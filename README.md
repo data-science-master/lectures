@@ -1,3 +1,3 @@
 # David Gerard’s STAT 413/613 (Data Science) Teaching Materials
 
-Website: <http://dcgerard.github.io/stat_413_613/>
+Website: <https://data-science-master.github.io/lectures/>
