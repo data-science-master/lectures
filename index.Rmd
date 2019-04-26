@@ -14,13 +14,15 @@ University by [David Gerard](https://dcgerard.github.io/).
 
 # Administrative
 
-- [Tentative Schedule](./admin/schedule.pdf)
+- [Tentative Schedule](./admin/schedule.html)
 
 # Lectures
 
 - 01 Git and the Terminal
     - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
     - [01 Git and GitHub](./01_git/01_git_github.html).
-    - [A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
+    - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
 - 02 Dates and Times
+    - [02 Dates](./02_dates/02_dates.html)
+    - [02 Dates Lab](./02_dates/02_dates_lab.html)
     
