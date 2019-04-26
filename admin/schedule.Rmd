@@ -1,0 +1,94 @@
+---
+title: "Course Plan for STAT 413/613"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+```
+
+- Week 1:
+    - Version control with git and GitHub.
+    - [Git Appendix in r-pkgs](http://r-pkgs.had.co.nz/git.html)
+    - [Setting up GitHub Classroom](https://github.com/jfiksel/github-classroom-for-students)
+    - [Git for Scientists](https://milesmcbain.github.io/git_4_sci/).
+    - [A Quick Introduction to Version Control with Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
+    - [Oh s**t, git!](https://ohshitgit.com/).
+- Week 2:
+    - Dates and times with lubridate.
+    - Chapter 16 of [RDS](https://r4ds.had.co.nz/).
+    - [Dates and Times Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf).
+    - [Lubridate Overview](https://lubridate.tidyverse.org/).
+- Week 3:
+    - Vectors and lists.
+    - Iterators and purrr.
+    - Chapters 20 and 21 of [RDS](https://r4ds.had.co.nz/).
+    - [Purrr Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf)
+    - [Purrr Overview](https://purrr.tidyverse.org/).
+- Week 4:
+    - Probability and statistics basics refresher.
+    - Distributions in R.
+    - One/two sample inference in R ($t$-tests).
+    - Tests for two-way tables.
+    - Tidy output with broom.
+- Week 5:
+    - Linear regression in R.
+    - Chapters 18 and 19 of [IDS](https://rafalab.github.io/dsbook/).
+    - Tidy output with broom.
+- Week 6:
+    - Logistic regression in R.
+    - Tidy output with broom.
+- Week 7:
+    - Exam 1.
+    - Weeks covered: 1 through 5
+- Week 8:
+    - Communicating results with Shiny.
+    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
+- Week 9:
+    - Communicating results with Shiny.
+    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
+    - Data ethics.
+- Week 10: 
+    - Multivariate EDA techniques in R.
+    - PCA/tSNE/MDS.
+    - Clustering
+- Week 11:
+    - Machine learning introduction.
+    - Machine learning with caret.
+    - [caret tutorial](https://www.machinelearningplus.com/machine-learning/caret-package/).
+    - Chapters 28, 30, and 31 of [IDS](https://rafalab.github.io/dsbook/).
+- Week 12: 
+    - Exam 2.
+    - Weeks covered: 6 through 10
+- Week 13:
+    - Machine learning with caret.
+    - Machine learning lab.
+    - Chapters 28, 30, and 31 of [IDS](https://rafalab.github.io/dsbook/).
+- Week 14
+    - Databases, `dbplyr`, and SQL.
+    - [Introduction to dbplyr](https://cran.r-project.org/web/packages/dbplyr/vignettes/dbplyr.html).
+    - [Introduction to MySQL with R](https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r#going-further-with-mysql).
+    - [hrsample](https://github.com/harryahlas/sample-hr-database).
+    - Getting data from XML, HTML, SQL, JSON, API.
+- Week 15:
+    - Miscellaneous day.
+    - Parallel computing in R?
+    - htmlwidgets?
+    - Simple features and plotting maps with tmap?
+    - tidytext?
+- Final Exam Period:
+    - Final project presentations.
+    
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+*.Rproj
+.DS_Store
+*~
+*.#*
+sensitive/
+*.aux
+*.log
+*.out
+Rplots.pdf
+*.pdf

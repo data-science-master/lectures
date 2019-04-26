@@ -1,0 +1,26 @@
+---
+title: "STAT 413/613 Teaching Website"
+author: "David Gerard"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Synopsis
+
+This website contains the teaching materials for STAT 413/613 Data Science, taught at American 
+University by [David Gerard](https://dcgerard.github.io/).
+
+# Administrative
+
+- [Tentative Schedule](./admin/schedule.pdf)
+
+# Lectures
+
+- 01 Git and the Terminal
+    - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
+    - [01 Git and GitHub](./01_git/01_git_github.html).
+    - [A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
+- 02 Dates and Times
+    

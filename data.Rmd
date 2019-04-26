@@ -1,0 +1,12 @@
+---
+title: "Data"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This will contain links to datasets that I'll use.
