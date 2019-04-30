@@ -44,7 +44,7 @@ knitr::opts_chunk$set(echo = TRUE)
       incorporate the `g` flag.
 
 - If you are using Linux or Mac, then you can keep going. If you are using Windows, 
-  you need to first download and install git (and git thus bash) from here:
+  you need to first download and install git (and thus git bash) from here:
   <http://git-scm.com/download/win>. You might need to restart R Studio if you
   are already running it.
   
