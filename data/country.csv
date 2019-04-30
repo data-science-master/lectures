@@ -1,0 +1,264 @@
+Country Code,Region,IncomeGroup,TableName
+ABW,Latin America & Caribbean,High income,Aruba
+AFG,South Asia,Low income,Afghanistan
+AGO,Sub-Saharan Africa,Lower middle income,Angola
+ALB,Europe & Central Asia,Upper middle income,Albania
+AND,Europe & Central Asia,High income,Andorra
+ARB,,,Arab World
+ARE,Middle East & North Africa,High income,United Arab Emirates
+ARG,Latin America & Caribbean,High income,Argentina
+ARM,Europe & Central Asia,Upper middle income,Armenia
+ASM,East Asia & Pacific,Upper middle income,American Samoa
+ATG,Latin America & Caribbean,High income,Antigua and Barbuda
+AUS,East Asia & Pacific,High income,Australia
+AUT,Europe & Central Asia,High income,Austria
+AZE,Europe & Central Asia,Upper middle income,Azerbaijan
+BDI,Sub-Saharan Africa,Low income,Burundi
+BEL,Europe & Central Asia,High income,Belgium
+BEN,Sub-Saharan Africa,Low income,Benin
+BFA,Sub-Saharan Africa,Low income,Burkina Faso
+BGD,South Asia,Lower middle income,Bangladesh
+BGR,Europe & Central Asia,Upper middle income,Bulgaria
+BHR,Middle East & North Africa,High income,Bahrain
+BHS,Latin America & Caribbean,High income,"Bahamas, The"
+BIH,Europe & Central Asia,Upper middle income,Bosnia and Herzegovina
+BLR,Europe & Central Asia,Upper middle income,Belarus
+BLZ,Latin America & Caribbean,Upper middle income,Belize
+BMU,North America,High income,Bermuda
+BOL,Latin America & Caribbean,Lower middle income,Bolivia
+BRA,Latin America & Caribbean,Upper middle income,Brazil
+BRB,Latin America & Caribbean,High income,Barbados
+BRN,East Asia & Pacific,High income,Brunei Darussalam
+BTN,South Asia,Lower middle income,Bhutan
+BWA,Sub-Saharan Africa,Upper middle income,Botswana
+CAF,Sub-Saharan Africa,Low income,Central African Republic
+CAN,North America,High income,Canada
+CEB,,,Central Europe and the Baltics
+CHE,Europe & Central Asia,High income,Switzerland
+CHI,Europe & Central Asia,High income,Channel Islands
+CHL,Latin America & Caribbean,High income,Chile
+CHN,East Asia & Pacific,Upper middle income,China
+CIV,Sub-Saharan Africa,Lower middle income,Côte d'Ivoire
+CMR,Sub-Saharan Africa,Lower middle income,Cameroon
+COD,Sub-Saharan Africa,Low income,"Congo, Dem. Rep."
+COG,Sub-Saharan Africa,Lower middle income,"Congo, Rep."
+COL,Latin America & Caribbean,Upper middle income,Colombia
+COM,Sub-Saharan Africa,Low income,Comoros
+CPV,Sub-Saharan Africa,Lower middle income,Cabo Verde
+CRI,Latin America & Caribbean,Upper middle income,Costa Rica
+CSS,,,Caribbean small states
+CUB,Latin America & Caribbean,Upper middle income,Cuba
+CUW,Latin America & Caribbean,High income,Curaçao
+CYM,Latin America & Caribbean,High income,Cayman Islands
+CYP,Europe & Central Asia,High income,Cyprus
+CZE,Europe & Central Asia,High income,Czech Republic
+DEU,Europe & Central Asia,High income,Germany
+DJI,Middle East & North Africa,Lower middle income,Djibouti
+DMA,Latin America & Caribbean,Upper middle income,Dominica
+DNK,Europe & Central Asia,High income,Denmark
+DOM,Latin America & Caribbean,Upper middle income,Dominican Republic
+DZA,Middle East & North Africa,Upper middle income,Algeria
+EAP,,,East Asia & Pacific (excluding high income)
+EAR,,,Early-demographic dividend
+EAS,,,East Asia & Pacific
+ECA,,,Europe & Central Asia (excluding high income)
+ECS,,,Europe & Central Asia
+ECU,Latin America & Caribbean,Upper middle income,Ecuador
+EGY,Middle East & North Africa,Lower middle income,"Egypt, Arab Rep."
+EMU,,,Euro area
+ERI,Sub-Saharan Africa,Low income,Eritrea
+ESP,Europe & Central Asia,High income,Spain
+EST,Europe & Central Asia,High income,Estonia
+ETH,Sub-Saharan Africa,Low income,Ethiopia
+EUU,,,European Union
+FCS,,,Fragile and conflict affected situations
+FIN,Europe & Central Asia,High income,Finland
+FJI,East Asia & Pacific,Upper middle income,Fiji
+FRA,Europe & Central Asia,High income,France
+FRO,Europe & Central Asia,High income,Faroe Islands
+FSM,East Asia & Pacific,Lower middle income,"Micronesia, Fed. Sts."
+GAB,Sub-Saharan Africa,Upper middle income,Gabon
+GBR,Europe & Central Asia,High income,United Kingdom
+GEO,Europe & Central Asia,Lower middle income,Georgia
+GHA,Sub-Saharan Africa,Lower middle income,Ghana
+GIB,Europe & Central Asia,High income,Gibraltar
+GIN,Sub-Saharan Africa,Low income,Guinea
+GMB,Sub-Saharan Africa,Low income,"Gambia, The"
+GNB,Sub-Saharan Africa,Low income,Guinea-Bissau
+GNQ,Sub-Saharan Africa,Upper middle income,Equatorial Guinea
+GRC,Europe & Central Asia,High income,Greece
+GRD,Latin America & Caribbean,Upper middle income,Grenada
+GRL,Europe & Central Asia,High income,Greenland
+GTM,Latin America & Caribbean,Upper middle income,Guatemala
+GUM,East Asia & Pacific,High income,Guam
+GUY,Latin America & Caribbean,Upper middle income,Guyana
+HIC,,,High income
+HKG,East Asia & Pacific,High income,"Hong Kong SAR, China"
+HND,Latin America & Caribbean,Lower middle income,Honduras
+HPC,,,Heavily indebted poor countries (HIPC)
+HRV,Europe & Central Asia,High income,Croatia
+HTI,Latin America & Caribbean,Low income,Haiti
+HUN,Europe & Central Asia,High income,Hungary
+IBD,,,IBRD only
+IBT,,,IDA & IBRD total
+IDA,,,IDA total
+IDB,,,IDA blend
+IDN,East Asia & Pacific,Lower middle income,Indonesia
+IDX,,,IDA only
+IMN,Europe & Central Asia,High income,Isle of Man
+IND,South Asia,Lower middle income,India
+IRL,Europe & Central Asia,High income,Ireland
+IRN,Middle East & North Africa,Upper middle income,"Iran, Islamic Rep."
+IRQ,Middle East & North Africa,Upper middle income,Iraq
+ISL,Europe & Central Asia,High income,Iceland
+ISR,Middle East & North Africa,High income,Israel
+ITA,Europe & Central Asia,High income,Italy
+JAM,Latin America & Caribbean,Upper middle income,Jamaica
+JOR,Middle East & North Africa,Upper middle income,Jordan
+JPN,East Asia & Pacific,High income,Japan
+KAZ,Europe & Central Asia,Upper middle income,Kazakhstan
+KEN,Sub-Saharan Africa,Lower middle income,Kenya
+KGZ,Europe & Central Asia,Lower middle income,Kyrgyz Republic
+KHM,East Asia & Pacific,Lower middle income,Cambodia
+KIR,East Asia & Pacific,Lower middle income,Kiribati
+KNA,Latin America & Caribbean,High income,St. Kitts and Nevis
+KOR,East Asia & Pacific,High income,"Korea, Rep."
+KWT,Middle East & North Africa,High income,Kuwait
+LAC,,,Latin America & Caribbean (excluding high income)
+LAO,East Asia & Pacific,Lower middle income,Lao PDR
+LBN,Middle East & North Africa,Upper middle income,Lebanon
+LBR,Sub-Saharan Africa,Low income,Liberia
+LBY,Middle East & North Africa,Upper middle income,Libya
+LCA,Latin America & Caribbean,Upper middle income,St. Lucia
+LCN,,,Latin America & Caribbean
+LDC,,,Least developed countries: UN classification
+LIC,,,Low income
+LIE,Europe & Central Asia,High income,Liechtenstein
+LKA,South Asia,Lower middle income,Sri Lanka
+LMC,,,Lower middle income
+LMY,,,Low & middle income
+LSO,Sub-Saharan Africa,Lower middle income,Lesotho
+LTE,,,Late-demographic dividend
+LTU,Europe & Central Asia,High income,Lithuania
+LUX,Europe & Central Asia,High income,Luxembourg
+LVA,Europe & Central Asia,High income,Latvia
+MAC,East Asia & Pacific,High income,"Macao SAR, China"
+MAF,Latin America & Caribbean,High income,St. Martin (French part)
+MAR,Middle East & North Africa,Lower middle income,Morocco
+MCO,Europe & Central Asia,High income,Monaco
+MDA,Europe & Central Asia,Lower middle income,Moldova
+MDG,Sub-Saharan Africa,Low income,Madagascar
+MDV,South Asia,Upper middle income,Maldives
+MEA,,,Middle East & North Africa
+MEX,Latin America & Caribbean,Upper middle income,Mexico
+MHL,East Asia & Pacific,Upper middle income,Marshall Islands
+MIC,,,Middle income
+MKD,Europe & Central Asia,Upper middle income,North Macedonia
+MLI,Sub-Saharan Africa,Low income,Mali
+MLT,Middle East & North Africa,High income,Malta
+MMR,East Asia & Pacific,Lower middle income,Myanmar
+MNA,,,Middle East & North Africa (excluding high income)
+MNE,Europe & Central Asia,Upper middle income,Montenegro
+MNG,East Asia & Pacific,Lower middle income,Mongolia
+MNP,East Asia & Pacific,High income,Northern Mariana Islands
+MOZ,Sub-Saharan Africa,Low income,Mozambique
+MRT,Sub-Saharan Africa,Lower middle income,Mauritania
+MUS,Sub-Saharan Africa,Upper middle income,Mauritius
+MWI,Sub-Saharan Africa,Low income,Malawi
+MYS,East Asia & Pacific,Upper middle income,Malaysia
+NAC,,,North America
+NAM,Sub-Saharan Africa,Upper middle income,Namibia
+NCL,East Asia & Pacific,High income,New Caledonia
+NER,Sub-Saharan Africa,Low income,Niger
+NGA,Sub-Saharan Africa,Lower middle income,Nigeria
+NIC,Latin America & Caribbean,Lower middle income,Nicaragua
+NLD,Europe & Central Asia,High income,Netherlands
+NOR,Europe & Central Asia,High income,Norway
+NPL,South Asia,Low income,Nepal
+NRU,East Asia & Pacific,Upper middle income,Nauru
+NZL,East Asia & Pacific,High income,New Zealand
+OED,,,OECD members
+OMN,Middle East & North Africa,High income,Oman
+OSS,,,Other small states
+PAK,South Asia,Lower middle income,Pakistan
+PAN,Latin America & Caribbean,High income,Panama
+PER,Latin America & Caribbean,Upper middle income,Peru
+PHL,East Asia & Pacific,Lower middle income,Philippines
+PLW,East Asia & Pacific,High income,Palau
+PNG,East Asia & Pacific,Lower middle income,Papua New Guinea
+POL,Europe & Central Asia,High income,Poland
+PRE,,,Pre-demographic dividend
+PRI,Latin America & Caribbean,High income,Puerto Rico
+PRK,East Asia & Pacific,Low income,"Korea, Dem. People's Rep."
+PRT,Europe & Central Asia,High income,Portugal
+PRY,Latin America & Caribbean,Upper middle income,Paraguay
+PSE,Middle East & North Africa,Lower middle income,West Bank and Gaza
+PSS,,,Pacific island small states
+PST,,,Post-demographic dividend
+PYF,East Asia & Pacific,High income,French Polynesia
+QAT,Middle East & North Africa,High income,Qatar
+ROU,Europe & Central Asia,Upper middle income,Romania
+RUS,Europe & Central Asia,Upper middle income,Russian Federation
+RWA,Sub-Saharan Africa,Low income,Rwanda
+SAS,,,South Asia
+SAU,Middle East & North Africa,High income,Saudi Arabia
+SDN,Sub-Saharan Africa,Lower middle income,Sudan
+SEN,Sub-Saharan Africa,Low income,Senegal
+SGP,East Asia & Pacific,High income,Singapore
+SLB,East Asia & Pacific,Lower middle income,Solomon Islands
+SLE,Sub-Saharan Africa,Low income,Sierra Leone
+SLV,Latin America & Caribbean,Lower middle income,El Salvador
+SMR,Europe & Central Asia,High income,San Marino
+SOM,Sub-Saharan Africa,Low income,Somalia
+SRB,Europe & Central Asia,Upper middle income,Serbia
+SSA,,,Sub-Saharan Africa (excluding high income)
+SSD,Sub-Saharan Africa,Low income,South Sudan
+SSF,,,Sub-Saharan Africa
+SST,,,Small states
+STP,Sub-Saharan Africa,Lower middle income,São Tomé and Principe
+SUR,Latin America & Caribbean,Upper middle income,Suriname
+SVK,Europe & Central Asia,High income,Slovak Republic
+SVN,Europe & Central Asia,High income,Slovenia
+SWE,Europe & Central Asia,High income,Sweden
+SWZ,Sub-Saharan Africa,Lower middle income,Eswatini
+SXM,Latin America & Caribbean,High income,Sint Maarten (Dutch part)
+SYC,Sub-Saharan Africa,High income,Seychelles
+SYR,Middle East & North Africa,Low income,Syrian Arab Republic
+TCA,Latin America & Caribbean,High income,Turks and Caicos Islands
+TCD,Sub-Saharan Africa,Low income,Chad
+TEA,,,East Asia & Pacific (IDA & IBRD)
+TEC,,,Europe & Central Asia (IDA & IBRD)
+TGO,Sub-Saharan Africa,Low income,Togo
+THA,East Asia & Pacific,Upper middle income,Thailand
+TJK,Europe & Central Asia,Low income,Tajikistan
+TKM,Europe & Central Asia,Upper middle income,Turkmenistan
+TLA,,,Latin America & Caribbean (IDA & IBRD)
+TLS,East Asia & Pacific,Lower middle income,Timor-Leste
+TMN,,,Middle East & North Africa (IDA & IBRD)
+TON,East Asia & Pacific,Upper middle income,Tonga
+TSA,,,South Asia (IDA & IBRD)
+TSS,,,Sub-Saharan Africa (IDA & IBRD)
+TTO,Latin America & Caribbean,High income,Trinidad and Tobago
+TUN,Middle East & North Africa,Lower middle income,Tunisia
+TUR,Europe & Central Asia,Upper middle income,Turkey
+TUV,East Asia & Pacific,Upper middle income,Tuvalu
+TZA,Sub-Saharan Africa,Low income,Tanzania
+UGA,Sub-Saharan Africa,Low income,Uganda
+UKR,Europe & Central Asia,Lower middle income,Ukraine
+UMC,,,Upper middle income
+URY,Latin America & Caribbean,High income,Uruguay
+USA,North America,High income,United States
+UZB,Europe & Central Asia,Lower middle income,Uzbekistan
+VCT,Latin America & Caribbean,Upper middle income,St. Vincent and the Grenadines
+VEN,Latin America & Caribbean,Upper middle income,"Venezuela, RB"
+VGB,Latin America & Caribbean,High income,British Virgin Islands
+VIR,Latin America & Caribbean,High income,Virgin Islands (U.S.)
+VNM,East Asia & Pacific,Lower middle income,Vietnam
+VUT,East Asia & Pacific,Lower middle income,Vanuatu
+WLD,,,World
+WSM,East Asia & Pacific,Upper middle income,Samoa
+XKX,Europe & Central Asia,Lower middle income,Kosovo
+YEM,Middle East & North Africa,Low income,"Yemen, Rep."
+ZAF,Sub-Saharan Africa,Upper middle income,South Africa
+ZMB,Sub-Saharan Africa,Lower middle income,Zambia
+ZWE,Sub-Saharan Africa,Low income,Zimbabwe

@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-03-18" />
+<meta name="date" content="2019-04-30" />
 
 <title>Data</title>
 
@@ -73,9 +73,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -194,8 +192,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -269,6 +265,15 @@ $(document).ready(function () {
 
 
 
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
@@ -291,7 +296,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/dcgerard/stat_413_613">
+  <a href="https://github.com/data-science-master/lectures">
     <span class="fa fa-github"></span>
      
   </a>
@@ -306,13 +311,27 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Data</h1>
-<h4 class="author"><em>David Gerard</em></h4>
-<h4 class="date"><em>2019-03-18</em></h4>
+<h4 class="author">David Gerard</h4>
+<h4 class="date">2019-04-30</h4>
 
 </div>
 
 
-<p>This will contain links to datasets that I’ll use.</p>
+<ul>
+<li>World Bank Data: The World Bank is an international organization that provides loans to countries with the goal of reducing poverty. The following data frames were all taken from the public data repositories of the World Bank.
+<ul>
+<li><a href="./data/country.csv">country.csv</a>: Contains information on the countries in the data set. The variables are:
+<ul>
+<li><code>Country_Cod</code>: A three-letter code for the country. Note that not all rows are countries; some are regions.</li>
+<li><code>Region</code>: The region of the country.</li>
+<li><code>IncomeGroup</code>: Either <code>&quot;High income&quot;</code>, <code>&quot;Upper middle income&quot;</code>, <code>&quot;Lower middle income&quot;</code>, or <code>&quot;Low income&quot;</code>.</li>
+<li><code>TableName</code>: The full name of the country.</li>
+</ul></li>
+<li><a href="./data/fertility.csv">fertility.csv</a>: Contains the fertility rate information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the fertility rate in total births per woman for the that year. Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.</li>
+<li><a href="./data/life_exp.csv">life_exp.csv</a>: Contains the life expectancy information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent life expectancy at birth in years for the given year. Life expectancy at birth indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.</li>
+<li><a href="./data/population.csv">population.csv</a>: Contains the population information for each country. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the total population in number of people for the given year. Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</li>
+</ul></li>
+</ul>
 
 
 
