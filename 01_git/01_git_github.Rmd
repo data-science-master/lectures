@@ -121,8 +121,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
   view your work.
   
 - You can host a website on GitHub, increasing your visibility. I host my 
-  [personal website](http://dcgerard.github.io/) and teaching websites on 
-  GitHub.
+  [personal website](http://dcgerard.github.io/) and 
+  [teaching websites](https://data-science-master.github.io/lectures/) 
+  on GitHub.
   
 # Git Overview
 
@@ -502,7 +503,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Commit fairly frequently. On the homework, 
   **you should commit each time you complete a homework question.**
   
-- Usually, you should only commit plain text. The reason for this is 
+- Usually, you should only commit plain text. The reason for this is that 
+  git is actually tracking **changes** in files, not the files themselves.
+  This is very efficient for plain text files. But for
+  non-plain text files the whole file is usally changed when you change a 
+  component, so git ends up saving the whole file each each time you change it.
   
 
 # References

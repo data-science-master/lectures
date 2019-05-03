@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-04-29" />
+<meta name="date" content="2019-05-03" />
 
 <title>Git and GitHub</title>
 
@@ -377,7 +377,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Git and GitHub</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-04-29</h4>
+<h4 class="date">2019-05-03</h4>
 
 </div>
 
@@ -508,7 +508,7 @@ git config --global user.email &quot;YOUR EMAIL ADDRESS&quot;</code></pre>
 <ul>
 <li><p>In a <a href="https://www.kaggle.com/surveys/2017">Kaggle Survey</a>, 58.5% of data scientists say they primarily use git for sharing code.</p></li>
 <li><p>You can make your final-project repo public so prospective employers can view your work.</p></li>
-<li><p>You can host a website on GitHub, increasing your visibility. I host my <a href="http://dcgerard.github.io/">personal website</a> and teaching websites on GitHub.</p></li>
+<li><p>You can host a website on GitHub, increasing your visibility. I host my <a href="http://dcgerard.github.io/">personal website</a> and <a href="https://data-science-master.github.io/lectures/">teaching websites</a> on GitHub.</p></li>
 </ul>
 </div>
 </div>
@@ -756,7 +756,7 @@ git diff --staged</code></pre></li>
 <h1>Best Practices</h1>
 <ul>
 <li><p>Commit fairly frequently. On the homework, <strong>you should commit each time you complete a homework question.</strong></p></li>
-<li><p>Usually, you should only commit plain text. The reason for this is</p></li>
+<li><p>Usually, you should only commit plain text. The reason for this is that git is actually tracking <strong>changes</strong> in files, not the files themselves. This is very efficient for plain text files. But for non-plain text files the whole file is usally changed when you change a component, so git ends up saving the whole file each each time you change it.</p></li>
 </ul>
 </div>
 <div id="references" class="section level1 unnumbered">
