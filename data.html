@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-05-01" />
+<meta name="date" content="2019-05-06" />
 
 <title>Data</title>
 
@@ -312,7 +312,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Data</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-05-01</h4>
+<h4 class="date">2019-05-06</h4>
 
 </div>
 
@@ -332,6 +332,14 @@ $(document).ready(function () {
 <li><a href="./data/population.csv">population.csv</a>: Contains the population information for each country. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the total population in number of people for the given year. Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</li>
 </ul></li>
 <li><a href="./data/words.txt">words.txt</a>: The list of acceptable 2015 Scrabble Words.</li>
+<li><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:
+<ul>
+<li><code>Battle</code>: The name of the battle.</li>
+<li><code>Date</code>: The date(s) of the battle. If it took place on one day, then the format is “month day, year”. If it took place over multiple days, then the format is “month day_start-day_end, year”. If it took place over multiple days spanning multiple months then the format is “month_start day_start - month_end day_end, year”. If it took place over multiple days spanning multiple years then the format is “month_start day_start, year_start - month_end day_end, year_end”.</li>
+<li><code>State</code>: The state where the battle took place. Annotations (e.g. describing that the state was a territory at the time) are in parentheses.</li>
+<li><code>CWSAC</code>: A rating of the military significance of the battle by the Civil War Sites Advisory Commission. <code>A</code> = Decisive, <code>B</code> = Major, <code>C</code> = Formative, <code>D</code> = Limited.</li>
+<li><code>Outcome</code>: Usually <code>&quot;Confederate victory&quot;</code>, <code>&quot;Union victory&quot;</code>, or <code>&quot;Inconclusive&quot;</code>, followed by notes.</li>
+</ul></li>
 </ul>
 
 

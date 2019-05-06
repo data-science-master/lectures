@@ -45,6 +45,24 @@ knitr::opts_chunk$set(echo = TRUE)
       population, which counts all residents regardless of legal status or 
       citizenship. The values shown are midyear estimates.
 - [words.txt](./data/words.txt): The list of acceptable 2015 Scrabble Words.
+- [civil_war.csv](./data/civil_war.csv): List of American Civil War battles, taken from
+  [Wikipedia](https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles). 
+  Variables include:
+    - `Battle`: The name of the battle.
+    - `Date`: The date(s) of the battle. If it took place on one day, then the
+      format is "month day, year". If it took place over multiple days, then
+      the format is "month day_start-day_end, year". If it took place over
+      multiple days spanning multiple months then the format is 
+      "month_start day_start - month_end day_end, year". If it took place over
+      multiple days spanning multiple years then the format is
+      "month_start day_start, year_start - month_end day_end, year_end".
+    - `State`: The state where the battle took place. Annotations (e.g. 
+      describing that the state was a territory at the time) are in parentheses.
+    - `CWSAC`: A rating of the military significance of the battle by the
+      Civil War Sites Advisory Commission. `A` = Decisive, `B` = Major, 
+      `C` = Formative, `D` = Limited.
+    - `Outcome`: Usually `"Confederate victory"`, `"Union victory"`, or 
+      `"Inconclusive"`, followed by notes.
 
 
 
