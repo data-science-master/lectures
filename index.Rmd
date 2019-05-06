@@ -27,4 +27,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
 - 02 Dates and Times
     - [02 Dates](./02_dates/02_dates.html)
+- 03 Vectors and Iteration
+    - [03 Vectors](./03_vectors_iterators/03_vectors.html)
+    - [03 Iteration](./03_vectors_iterators/03_iterators.html)
     
