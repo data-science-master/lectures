@@ -1,0 +1,165 @@
+---
+title: "STAT 413/613 Data Science"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- **Time**: Wednesdays, 5:30 PM to 8:00 PM
+- **Instructor**: Dr. David Gerard
+- **Email**: <dgerard@american.edu>
+- **Office**: DMTI 106E
+- **Phone**: 202-885-3022
+- **Office Hours**: TBD
+
+# Overview of Topics and Course Objectives
+This course focuses on the collection, organization, analysis, interpretation, and presentation of data. Topics include the acquisition, cleaning, and imputation of data from a variety of sources; data visualization and graphing; data presentation and packaging; and programming considerations for large datasets. The course uses R packages and programming language.
+
+# Learning Objectives:
+- Produce reproducible research using R
+- Import and analyze a dataset from .csv, .xml, JSON, API, MySQL
+- Deal effectively with missing data
+- Use graphical tools to visualize and understand data
+- Present results in both report and presentation form
+- Share results with others using tools such as shiny app and R presenter.
+- Apply concepts of the course to an application area of interest to the student.
+- Understand the ethical questions associated with data collection and analysis.
+    
+# Materials
+- **Required**: Laptop computer 
+- **Books**: 
+    - R for Data Science by Wickham and Grolemund (O'Reilly): <http://r4ds.had.co.nz/>
+    - Advanced R – Wickham (O’Reilly): <https://adv-r.hadley.nz/>
+    - Git for Scientists: <https://milesmcbain.github.io/git_4_sci/>
+- **Course Website**: https://github.com/orgs/data-science-fall-2019/
+
+# Class Structure
+
+This class will be a blend of lecture, class discussion and labs. I want you all to be involved during class and please do not hesitate to ask questions whenever something is unclear to you.  You are expected to attend all class meetings, as I believe that attending class regularly contributes greatly to your performance in the course. It is understandable that you may have to miss class on the rare occasion. You are responsible for any assignments or papers given out during any missed class. Please obtain these materials from a colleague BEFORE the next class meeting.
+
+I will use GitHub to post all class materials.
+
+# Graded Work
+
+## Assignments 
+
+- During the semester I will assign, collect, and grade assignments.  There will be approximately 8 formal assignments throughout the semester. 
+- Assignments will be posted and returned on GitHub. **I expect frequent commits while you are completing your assignment.** Lack of frequent commits may result in point deductions.
+- You may receive assistance from other students in the class and me, but your submissions must be composed of your own thoughts, coding and words. I expect you to get ideas from online resources such as Stackoverflow or GitHub when you get stuck.  Please cite your source when you do so and be specific about what you have added to it.  You should be able to redo the code "cold" when you do this.  Failure to do so is a violation of AU’s Academic Integrity Code. 
+- I may accept a late assignment if I see some progress and a consistent commit history in that assignment. Though, to also accommodate extraordinary circumstances and illness, I will drop the lowest assignment grade. You should not use this as an excuse to skip an assignment, but rather to handle a situation where you are unable to turn in your assignment in a timely manner.
+
+## Exams
+
+We will have approximately three in-class exams.  Any material covered in class, reading assigned, or on assignments is "fair game."  No make-up exams will be given unless you have an extremely compelling excuse such as observance of a religious holiday (in which case you need to let me know in advance) or a documented medical emergency.
+
+## Project
+
+Students taking the course for graduate credit (STAT 613) will prepare a final project using the tools learned in the class.  Work with me to get your topic approved.  Undergraduate students may complete a final project at their option.  
+Your project should involve working with a fairly large real-world dataset to answer some question of interest to you. It should be reproducible and include graphical representations of your data.
+
+# Grading
+
+You should be able to explain your work on assignments, exams, and project and your rationale.  Based on your explanation (or lack thereof), I may modify your grade.
+
+Your final grade will be determined by:
+
+```{r, echo=FALSE, message = FALSE}
+library(tidyverse)
+gradedf <- tribble(~Component, ~`Graduate (613)`, ~`Undergraduate (413)`,
+                   "Assignments", 0.4, 0.4,
+                   "Exam 1", 0.12, 0.12,
+                   "Exam 2", 0.12, 0.12,
+                   "Final Exam", 0.16, 0.16,
+                   "Final Project", 0.2, 0,
+                   "Attendance and Participation", 0, 0.2)
+knitr::kable(gradedf)
+```
+
+## The Curve
+
+We will curve the final course score, but not each individual assignment/exam score. Your final curved score will be calculated as described below.
+
+Let $S_i$ be the composite score (a number between 0 and 1) for student $i$ based on the grade weighting above.
+
+Let $C = \text{median}(S_1,S_2,\ldots,S_n)$, where $n$ is the number of students in the class. Then student $i$'s post-curve score is
+$$
+\tilde{S}_i = \frac{0.85 - C}{1 - C} * (1 - S_i) + S_i.
+$$
+
+We will then use the following cutoffs on the ceiling of $100 * \tilde{S}_i$ for letter grades:
+```{r, echo = FALSE}
+curve_df <- data.frame(Grade = c("A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"),
+                       Lower = c(93, 90, 88, 83, 80, 78, 73, 70, 60, 0),
+                       Upper = c(100, 92, 89, 87, 82, 79, 77, 72, 69, 59))
+knitr::kable(curve_df)
+```
+
+The idea is that we came up with a linear relationship such that the median student will get an 85\% and any student who received a 100\% will stay at 100\%, post-curve.
+
+If the median pre-curve grade is above 85\%, then there will be no curve.
+
+Below is a visualization of the curve.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+library(plyr)
+get_curve <- function(x, m) {
+  (0.85 - m) / (1 - m) * (1 - x) + x
+}
+get_lettergrade <- function(x) {
+  cut(x, breaks = c(-Inf, 0.6, 0.7, 0.73, 0.78, 0.8, 0.83, 0.88, 0.9, 0.93, Inf)) %>%
+    mapvalues(from = c("(-Inf,0.6]", "(0.6,0.7]", "(0.7,0.73]", "(0.73,0.78]", "(0.78,0.8]", "(0.8,0.83]", "(0.83,0.88]", "(0.88,0.9]", "(0.9,0.93]", "(0.93, Inf]"), to = c("F", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"))
+}
+x <- seq(0, 1, length = 500)
+y1 <- get_curve(x, 0.7)
+lg1 <- get_lettergrade(y1)
+y2 <- get_curve(x, 0.75)
+lg2 <- get_lettergrade(y2)
+y3 <- get_curve(x, 0.8)
+lg3 <- get_lettergrade(y3)
+y4 <- get_curve(x, 0.85)
+lg4 <- get_lettergrade(y4)
+
+dfdat <- data.frame(x = rep(x, 4),
+                    y = c(y1, y2, y3, y4),
+                    m = rep(c("median = 0.7", "median = 0.75", "median = 0.8", "median >= 0.85"), each = length(x)),
+                    lg = unlist(list(lg1, lg2, lg3, lg4)))
+pl <- ggplot(dfdat, aes(x = x, y = y, color = lg)) +
+  geom_line(lwd = 2) +
+  facet_wrap(~ m) +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "white")) +
+  xlab("Pre-curve Score") +
+  ylab("Post-curve Score") +
+  guides(color=guide_legend(title="Post-curve\nGrade"))
+print(pl)
+```
+
+
+# Assistance/Support
+
+Before receiving any assistance on a specific homework problem, please make sure that you have read through the class materials, and that you have made a fair attempt at the problem. 
+
+1. Always feel welcome to come visit me during my office hours.  Office hours are often busy so please come prepared with specific questions.  **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
+2. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
+3. You are also encouraged to ask me questions online via email. 
+4. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
+    - The Academic Support and Access Center (x3360, MGC 243) supports the academic development and educational goals of all AU students while also providing support to students with disabilities. They offer workshops on topics of interest to all students such as time management, note taking, critical thinking, memory skills, and test taking. Additional support includes free private and group tutoring in many subjects, supplemental instruction, The Math Lab and The Writing Lab. 
+    - Students wishing to receive accommodations for a disability, are to bring their documentation directly to the Academic Support and Access Center (ASAC-<http://www.american.edu/ocl/asac/index.cfm>), in MGC 243, x3360. ASAC, in turn, will notify me of the accommodation required. Keep in mind that accommodations can only begin when I have been notified. This means that students should take care of this at the start of the semester, **before** the work for which they require accommodation is due.
+    - The Counseling Center (x3500, MGC 214) is here to help students make the most of their university experience, both personally and academically. We offer individual and group counseling, urgent care, self-help resources, referrals to private care, as well as programming to help you gain the skills and insight needed to overcome adversity and thrive while you are in college. Contact the Counseling Center to make an appointment in person or by telephone, or visit the Counseling Center page on the AU website for additional information.
+    - Center for Diversity & Inclusion (X3651, MGC 201) is dedicated to enhancing LGBTQ, Multicultural, First Generation, and Women's experiences on campus and to advance AU's commitment to respecting & valuing diversity by serving as a resource and liaison to students, staff, and faculty on issues of equity through education, outreach, and advocacy.
+    - OASIS: The Office of Advocacy Services for Interpersonal and Sexual Violence (X7070) provides free and confidential advocacy services for anyone in the campus community who is impacted by sexual violence (sexual assault, dating or domestic violence, and stalking).
+    
+# A Few Additional Notes
+
+- I expect you to be courteous to me and your fellow classmates both inside and outside of the classroom. This generally just involves a bit of common sense.  Cell phones need to be silenced and put away during class. Laptops should be out during class time for use only on class activities. Please save texting, typing/sending emails, checking Facebook, etc. for outside of class time.  Any correspondence pertaining to the course needs to be handled in a respectful manner.
+- A grade of incomplete will only be given under extreme circumstances and will not be granted to any student who is failing.
+- In the event of an emergency, please refer to the AU Web site (<http://www.american.edu/emergency>) and the AU information line at (202) 885-1100 for general university-wide information. In the event that class is cancelled for ANY reason I will communicate with you via email and Blackboard to let you know what work, reading, etc. you will be responsible for.
+
+
+
+
+
