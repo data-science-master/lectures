@@ -2,7 +2,10 @@
 title: "Vectors and Lists"
 author: "David Gerard"
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
 urlcolor: "blue"
 ---
 
