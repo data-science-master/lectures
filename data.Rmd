@@ -27,6 +27,23 @@ knitr::opts_chunk$set(echo = TRUE)
       `C` = Formative, `D` = Limited.
     - `Outcome`: Usually `"Confederate victory"`, `"Union victory"`, or 
       `"Inconclusive"`, followed by notes.
+- [college_score.csv](./data/college_score.csv): Contains a subset of the 
+  variables found in the 2016 to 2017 
+  [College Scorecard](https://collegescorecard.ed.gov/data/)
+  database. These data contain information on colleges in the United States. 
+  The variables included are:
+    - `UNITID` and `OPEID`: Identifiers for the colleges.
+    - `INSTNM`: Institution name
+    - `ADM_RATE`: The Admission Rate.
+    - `SAT_AVE`: Average SAT equivalent score of students admitted.
+    - `UGDS`: Enrollment of undergraduate certificate/degree-seeking students
+    - `COSTT4_A`: Average cost of attendance (academic year institutions)
+    - `AVGFACSAL`: Average faculty salary
+    - `GRAD_DEBT_MDN`: The median debt for students who have completed
+    - `AGE_ENTRY`: Average age of entry
+    - `ICLEVEL`: Level of institution (`1` = 4-year, `2` = 2-year, `3` = less than 2-year).
+    - `MN_EARN_WNE_P6`: Mean earnings of students working and not enrolled 6 years 
+      after entry (so students who graduated in the 2009 to 2010 academic year).
 - [estate.csv](./data/estate.csv): Data on 522 home sales in a midwestern
   city during the year 2002. The 13 variables are
     - `Price`: Sales price of residence (in dollars)
