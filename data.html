@@ -318,6 +318,30 @@ $(document).ready(function () {
 
 
 <ul>
+<li><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:
+<ul>
+<li><code>Battle</code>: The name of the battle.</li>
+<li><code>Date</code>: The date(s) of the battle. If it took place on one day, then the format is “month day, year”. If it took place over multiple days, then the format is “month day_start-day_end, year”. If it took place over multiple days spanning multiple months then the format is “month_start day_start - month_end day_end, year”. If it took place over multiple days spanning multiple years then the format is “month_start day_start, year_start - month_end day_end, year_end”.</li>
+<li><code>State</code>: The state where the battle took place. Annotations (e.g. describing that the state was a territory at the time) are in parentheses.</li>
+<li><code>CWSAC</code>: A rating of the military significance of the battle by the Civil War Sites Advisory Commission. <code>A</code> = Decisive, <code>B</code> = Major, <code>C</code> = Formative, <code>D</code> = Limited.</li>
+<li><code>Outcome</code>: Usually <code>&quot;Confederate victory&quot;</code>, <code>&quot;Union victory&quot;</code>, or <code>&quot;Inconclusive&quot;</code>, followed by notes.</li>
+</ul></li>
+<li><a href="./data/estate.csv">estate.csv</a>: Data on 522 home sales in a midwestern city during the year 2002. The 13 variables are
+<ul>
+<li><code>Price</code>: Sales price of residence (in dollars)</li>
+<li><code>Area</code>: Finished area of residence (in square feet)</li>
+<li><code>Bed</code>: Total number of bedrooms in residence</li>
+<li><code>Bath</code>: Total number of bathrooms in residence</li>
+<li><code>AC</code>: 1 = presence of air conditioning, 0 = absence of air conditioning</li>
+<li><code>Garage</code>: Number of cars that a garage will hold</li>
+<li><code>Pool</code>: 1 = presence of a pool, 0 = absence of a pool</li>
+<li><code>Year</code>: Year property was originally constructed</li>
+<li><code>Quality</code>: Index for quality of construction. <code>High</code>, <code>Medium</code>, or <code>Low</code>.</li>
+<li><code>Style</code>: Categorical variable indicating architectural style</li>
+<li><code>Lot</code>: Lot size (in square feet)</li>
+<li><code>Highway</code>: 1 = highway adjacent, 0 = highway not adjacent.</li>
+</ul></li>
+<li><a href="./data/words.txt">words.txt</a>: The list of acceptable 2015 Scrabble Words.</li>
 <li>World Bank Data: The World Bank is an international organization that provides loans to countries with the goal of reducing poverty. The following data frames were all taken from the public data repositories of the World Bank.
 <ul>
 <li><a href="./data/country.csv">country.csv</a>: Contains information on the countries in the data set. The variables are:
@@ -330,15 +354,6 @@ $(document).ready(function () {
 <li><a href="./data/fertility.csv">fertility.csv</a>: Contains the fertility rate information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the fertility rate in total births per woman for the that year. Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.</li>
 <li><a href="./data/life_exp.csv">life_exp.csv</a>: Contains the life expectancy information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent life expectancy at birth in years for the given year. Life expectancy at birth indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.</li>
 <li><a href="./data/population.csv">population.csv</a>: Contains the population information for each country. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the total population in number of people for the given year. Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship. The values shown are midyear estimates.</li>
-</ul></li>
-<li><a href="./data/words.txt">words.txt</a>: The list of acceptable 2015 Scrabble Words.</li>
-<li><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:
-<ul>
-<li><code>Battle</code>: The name of the battle.</li>
-<li><code>Date</code>: The date(s) of the battle. If it took place on one day, then the format is “month day, year”. If it took place over multiple days, then the format is “month day_start-day_end, year”. If it took place over multiple days spanning multiple months then the format is “month_start day_start - month_end day_end, year”. If it took place over multiple days spanning multiple years then the format is “month_start day_start, year_start - month_end day_end, year_end”.</li>
-<li><code>State</code>: The state where the battle took place. Annotations (e.g. describing that the state was a territory at the time) are in parentheses.</li>
-<li><code>CWSAC</code>: A rating of the military significance of the battle by the Civil War Sites Advisory Commission. <code>A</code> = Decisive, <code>B</code> = Major, <code>C</code> = Formative, <code>D</code> = Limited.</li>
-<li><code>Outcome</code>: Usually <code>&quot;Confederate victory&quot;</code>, <code>&quot;Union victory&quot;</code>, or <code>&quot;Inconclusive&quot;</code>, followed by notes.</li>
 </ul></li>
 </ul>
 
