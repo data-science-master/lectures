@@ -1,0 +1,385 @@
+---
+title: "Basic Statistics"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Review STAT 614
+- Probability Distributions in R
+- P-values/Confidence Intervals
+- $t$-tests for Means
+- Proportion Tests
+- Simple Linear Regression
+
+# A note
+
+- This review assumes that you have had *some* basic statistics course 
+  and have seen all of these concepts in the past.
+
+- If you haven't taken a basic statistics course, you will find this review 
+  very difficult and incomplete.
+
+# Probability and Distributions in R.
+
+- sample(), rnorm(), pnorm(), qnorm(), dnorm().
+
+# All of Statistics
+
+- **Observational/experimental Units**: The people/places/things/animals/groups
+  that we collect information about. Also known as "individuals" or "cases".
+  
+- **Variable**: A property of the observational/experimental units. 
+    - E.g.: height of a person, area of a country, marital status.
+    
+- **Value**: The specific level of a variable for an observational/experimental 
+  unit.
+    - E.g.: Bob is 5'11'', China has an area of 3,705,407 square miles, Jane is divorced.
+    
+- **Quantitative Variable**: Variable takes on numerical values where arithmetic 
+  operations (plus/minus/divide/times) make sense. 
+    - E.g.: height, weight, area, income.
+    
+- **Categorical Variable**: Variable places observational/experimental units 
+  into different groups/categories based on the values of that variable.
+    - E.g.: race/ethnicity, marital status, religion.
+
+- **Binary Variable**: A categorical variable that takes on only two values.
+    - E.g.: dead/alive, treatment/control.
+    
+- **Population**: The collection of all observational units we are interested in. 
+
+- **Parameter**: A numerical summary of the population.
+    - E.g.: Average height, proportion of people who are divorced.
+
+- **Sample**: A subset of the population (some observational units, but 
+  not all of them).
+
+- **Statistic**: A numeric summary of the sample.
+    - E.g.: Average height of the sample, proportion of people who are 
+      divorced in the sample.
+
+- All of Statistics: We see a pattern in the sample.
+    - **Estimation**: Guess the pattern in the population based on the sample. 
+      Guess a parameter with a statistic. A statistic which is a guess for a 
+      parameter is called an **estimate**.
+    - **Hypothesis Testing**: Ask if the pattern we see in the sample also
+      exists in the population. Test if a parameter has some value.
+    - **Confidence Intervals**: Quantify our (un)certainty of the pattern 
+      in the population based on the sample. Provide a range of likely 
+      parameter values.
+
+- We will go through a lot of examples of this below    
+
+- For the examples below, we will use the data from the Sleuth3 package in R.
+    
+    ```{r, message=FALSE}
+    library(Sleuth3)
+    library(tidyverse)
+    library(broom)
+    ```
+
+- **Exercise**: Read the help page of the `ex0126` data frame from the Sleuth3
+  package. What are the observational units? What are the variables? Which
+  are quantitative and which are categorical?
+  
+    ```{block, echo=FALSE, eval=FALSE}
+    - Observational Units: the members of the US House of Representatives.
+    - Variables: `State` (categorical), `Representative` (primary key), `Party` 
+      (categorical), `Pro05` (quantitative), `Anti05` (quantitative), 
+      `Pro06` (quantitative), `Anti06` (quantitative), `Pro07` (quantitative),
+      `Anti07` (quantitative), `PctPro` (quantitative).
+    ```
+  
+- **Exercise**: Read the help page of the `ex0223` data frame from the Sleuth3
+  package. What are the observational units? What are the variables? Which
+  are quantitative and which are categorical?
+  
+    ```{block, echo=FALSE, eval=FALSE}
+    - Observational Units: The states (and DC).
+    - Variables: `State` (primary key), `Fatalities1995` (quantitative),
+      `Fatalities1996` (quantitative), `PctChange` (quantitative),
+      `SpeedLimit` (categorical).
+    ```
+
+  
+# Pattern: Mean is shifted (one quantitative variable)
+
+- Example: Researchers measured the volume of the left hippocampus in 15 twins
+  where one twin had schizophrenia and the other did not. They were interested
+  in whether the left hippocampus differed in size between the normal and 
+  schizophrenic twin.
+  
+- Observational Units: The twins.
+
+- Population: All twins where one has schizophrenia and the other 
+  does not.
+  
+- Sample: The 15 twins in our study.
+  
+- Variable: The difference in volume in the left hippocampus between the twins.
+  We derived this quantitative variable by subtracting one volume from another.
+    ```{r}
+    case0202 %>%
+      as_tibble() %>%
+      mutate(diff = Unaffected - Affected) %>%
+      select(diff) ->
+      schizo
+    glimpse(schizo)
+    ```
+
+- Pattern: Use a histogram/boxplot to visualize the shift from 0.
+
+    ```{r}
+    ggplot(schizo, aes(x = diff)) +
+      geom_histogram(bins = 15, fill = "white", color = "black") +
+      geom_vline(xintercept = 0, lty = 2) +
+      xlab("Difference in Brain Volumes")
+    ```
+
+- Graphic: 
+
+    ![](./cartoons/twins1.png)\ 
+    
+- Parameter of interest: Mean difference in left hippocampus volumes for all twins.
+
+- Estimate: Use sample mean
+
+    ```{r}
+    schizo %>%
+      summarize(meandiff = mean(diff))
+    ```
+    
+- 0.199 is our "best guess" for the parameter, but it is almost certainly not
+  the value of the parameter (since we didn't measure everyone).
+
+- Hypothesis Testing: 
+    - We are interested in if the mean difference is different from 0. 
+    - Two possibilities:
+        1. **Alternative Hypothesis**: Mean is different from 0.
+        2. **Null Hypothesis**: Mean is not different from 0, we just happened
+           *by chance* to get twins that had a big difference in volume.
+    - Strategy: We calculate the probability of the data assuming possibility 2 
+      (called a $p$-value). If this probability is low, we conclude possibility 1. 
+      If the this probability is high, we don't conclude anything.
+    - **p-value**: the probability that you would see data as or more 
+      supportive of the alternative hypothesis than what you saw 
+      *assuming that the null hypothesis is true*.
+
+- Graphic:
+
+    ![](./cartoons/p-value.png)\ 
+    
+- The distribution of possible null sample means is given by statistical theory.
+  The $t$-statistic has a $t$ distribution with
+  $n - 1$ degrees of freedom ($n$ is the sample size). 
+  It works as long as your data aren't too skewed or if you have a large 
+  enough sample size.
+
+- Function: `t.test()`
+
+    ```{r}
+    tout <- t.test(schizo$diff)
+    tout
+    ```
+    
+- The `tidy()` function from the broom package will format the output of common
+  procedures to a convenient data frame.
+  
+    ```{r}
+    tdf <- tidy(tout)
+    tdf$estimate
+    tdf$p.value
+    ```
+    
+- We often want a range of "likely" values. These are called confidence
+  intervals. `t.test()` will return these confidence intervals, giving
+  lowest and highest likely values for the mean difference in volumes:
+    ```{r}
+    tdf$conf.low
+    tdf$conf.high
+    ```
+    
+- Interpreting confidence intervals:
+    - CORRECT: We used a procedure that would capture the true parameter in 95%
+      of repeated samples.
+    - CORRECT: *Prior to sampling*, the probability of capturing the true
+      paramter is 0.95.
+    - WRONG: After sampling, the probability of capturing the true parameter
+      is 0.95. 
+        - Because after sampling the parameter is either in the interval
+          or it's not. We just don't know which.
+    - WRONG: 95% of twins have volume differences within the bounds of the 95% 
+      confidence interval. 
+        - Because confidence intervals are statements about
+          parameters, not observational units or statistics.
+      
+- Graphic:
+    ```{r, echo=FALSE,eval=FALSE}
+    library(ggthemes)
+    set.seed(1)
+    ncoll <- 20
+    nind <- 15
+    meanval <- 0.25
+    sig <- 0.23
+    tibble(diff2 = rnorm(n = nind * ncoll, mean = meanval, sd = sig),
+           sample = rep(1:nind, each = ncoll)) %>%
+      group_by(sample) %>%
+      nest() %>%
+      mutate(ttest = map(data, ~t.test(.$diff2)),
+             ttest = map(ttest, tidy)) %>%
+      unnest(ttest, .drop = TRUE) %>%
+      select(sample, conf.low, conf.high) %>%
+      mutate(cover = factor(conf.low < meanval & conf.high > meanval, levels = c("TRUE", "FALSE"))) %>%
+    ggplot(aes(x = sample, xend = sample, y = conf.low, yend = conf.high, color = cover)) +
+      geom_segment(lwd = 2) +
+      geom_hline(yintercept = meanval, lty = 2) +
+      theme_classic() +
+      theme(legend.position = "none") +
+      xlab("Sample Number") +
+      ylab("Volume Difference") +
+      scale_x_continuous(breaks = 1:ncoll) +
+      scale_color_colorblind() ->
+      pl
+    ```
+    
+    ![](./cartoons/ci_graphic.png)\ 
+      
+      
+- Intuition: Statistical theory tells us that the sample mean will be
+  within (approximately) 2 standard deviations of the population 
+  mean in 95% of repeated samples. This is two standard deviations
+  of the sampling distribution of the sample mean, *not* two standard
+  deviations of the sample. So we just add and subtract (approximately)
+  two standard deviations of the sampling distribution from the sample mean.
+
+- **Exercise**: 
+
+# Pattern: Means of two groups are different (one quantitative, one binary)
+
+- Example: Beaks depths were measured on Daphne Major finches in 1976 (before
+  a harsh drought) and in 1978 (after a harsh drought). The researchers
+  hypothesized that finches with deeper peaks were more likely to survive.
+  
+    ```{r}
+    data("case0201")
+    case0201 %>%
+      mutate(Year = as.factor(Year)) ->
+      finch
+    glimpse(finch)
+    ```
+
+- Observational Units: The finches.
+
+- Population: All finches.
+
+- Sample: The 178 finches that the researches measured.
+
+- Variables: The year the finch was measured (binary/categorical) and the
+  beak depth (quantitative). Possible to also treat year as quantitative.
+  
+- Pattern: Use a boxplot to see if the groups differ.
+
+    ```{r}
+    ggplot(finch, aes(x = Year, y = Depth)) +
+      geom_boxplot(coef = Inf) +
+      geom_jitter(alpha = 1/3)
+    ```
+
+- Parameter of interest: Difference in mean beak depths between 1976 finches
+  and 1978 finches.
+
+- Estimate: The difference in mean beak depths between 1976 finches and 
+  1978 finches in our sample.
+  
+    ```{r}
+    finch %>%
+      group_by(Year) %>%
+      summarize(meandepth = mean(Depth)) %>%
+      spread(key = Year, value = meandepth) %>%
+      mutate(diff = `1978` - `1976`) ## do you remember why we need back-ticks?
+    ```
+  
+
+- Hypothesis Test:
+  - We want to know if the difference in the mean depths in the two years is
+    actually different.
+  - Two possibilites:
+    - **Alternative Hypothesis**: The mean depths are different in the two years.
+    - **Null Hypothesis**: The mean depths are the same in the two years. We
+      just happened by chance to get deep 1978 finches and shallow 1976 finches.
+    - Strategy: We calculate the probability of the data assuming possibility 2
+      (called a p-value). If this probability is low, we conclude possibility 1.
+      If the this probability is high, we don’t conclude anything.
+      
+- Graphic:
+    
+    ![](./cartoons/two_sample_p.png)\ 
+    
+- The distribution of possible null sample means comes from statistical theory.
+  The t-statistic has a $t$ distribution with a complicated degrees of freedom.
+
+- Function: `t.test()`. The quantitative variable goes to the left of the tilde
+  and the binary variable goes to the right of the tilde.
+
+    ```{r}
+    tout <- t.test(Depth ~ Year, data = finch)
+    tdf <- tidy(tout)
+    tdf$estimate
+    tdf$p.value
+    ```
+    
+- `t.test()` also returns a 95% confidence interval for the difference in means.
+  This has the exact same interpretation as in the previous section.
+  
+    ```{r}
+    c(tdf$conf.low, tdf$conf.high)
+    ```
+    
+- Assumptions (in decreasing order of importance):
+  1. Independence: conditional on year, beak length of one finch doesn't
+     give us any information on the beak lengths of any other finch.
+  2. Approximate normality: The distribution of beak lengths is bell-curved 
+     in each year. Doesn't matter for moderate-large sample sizes because of
+     the central limit theorem.
+  
+
+# Pattern: Means of three or more groups are different (one quantitative, one categorical).
+
+- Example: A judge
+
+- Function: `lm()` or `aov()`.
+
+# Pattern: Two quantitative variables are associated.
+
+- Function: `lm()`
+
+# Pattern: Proportion is shifted (one categorical variable).
+
+- Function: `prop.test()`
+
+# Pattern: Two categorical variables are associated.
+
+- Function: `chisq.test()` or `fisher.test()`.
+
+
+
+
+
+

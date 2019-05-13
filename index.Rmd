@@ -31,4 +31,6 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 03 Vectors and Iteration
     - [03 Vectors](./03_vectors_iterators/03_vectors.html)
     - [03 Iteration](./03_vectors_iterators/03_iterators.html)
+- 04 Basic Statistics
+    - [04 Basic Statistcs](./04_basic_stats/04_basic_stats.html)
     
