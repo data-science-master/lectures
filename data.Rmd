@@ -58,6 +58,14 @@ knitr::opts_chunk$set(echo = TRUE)
     - `Style`: Categorical variable indicating architectural style 
     - `Lot`: Lot size (in square feet)
     - `Highway`: 1 = highway adjacent, 0 = highway not adjacent.
+- [smoke.csv](./data/smoke.csv): A data frame containing information on 
+  smoking status and cancer status for 172 individuals. Data are from 
+  Dorn, Harold F. "The relationship of cancer of the lung and the use of 
+  tobacco." *The American Statistician* 8, no. 5 (1954): 7-13. Variables include
+    - `individual`: The individual number.
+    - `smoke`: Whether the individual smoked (`smoker`) or did not (`nonsmoker`).
+    - `cancer`: Whether the individual had cancer (`cancer`) or was a control
+      (`control`).
 - [words.txt](./data/words.txt): The list of acceptable 2015 Scrabble Words.
 - World Bank Data: The World Bank is an international organization that
   provides loans to countries with the goal of reducing poverty. The following

@@ -1,0 +1,95 @@
+---
+title: "Simple Linear Regression"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Learning Objectives
+
+- Simple Linear Regression
+- ANOVA
+
+# Pattern: Two quantitative variables are associated.
+
+- Example: The big-bang theory suggests a linear relationship between 
+  the recession velocity of a stellar object and its distance from Earth,
+  with a y-intercept of 0. Measurements of recession velocity and distance
+  were made on 24 extra-galactic nebulae.
+    ```{r}
+    data("case0701")
+    bang <- case0701
+    glimpse(bang)
+    ```
+    
+- Observational Units: The nebulae.
+
+- Population: All nebulae.
+
+- Sample: The 24 nebulae that the researches measured.
+
+- Variables: recession velocity (quantitative) and distance (quantitative).
+  
+- Pattern: Use a scatterplot to see if there is an association.
+
+    ```{r}
+    ggplot(bang, aes(x = Velocity, y = Distance)) +
+      geom_point()
+    ```
+
+- Model: $Y_i = \beta_0 + \beta_1 X_i + noise$, where
+    - $Y_i$ is the distance of nebula $i$.
+    - $X_i$ is the velocity of nebula $i$.
+    - $\beta_0$ is the intercept of the mean line.
+    - $\beta_1$ is the slope of the mean line.
+
+- Function: `lm()`
+
+# Pattern: Means of three or more groups are different (one quantitative, one categorical).
+
+- Example: [Dr. Spock](https://en.wikipedia.org/wiki/Benjamin_Spock) was on 
+  trial for draft dodging. He claimed that his judge includes fewer women
+  in his jury selection pool. They measured the proportion of women in 
+  a jury selection in many trials for six judges as well as Spock's judge.
+  
+    ```{r}
+    data("case0502")
+    spock <- case0502
+    glimpse(spock)
+    ```
+  
+- Observational units: The trials in Boston.
+
+- Population: All trials in Boston.
+
+- Sample: The 46 trials the researchers collected data on.
+
+- Variables: The percent of women in the jury selection pool (quantitative)
+  and the judge of the trial (categorical).
+  
+- Pattern: Use a boxplot to see if the groups differ.
+
+    ```{r}
+    ggplot(spock, aes(x = Judge, y = Percent)) +
+      geom_boxplot()
+    ```
+
+- Function: `lm()` or `aov()`.

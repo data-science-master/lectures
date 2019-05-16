@@ -25,8 +25,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Probability Distributions in R
 - P-values/Confidence Intervals
 - $t$-tests for Means
-- ANOVA
-- Simple Linear Regression
 - Proportion Tests
 
 # A note
@@ -257,7 +255,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     qplot(x, y, geom = "line", ylab = "f(x)") +
       geom_polygon(data = polydf, mapping = aes(x = x, y = y), 
                    fill = "blue", alpha = 1/4) +
-      annotate(geom = "text", x = 0, y = 0.1, label = "0.9082", color = "white")
+      annotate(geom = "text", x = 0, y = 0.1, label = "0.9082", color = "black")
     ```
       
       
@@ -621,76 +619,81 @@ ggplot2::theme_set(ggplot2::theme_bw())
   2. Approximate normality: The distribution of beak lengths is bell-curved 
      in each year. Doesn't matter for moderate-large sample sizes because of
      the central limit theorem.
+     
+- **Exercise**: The Armed Forces Qualifying Test is designed for evaluating
+  suitability of military recruits. There are different subjects tested:
+  arithmetic, word knowledge, paragraph comprehension, and mathematics. 
+  They also provide a composite score. These data are stored in the
+  `ex0222` data frame from the Sleuth package. For which subjects do we have
+  evidence that the genders differ? Make appropriate exploratory plots, set up
+  the appropriate hypotheses, and run appropriate hypothesis tests.
   
-
-# Pattern: Means of three or more groups are different (one quantitative, one categorical).
-
-- Example: [Dr. Spock](https://en.wikipedia.org/wiki/Benjamin_Spock) was on 
-  trial for draft dodging. He claimed that his judge includes fewer women
-  in his jury selection pool. They measured the proportion of women in 
-  a jury selection in many trials for six judges as well as Spock's judge.
-  
-    ```{r}
-    data("case0502")
-    spock <- case0502
-    glimpse(spock)
-    ```
-  
-- Observational units: The trials in Boston.
-
-- Population: All trials in Boston.
-
-- Sample: The 46 trials the researchers collected data on.
-
-- Variables: The percent of women in the jury selection pool (quantitative)
-  and the judge of the trial (categorical).
-  
-- Pattern: Use a boxplot to see if the groups differ.
-
-    ```{r}
-    ggplot(spock, aes(x = Judge, y = Percent)) +
-      geom_boxplot()
-    ```
-
-- Function: `lm()` or `aov()`.
-
-# Pattern: Two quantitative variables are associated.
-
-- Example: The big-bang theory suggests a linear relationship between 
-  the recession velocity of a stellar object and its distance from Earth,
-  with a y-intercept of 0. Measurements of recession velocity and distance
-  were made on 24 extra-galactic nebulae.
-    ```{r}
-    data("case0701")
-    bang <- case0701
-    glimpse(bang)
+    ```{r, echo=FALSE, eval=FALSE}
+    data("ex0222")
+    afqt <- ex0222
+    afqt %>%
+      gather(-Gender, key = "Test", value = "Score") %>%
+      ggplot(aes(x = Test, y = Score, fill = Gender)) +
+      geom_boxplot() +
+      scale_fill_colorblind()
     ```
     
-- Observational Units: The nebulae.
-
-- Population: All nebulae.
-
-- Sample: The 24 nebulae that the researches measured.
-
-- Variables: recession velocity (quantitative) and distance (quantitative).
-  
-- Pattern: Use a scatterplot to see if there is an association.
-
-    ```{r}
-    ggplot(bang, aes(x = Velocity, y = Distance)) +
-      geom_point()
+    ```{block, echo=FALSE, eval=FALSE}
+    It seems possible that males do better on the arithmetic, math, and composite
+    scores, while women do better at paragraph scores. 
+    But the coefficient of variation seems very small. That is, the 
+    variability within a gender is much larger than the variability between
+    genders.
     ```
-
-
-- Function: `lm()`
+    
+    ```{r, echo=FALSE, eval=FALSE}
+    afqt %>%
+      gather(-Gender, key = "Test", value = "Score") %>%
+      group_by(Test) %>%
+      nest() %>%
+      mutate(ttest = map(data, ~tidy(t.test(Score ~ Gender, data = .)))) %>%
+      unnest(ttest, .drop = TRUE) ->
+      tout
+    
+    tout %>%
+      select(Test, p.value, estimate) %>%
+      knitr::kable()
+    ```
+    
+    ```{block, echo=FALSE, eval=FALSE}
+    We have strong evidence that the genders differ in the arithmetic, paragraph,
+    and math scores. We have moderate evidence of a difference in the AFQT scores.
+    No evidence of a difference in word scores.
+    ```
+    
 
 # Pattern: Proportion is shifted (one categorical variable).
 
-- Function: `prop.test()`
+- Function: `prop.test()` or `binom.test()`.
 
 # Pattern: Two categorical variables are associated.
 
-- Example:
+- Example: 86 lung cance patients and 86 controls were interviewed on their
+  smoking history in a 1954 study. The data can be found at: 
+    ```{r}
+    smoke <- read_csv(file = "../data/smoke.csv")
+    glimpse(smoke)
+    ```
+
+- Usually, for two categorical variables, data are presented in two-way tables:
+    ```{r}
+    table(smoke$smoke, smoke$cancer) %>%
+      addmargins()
+    ```
+    
+- Or tables of proportions.
+    ```{r}
+    table(smoke$smoke, smoke$cancer) %>%
+      prop.table()
+    ```
+
+    
+
 
 - Function: `chisq.test()` or `fisher.test()`.
 
