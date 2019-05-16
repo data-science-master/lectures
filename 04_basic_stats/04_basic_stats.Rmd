@@ -21,12 +21,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Review STAT 614
+- Review Intermediate Statistics (STAT 302/320/614)
 - Probability Distributions in R
 - P-values/Confidence Intervals
 - $t$-tests for Means
-- Proportion Tests
+- ANOVA
 - Simple Linear Regression
+- Proportion Tests
 
 # A note
 
@@ -34,16 +35,266 @@ ggplot2::theme_set(ggplot2::theme_bw())
   and have seen all of these concepts in the past.
 
 - If you haven't taken a basic statistics course, you will find this review 
-  very difficult and incomplete.
+  **very** difficult and incomplete.
 
 # Probability and Distributions in R.
 
-- sample(), rnorm(), pnorm(), qnorm(), dnorm().
+- **Distribution**: The possible values of a variable and how often it takes
+  those values. 
+  
+- A **density** describes the distribution of a *quantitative* variable. 
+  You can think of it as approximating a histogram. It is a curve where
+  - The area under the curve between any two points is approximately the
+    probability of being between those two points.
+  - The total area under the curve is 1 (something must happen).
+  - The curve is never negative (can't have negative probabilities).
+  
+- The density of birthweights in America:
+
+    ![](./cartoons/birthweights.png)\ 
+  
+- The distribution of many variables in Statistics approximate the 
+  **normal distribution**.
+    - If you know the mean and standard deviation of a normal distribution, then
+      you know the whole distribution.
+    - Larger standard deviation means more spread out (larger and smaller values
+      are both more likely).
+    - Mean determines where the data are centered.
+
+- Normal densities with different means.
+    ```{r, echo=FALSE}
+    library(ggplot2)
+    library(ggthemes)
+    x <- seq(-10, 10, length = 100)
+    y1 <- dnorm(x = x, mean = 0, sd = 2)
+    y2 <- dnorm(x = x, mean = -4, sd = 2)
+    y3 <- dnorm(x = x, mean = 4, sd = 2)
+    dfdat <- data.frame(x = rep(x, 3), 
+                        y = c(y1, y2, y3), 
+                        z = factor(rep(c(1, 2, 3), each = length(x))))
+    
+    ggplot(data = dfdat, mapping = aes(x = x, y = y, color = z, lty = z)) +
+      geom_line(lwd=1) + 
+      ggthemes::scale_color_colorblind() +
+      theme(legend.position="none") +
+      ylab("f(x)") +
+      xlab("x")
+    ```
+
+- Normal densities with different standard deviations
+    ```{r, echo=FALSE}
+    x <- seq(-10, 10, length = 100)
+    y1 <- dnorm(x = x, mean = 0, sd = 1)
+    y2 <- dnorm(x = x, mean = 0, sd = 2)
+    y3 <- dnorm(x = x, mean = 0, sd = 4)
+    dfdat <- data.frame(x = rep(x, 3), 
+                        y = c(y1, y2, y3), 
+                        z = factor(rep(c(1, 2, 3), each = length(x))))
+    
+    ggplot(data = dfdat, mapping = aes(x = x, y = y, color = z, lty = z)) +
+      geom_line(lwd=1) + 
+      ggthemes::scale_color_colorblind() +
+      theme(legend.position="none") +
+      ylab("f(x)") +
+      xlab("x")
+    ```
+    
+    
+  
+- Density Function (height of curve, **NOT** probability of a value).
+    ```{r}
+    dnorm(x = 2, mean = 1, sd = 1)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-2, 4, length = 100)
+    y <- dnorm(x, mean = 1, sd = 1)
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_segment(dat = data.frame(x = 2, xend = 2, y = 0, 
+                                    yend = dnorm(x = 2, mean = 1, sd = 1)), 
+                   aes(x = x, y = y, xend = xend, yend = yend), lty = 2, col = 2)
+    ```
+    
+- Random Generation (generate samples from a given normal distribution).
+
+    ```{r}
+    samp <- rnorm(n = 1000, mean = 1, sd = 1)
+    head(samp)
+    ```
+    
+    ```{r, echo = FALSE}
+    qplot(samp, geom = "histogram", fill = I("white"), color = I("black"), bins = 20)
+    ```
+  
+- Cumulative Distribution Function (probability of being less than or equal 
+  to some value).
+
+    ```{r}
+    pnorm(q = 2, mean = 1, sd = 1)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-2, 4, length = 500)
+    y <- dnorm(x, mean = 1, sd = 1)
+    polydf <- data.frame(x = c(min(x), x[x < 2], 2, 0), 
+                         y = c(0, y[x < 2], 0, 0))
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_polygon(data = polydf, mapping = aes(x = x, y = y), 
+                   fill = "blue", alpha = 1/4)
+    ```
+    
+- Quantile function (find value that has a given the probability of being less 
+  than or equal to it).
+  
+    ```{r}
+    qnorm(p = 0.8413, mean = 1, sd = 1)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-2, 4, length = 500)
+    y <- dnorm(x, mean = 1, sd = 1)
+    polydf <- data.frame(x = c(min(x), x[x < 2], 2, 0), 
+                         y = c(0, y[x < 2], 0, 0))
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_polygon(data = polydf, mapping = aes(x = x, y = y), 
+                   fill = "blue", alpha = 1/4) +
+      annotate(geom = "text", x = 0.5, y = 0.1, label = "0.8413", color = "black")
+    ```  
+    
+- **Exercise**: Use `rnorm()` to generate 10,000 random draws from a normal 
+  distribution with mean 5 and standard deviation 2. What proportion are
+  less than 3? Can you think up a way to approximate this proportion using
+  a different function?
+  
+    ```{r, eval=FALSE, echo=FALSE}
+    samp <- rnorm(n = 10000, mean = 5, sd = 2)
+    mean(samp < 3)
+    pnorm(q = 3, mean = 5, sd = 2)
+    ```
+    
+- The $t$-distribution shows up a lot in Statistics. 
+    - It is also bell-curved but has "thicker tails" (more extreme observations 
+      are more likely). 
+    - It is always centered at 0. 
+    - It only has one parameter, called the "degrees of freedom", which 
+      determines how large the tails are.
+    - Smaller degrees of freedom mean thicker tails, larger degrees of freedom
+      means thinner tails.
+    - If the degrees of freedom is large enough, the $t$-distribution
+      is approximately the same as a normal distribution with mean 0
+      and variance 1.
+      
+- $t$-distributions with different degrees of freedom:
+
+    ```{r, echo=FALSE}
+    x <- seq(-4, 4, length = 200)
+    data.frame(df = as.factor(c(rep(1, length(x)), rep(5, length(x)), rep(Inf, length(x)))),
+               x = c(x, x, x),
+               y = c(dt(x = x, df = 1),
+                     dt(x = x, df = 5),
+                     dt(x = x, df = Inf))) ->
+      dfdat
+    ggplot(dfdat, mapping = aes(x = x, y = y, color = df, lty = df)) +
+      geom_line() +
+      scale_color_colorblind() +
+      ylab("f(x)")
+    ```
+
+
+- Density Function
+
+    ```{r}
+    dt(x = -6, df = 2)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-6, 6, length = 100)
+    y <- dt(x, df = 1)
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_segment(dat = data.frame(x = 2, xend = 2, y = 0,
+                                    yend = dt(x = 2, df = 2)), 
+                   aes(x = x, y = y, xend = xend, yend = yend), lty = 2, col = 2)
+    ```
+    
+- Random Generation
+
+    ```{r}
+    samp <- rt(n = 1000, df = 2)
+    head(samp)
+    ```
+    
+    ```{r, echo = FALSE}
+    qplot(samp, geom = "histogram", fill = I("white"), color = I("black"), bins = 20)
+    ```
+    
+- Cumulative Distribution Function
+
+    ```{r}
+    pt(q = 2, df = 2)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-6, 6, length = 500)
+    y <- dt(x,  df = 2)
+    polydf <- data.frame(x = c(min(x), x[x < 2], 2, 0), 
+                         y = c(0, y[x < 2], 0, 0))
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_polygon(data = polydf, mapping = aes(x = x, y = y), 
+                   fill = "blue", alpha = 1/4)
+    ```
+    
+- Quantile Function
+
+    ```{r}
+    qt(p = 0.9082, df = 2)
+    ```
+    
+    ```{r, echo = FALSE}
+    x <- seq(-6, 6, length = 500)
+    y <- dt(x, df = 2)
+    polydf <- data.frame(x = c(min(x), x[x < 2], 2, 0), 
+                         y = c(0, y[x < 2], 0, 0))
+    qplot(x, y, geom = "line", ylab = "f(x)") +
+      geom_polygon(data = polydf, mapping = aes(x = x, y = y), 
+                   fill = "blue", alpha = 1/4) +
+      annotate(geom = "text", x = 0, y = 0.1, label = "0.9082", color = "white")
+    ```
+      
+      
+- There are many other distributions implemented in R. To see the most common,
+  run:
+  
+    ```{r,eval=FALSE}
+    help("Distributions")
+    ```
+  
+- **Exercise**: Calculate the 0.75 quantile of the $t$-distribution for 
+  degrees of freedome $1, 2, 3,\ldots,50$. Reproduce this plot:
+  
+    ````{r,echo=FALSE,message=FALSE}
+    library(tidyverse)
+    tibble(df = seq_len(50)) %>%
+      mutate(quant75 = qt(p = 0.75, df = df)) %>%
+      ggplot(aes(x = df, y = quant75)) +
+      geom_line() +
+      xlab("Degrees of Freedom") +
+      ylab("0.75 Quantile")
+    ```
+    
+    Can you use a function to come up with the asymptotic value of the 0.75
+    quantile as the degrees of freedom approaches infinity?
+    
+    ```{r,echo=FALSE,eval=FALSE}
+    qnorm(0.75)
+    ```
+    
+  
 
 # All of Statistics
 
 - **Observational/experimental Units**: The people/places/things/animals/groups
   that we collect information about. Also known as "individuals" or "cases".
+  Sometimes I just say "units".
   
 - **Variable**: A property of the observational/experimental units. 
     - E.g.: height of a person, area of a country, marital status.
@@ -52,11 +303,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
   unit.
     - E.g.: Bob is 5'11'', China has an area of 3,705,407 square miles, Jane is divorced.
     
-- **Quantitative Variable**: Variable takes on numerical values where arithmetic 
+- **Quantitative Variable**: The variable takes on numerical values where arithmetic 
   operations (plus/minus/divide/times) make sense. 
     - E.g.: height, weight, area, income.
+    - Counterexample: Phone numbers, social security numbers.
     
-- **Categorical Variable**: Variable places observational/experimental units 
+- **Categorical Variable**: The variable places observational/experimental units 
   into different groups/categories based on the values of that variable.
     - E.g.: race/ethnicity, marital status, religion.
 
@@ -66,21 +318,31 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - **Population**: The collection of all observational units we are interested in. 
 
 - **Parameter**: A numerical summary of the population.
-    - E.g.: Average height, proportion of people who are divorced.
+    - E.g.: Average height, proportion of people who are divorced, standard
+      deviation of weight.
 
 - **Sample**: A subset of the population (some observational units, but 
   not all of them).
 
 - **Statistic**: A numeric summary of the sample.
     - E.g.: Average height of the sample, proportion of people who are 
-      divorced in the sample.
+      divorced in the sample, standard deviation of weight of a sample.
+      
+- Graphic:
+    
+    ![](./cartoons/pop_vs_sample.png)\ 
+
+- **Sampling Distribution**: The distribution of a statistic over
+  many hypothetical random samples from the population.
+  
+    ![](./cartoons/sampling_dist.png)\ 
 
 - All of Statistics: We see a pattern in the sample.
     - **Estimation**: Guess the pattern in the population based on the sample. 
       Guess a parameter with a statistic. A statistic which is a guess for a 
       parameter is called an **estimate**.
     - **Hypothesis Testing**: Ask if the pattern we see in the sample also
-      exists in the population. Test if a parameter has some value.
+      exists in the population. Test if a parameter is some value.
     - **Confidence Intervals**: Quantify our (un)certainty of the pattern 
       in the population based on the sample. Provide a range of likely 
       parameter values.
@@ -187,7 +449,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ![](./cartoons/p-value.png)\ 
     
 - The distribution of possible null sample means is given by statistical theory.
-  The $t$-statistic has a $t$ distribution with
+  Secifically, the $t$-statistic (mean divided by the standard deviation of the
+  sampling distribution of the mean) has a $t$ distribution with
   $n - 1$ degrees of freedom ($n$ is the sample size). 
   It works as long as your data aren't too skewed or if you have a large 
   enough sample size.
@@ -362,11 +625,62 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Pattern: Means of three or more groups are different (one quantitative, one categorical).
 
-- Example: A judge
+- Example: [Dr. Spock](https://en.wikipedia.org/wiki/Benjamin_Spock) was on 
+  trial for draft dodging. He claimed that his judge includes fewer women
+  in his jury selection pool. They measured the proportion of women in 
+  a jury selection in many trials for six judges as well as Spock's judge.
+  
+    ```{r}
+    data("case0502")
+    spock <- case0502
+    glimpse(spock)
+    ```
+  
+- Observational units: The trials in Boston.
+
+- Population: All trials in Boston.
+
+- Sample: The 46 trials the researchers collected data on.
+
+- Variables: The percent of women in the jury selection pool (quantitative)
+  and the judge of the trial (categorical).
+  
+- Pattern: Use a boxplot to see if the groups differ.
+
+    ```{r}
+    ggplot(spock, aes(x = Judge, y = Percent)) +
+      geom_boxplot()
+    ```
 
 - Function: `lm()` or `aov()`.
 
 # Pattern: Two quantitative variables are associated.
+
+- Example: The big-bang theory suggests a linear relationship between 
+  the recession velocity of a stellar object and its distance from Earth,
+  with a y-intercept of 0. Measurements of recession velocity and distance
+  were made on 24 extra-galactic nebulae.
+    ```{r}
+    data("case0701")
+    bang <- case0701
+    glimpse(bang)
+    ```
+    
+- Observational Units: The nebulae.
+
+- Population: All nebulae.
+
+- Sample: The 24 nebulae that the researches measured.
+
+- Variables: recession velocity (quantitative) and distance (quantitative).
+  
+- Pattern: Use a scatterplot to see if there is an association.
+
+    ```{r}
+    ggplot(bang, aes(x = Velocity, y = Distance)) +
+      geom_point()
+    ```
+
 
 - Function: `lm()`
 
@@ -375,6 +689,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Function: `prop.test()`
 
 # Pattern: Two categorical variables are associated.
+
+- Example:
 
 - Function: `chisq.test()` or `fisher.test()`.
 
