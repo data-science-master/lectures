@@ -34,6 +34,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - If you haven't taken a basic statistics course, you will find this review 
   **very** difficult and incomplete.
+  
+- If you are having difficulty remembering these topics, then you can review
+  them in the free OpenIntro book: <https://leanpub.com/openintro-statistics>.
+  The most pertinent sections (from the third edition) 
+  are 3.1, 4.1, 4.2, 4.3, 5.1, 5.2, 5.3, 6.1, 6.2, and 6.5.
 
 # Probability and Distributions in R.
 
@@ -666,39 +671,178 @@ ggplot2::theme_set(ggplot2::theme_bw())
     No evidence of a difference in word scores.
     ```
     
+# Pattern: Proportion is shifted (one binary variable).
 
-# Pattern: Proportion is shifted (one categorical variable).
+- Example: A 2013 Gallup poll (<https://news.gallup.com/poll/161198/favor-russian-nuclear-arms-reductions.aspx>)
+  surveyed 1,028 U.S. adults. Of the respondents, 576 said they they support
+  nuclear arms reduction
+  
+- Observational Units: U.S. adults
 
-- Function: `prop.test()` or `binom.test()`.
+- Population: All U.S. adults.
+
+- Sample: The 1028 U.S. adults in the survey.
+
+- Variable: Did they support nuclear arms reduction (yes or no). This is a
+  binary variable.
+  
+- Pattern: Calculate sample proportion.
+
+    ```{r}
+    576 / 1028
+    ```
+
+- Parameter of interest: Proportion of U.S. adults who support nuclear arms
+  reduction.
+  
+- Estimate with sample proportion, 0.56.
+
+- Question: Do more than half of U.S. adults support nuclear arms reduction?
+
+- Function: `prop.test()` (when you have a large number of both successes and
+  failures) or `binom.test()` (for any number of successes and failures).
+  
+    ```{r}
+    bout <- tidy(binom.test(x = 576, n = 1028, p = 0.5))
+    bout %>%
+      select(estimate, p.value, conf.low, conf.high)
+    ```
+    
+    ```{r}
+    pout <- tidy(prop.test(x = 576, n = 1028, p = 0.5))
+    pout %>%
+      select(estimate, p.value, conf.low, conf.high)
+    ```
+    
+- **Exercise** (from OpenIntro): The 2010 General Social Survey asked 1,259
+  US residents: "Do you think the use of marijuana should be made legal, or not?"
+  48% of the respondents said it should be made legal.
+    a. Is 48% a sample statistic or a population parameter? Explain.
+    b. Construct a 95% confidence interval for the proportion of US residents 
+       who think marijuana should be made legal, and interpret it in the 
+       context of the data.
+       
+    ```{block, eval=FALSE, echo=FALSE}
+    For part a, 0.48 is a sample statistic.
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    binom.test(x = round(0.48 * 1259), n = 1259) %>%
+      tidy() %>%
+      select(conf.low, conf.high)
+    ```
+
+       
 
 # Pattern: Two categorical variables are associated.
 
-- Example: 86 lung cance patients and 86 controls were interviewed on their
+- Example: 86 lung cancer patients and 86 controls were interviewed on their
   smoking history in a 1954 study. The data can be found at: 
-    ```{r}
+  <https://data-science-master.github.io/lectures/data/smoke.csv>.
+    ```{r, message = FALSE}
     smoke <- read_csv(file = "../data/smoke.csv")
     glimpse(smoke)
     ```
 
-- Usually, for two categorical variables, data are presented in two-way tables:
+- Usually, for two categorical variables, data are presented/provided in 
+  two-way tables:
     ```{r}
-    table(smoke$smoke, smoke$cancer) %>%
-      addmargins()
+    tabdat <- table(smoke$smoke, smoke$cancer)
+    tabdat
+    addmargins(tabdat)
     ```
     
-- Or tables of proportions.
+- Or two-way tables of proportions.
     ```{r}
-    table(smoke$smoke, smoke$cancer) %>%
-      prop.table()
+    prop.table(tabdat)
     ```
 
+- Observational Units: People.
+
+- Population: All people.
+
+- Sample: The 172 people in the study.
+
+- Variables: The smoking status of ther person (`smoke`) and the cancer
+  status of the person (`cancer`).
+  
+- Pattern: Visualize by calculating conditional proportions. For example, the 
+  following code calculates the proportion of cancer cases that are smokers,
+  and the proportion of controls that are smokers.
+    ```{r}
+    prop.table(tabdat, margin = 2)
+    ```
     
+- If you need a fancy plot for your boss, try a mosaic plot:
 
+    ```{r}
+    as.data.frame(tabdat) %>%
+      ggplot(aes(y = Freq, x = Var2, fill = Var1)) +
+      geom_col(position = "fill") +
+      scale_fill_colorblind(name = "Smoking\nStatus") +
+      xlab("Cancer Status") +
+      ylab("Proportion")
+    ```
+    
+- Intuition: If the two variables are not related, then we would expect about
+  the same proportion of smokers in each group. But if these conditional 
+  proportions are very different, then to variables might be related.
+  
+- Null hypothesis: cancer status and smoking status are independent.
 
-- Function: `chisq.test()` or `fisher.test()`.
+- Alternative hypothesis: cancer satatus and smoking status are dependent.
 
+- Function:`fisher.test()` tests for whether we see
+  more smokers in one group versus the other. Or, symmetrically,
+  whether we see more cancer cases in the smoker group versus the 
+  nonsmoker group. We won't get into the test statistic or the null 
+  distribution of this test.
 
+    ```{r}
+    tidy(fisher.test(tabdat)) %>%
+      select(p.value, estimate)
+    ```
+    
+- The value in the "estimate" column is the odds ratio. It's the multiplicative
+  change in the odds of being a nonsmoker when you consider the cancer versus
+  control groups. Specifically 
+    $$
+    \frac{3/86}{83/86} \div \frac{14/86}{72/86}
+    $$
+    
+- You might see a chi-squared test in the wild. They are only appropriate
+  for large numbers of counts in each cell. I don't see a reason to use it
+  since we have computers, but it's fine most of the time to use:
 
+    ```{r}
+    tidy(chisq.test(tabdat)) %>%
+      select(p.value)
+    ```
+
+- **Exercise**: Researches collected information on women 60 years old or older. 
+  They asked them about their sexual activity and their coffee drinking status.
+  Data are from: Diokno, Ananias C., Morton B. Brown, and A. Regula Herzog. 
+  "Sexual function in the elderly." *Archives of Internal Medicine* 150, 
+  no. 1 (1990): 197-200. The table is below:
+  
+    ```{r}
+    tabdat <- as.table(matrix(c(15, 115, 25, 70), nrow = 2))
+    dimnames(tabdat) <- list(coffee = c("yes", "no"), sex = c("yes", "no"))
+    tabdat
+    ```
+  
+    Does there appear to be an association between coffee drinking and 
+    sexual activity? Create a table to explore this association. Then
+    run a hypothesis test. What is the null hypothesis?
+    
+    ```{r, echo=FALSE, eval=FALSE}
+    ## It seems like a very strong association.
+    prop.table(tabdat, margin = 1)
+    # Null hypothesis is independence.
+    fisher.test(tabdat)
+    ```
+    
+  
 
 
 
