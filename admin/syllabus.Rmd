@@ -35,6 +35,7 @@ This course focuses on the collection, organization, analysis, interpretation, a
     - R for Data Science by Wickham and Grolemund (O'Reilly): <http://r4ds.had.co.nz/>
     - Advanced R – Wickham (O’Reilly): <https://adv-r.hadley.nz/>
     - Git for Scientists: <https://milesmcbain.github.io/git_4_sci/>
+    - OpenIntro Statistics: <https://www.openintro.org/stat/textbook.php?stat_book=os>
 - **Course Website**: https://github.com/orgs/data-science-fall-2019/
 
 # Class Structure
@@ -50,7 +51,7 @@ I will use GitHub to post all class materials.
 - During the semester I will assign, collect, and grade assignments.  There will be approximately 8 formal assignments throughout the semester. 
 - Assignments will be posted and returned on GitHub. **I expect frequent commits while you are completing your assignment.** Lack of frequent commits may result in point deductions.
 - You may receive assistance from other students in the class and me, but your submissions must be composed of your own thoughts, coding and words. I expect you to get ideas from online resources such as Stackoverflow or GitHub when you get stuck.  Please cite your source when you do so and be specific about what you have added to it.  You should be able to redo the code "cold" when you do this.  Failure to do so is a violation of AU’s Academic Integrity Code. 
-- I may accept a late assignment if I see some progress and a consistent commit history in that assignment. Though, to also accommodate extraordinary circumstances and illness, I will drop the lowest assignment grade. You should not use this as an excuse to skip an assignment, but rather to handle a situation where you are unable to turn in your assignment in a timely manner.
+- Under extraordinary circumstances, I may accept a late assignment if I see some progress and a **consistent commit history** in that assignment. Though, I also will drop the lowest assignment grade. You should not use this as an excuse to skip an assignment, but rather to handle a situation where you are unable to turn in your assignment in a timely manner.
 
 ## Exams
 
@@ -59,7 +60,8 @@ We will have approximately three in-class exams.  Any material covered in class,
 ## Project
 
 Students taking the course for graduate credit (STAT 613) will prepare a final project using the tools learned in the class.  Work with me to get your topic approved.  Undergraduate students may complete a final project at their option.  
-Your project should involve working with a fairly large real-world dataset to answer some question of interest to you. It should be reproducible and include graphical representations of your data.
+
+Your project will involve creating a Shiny app to interactively analyze a real-world dataset. Your Shiny app should be able to perform at least one interactive inference task (e.g. choosing variables to run a simple linear regression on). As a part of the project, you will present this Shiny app to the rest of the class.
 
 # Grading
 
@@ -143,10 +145,11 @@ print(pl)
 
 Before receiving any assistance on a specific homework problem, please make sure that you have read through the class materials, and that you have made a fair attempt at the problem. 
 
-1. Always feel welcome to come visit me during my office hours.  Office hours are often busy so please come prepared with specific questions.  **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
-2. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
-3. You are also encouraged to ask me questions online via email. 
-4. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
+1. Always feel welcome to come visit me during my office hours (no appointment necessary). I sometimes provide tea. Office hours can be busy so please come prepared with specific questions.  **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
+2. I also set aside a few hours each week to meet with students outside of office hours. To accomodate students who commute, I can also meet over Skype or Google Hangouts. Please send me an email if you are unable to come to my office hours and need help.
+3. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
+4. You are also encouraged to ask me questions online via email. 
+5. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
     - The Academic Support and Access Center (x3360, MGC 243) supports the academic development and educational goals of all AU students while also providing support to students with disabilities. They offer workshops on topics of interest to all students such as time management, note taking, critical thinking, memory skills, and test taking. Additional support includes free private and group tutoring in many subjects, supplemental instruction, The Math Lab and The Writing Lab. 
     - Students wishing to receive accommodations for a disability, are to bring their documentation directly to the Academic Support and Access Center (ASAC-<http://www.american.edu/ocl/asac/index.cfm>), in MGC 243, x3360. ASAC, in turn, will notify me of the accommodation required. Keep in mind that accommodations can only begin when I have been notified. This means that students should take care of this at the start of the semester, **before** the work for which they require accommodation is due.
     - The Counseling Center (x3500, MGC 214) is here to help students make the most of their university experience, both personally and academically. We offer individual and group counseling, urgent care, self-help resources, referrals to private care, as well as programming to help you gain the skills and insight needed to overcome adversity and thrive while you are in college. Contact the Counseling Center to make an appointment in person or by telephone, or visit the Counseling Center page on the AU website for additional information.

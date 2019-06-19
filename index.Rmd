@@ -33,4 +33,5 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [03 Iteration](./03_vectors_iterators/03_iterators.html)
 - 04 Basic Statistics
     - [04 Basic Statistcs](./04_basic_stats/04_basic_stats.html)
+    - [Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf)
     

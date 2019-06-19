@@ -44,7 +44,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - `ICLEVEL`: Level of institution (`1` = 4-year, `2` = 2-year, `3` = less than 2-year).
     - `MN_EARN_WNE_P6`: Mean earnings of students working and not enrolled 6 years 
       after entry (so students who graduated in the 2009 to 2010 academic year).
-- [estate.csv](./data/estate.csv): Data on 522 home sales in a midwestern
+- [estate.csv](./data/estate.csv): Data on 522 home sales in a Midwestern
   city during the year 2002. The 13 variables are
     - `Price`: Sales price of residence (in dollars)
     - `Area`: Finished area of residence (in square feet)
@@ -58,6 +58,21 @@ knitr::opts_chunk$set(echo = TRUE)
     - `Style`: Categorical variable indicating architectural style 
     - `Lot`: Lot size (in square feet)
     - `Highway`: 1 = highway adjacent, 0 = highway not adjacent.
+- [flights14.csv](./data/flights14.csv): Data from 253,316 flights originating
+  from New York City in 2014. This is from the
+  [data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) 
+  vignettes. The 11 variables include:
+    - `year`: Year of scheduled departure.
+    - `month`: Month of scheduled departure.
+    - `day`: Day of scheduled departure.
+    - `dep_delay`: Departure delay in minutes.
+    - `arr_delay`: Arrival delay in minutes.
+    - `carrier`: The two-letter carrier abbreviation.
+    - `origin`: The originating airport.
+    - `dest`: The destination airport.
+    - `air_time`: The amount of time in the air, in minutes.
+    - `distance`: The distance traveled, in miles.
+    - `hour`: Hour of scheduled departure.
 - [smoke.csv](./data/smoke.csv): A data frame containing information on 
   smoking status and cancer status for 172 individuals. Data are from 
   Dorn, Harold F. "The relationship of cancer of the lung and the use of 

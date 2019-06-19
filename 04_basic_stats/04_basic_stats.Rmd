@@ -7,6 +7,7 @@ output:
     toc: true
     toc_depth: 4
 urlcolor: "blue"
+bibliography: "../bib.bib"
 ---
 
 
@@ -27,7 +28,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - $t$-tests for Means
 - Proportion Tests
 
-# A note
+# A Note on this Review
 
 - This review assumes that you have had *some* basic statistics course 
   and have seen all of these concepts in the past.
@@ -60,7 +61,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
   **normal distribution**.
     - If you know the mean and standard deviation of a normal distribution, then
       you know the whole distribution.
-    - Larger standard deviation means more spread out (larger and smaller values
+    - Larger standard deviation implies more spread out (larger and smaller values
       are both more likely).
     - Mean determines where the data are centered.
 
@@ -174,13 +175,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
     mean(samp < 3)
     pnorm(q = 3, mean = 5, sd = 2)
     ```
+  
+- **Exercise**: In Hong Kong, human male height is approximately normally
+  distributed with mean 171.5 cm and standard deviation 5.5 cm. What 
+  proportion of the Hong Kong population is between 170 cm and 180 cm?
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    pless180 <- pnorm(q = 180, mean = 171.5, sd = 5.5)
+    pless170 <- pnorm(q = 170, mean = 171.5, sd = 5.5)
+    pbetween <- pless180 - pless170
+    pbetween
+    ```
     
 - The $t$-distribution shows up a lot in Statistics. 
     - It is also bell-curved but has "thicker tails" (more extreme observations 
       are more likely). 
     - It is always centered at 0. 
     - It only has one parameter, called the "degrees of freedom", which 
-      determines how large the tails are.
+      determines how thick the tails are.
     - Smaller degrees of freedom mean thicker tails, larger degrees of freedom
       means thinner tails.
     - If the degrees of freedom is large enough, the $t$-distribution
@@ -272,7 +284,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
   
 - **Exercise**: Calculate the 0.75 quantile of the $t$-distribution for 
-  degrees of freedome $1, 2, 3,\ldots,50$. Reproduce this plot:
+  degrees of freedom $1, 2, 3,\ldots,50$. Reproduce this plot:
   
     ````{r,echo=FALSE,message=FALSE}
     library(tidyverse)
@@ -292,7 +304,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
   
-
 # All of Statistics
 
 - **Observational/experimental Units**: The people/places/things/animals/groups
@@ -311,7 +322,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - E.g.: height, weight, area, income.
     - Counterexample: Phone numbers, social security numbers.
     
-- **Categorical Variable**: The variable places observational/experimental units 
+- **Categorical Variable**: The variable puts observational/experimental units 
   into different groups/categories based on the values of that variable.
     - E.g.: race/ethnicity, marital status, religion.
 
@@ -452,7 +463,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ![](./cartoons/p-value.png)\ 
     
 - The distribution of possible null sample means is given by statistical theory.
-  Secifically, the $t$-statistic (mean divided by the standard deviation of the
+  Specifically, the $t$-statistic (mean divided by the standard deviation of the
   sampling distribution of the mean) has a $t$ distribution with
   $n - 1$ degrees of freedom ($n$ is the sample size). 
   It works as long as your data aren't too skewed or if you have a large 
@@ -486,7 +497,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - CORRECT: We used a procedure that would capture the true parameter in 95%
       of repeated samples.
     - CORRECT: *Prior to sampling*, the probability of capturing the true
-      paramter is 0.95.
+      parameter is 0.95.
     - WRONG: After sampling, the probability of capturing the true parameter
       is 0.95. 
         - Because after sampling the parameter is either in the interval
@@ -535,7 +546,53 @@ ggplot2::theme_set(ggplot2::theme_bw())
   deviations of the sample. So we just add and subtract (approximately)
   two standard deviations of the sampling distribution from the sample mean.
 
-- **Exercise**: 
+- **Exercise**: An investor sued his broker for lack of diversification. Below
+  are the rates of return (in percent) for the investor's portfolio over 39 
+  months (data from @moore1998introduction). The average of the S&P 500 stock 
+  index for the same period was 0.95%. Does the broker perform worse than
+  average? Explore the data, set up hypotheses, and run the appropriate test.
+
+    ```{r}
+    stock <- tibble(return = c(-8.36,   1.63,  -2.27, -2.93,  -2.70, 
+                               -2.93,  -9.14,  -2.64,  6.82,  -2.35, 
+                               -3.58,   6.13,   7.00, -15.25, -8.66,
+                               -1.03,  -9.16,  -1.25, -1.22,  -10.27,
+                               -5.11,  -0.80,  -1.44,  1.28,  -0.65,
+                                4.34,   12.22, -7.21, -0.09,   7.34, 
+                                5.04,  -7.24,  -2.14, -1.01,  -1.41, 
+                                12.03, -2.53,   4.33,  1.35))
+    ```
+
+    ```{r, eval=FALSE, echo=FALSE}
+    ggplot(stock, aes(x = return)) +
+      geom_histogram(bins = 10, fill = "white", color = "black") +
+      geom_vline(xintercept = 0, lty = 2, col = 2) +
+      theme_bw()
+    
+    stock %>%
+      summarize(mean_return = mean(return))
+    ```
+    
+    ```{block, eval=FALSE, echo=FALSE}
+    It's hard to tell with the data if the broker did worse than average.
+    
+    Null hypothesis: The broker's average rate of return is 0.95%
+    
+    Alternative hypothesis: The broker's average rate of return is not 0.95%.
+    ```
+    
+    ```{r, eval=FALSE, echo=FALSE}
+    t.test(stock$return, mu = 0.95) %>%
+      tidy() ->
+      tout
+    tout$p.value
+    c(low = tout$conf.low, high = tout$conf.high)
+    ```
+    
+    ```{block, eval=FALSE, echo=FALSE}
+    We have moderate evidence to suggest that the broker performs 
+    worse than average.
+    ```
 
 # Pattern: Means of two groups are different (one quantitative, one binary)
 
@@ -586,7 +643,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Hypothesis Test:
   - We want to know if the difference in the mean depths in the two years is
     actually different.
-  - Two possibilites:
+  - Two possibilities:
     - **Alternative Hypothesis**: The mean depths are different in the two years.
     - **Null Hypothesis**: The mean depths are the same in the two years. We
       just happened by chance to get deep 1978 finches and shallow 1976 finches.
@@ -670,6 +727,111 @@ ggplot2::theme_set(ggplot2::theme_bw())
     and math scores. We have moderate evidence of a difference in the AFQT scores.
     No evidence of a difference in word scores.
     ```
+    
+# Note on Assumptions of $t$-tools
+
+- Assumptions of $t$-tools in decreasing order of importance:
+
+    1. Independence: Knowing value of one observation does not tell you value of another.
+    2. Normality: Distribution of quantitative variable (within each group) is normal.
+  
+- Hire a statistician if the independence assumption is violated.
+  
+- If data are *very* skewed (violating assumption 2) and the sample size is small
+  and the quantitative variable is *always positive*, then take a log to make 
+  the data more symmetric.
+  
+- Example: Seeded clouds with either silver iodide or a control substance. Measured rainfall.
+
+    ```{r}
+    data("case0301")
+    ggplot(case0301, aes(x = Treatment, y = Rainfall)) +
+      geom_boxplot()
+    
+    ggplot(case0301, aes(x = Treatment, y = Rainfall)) +
+      geom_boxplot() +
+      scale_y_log10()
+    
+    case0301 %>%
+      mutate(logRainfall = log(Rainfall)) %>%
+      t.test(logRainfall ~ Treatment, data = .) %>%
+      tidy() ->
+      tout
+    ```
+
+- Inference is then stated in terms of *medians* and *ratios of medians* since
+  the log of the median is the median of the log (which is not true of means).
+  Equivalently, the exponentiation of the median is equal to the median of the 
+  exponentiation.
+  Also, when data are symmetric, median = mean.
+  
+    - $\mu_1$ = mean of log-rainfall in seeded group = median of log-rainfall in seeded group.
+    - $\mu_2$ = mean of log-rainfall in unseeded group = median of log-rainfall in unseeded group.    
+    - $\mu_1 - \mu_2$ = difference in median log-rainfalls in two groups.
+    - $e^{\mu_1 - \mu_2} = e^{\mu_1}/e^{\mu_2}$ = median rainfall in seeded group divided by median rainfall in unseeded group.
+    - We estimate and get confidence intervals for $\mu_1 - \mu_2$, which implies we can estimate and get confidence intervals of $e^{\mu_1}/e^{\mu_2}$ by just exponentiating the output of `t.test()`.
+
+- $p$-value:  
+    ```{r}
+    tout$p.value
+    ```
+
+- Estimate ratio of median rainfall in seeded group to median rainfall in 
+  unseeded group:
+  
+    ```{r}
+    exp(tout$estimate)
+    ```
+
+- Confidence interval for ratio of median rainfall in seeded group to median
+  rainfall in unseeded group:
+  
+    ```{r}
+    exp(c(low = tout$conf.low, high = tout$conf.high))
+    ```
+  
+- **Exercise**: Read up on the `ex0330` dataset from the Sleuth R package. Determine
+  if education level is associated with income. Interpret any estimates and
+  confidence intervals you derive.
+  
+    ```{r, echo=FALSE, eval=FALSE}
+    data("ex0330")
+    ex0330 %>%
+      mutate(Educ = factor(Educ)) ->
+      educ
+    
+    educ %>%
+      ggplot(aes(x = Income2005)) +
+      facet_wrap(Educ ~ .) +
+      geom_histogram(bins = 20)
+    
+    educ %>%
+      ggplot(aes(x = Income2005)) +
+      facet_wrap(Educ ~ .) +
+      geom_histogram(bins = 20) +
+      scale_x_log10()
+    
+    educ %>%
+      mutate(logincome = log(Income2005)) ->
+      educ
+    
+    educ %>%
+      t.test(logincome ~ Educ, data = .) %>%
+      tidy() ->
+      tout
+    
+    ## strong evidence of assocation
+    tout$p.value
+    
+    ## Estiamted ratio of median incomes between two groups
+    exp(tout$estimate)
+    
+    ## So only having 12 years of education is estimated to have about 56% the median 
+    ## income of a high-education individual with 95% confidence interval of:
+    exp(c(low = tout$conf.low, high = tout$conf.high))
+    ```
+  
+
     
 # Pattern: Proportion is shifted (one binary variable).
 
@@ -763,7 +925,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Sample: The 172 people in the study.
 
-- Variables: The smoking status of ther person (`smoke`) and the cancer
+- Variables: The smoking status of the person (`smoke`) and the cancer
   status of the person (`cancer`).
   
 - Pattern: Visualize by calculating conditional proportions. For example, the 
@@ -790,7 +952,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - Null hypothesis: cancer status and smoking status are independent.
 
-- Alternative hypothesis: cancer satatus and smoking status are dependent.
+- Alternative hypothesis: cancer status and smoking status are dependent.
 
 - Function:`fisher.test()` tests for whether we see
   more smokers in one group versus the other. Or, symmetrically,
@@ -840,9 +1002,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     prop.table(tabdat, margin = 1)
     # Null hypothesis is independence.
     fisher.test(tabdat)
-    ```
+      ```
     
-  
+# References  
 
 
 
