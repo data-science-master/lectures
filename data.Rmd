@@ -81,6 +81,15 @@ knitr::opts_chunk$set(echo = TRUE)
     - `smoke`: Whether the individual smoked (`smoker`) or did not (`nonsmoker`).
     - `cancer`: Whether the individual had cancer (`cancer`) or was a control
       (`control`).
+- Tidying exercise datasets:
+    - [flowers1.csv](./data/tidy_exercise/flowers1.csv)
+    - [flowers2.csv](./data/tidy_exercise/flowers2.csv)
+    - [monkeymem.csv](./data/tidy_exercise/monkeymem.csv)
+    - [pew.csv](./data/tidy_exercise/pew.csv)
+    - [preg.csv](./data/tidy_exercise/preg.csv)
+    - [tb.csv](./data/tidy_exercise/tb.csv)
+    - [weather.csv](./data/tidy_exercise/weather.csv)
+    - [wine.csv](./data/tidy_exercise/wine.csv)
 - [words.txt](./data/words.txt): The list of acceptable 2015 Scrabble Words.
 - World Bank Data: The World Bank is an international organization that
   provides loans to countries with the goal of reducing poverty. The following

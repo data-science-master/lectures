@@ -1,0 +1,414 @@
+---
+title: "Manipulating Large Datasets with `data.table`s"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Reading large datasets into R.
+- `data.table` syntax for manipulating data frames.
+- [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
+- [Efficient reshaping using data.tables](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
+
+# Data Frames and Motivation
+
+- Big data: Can't read data into memory. Need to do distributed computing (like [Spark](https://spark.apache.org/)).
+
+- Biggish data: Can read data into memory, but it's very slow to manipulate it.
+
+- The data.table package helps you with biggish data.
+
+- `data.frame`s are a base R class. We've learned about them [before](https://dcgerard.github.io/stat_412_612/lectures/01_intro/01_data_frames.pdf).
+
+- There are many competitors to `data.frame`s: [`tibble`s](https://tibble.tidyverse.org/), [`DataFrame`s](https://bioconductor.org/packages/release/bioc/html/S4Vectors.html) (from Bioconductor), and [`data.table`s](https://github.com/Rdatatable/data.table/wiki).
+
+- Julia (another statistical programming language) has its own [`DataFrames`](https://juliadata.github.io/DataFrames.jl/stable/man/getting_started.html) class. Python's data frames package is called [`pandas`](https://pandas.pydata.org/).
+
+- `data.table` is the fastest: <https://h2oai.github.io/db-benchmark/>.
+
+# Syntax
+
+## Reading in and Printing Data
+
+- Load the data.table package and (to compare) the tidyverse into R:
+    ```{r, message = FALSE}
+    library(tidyverse)
+    library(data.table)
+    ```
+    
+- We'll demonstrate all methods with the data from "NYC-flights14" dataset from
+  the data.table package vignettes. I've posted it on my own webpage:
+  
+- Read in data with `fread()` (for "file read"). It accepts all delimiters, 
+  which you (optionally) specify with the `sep` argument. The default is to
+  guess the delimiter.
+  
+    ```{r}
+    flights <- fread("../data/flights14.csv")
+    ```
+    
+- `fread()` will return a `data.table` object.
+
+    ```{r}
+    class(flights)
+    ```
+    
+- Use `fwrite()` to write a `data.table` object to a file.
+
+- Compare to `read_csv()` in the tidyverse.
+
+    ```{r, message=FALSE}
+    flights_tib <- read_csv("../data/flights14.csv")
+    ```
+    
+- `read_csv()` will return a tibble.
+
+    ```{r}
+    class(flights_tib)
+    ```
+
+- `tibble`s and `data.table`s both print better than `data.frame`s.
+    
+    ```{r, eval=FALSE}
+    flights
+    flights_tib
+    ```
+    
+- You usually use the base function `str()` (for "**str**ucture") to look at 
+  the `data.table` entries.
+
+    ```{r, eval = FALSE}
+    ## data.table way
+    str(flights)
+    
+    ## Similar tidyverse way
+    glimpse(flights_tib)
+    ```
+
+- You can use `as.data.table()` to convert a `tibble` or a `data.frame` into 
+  a `data.table`.
+  
+    ```{r}
+    temp_dt <- as.data.table(flights_tib)
+    class(temp_dt)
+    ```
+
+## Filtering/Arranging Rows (Observations)
+
+- Just like in the tidyverse, we use logicals to filter based on rows. The
+  syntax for this is to place the logicals inside a bracket. Let's find all
+  flights that left JFK and arrived at LAX.
+  
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[origin == "JFK" & dest == "LAX"]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      filter(origin == "JFK", dest == "LAX")
+    ```
+    
+- To get a specific row, insert a number into the brackets.
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[c(1, 3, 207)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      slice(1, 3, 207)
+    ```
+    
+- Reorder rows by using the `order()` function inside the brackets. Let's
+  reorder the rows alphabetically by origin, and break ties in reverse
+  alphabetical order by destination.
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[order(origin, -dest)]
+
+    ## equivalent tidyverse way    
+    flights_tib %>%
+      arrange(origin, desc(dest))
+    ```
+
+- **Exercise**: Use both data.table and the tidyverse to select all 
+  flights from EWR and LGA, and arrange the flights in decreasing order of
+  departure delay.
+  
+    ```{r, eval=FALSE, echo=FALSE}
+    ## data.table way
+    fl1 <- flights[origin == "EWR" | origin == "LGA"]
+    fl1[order(-dep_delay)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      filter(origin == "EWR" | origin == "LGA") %>%
+      arrange(desc(dep_delay))
+    ```
+
+## Selecting Columns (Variables)
+
+- To select a variable (a column), you also use bracket notation, but you
+  place a comma before you select the columns. This idea is that you are
+  selecting all rows (empty space before comma).
+  
+- There are lots of ways to select columns that keeps the new object a 
+  `data.table`.
+    
+- **List method**: Use the `.()` function (which is an alias for `list()`).
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(origin, dest)]
+    
+    ## Or
+    flights[, list(origin, dest)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      select(origin, dest)
+    ```
+    
+- **Character Vector Method**: Use `c()` with their character names
+    ```{r, results = "hide"}
+    flights[, c("origin", "dest")]
+    ```
+    
+- **Range Method**: Use `:` to select variables within a range of columns.
+
+    ```{r, results = "hide"}
+    flights[, origin:dest]
+    ```
+    
+- **Prespecify**: Define variables to keep outside of the `data.table`, then
+  use `with = FALSE`. This option makes data.table not think that `keep_vec`
+  is a varible in the `data.table`.
+  
+    ```{r, results = "hide"}
+    keep_vec <- c("origin", "dest")
+    flights[, keep_vec, with = FALSE]
+    ```
+  
+- To remove a column, you cannot use the list syntax. Place a `!` before the 
+  columns to remove
+  
+    ```{r, results = "hide"}
+    flights[, !c("year", "month")]
+    flights[, !(year:month)]
+    ```
+    
+- **Exercise**: Use data.table to select the `year`, `month`, `day`, and `hour` 
+  columns.
+  
+    ```{r, echo = FALSE, eval = FALSE}
+    flights[, .(year, month, day, hour)]
+    ```
+    
+- **Exercise**: Use data.table to print out just the departure delays from JFK.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    flights[origin == "JFK", .(dep_delay)]
+    ```
+
+
+## Group Summaries
+
+- You calculate summaries in the column slot. It's best to use the list method.
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(dd = mean(dep_delay))]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      summarize(dd = mean(dep_delay))
+    ```
+    
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(dd = mean(dep_delay), ad = mean(arr_delay))]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      summarize(dd = mean(dep_delay), ad = mean(arr_delay))
+    ```
+
+- Count the number of rows with `.N`.
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(.N)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      count()
+    ```
+
+- In data.table, you create grouped summaries by simultaneously grouping
+  and calculating summaries in one line, not separately like in dplyr.
+
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(dd = mean(dep_delay)) , by = .(origin)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      group_by(origin) %>%
+      summarize(dd = mean(dep_delay))
+    ```
+    
+- You can calculate more than one group summary at a time, or group by more
+  than one variable.
+  
+    ```{r, results = "hide"}
+    ## data.table way
+    flights[, .(dd = mean(dep_delay), .N), by = .(origin, carrier)]
+    
+    ## equivalent tidyverse way
+    flights_tib %>%
+      group_by(origin, carrier) %>%
+      summarize(dd = mean(dep_delay), N = n())
+    ```
+  
+- **Exercise**: Use data.table to calculate the median air time for each month.
+
+    ```{r, echo = FALSE, eval = FALSE}
+    flights[, .(median(air_time)), by = .(month)]
+    ```
+  
+- **Exercise**: Use data.table to calculate the number of trips from each airport for the
+  carrier code DL.
+  
+    ```{r, echo = FALSE, eval = FALSE}
+    flights[carrier == "DL", .(.N), by = .(origin)]
+    ```
+    
+- **Exercise**: Use data.table to calculate the mean departure delay for each origin 
+  in the months of January and February.
+  
+    ```{r, echo = FALSE, eval = FALSE}
+    flights[month %in% c(1, 2), .(mean(dep_delay)), by = .(month, origin)]
+    ```
+  
+  
+## Chaining
+
+- In the tidyverse, we chain commands by using the pipe `%>%`. In data.table, we
+  chain commands by adding additional brackets after the brackets we used.
+  Data.table makes this very efficients.
+  
+- Let's calculate the mean arrival delay for american airlines for each
+  origin/destination pair, then order the results by origin in increasing order,
+  breaking ties by destination in decreasing order.
+
+    ```{r, eval=FALSE}
+    ## data.table way
+    flights[carrier == "AA", .(ad = mean(arr_delay)), by = .(origin, dest)][order(origin, -dest)]
+    
+    ## Usual indentation for readability:
+    flights[carrier == "AA", .(ad = mean(arr_delay)), by = .(origin, dest)
+            ][order(origin, -dest)]
+    
+    ## Equivalent tidyverse way
+    flights_tib %>%
+      filter(carrier == "AA") %>%
+      group_by(origin, dest) %>%
+      summarize(ad = mean(arr_delay)) %>%
+      arrange(origin, desc(dest))
+    ```
+  
+## Gathering
+
+- Problem: One variable spread across multiple columns.
+
+- Column names are actually *values* of a variable
+
+- Recall `table4a` and `table4b` from the tidyr package
+
+    ```{r}
+    dt4a <- as.data.table(tidyr::table4a)
+    dt4b <- as.data.table(tidyr::table4b)
+    dt4a
+    dt4b
+    ```
+
+- Solution: `melt()`:
+
+    ```{r}
+    ## data.table way
+    melt(dt4a, 
+         id.vars       = c("country"),
+         measure.vars  = c("1999", "2000"),
+         variable.name = "year",
+         value.name    = "count")
+    
+    ## Equivalent tidyverse way
+    tidyr::table4a %>%
+      gather(`1999`, `2000`, key = "year", value = "count")
+    ```
+
+- **Exercise**: gather the `monkeymem` data frame (available at). The cell 
+  values represent identification accuracy of some objects (in percent of 20 
+  trials).
+
+    ```{r, echo=FALSE, eval=FALSE}
+    monkeymem <- fread("../data/tidy_exercise/monkeymem.csv")
+    melt(monkeymem, 
+         id.vars       = c("Monkey", "Treatment"),
+         measure.vars  = c("Week2", "Week4", "Week8", "Week12", "Week16"),
+         variable.name = "Week", value.name = "Percent")
+    ```
+
+## Spreading
+
+- Problem: One observation is spread across multiple rows.
+
+- One column contains variable names. One column contains values for the 
+  different variables.
+
+- Recall `table2` from the tidyr package
+
+    ```{r}
+    dt2 <- as.data.table(tidyr::table2)
+    ```
+
+- Solution: `dcast()`. In the `formula` argument, put the "id variables"
+  to the left and the "key" variables to the right. In tidyverse jargon, 
+  the `value` is everything not stated in the formula and the `key` is everything
+  to the left of the tilde.
+  
+    ```{r}
+    ## data.table way
+    dcast(dt2, formula = country + year ~ type)
+    
+    ## Equivalent tidyverse way
+    tidyr::table2 %>%
+          spread(key = type, value = count)
+    ```
+    
+- **Exercise**: Spread the `flowers1` data frame (available at).
+
+    ```{r, eval = FALSE, echo = FALSE}
+    flowers1 <- fread("../data/tidy_exercise/flowers1.csv")
+    dcast(flowers1, Time + replication ~ Variable)
+    ```
+  
+
+
