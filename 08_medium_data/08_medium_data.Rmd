@@ -23,6 +23,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Reading large datasets into R.
 - `data.table` syntax for manipulating data frames.
+- [A data.table and dplyr tour](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/)
 - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
 - [Efficient reshaping using data.tables](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
 
@@ -44,7 +45,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - So why did we learn the tidyverse? 
     - It's easier to read. This is important if you are sharing code, or 
-      if you are looking at your code 6 months after you write it.
+      if you are looking at your code 6 months after you write it
+      (this is a *very* controversial opinion and Matt Dowle would say I'm 
+      full of crap).
     - For datasets with fewer than, like, one million observations, it works 
       fast enough.
 
@@ -58,7 +61,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     library(data.table)
     ```
     
-- We'll demonstrate all methods with the data from "NYC-flights14" dataset from
+- We'll demonstrate most methods with the data from "NYC-flights14" dataset from
   the data.table package vignettes. I've posted it on my own webpage:
   <https://data-science-master.github.io/lectures/data/flights14.csv>.
   
@@ -205,7 +208,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     flights[, origin:dest]
     ```
     
-- **Prespecify**: Define variables to keep outside of the `data.table`, then
+- **Prespecify Method**: Define variables to keep outside of the `data.table`, then
   use `with = FALSE`. This option makes data.table not think that `keep_vec`
   is a varible in the `data.table`.
   
@@ -252,8 +255,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ## Creating New Variables (Mutate)
 
 - The **fastest** way to create and remove variables in a `data.table` is by 
-  reference, where we **modify** the `data.table`, we don't create a new 
-  `data.table`.
+  [reference](https://en.wikipedia.org/wiki/Evaluation_strategy#Call_by_reference), 
+  where we **modify** the `data.table`, we don't create a new `data.table`.
   
 - Use `:=` to modify a data.table by reference. You put the variable names
   (as a character vector) to the left of `:=`. You put the new variables
@@ -443,7 +446,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Solution: `melt()`:
 
-    ```{r}
+    ```{r, eval = FALSE}
     ## data.table way
     melt(dt4a, 
          id.vars       = c("country"),
@@ -455,6 +458,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     tidyr::table4a %>%
       gather(`1999`, `2000`, key = "year", value = "count")
     ```
+
+- RDS visualization:
+
+    ![](./figs/tidy-9.png)\
 
 - **Exercise**: gather the `monkeymem` data frame (available at
   <https://data-science-master.github.io/lectures/data/tidy_exercise/monkeymem.csv>). 
@@ -488,7 +495,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
   the `value` is everything not stated in the formula and the `key` is everything
   to the left of the tilde.
   
-    ```{r}
+    ```{r, eval = FALSE}
     ## data.table way
     dcast(dt2, formula = country + year ~ type, value.var = "count")
     
@@ -496,7 +503,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     tidyr::table2 %>%
           spread(key = type, value = count)
     ```
-    
+
+- RDS visualization:
+
+    ![](./figs/tidy-8.png)\ 
+
 - **Exercise**: Spread the `flowers1` data frame (available at
   <https://data-science-master.github.io/lectures/data/tidy_exercise/flowers1.csv>).
 
@@ -507,12 +518,73 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Separating
 
-- To separate a column into two columns, use `tstrsplit()`.
+- To separate a column into two columns, use the base function `tstrsplit()`.
+    
+    ```{r}
+    dt3 <- as.data.table(tidyr::table3)
+    dt3
+    ```
+    
+    ```{r, eval = FALSE}
+    ## data.table way
+    dt3[, c("cases", "population") := tstrsplit(rate, split = "/")]
+    dt3[, rate := NULL]
+    dt3
+    
+    ## equivalent tidyverse way
+    tidyr::table3 %>%
+      separate(rate, into = c("cases", "population"), sep = "/")
+    ```
+
+- RDS visualization:
+
+    ![](./figs/tidy-17.png)\ 
+    
+- **Exercise**: Separate the `flowers2` data frame (available at
+  <https://data-science-master.github.io/lectures/data/tidy_exercise/flowers2.csv>).
+  
+    ```{r, eval=FALSE, echo=FALSE}
+    flowers2 <- fread("../data/tidy_exercise/flowers2.csv")
+    
+    flowers2[, c("Flowers", "Intensity") := tstrsplit(`Flowers/Intensity`, split = "/")]
+    flowers2[, `Flowers/Intensity` := NULL]
+    flowers2
+    ```
+  
 
 ## Uniting
 
-- To unite, use `paste0()`.
+- To unite, use `paste()`.
+
+    ```{r}
+    dt5 <- as.data.table(tidyr::table5)
+    dt5
+    ```
+
+
+    ```{r, eval = FALSE}
+    ## data.table way
+    dt5[, year := paste(century, year, sep = "")]
+    dt5[, century := NULL]
+    dt5
+    
+    ## Equivalent tidyverse way
+    tidyr::table5 %>%
+      unite(century, year, col = "year", sep = "")
+    ```
+
+- RDS visualization:
+
+    ![](./figs/tidy-18.png)\
+    
+- **Exercise**: Re-unite the data frame you separated from the flowers2 
+  exercise. Use a comma for the separator.
   
+    ```{r, echo=FALSE, eval=FALSE}
+    flowers2[, flowers_intensity := .(paste(Flowers, Intensity, sep = ","))]
+    flowers2[, c("Flowers", "Intensity") := .(NULL, NULL)]
+    flowers2
+    ```
   
 ## Chaining
 
@@ -543,8 +615,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 # Additional References
 
-There is **so** much more to data.table. It is quite literally a competitor
-to the tidyverse. 
-
-- It's own date class (a competitor to lubridate): `help(IDateTime)`
-
+There is **so** much more to data.table. You can do quite complicated and
+sophisticated data manipulations using data.table that would require a lot
+more typing in the tidyverse. I am not an expert in much of this 
+functionality. A large number of articles and
+references are given on the wiki page: 
+<https://github.com/Rdatatable/data.table/wiki>.
