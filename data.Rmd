@@ -9,6 +9,24 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+- [bob.csv](./data/bob.csv): [Bob Ross](https://en.wikipedia.org/wiki/Bob_Ross) 
+  was a painter who hosted a popular television series on PBS. Each episode 
+  would consist of him completing an entire painting. His paintings almost 
+  always consisted heavily of elements from nature: trees, clouds, mountains, 
+  lakes, etc. These data consist of indicators for what elements are in each 
+  episode. This dataset was taken from the excellent crew at
+  [fivethirtyeight](https://github.com/fivethirtyeight/data/tree/master/bob-ross). 
+  See [here](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/) 
+  for their article. The data were obtained using
+  [this](https://github.com/dcgerard/stat234/blob/master/analysis/clean_datasets/bob_ross/get_bob.R) 
+  code. The variables are:
+    - `EPISODE`: The season and episode number of the episode.
+    - `TITLE`: The title of the painting.
+    - Every other variable is an indicator for whether the episode contains 
+      the element described by the variable name. For example, `BARN` 
+      is `0` if the episode does not have a barn in the painting and `1` if the 
+      episode does have a barn in the painting.
 - [civil_war.csv](./data/civil_war.csv): List of American Civil War battles, taken from
   [Wikipedia](https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles). 
   Variables include:

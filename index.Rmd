@@ -26,16 +26,26 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
     - [01 Git and GitHub](./01_git/01_git_github.html).
     - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
+    - [01 Lab: Review of Tidyverse Concepts](https://github.com/data-science-master/lab_01).
 - 02 Dates and Times
     - [02 Dates](./02_dates/02_dates.html).
+    - [02 Lab](https://github.com/data-science-master/lab_02).
 - 03 Vectors and Iteration
     - [03 Vectors](./03_vectors_iterators/03_vectors.html).
     - [03 Iteration](./03_vectors_iterators/03_iterators.html).
+    - [03 Lab](https://github.com/data-science-master/lab_03).
 - 04 Basic Statistics
     - [04 Basic Statistcs](./04_basic_stats/04_basic_stats.html).
-    - [Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf).
+    - [04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf).
+    - [04 Lab](https://github.com/data-science-master/lab_04).
 - 05 Linear Models
 - 06 Shiny Apps 1
 - 07 Shiny Apps 2
 - 08 Data.table    
     - [08 Manipulating Large(ish) Datasets with data.table](./08_medium_data/08_medium_data.html).
+- 09 Dimensionality Reduction
+- 10 Machine Learning and Caret 1
+- 11 Machine Learning and Caret 2
+- 12 Data Dredging
+- 13 Data Ethics
+- 14 Building a Professional Website

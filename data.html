@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-06-19" />
+<meta name="date" content="2019-07-01" />
 
 <title>Data</title>
 
@@ -312,19 +312,25 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Data</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-06-19</h4>
+<h4 class="date">2019-07-01</h4>
 
 </div>
 
 
 <ul>
+<li><a href="./data/bob.csv">bob.csv</a>: <a href="https://en.wikipedia.org/wiki/Bob_Ross">Bob Ross</a> was a painter who hosted a popular television series on PBS. Each episode would consist of him completing an entire painting. His paintings almost always consisted heavily of elements from nature: trees, clouds, mountains, lakes, etc. These data consist of indicators for what elements are in each episode. This dataset was taken from the excellent crew at <a href="https://github.com/fivethirtyeight/data/tree/master/bob-ross">fivethirtyeight</a>. See <a href="https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/">here</a> for their article. The data were obtained using <a href="https://github.com/dcgerard/stat234/blob/master/analysis/clean_datasets/bob_ross/get_bob.R">this</a> code. The variables are:
+<ul>
+<li><code>EPISODE</code>: The season and episode number of the episode.</li>
+<li><code>TITLE</code>: The title of the painting.</li>
+<li>Every other variable is an indicator for whether the episode contains the element described by the variable name. For example, <code>BARN</code> is <code>0</code> if the episode does not have a barn in the painting and <code>1</code> if the episode does have a barn in the painting.</li>
+</ul></li>
 <li><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:
 <ul>
 <li><code>Battle</code>: The name of the battle.</li>
 <li><code>Date</code>: The date(s) of the battle. If it took place on one day, then the format is “month day, year”. If it took place over multiple days, then the format is “month day_start-day_end, year”. If it took place over multiple days spanning multiple months then the format is “month_start day_start - month_end day_end, year”. If it took place over multiple days spanning multiple years then the format is “month_start day_start, year_start - month_end day_end, year_end”.</li>
-<li><code>State</code>: The state where the battle took place. Annotations (e.g. describing that the state was a territory at the time) are in parentheses.</li>
+<li><code>State</code>: The state where the battle took place. Annotations (e.g.  describing that the state was a territory at the time) are in parentheses.</li>
 <li><code>CWSAC</code>: A rating of the military significance of the battle by the Civil War Sites Advisory Commission. <code>A</code> = Decisive, <code>B</code> = Major, <code>C</code> = Formative, <code>D</code> = Limited.</li>
-<li><code>Outcome</code>: Usually <code>&quot;Confederate victory&quot;</code>, <code>&quot;Union victory&quot;</code>, or <code>&quot;Inconclusive&quot;</code>, followed by notes.</li>
+<li><code>Outcome</code>: Usually <code>"Confederate victory"</code>, <code>"Union victory"</code>, or <code>"Inconclusive"</code>, followed by notes.</li>
 </ul></li>
 <li><a href="./data/college_score.csv">college_score.csv</a>: Contains a subset of the variables found in the 2016 to 2017 <a href="https://collegescorecard.ed.gov/data/">College Scorecard</a> database. These data contain information on colleges in the United States. The variables included are:
 <ul>
@@ -393,7 +399,7 @@ $(document).ready(function () {
 <ul>
 <li><code>Country_Code</code>: A three-letter code for the country. Note that not all rows are countries; some are regions.</li>
 <li><code>Region</code>: The region of the country.</li>
-<li><code>IncomeGroup</code>: Either <code>&quot;High income&quot;</code>, <code>&quot;Upper middle income&quot;</code>, <code>&quot;Lower middle income&quot;</code>, or <code>&quot;Low income&quot;</code>.</li>
+<li><code>IncomeGroup</code>: Either <code>"High income"</code>, <code>"Upper middle income"</code>, <code>"Lower middle income"</code>, or <code>"Low income"</code>.</li>
 <li><code>TableName</code>: The full name of the country.</li>
 </ul></li>
 <li><a href="./data/fertility.csv">fertility.csv</a>: Contains the fertility rate information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the fertility rate in total births per woman for the that year. Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.</li>

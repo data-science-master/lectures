@@ -612,7 +612,116 @@ ggplot2::theme_set(ggplot2::theme_bw())
       arrange(origin, desc(dest))
     ```
     
+## Joining
+
+- We'll use the following `data.table`s to introduce joining.
+
+    ```{r}
+    xdf <- data.table(mykey = c("1", "2", "3"),
+                      x_val = c("x1", "x2", "x3"))
+    ydf <- data.table(mykey = c("1", "2", "4"),
+                      y_val = c("y1", "y2", "y3"))
+    xdf
+    ydf
+    ```
     
+    ![](./figs/join-setup.png)\ 
+
+- Use the `merge()` function for *all* joining in data.table.
+
+- Inner Join:
+
+    ![](./figs/join-inner.png)\ 
+    
+    ```{r, eval=FALSE}
+    ## data.table way
+    merge(xdf, ydf, by = "mykey")
+    
+    ## equivalent tidyverse way
+    inner_join(xdf, ydf, by = "mykey")
+    ```
+    
+- Outer Joins
+
+    ![](./figs/join-outer.png)\ 
+    
+- Left Join
+
+    ```{r, eval=FALSE}
+    ## data.table way
+    merge(xdf, ydf, by = "mykey", all.x = TRUE)
+    
+    ## equivalent tidyverse way
+    left_join(xdf, ydf, by = "mykey")
+    ```
+    
+- Right Join
+
+    ```{r, eval=FALSE}
+    ## data.table way
+    merge(xdf, ydf, by = "mykey", all.y = TRUE)
+    
+    ## equivalent tidyverse way
+    right_join(xdf, ydf, by = "mykey")
+    ```
+    
+- Outer Join
+
+    ```{r, eval=FALSE}
+    ## data.table way
+    merge(xdf, ydf, by = "mykey", all.x = TRUE, all.y = TRUE)
+    
+    ## equivalent tidyverse way
+    full_join(xdf, ydf, by = "mykey")
+    ```
+
+- Binding Rows:
+
+    ```{r, eval=FALSE}
+    ## data.table way
+    rbind(xdf, ydf, fill = TRUE)
+    
+    ## equivalent tidyverse way
+    bind_rows(xdf, ydf)
+    ```
+
+- When you have different key names, use the `by.x` and `by.y` arguments instead
+  of the `by` argument.
+    ```{r}
+    names(ydf)[1] <- "newkey"
+    ydf
+    ```
+    
+    ```{r, eval=FALSE}
+    ## data.table way
+    merge(xdf, ydf, by.x = "mykey", by.y = "newkey")
+    
+    ## equivalent tidyverse way
+    inner_join(xdf, ydf, by = c("mykey" = "newkey"))
+    ```
+    
+- **Exercise**: Recall the `nycflights13` dataset
+    ```{r, message = FALSE}
+    library(nycflights13)
+    data("flights")
+    data("airlines")
+    data("planes")
+    flights  <- as.data.table(flights)
+    airlines <- as.data.table(airlines)
+    planes   <- as.data.table(planes)
+    ```
+    Add the full airline names to the `flights` data.table.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    flights <- merge(flights, airlines, by = "carrier")
+    ```
+    
+- **Exercise**: Select all flights that use a plane where you have some annotation.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    flights_sub <- merge(flights, planes[, .(tailnum)], by = "tailnum")
+    ```
+
 # Additional References
 
 There is **so** much more to data.table. You can do quite complicated and
