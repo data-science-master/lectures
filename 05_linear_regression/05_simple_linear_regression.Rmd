@@ -19,16 +19,17 @@ knitr::opts_chunk$set(echo       = TRUE,
 ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 # Learning Objectives
 
 - Simple Linear Regression
-- ANOVA
 
 # Pattern: Two quantitative variables are associated.
+
+- Before we get started, let's load the packages we'll need.
+    ```{r, message=FALSE}
+    library(Sleuth3)
+    library(tidyverse)
+    ```
 
 - Example: The big-bang theory suggests a linear relationship between 
   the recession velocity of a stellar object and its distance from Earth,
@@ -55,41 +56,19 @@ knitr::opts_chunk$set(echo = TRUE)
       geom_point()
     ```
 
+- Line Review:
+
+    ![](./cartoons/line_review.png)\ 
+
 - Model: $Y_i = \beta_0 + \beta_1 X_i + noise$, where
     - $Y_i$ is the distance of nebula $i$.
     - $X_i$ is the velocity of nebula $i$.
     - $\beta_0$ is the intercept of the mean line.
     - $\beta_1$ is the slope of the mean line.
 
-- Function: `lm()`
+- *Given* $X_i$, mean of $Y_i$ is $\beta_0 + \beta_1 X_i$. Points vary
+   about this mean.
+   
+    ![](./cartoons/reg1.png)\    
 
-# Pattern: Means of three or more groups are different (one quantitative, one categorical).
-
-- Example: [Dr. Spock](https://en.wikipedia.org/wiki/Benjamin_Spock) was on 
-  trial for draft dodging. He claimed that his judge includes fewer women
-  in his jury selection pool. They measured the proportion of women in 
-  a jury selection in many trials for six judges as well as Spock's judge.
-  
-    ```{r}
-    data("case0502")
-    spock <- case0502
-    glimpse(spock)
-    ```
-  
-- Observational units: The trials in Boston.
-
-- Population: All trials in Boston.
-
-- Sample: The 46 trials the researchers collected data on.
-
-- Variables: The percent of women in the jury selection pool (quantitative)
-  and the judge of the trial (categorical).
-  
-- Pattern: Use a boxplot to see if the groups differ.
-
-    ```{r}
-    ggplot(spock, aes(x = Judge, y = Percent)) +
-      geom_boxplot()
-    ```
-
-- Function: `lm()` or `aov()`.
+- Function: `lm()`.

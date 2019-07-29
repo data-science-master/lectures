@@ -40,11 +40,10 @@ knitr::opts_chunk$set(echo       = TRUE,
     - Tidy output with broom.
 - Week 5:
     - Linear regression in R.
-    - Chapters 18 and 19 of [IDS](https://rafalab.github.io/dsbook/).
     - Tidy output with broom.
 - Week 6:
-    - Logistic regression in R.
-    - Tidy output with broom.
+    - Communicating results with Shiny.
+    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
 - Week 7:
     - Exam 1.
     - Weeks covered: 1 through 5
@@ -52,11 +51,14 @@ knitr::opts_chunk$set(echo       = TRUE,
     - Communicating results with Shiny.
     - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
 - Week 9:
-    - Communicating results with Shiny.
-    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
-    - Data ethics.
+    - Reading large datasets into R.
+    - `data.table` syntax for manipulating data frames.
+    - [A data.table and dplyr tour](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/)
+    - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
+    - [Efficient reshaping using data.tables](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
 - Week 10: 
     - Multivariate EDA techniques in R.
+    - Dimensionality Reduction
     - PCA/tSNE/MDS.
     - Clustering
 - Week 11:
@@ -78,11 +80,8 @@ knitr::opts_chunk$set(echo       = TRUE,
     - [hrsample](https://github.com/harryahlas/sample-hr-database).
     - Getting data from XML, HTML, SQL, JSON, API.
 - Week 15:
-    - Miscellaneous day.
-    - Parallel computing in R?
-    - htmlwidgets?
-    - Simple features and plotting maps with tmap?
-    - tidytext?
+    - Data ethics (bias of machine learning algorithms).
+    - Building a professional website.
 - Final Exam Period:
     - Final project presentations.
     
