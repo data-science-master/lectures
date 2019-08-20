@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- **Time**: Wednesdays, 5:30 PM to 8:00 PM, DMTI 114
+- **Time**: Tuesdays, 5:30 PM to 8:00 PM, DMTI 109
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
