@@ -143,11 +143,11 @@ print(pl)
 
 Note that exam dates are subject to (and probably will) change.
 
-- 10/02: Exam 1
-- 11/13: Exam 2
-- 11/20: Final Project Progress Report Due.
-- 11/27: Thanksgiving Holiday (No Class)
-- TBD: Final Project Presentations (During Final Exam Period)
+- 10/01: Exam 1
+- 11/12: Exam 2
+- 11/19: Final Project Progress Report Due.
+- 11/26: Thanksgiving Holiday (Friday classes meet instead of Tuesday classes).
+- 12/10, 5:30 pm - 8:00 pm: Final Project Presentations (During Final Exam Period)
 
 # Assistance/Support
 
