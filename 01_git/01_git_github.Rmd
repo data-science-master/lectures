@@ -58,6 +58,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     If you are worried about email privacy, follow GitHub's instructions
     [here](https://help.github.com/en/articles/setting-your-commit-email-address-on-github).
+    
+### Extra Setup Step for Windows Users
+
+- To use the git bash terminal in R Studio in Windows, you'll need to 
+  make sure it is set as the default.
+    1. Go to Tools > Global Options... > Terminal. 
+    2. Make sure you have "New terminals open with: Git Bash".
+    3. Exit out of the old terminal. Restart R Studio.
+    4. Then do Tools > Terminal > New Terminal.
 
 # Version Control: 
 
