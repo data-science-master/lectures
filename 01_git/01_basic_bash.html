@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-04-29" />
+<meta name="date" content="2019-08-27" />
 
 <title>Basic Bash</title>
 
@@ -270,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -344,18 +344,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,7 +365,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Basic Bash</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-04-29</h4>
+<h4 class="date">2019-08-27</h4>
 
 </div>
 
@@ -403,17 +391,17 @@ $(document).ready(function () {
 <ul>
 <li><p>The <strong>command line</strong> is like the R command prompt: you insert code, hit enter, and then the computer executes your command.</p></li>
 <li><p>However, instead of inserting R code, you insert <a href="https://en.wikipedia.org/wiki/Shell_script">Shell Script</a>.</p></li>
-<li>In this class, we will use the command line primarily for two things:
+<li><p>In this class, we will use the command line primarily for two things:</p>
 <ul>
 <li>Moving around your file system.</li>
 <li>Running git commands.</li>
 </ul></li>
-<li>Other words for command line: shell, terminal, command line interface (cli), and console.
+<li><p>Other words for command line: shell, terminal, command line interface (cli), and console.</p>
 <ul>
 <li>These terms are technically slightly <a href="https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line">different</a>.</li>
 </ul></li>
 <li><p>There are many types of shells, each with their own scripting language. We will use the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">bash scripting language</a> for this class.</p></li>
-<li>A huge difference between R and bash is how commands/functions are called.
+<li><p>A huge difference between R and bash is how commands/functions are called.</p>
 <ul>
 <li>R: <code>f(x, y = 1)</code></li>
 <li>Bash: <code>f x --y=1</code></li>
@@ -435,15 +423,14 @@ $(document).ready(function () {
 <ul>
 <li><p><code>pwd</code>: Print working directory. Show the current working directory. This is like <code>getwd()</code> in R.</p>
 <pre class="bash"><code>pwd</code></pre>
-<pre><code>## /home/dgerard/Dropbox/teaching/stat_413_613/lectures/01_git</code></pre></li>
+<pre><code>## /mnt/c/Users/david/Dropbox/teaching/stat_413_613/lectures/01_git</code></pre></li>
 <li><p><code>ls</code>: List the current files and folders in a directory.</p>
 <pre class="bash"><code>ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -452,13 +439,13 @@ $(document).ready(function () {
 <li><p><code>cd</code>: Change directories. This is like <code>setwd()</code> in R. As when we specified paths in R, using two periods mean “move back a folder”.</p>
 <pre class="bash"><code>cd ../
 pwd</code></pre>
-<pre><code>## /home/dgerard/Dropbox/teaching/stat_413_613/lectures</code></pre>
+<pre><code>## /mnt/c/Users/david/Dropbox/teaching/stat_413_613/lectures</code></pre>
 <ul>
 <li>If you use <code>cd</code> without specifying a folder to move to, it will move the working directory to the home directory.</li>
 </ul>
 <pre class="bash"><code>cd
 pwd</code></pre>
-<pre><code>## /home/dgerard</code></pre>
+<pre><code>## /home/david</code></pre>
 <ul>
 <li>OK, I’m going to move us back to the 01_git directory.</li>
 </ul>
@@ -466,7 +453,9 @@ pwd</code></pre>
 <li><p><code>man</code>: Read the manual of a command. Just like <code>help()</code> in R.</p>
 <pre class="bash"><code>man ls</code></pre>
 <ul>
-<li>This will open up the man page of <code>ls</code>. You can scroll through this page using the up and down arrows. You can exit this page by typing <code>q</code>.</li>
+<li><p>This will open up the man page of <code>ls</code>. You can scroll through this page using the up and down arrows. You can exit this page by typing <code>q</code>.</p></li>
+<li><p>This won’t work for Git Bash (for Windows users). Instead, you’ll need to type</p>
+<pre class="bash"><code>ls --help</code></pre></li>
 </ul></li>
 <li><p><strong>Exercise</strong>: What is your home directory? What files/folders exist in your home directory? Navigate to it and then navigate back to your notes.</p></li>
 <li><p><strong>Exercise</strong>: Where does the following command take you? How does it work?</p>
@@ -482,10 +471,9 @@ pwd</code></pre>
 ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -497,10 +485,9 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -512,10 +499,9 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -526,10 +512,9 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -541,10 +526,9 @@ ls</code></pre>
 ls</code></pre>
 <pre><code>## 01_basic_bash.html
 ## 01_basic_bash.Rmd
-## 01_git_github_files
 ## 01_git_github.html
 ## 01_git_github.Rmd
-## blischak_etal_2016.pdf
+## blischak_etal_2016.PDF
 ## citation.bib
 ## citation.bib~
 ## fiksel_etal_2018.pdf
@@ -571,6 +555,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

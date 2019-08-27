@@ -110,6 +110,11 @@ knitr::opts_chunk$set(echo = TRUE)
     - This will open up the man page of `ls`. You can scroll through this page
       using the up and down arrows. You can exit this page by typing `q`.
       
+    - This won't work for Git Bash (for Windows users). Instead, you'll need to type
+        ```{bash, eval=FALSE}
+        ls --help
+        ```
+      
 - **Exercise**: What is your home directory? What files/folders exist in your 
   home directory? Navigate to it and then navigate back to your notes.
   
