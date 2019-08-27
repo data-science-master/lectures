@@ -517,7 +517,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
   This is very efficient for plain text files. But for
   non-plain text files the whole file is usally changed when you change a 
   component, so git ends up saving the whole file each each time you change it.
-  
+
+# Parting Wisdom from [XKCD](https://xkcd.com/1597/)
+
+  ![](./graphics/git_2x.png)\ 
 
 # References
 
