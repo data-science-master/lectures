@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
 - **Phone**: 202-885-3022
-- **Office Hours**: TBD
+- **Office Hours**: Monday 4pm -- 5pm, Thursday 3pm -- 4pm.
 
 # Overview of Topics and Course Objectives
 This course focuses on the collection, organization, analysis, interpretation, and presentation of data. Topics include the acquisition, cleaning, and imputation of data from a variety of sources; data visualization and graphing; data presentation and packaging; and programming considerations for large datasets. The course uses R packages and programming language.
