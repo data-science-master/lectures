@@ -291,12 +291,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     git log
     ```
 
-- **Exercise**: As a next step in the analysis of the `gapminder_full` data
+- **Exercise**: As a next step in the analysis of the `gapminder_unfiltered` data
   frame, add code in life_exp_analysis.Rmd that
     1. Loads the `gapminder_unfiltered` data frame into R, and
     2. Calculates the maximum life expectancy each year and the corresponding 
-       country that had that maximum life expectancy. Hint: Use `group_by()`
-       and `summarize()`.
+       country that had that maximum life expectancy. Hint: There are
+       multiple ways to do this, but the easiest involves `group_by()` and
+       `filter()`.
        
     Also, change the header from "Analysis" to "Life Expectancy Analysis".
     Then save life_exp_analysis.Rmd.
@@ -307,8 +308,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     data("gapminder_unfiltered")
     gapminder_unfiltered %>%
       group_by(year) %>%
-      summarize(max = max(lifeExp),
-                country = country[which.max(lifeExp)]) ->
+      filter(lifeExp == max(lifeExp)) %>%
+      ungroup() %>%
+      select(year, country, lifeExp) %>%
+      arrange(year) ->
       sumdat
     ```
 
@@ -341,7 +344,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
   
 - **Exercise**: Commit your changes. Use a nice commit message.
-
 
 # Collaborate Using GitHub
 
@@ -409,6 +411,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - When the push is complete, your code is now up on GitHub.
 
     ![](./graphics/repo5.png)\ 
+    
+- **Exercise**: Add some comments before your code chunk in life_exp.Rmd
+  describing what the code is doing. Then save the file, stage the file for commit,
+  commit the changes, then push the changes to GitHub.
 
 ### Fork
 
@@ -453,11 +459,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
   maximum life expectancy. Color code by country, and add a single OLS line.
   Your plot should look like this:
   
-
     ```{r, eval=TRUE, echo=FALSE}
     sumdat %>%
-      ggplot(aes(x = year, y = max)) +
+      ggplot(aes(x = year, y = lifeExp)) +
       geom_point(aes(color = country)) +
+      geom_point(pch = 1) + 
       theme_bw() +
       geom_smooth(method = "lm", se = FALSE) +
       xlab("Year") +
