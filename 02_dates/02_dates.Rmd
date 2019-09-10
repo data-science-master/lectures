@@ -199,6 +199,38 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - `as_datetime()` tries to coerce an object to a `POSIXct` object.  
 
+- **Exercise**: Create a date variable from the following data frame. Then
+  filter out all rows before Feb 1, 2010. If you finish early, try converting the month
+  variable to the numeric representation of the month.
+  
+    ```{r, eval = FALSE, echo = TRUE}
+    fake <- tribble(~year, ~month, ~day, ~month_num,
+                    ##----/-------/----------------
+                    2018,  "Oct",  1,    10,
+                    2011,  "Nov",  2,    11,
+                    2019,  "Dec",  3,    12,
+                    2010,  "JAN",  5,     1,
+                    1999,  "MAr",  1,     3,
+                    1987,  "ApR",  3,     4,
+                    2020,  "maY",  2,     5,
+                    2010,  "May",  4      5)  
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    fake %>%
+      mutate(month = str_to_sentence(month),
+             month = parse_factor(month, levels = month.abb),
+             month_num2 = as.numeric(month),
+             date = make_date(year = year, month = month_num2, day = day)) %>%
+      filter(date > ymd(20100201))
+    
+    fake %>%
+      mutate(date = make_date(year = year, month = month_num, day = day)) %>%
+      filter(date > ymd(20100201))
+    ```
+    
+
+
 # Extracting Components
 
 - `year()` extracts the year.

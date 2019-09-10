@@ -13,7 +13,7 @@ urlcolor: "blue"
 ```{r setup, include=FALSE}
 set.seed(1)
 knitr::opts_chunk$set(echo       = TRUE, 
-                      fig.height = 3, 
+                      fig.height = 3.5, 
                       fig.width  = 6,
                       fig.align  = "center")
 ggplot2::theme_set(ggplot2::theme_bw())
@@ -22,53 +22,370 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Learning Objectives
 
 - Simple Linear Regression
+- Chapter 8 of [OpenIntro Statistics (Fourth Edition)](https://www.openintro.org/stat/textbook.php)
+- [Introduction to Broom](https://cran.r-project.org/web/packages/broom/vignettes/broom.html)
 
-# Pattern: Two quantitative variables are associated.
+# Motivation
+- The simple linear model is not sexy.
+- But the most commonly used methods in Statistics are either
+    [specific applications of it](https://lindeloev.github.io/tests-as-linear/)
+    or are generalizations of it.
+- Understanding it well will help you better understand methods
+  taught in other classes.
 
-- Before we get started, let's load the packages we'll need.
+# Broom
+
+```{r}
+library(broom)
+```
+
+- For the most popular model output, the `broom` package provides three
+  functions that aid in data analysis.
+    1. `tidy()`: Provides summary information of the model (such as parameter
+       estimates and $p$-values) in a tidy format. We used this last class.
+    2. `augment()`: Creates data derived from the model and adds it to the
+       original data, such as residuals
+       and fits. It formats this augmented data in a tidy format.
+    3. `glance()`: Prints a single row summary of the model fit.
+    
+- These three functions are *very* useful and incorporate well with the 
+  tidyverse.
+  
+- You will see examples of using these functions for the linear models below.
+
+# `mtcars`
+
+- For this section, we will use the (infamous) `mtcars` dataset that comes
+  with R by default.
     ```{r, message=FALSE}
-    library(Sleuth3)
     library(tidyverse)
+    data("mtcars")
+    glimpse(mtcars)
     ```
 
-- Example: The big-bang theory suggests a linear relationship between 
-  the recession velocity of a stellar object and its distance from Earth,
-  with a y-intercept of 0. Measurements of recession velocity and distance
-  were made on 24 extra-galactic nebulae.
+- It's "infamous" because [every R class uses it](https://twitter.com/ZachDrakeTweets/status/1151549076992876551?s=20). 
+  But it's a really nice dataset to showcase some statistical methods.
+    
+- The goal of this dataset is to determine which variables affect fuel 
+  consumption (the `mpg` variable in the dataset).
+  
+- To begin, we'll look at the association between the variables log-weight 
+  and mpg (more on why we used log-weight later).
+  
     ```{r}
-    data("case0701")
-    bang <- case0701
-    glimpse(bang)
+    ggplot(mtcars, aes(x = wt, mpg)) +
+      geom_point() +
+      scale_x_log10() +
+      xlab("Weight") +
+      ylab("Miles Per Gallon")
     ```
     
-- Observational Units: The nebulae.
+- It seems that log-weight is negatively associated with mpg.    
+    
+- It seems that the data approximately fall on a line.
 
-- Population: All nebulae.
+# Line Review
+- Every line may be represented by a formula of the form
+    $$
+    Y = \beta_0 + \beta_1 X
+    $$
+- $Y$ = response variable on $y$-axis
+- $X$ = explanatory variable on the $x$-axis
+- $\beta_1$ = slope (rise over run)
+    - How much larger is $Y$ when $X$ is increased by 1.
+- $\beta_0$ = $y$-intercept (the value of the line at $X = 0$)
 
-- Sample: The 24 nebulae that the researches measured.
-
-- Variables: recession velocity (quantitative) and distance (quantitative).
-  
-- Pattern: Use a scatterplot to see if there is an association.
-
-    ```{r}
-    ggplot(bang, aes(x = Velocity, y = Distance)) +
-      geom_point()
-    ```
-
-- Line Review:
+- You can represent any line in terms of its slope and its $y$-intercept:
 
     ![](./cartoons/line_review.png)\ 
+    
+- If $\beta_1 < 0$ then the line slopes downward. If $\beta_1 > 0$ then the 
+  line slopes upword. If $\beta_1 = 0$ then the line is horizontal.
+    
+- **Exercise**: Suppose we consider the line defined by the following equation:
+  $$
+  Y = 2 + 4X
+  $$
+  - What is the value of $Y$ at $X = 3$?
+  - What is the value of $Y$ at $X = 4$?
+  - What is the difference in $Y$ values at $X = 3$ versus $X = 4$?
+  - What is the value of $Y$ at $X = 0$?
 
-- Model: $Y_i = \beta_0 + \beta_1 X_i + noise$, where
-    - $Y_i$ is the distance of nebula $i$.
-    - $X_i$ is the velocity of nebula $i$.
-    - $\beta_0$ is the intercept of the mean line.
-    - $\beta_1$ is the slope of the mean line.
+# Simple Linear Regression Model
+
+- A line does not *exactly* fit the `mtcars` dataset. But a line does
+  *approximate* the `mtcars` data.
+  
+- Model: Response variable = line + noise.
+    $$
+    Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+    $$
+
+- We typically assume that the noise ($\epsilon_i$'s) for each individual has 
+  mean 0 and some variance $\sigma^2$. We estimate $\sigma^2$.
 
 - *Given* $X_i$, mean of $Y_i$ is $\beta_0 + \beta_1 X_i$. Points vary
    about this mean.
    
     ![](./cartoons/reg1.png)\    
+    
+- Some intuition:
+  - The distribution of $Y$ is *conditional* on the value of $X$.
+  - The distribution of $Y$ is assumed to have the **same variance**, 
+    $\sigma^2$ for **all possible values of $X$**.
+  - This last one is a considerable assumption.
+  
+- Interpretation:
+  - Randomized Experiment: A 1 unit increase in $x$ results in a $\beta_1$ unit
+    increase in $y$.
+  - Observational Study: Individuals that differ only in 1 unit of $x$ are
+    expected to differ by $\beta_1$ units of $y$.
 
-- Function: `lm()`.
+- **Exercise**: What is the interpretation of $\beta_0$? 
+  
+# Estimating Coefficients
+- How do we estimate $\beta_0$ and $\beta_1$?
+  - $\beta_0$ and $\beta_1$ are **parameters**
+  - We want to estimate them from our **sample**\pause
+  - Idea: Draw a line through the cloud of points and calculate the slope 
+    and intercept of that line?
+  - Problem: Subjective\pause
+  - Another idea: Minimize residuals (sum of squared residuals).
+
+- Ordinary Least Squares
+  - Residuals: $\hat{\epsilon}_i = Y_{i} - (\hat{\beta}_0 + \hat{\beta}_1X_i)$
+  - Sum of squared residuals: $\hat{\epsilon}_1^2 + \hat{\epsilon}_2^2 + \cdots + \hat{\epsilon}_n^2$
+  - Find $\hat{\beta}_0$ and $\hat{\beta}_1$ that have small sum of squared residuals.
+  - The obtained estimates, $\hat{\beta}_0$ and $\hat{\beta}_1$, are called
+    the **ordinary least squares** (OLS) estimates.
+    
+- Bad Fit:
+    ```{r, echo=FALSE}
+    mtcars %>%
+      select(mpg, wt) %>%
+      mutate(logwt = log(wt)) ->
+      submt
+    beta0 <- 37
+    beta1 <- -10
+    submt$fitted <- beta0 + submt$logwt * beta1
+    ss <- sum((submt$fitted - submt$mpg)^2)
+    submt %>%
+      ggplot(mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = beta1, intercept = beta0, color = "blue", alpha = 1/2) +
+      xlab("Log-Weight") + 
+      ylab("MPG") +
+      geom_segment(mapping = aes(x = logwt, xend = logwt, y = mpg, yend = fitted), alpha = 1/2) +
+      ggtitle(paste0("Sum of Squares: ", round(ss, digits = 2)))
+    ```
+    
+- Better Fit:
+    ```{r, echo=FALSE}
+    beta0 <- 38
+    beta1 <- -14
+    submt$fitted <- beta0 + submt$logwt * beta1
+    ss <- sum((submt$fitted - submt$mpg)^2)
+    submt %>%
+      ggplot(mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = beta1, intercept = beta0, color = "blue", alpha = 1/2) +
+      xlab("Log-Weight") + 
+      ylab("MPG") +
+      geom_segment(mapping = aes(x = logwt, xend = logwt, y = mpg, yend = fitted), alpha = 1/2) +
+      ggtitle(paste0("Sum of Squares: ", round(ss, digits = 2)))
+    ```
+    
+- Best Fit (OLS Fit):
+    ```{r, echo=FALSE}
+    lmout <- lm(mpg ~ logwt, data = submt)
+    beta0 <- coef(lmout)[1]
+    beta1 <- coef(lmout)[2]
+    submt$fitted <- beta0 + submt$logwt * beta1
+    ss <- sum((submt$fitted - submt$mpg)^2)
+    submt %>%
+      ggplot(mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = beta1, intercept = beta0, color = "blue", alpha = 1/2) +
+      xlab("Log-Weight") + 
+      ylab("MPG") +
+      geom_segment(mapping = aes(x = logwt, xend = logwt, y = mpg, yend = fitted), alpha = 1/2) +
+      ggtitle(paste0("Sum of Squares: ", round(ss, digits = 2)))
+    ```
+
+- How to find OLS fits in R:
+    ```{r}
+    lmout <- lm(mpg ~ log(wt), data = mtcars)
+    lmtide <- tidy(lmout)
+    select(lmtide, term, estimate)
+    ```
+
+- The first argument in `lm()` is a **formula**, where the response variable
+  is to the left of the tilde and the explanatory variable is to the right of
+  the tilde.
+  
+- The `data` argument tells `lm()` where to find the variables.
+
+- We often put a "hat" over the coefficient names to denote that they are estimates:
+  - $\hat{\beta}_0$ = `r round(lmtide$estimate[1], digits = 1)`.
+  - $\hat{\beta}_1$ = `r round(lmtide$estimate[2], digits = 1)`.
+  
+- Thus, the estimated line is:
+  - $E[Y_i]$ = `r round(lmtide$estimate[1], digits = 1)` + 
+    `r round(lmtide$estimate[2], digits = 1)`$X_i$.
+
+## Hypothesis Testing
+
+- The sign of $\beta_1$ denotes different types of relationships between
+  the two quantitative variables:
+    - $\beta_1 = 0$: The two quantitative variables are not linearly associated.
+    - $\beta_1 > 0$: The two quantitative variables are positively associated.
+    - $\beta_1 < 0$: The two quantitative variables are negatively associated.
+    
+- Hypothesis Testing:
+  - We are often interested in testing if a relationship exists:
+  - Two possibilities: 
+    1. Alternative Hypothesis: $\beta_1 \neq 0$.
+    2. Null Hypothesis: $\beta_1 = 0$.
+  - Strategy: We calculate the probability of the data assuming possibility 2 
+    (called a $p$-value). If this probability is low, we conclude possibility 1. 
+    If the this probability is high, we don’t conclude anything.
+
+- Graphic: 
+  ![](cartoons/linear_p.png) \ 
+  
+```{r, eval = FALSE, echo = FALSE}
+# set.seed(1)
+# ybar <- mean(mtcars$mpg)
+# ysd  <- sd(mtcars$mpg)
+# miny <- min(mtcars$mpg) - 3.7
+# maxy <- max(mtcars$mpg) + 0.7
+# 
+# ggplot(mtcars, aes(x = wt, mpg)) +
+#   geom_point(size = 0.5) +
+#   scale_x_log10() +
+#   theme_minimal() +
+#   theme(axis.text = element_blank(),
+#         axis.title = element_blank()) +
+#   geom_smooth(method = "lm", se = FALSE) +
+#   geom_rug(sides = "b") +
+#   ylim(miny, maxy) ->
+#   pl
+# 
+# ggsave(filename = "./cartoons/true_dat.pdf", plot = pl, height = 0.7, width = 1.1)
+# 
+# for (index in 1:5) {
+#     mtcars$sim <- rnorm(n = nrow(mtcars), mean = ybar, sd = ysd)
+#     lmtemp <- lm(sim ~ log(wt), data = mtcars)
+#     cat(coef(lmtemp)[2], "\n")
+#     ggplot(mtcars, aes(x = wt, sim)) +
+#       geom_point(size = 0.5) +
+#       scale_x_log10() +
+#       theme_minimal() +
+#       theme(axis.text = element_blank(),
+#             axis.title = element_blank()) +
+#       geom_smooth(method = "lm", se = FALSE) +
+#       geom_rug(sides = "b") +
+#       ylim(miny, maxy) ->
+#       pl
+#   ggsave(filename = paste0("./cartoons/simdat_dat", index, ".pdf"), plot = pl, height = 0.7, width = 1.1)
+# }
+```
+
+- The distribution of $\hat{\beta}_1$ comes from statistical theory. The 
+  $t$-statistic is $\hat{\beta}_1 / SE(\hat{\beta}_1)$. It has 
+  a $t$-distribution with $n-2$ degrees of freedom.
+
+- $SE(\hat{\beta}_1)$: Estimated standard deviation of the sampling distribution
+  of $\hat{\beta}_1$.
+  
+- The confidence intervals for $\beta_0$ and $\beta_1$ are easy to obtain 
+  from the output of `tidy()` if you set `conf.int = TRUE`.
+  
+    ```{r}
+    lmtide <- tidy(lmout, conf.int = TRUE)
+    select(lmtide, conf.low, conf.high)
+    ```
+    
+- **Exercise** (8.18 in OpenIntro 4th Edition): Which is higher? Determine if (i) 
+  or (ii) is higher or if they are equal. Explain your reasoning. For a
+  regression line, the uncertainty associated with the slope estimate, 
+  $\hat{\beta}_1$ , is higher when
+    i. there is a lot of scatter around the regression line or
+    ii. there is very little scatter around the regression line
+        
+    ```{block, echo = FALSE}
+    (i). If there is a lot of scatter, then it is hard to pin-point the mean
+    relationship. This can be formalized by looking at the contribution of the
+    sample size in the standard error formula for $\hat{\beta}_1$.
+    ```
+    
+    
+- **Exercise**: Load in the `bac` dataset from the openintro R package.
+  1. Create an appropriate plot to visualize the association between the number
+     of beers and the BAC.
+    ```{r, echo = FALSE, eval = FALSE}
+    library(openintro)
+    data("bac")
+    ggplot(bac, aes(x = Beers, y = BAC)) +
+      geom_point()
+    ```
+  2. Does the relationship appear positive or negative?
+    ```{block, echo = FALSE}
+    Positive. It points up.
+    ```
+  3. Write out equation of the OLS line.
+    ```{r, echo = FALSE, eval = FALSE}
+    lmout <- lm(BAC ~ Beers, data = bac)
+    tdat <- tidy(lmout, conf.int = TRUE)
+    beta0hat <- tdat$estimate[1]
+    beta1hat <- tdat$estimate[2]
+    ```
+    ```{block, echo = FALSE}
+    y = `r beta0hat` + `r beta1hat` x
+    ```
+  4. Do we have evidence that the number of beers is associated with BAC? 
+     Formally justify.
+    ```{block, echo=FALSE}
+    Yes, the $p$-value is `r tdat$p.value[2]`, which provides strong
+    evidence against the null that the two variables are not linearly
+    associated.
+    ```
+  5. Interpret the coefficient estimates.
+    ```{block, echo=FALSE}
+    Every beer a person drinks is expected to increase their blood alcohol
+    content by 0.018. I use causal language here because this was a randomized
+    experiment.
+    
+    The BAC at zero beers is expected to be -0.0127.
+    ```
+  6. What happens to the standard errors of the estimates when we force
+     the interecept to be 0? Why?
+    ```{r, eval=FALSE, echo=FALSE}
+    lmout2 <- lm(BAC ~ Beers - 1, data = bac)
+    tdat2 <- tidy(lmout2, conf.int = TRUE)
+    tdat$std.error[2]
+    tdat2$std.error
+    ```
+    ```{block, echo=FALSE}
+    It shrinks. That's because we are having to estimate one less parameter
+    and so we have degrees of freedom.
+    ```
+    
+     
+  
+    
+  
+
+  
+
+
+## Prediction (Interpolation)
+
+## Residuals
+
+## Assumptions
+
+## Checking Assumptions with Residuals
+
+
+
