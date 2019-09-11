@@ -221,9 +221,19 @@ library(broom)
 
 - The first argument in `lm()` is a **formula**, where the response variable
   is to the left of the tilde and the explanatory variable is to the right of
-  the tilde.
+  the tilde. 
   
-- The `data` argument tells `lm()` where to find the variables.
+    ``` r
+    response ~ explanatory
+    ```
+    
+    This formula says that `lm()` should find the OLS estimates of the 
+    following model: 
+    
+    response = $\beta_0$ + $\beta_1$explanatory + noise
+  
+- The `data` argument tells `lm()` where to find the response and 
+  explanatory variables.
 
 - We often put a "hat" over the coefficient names to denote that they are estimates:
   - $\hat{\beta}_0$ = `r round(lmtide$estimate[1], digits = 1)`.

@@ -46,8 +46,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - So why did we learn the tidyverse? 
     - It's easier to read. This is important if you are sharing code, or 
       if you are looking at your code 6 months after you write it
-      (this is a *very* controversial opinion and Matt Dowle would say I'm 
-      full of crap).
+      (this is a *very* controversial opinion and Matt Dowle would disagree
+      with this).
     - For datasets with fewer than, like, one million observations, it works 
       fast enough.
 

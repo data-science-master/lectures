@@ -7,11 +7,12 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-07-08" />
+<meta name="date" content="2019-09-11" />
 
 <title>Manipulating Large(ish) Datasets with data.table</title>
 
@@ -270,7 +271,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -344,18 +344,6 @@ summary {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -377,7 +365,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Manipulating Large(ish) Datasets with data.table</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-07-08</h4>
+<h4 class="date">2019-09-11</h4>
 
 </div>
 
@@ -425,7 +413,7 @@ $(document).ready(function () {
 <li><p><code>data.table</code> is the fastest: <a href="https://h2oai.github.io/db-benchmark/" class="uri">https://h2oai.github.io/db-benchmark/</a>.</p></li>
 <li>So why did we learn the tidyverse?
 <ul>
-<li>It’s easier to read. This is important if you are sharing code, or if you are looking at your code 6 months after you write it (this is a <em>very</em> controversial opinion and Matt Dowle would say I’m full of crap).</li>
+<li>It’s easier to read. This is important if you are sharing code, or if you are looking at your code 6 months after you write it (this is a <em>very</em> controversial opinion and Matt Dowle would disagree with this).</li>
 <li>For datasets with fewer than, like, one million observations, it works fast enough.</li>
 </ul></li>
 </ul>
@@ -868,6 +856,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

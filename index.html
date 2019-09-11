@@ -7,6 +7,7 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
@@ -86,7 +87,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -247,18 +247,6 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
@@ -354,19 +342,35 @@ $(document).ready(function () {
 <li><a href="./04_basic_stats/greenland_etal_2016.pdf">04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations</a>.</li>
 <li><a href="https://github.com/data-science-master/lab_04">04 Lab</a>.</li>
 </ul></li>
-<li>05 Linear Models</li>
-<li>06 Shiny Apps 1</li>
-<li>07 Shiny Apps 2</li>
-<li>08 Data.table
+<li>05 Linear Models
 <ul>
-<li><a href="./08_medium_data/08_medium_data.html">08 Manipulating Large(ish) Datasets with data.table</a>.</li>
+<li><a href="./05_linear_regression/05_simple_linear_regression.html">05 Simple Linear Regression</a>.</li>
 </ul></li>
-<li>09 Dimensionality Reduction</li>
-<li>10 Machine Learning and Caret 1</li>
-<li>11 Machine Learning and Caret 2</li>
-<li>12 Data Dredging</li>
-<li>13 Data Ethics</li>
-<li>14 Building a Professional Website</li>
+<li>06 Shiny Apps
+<ul>
+<li><a href="./06_shiny/06_basic_shiny.html">06 Shiny Basics</a>.</li>
+</ul></li>
+<li>07 Data.table
+<ul>
+<li><a href="./07_medium_data/07_medium_data.html">07 Manipulating Large(ish) Datasets with data.table</a>.</li>
+</ul></li>
+<li>08 Dimensionality Reduction
+<ul>
+<li><a href="./08_dimension_reduction/08_dimension_reduction.html">08 Dimensionality Reduction</a>.</li>
+</ul></li>
+<li>09 Web Scraping
+<ul>
+<li><a href="./09_web_scraping/09_web_scraping.html">09 Web Scraping</a>.</li>
+</ul></li>
+<li>10 Websites with R Markdown
+<ul>
+<li><a href="./10_websites/10_websites.html">10 Websites with R Markdown</a>.</li>
+</ul></li>
+<li>11 Data Ethics
+<ul>
+<li><a href="./11_ethics/11_ethics.html">11 Data Ethics</a>.</li>
+<li><a href="./11_ethics/data_science_bias.pdf">11 Technology Is Biased Too. How Do We Fix It?</a>.</li>
+</ul></li>
 </ul>
 </div>
 
@@ -387,6 +391,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

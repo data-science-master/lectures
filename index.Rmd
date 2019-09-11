@@ -39,13 +39,17 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf).
     - [04 Lab](https://github.com/data-science-master/lab_04).
 - 05 Linear Models
-- 06 Shiny Apps 1
-- 07 Shiny Apps 2
-- 08 Data.table    
-    - [08 Manipulating Large(ish) Datasets with data.table](./08_medium_data/08_medium_data.html).
-- 09 Dimensionality Reduction
-- 10 Machine Learning and Caret 1
-- 11 Machine Learning and Caret 2
-- 12 Data Dredging
-- 13 Data Ethics
-- 14 Building a Professional Website
+    - [05 Simple Linear Regression](./05_linear_regression/05_simple_linear_regression.html).
+- 06 Shiny Apps
+    - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
+- 07 Data.table    
+    - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
+- 08 Dimensionality Reduction
+    - [08 Dimensionality Reduction](./08_dimension_reduction/08_dimension_reduction.html).
+- 09 Web Scraping
+    - [09 Web Scraping](./09_web_scraping/09_web_scraping.html).
+- 10 Websites with R Markdown
+    - [10 Websites with R Markdown](./10_websites/10_websites.html).
+- 11 Data Ethics
+    - [11 Data Ethics](./11_ethics/11_ethics.html).
+    - [11 Technology Is Biased Too. How Do We Fix It?](./11_ethics/data_science_bias.pdf).
