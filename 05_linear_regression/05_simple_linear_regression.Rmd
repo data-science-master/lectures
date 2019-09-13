@@ -32,6 +32,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     or are generalizations of it.
 - Understanding it well will help you better understand methods
   taught in other classes.
+- We teach Linear Regression in STAT 415/615 (the most important course we teach). 
+  So these notes are just meant to give you a couple tools that you can 
+  build on in that course.
 
 # Broom
 
@@ -39,7 +42,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 library(broom)
 ```
 
-- For the most popular model output, the `broom` package provides three
+- For the most popular model output (t-tests, linear models, generalized
+  linear models), the `broom` package provides three
   functions that aid in data analysis.
     1. `tidy()`: Provides summary information of the model (such as parameter
        estimates and $p$-values) in a tidy format. We used this last class.
@@ -55,7 +59,7 @@ library(broom)
 
 # `mtcars`
 
-- For this section, we will use the (infamous) `mtcars` dataset that comes
+- For this lesson, we will use the (infamous) `mtcars` dataset that comes
   with R by default.
     ```{r, message=FALSE}
     library(tidyverse)
@@ -100,7 +104,7 @@ library(broom)
     ![](./cartoons/line_review.png)\ 
     
 - If $\beta_1 < 0$ then the line slopes downward. If $\beta_1 > 0$ then the 
-  line slopes upword. If $\beta_1 = 0$ then the line is horizontal.
+  line slopes upward. If $\beta_1 = 0$ then the line is horizontal.
     
 - **Exercise**: Suppose we consider the line defined by the following equation:
   $$
@@ -124,8 +128,9 @@ library(broom)
 - We typically assume that the noise ($\epsilon_i$'s) for each individual has 
   mean 0 and some variance $\sigma^2$. We estimate $\sigma^2$.
 
-- *Given* $X_i$, mean of $Y_i$ is $\beta_0 + \beta_1 X_i$. Points vary
-   about this mean.
+- **LINEAR MODEL IN A NUTSHELL**: 
+
+    > *Given* $X_i$, mean of $Y_i$ is $\beta_0 + \beta_1 X_i$. Points vary about this mean.
    
     ![](./cartoons/reg1.png)\    
     
@@ -213,11 +218,21 @@ library(broom)
     ```
 
 - How to find OLS fits in R:
-    ```{r}
-    lmout <- lm(mpg ~ log(wt), data = mtcars)
-    lmtide <- tidy(lmout)
-    select(lmtide, term, estimate)
-    ```
+    1. Make sure you have the explanatory variables in the format you want:
+    
+        ```{r}
+        mtcars %>%
+          mutate(logwt = log(wt)) ->
+          mtcars
+        ```
+        
+    2. Use `lm()`
+    
+        ```{r}
+        lmout <- lm(mpg ~ logwt, data = mtcars)
+        lmtide <- tidy(lmout)
+        select(lmtide, term, estimate)
+        ```
 
 - The first argument in `lm()` is a **formula**, where the response variable
   is to the left of the tilde and the explanatory variable is to the right of
@@ -242,8 +257,85 @@ library(broom)
 - Thus, the estimated line is:
   - $E[Y_i]$ = `r round(lmtide$estimate[1], digits = 1)` + 
     `r round(lmtide$estimate[2], digits = 1)`$X_i$.
+    
+- **Exercise**: Fit a linear model of displacement on weight. What are the
+  regression coefficient estimates. Interpret them.
+  
+    ```{r, eval = FALSE, echo = FALSE}
+    lm_disp_wt <- lm(disp ~ wt, data = mtcars)
+    tidy(lm_disp_wt) %>%
+      select(term, estimate)
+    ```
+    
+    ```{block, echo = FALSE, eval = FALSE}
+    A car that weighs one pound heavier than another car is expected to have a 
+    displacement 112 cubic inches larger.
+    
+    Notice the **non-causal** language here. We are just talking about differences
+    in expectations, **not** that a car will gain a certain amount
+    of displacement if it's heavier.
+    ```    
 
-## Hypothesis Testing
+# Estimating Variance
+
+- We assume that the variance of $Y_i$ is the same for each $X_i$. 
+- Call this variance $\sigma^2$.
+- We estimate it by the variability in the residuals.
+    
+    ```{r, echo = FALSE}
+    submt %>%
+      mutate(resid = mpg - fitted,
+             resid2 = resid^2) ->
+      submt
+    submt %>%
+      ggplot(mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = beta1, intercept = beta0, color = "blue", alpha = 1/2) +
+      xlab("Log-Weight") + 
+      ylab("MPG") +
+      geom_segment(mapping = aes(x = logwt, xend = logwt, y = mpg, yend = fitted), alpha = 1/2)
+    
+    submt %>%
+      ggplot(mapping = aes(x = logwt, y = resid)) +
+      geom_point() +
+      xlab("Log-Weight") + 
+      ylab("Residuals") +
+      geom_segment(mapping = aes(x = logwt, xend = logwt, y = 0, yend = resid), alpha = 1/2) +
+      geom_hline(yintercept = 0, col = "blue", alpha = 1/2) +
+      ylim(-12.5, 12.5)
+    
+    submt %>%
+      summarize(meansquared = mean(resid2),
+                meanweight = mean(logwt)) ->
+      sumsubmt
+    
+    submt %>%
+      ggplot(aes(x = resid)) +
+      geom_histogram(bins = 7, fill = "white", color = "black") +
+      xlab("Residuals")
+    ```
+- The variance of residuals is the estimated variance in the data. This is
+  a general technique.
+    - Technical note: people adjust for the number of parameters in a model when calculating the variance, so they no-longer divide by "n - 1".
+
+- In R, use the broom function `glance()` function to get the estimated standard deviation. It's the value
+  in the `sigma` column.
+    ```{r}
+    glance(lmout) %>%
+      select(sigma)
+    ```
+    
+- Estimating the variance/standard deviation is important because it is a component in the 
+  standard error of $\hat{\beta}_1$ and $\hat{\beta}_0$. These standard
+  errors are output by `tidy()`.
+    ```{r}
+    tidy(lmout) %>%
+      select(term, std.error)
+    ```
+    
+- The variance is also used when calculating prediction intervals.
+
+# Hypothesis Testing
 
 - The sign of $\beta_1$ denotes different types of relationships between
   the two quantitative variables:
@@ -301,11 +393,10 @@ library(broom)
 # }
 ```
 
-- The distribution of $\hat{\beta}_1$ comes from statistical theory. The 
+- The sampling distribution of $\hat{\beta}_1$ comes from statistical theory. The 
   $t$-statistic is $\hat{\beta}_1 / SE(\hat{\beta}_1)$. It has 
   a $t$-distribution with $n-2$ degrees of freedom.
-
-- $SE(\hat{\beta}_1)$: Estimated standard deviation of the sampling distribution
+  - $SE(\hat{\beta}_1)$: Estimated standard deviation of the sampling distribution
   of $\hat{\beta}_1$.
   
 - The confidence intervals for $\beta_0$ and $\beta_1$ are easy to obtain 
@@ -323,7 +414,7 @@ library(broom)
     i. there is a lot of scatter around the regression line or
     ii. there is very little scatter around the regression line
         
-    ```{block, echo = FALSE}
+    ```{block, echo = FALSE, eval = FALSE}
     (i). If there is a lot of scatter, then it is hard to pin-point the mean
     relationship. This can be formalized by looking at the contribution of the
     sample size in the standard error formula for $\hat{\beta}_1$.
@@ -340,7 +431,7 @@ library(broom)
       geom_point()
     ```
   2. Does the relationship appear positive or negative?
-    ```{block, echo = FALSE}
+    ```{block, echo = FALSE, eval=FALSE}
     Positive. It points up.
     ```
   3. Write out equation of the OLS line.
@@ -350,18 +441,18 @@ library(broom)
     beta0hat <- tdat$estimate[1]
     beta1hat <- tdat$estimate[2]
     ```
-    ```{block, echo = FALSE}
+    ```{block, echo = FALSE, eval = FALSE}
     y = `r beta0hat` + `r beta1hat` x
     ```
   4. Do we have evidence that the number of beers is associated with BAC? 
      Formally justify.
-    ```{block, echo=FALSE}
+    ```{block, echo=FALSE, eval = FALSE}
     Yes, the $p$-value is `r tdat$p.value[2]`, which provides strong
     evidence against the null that the two variables are not linearly
     associated.
     ```
   5. Interpret the coefficient estimates.
-    ```{block, echo=FALSE}
+    ```{block, echo=FALSE, eval = FALSE}
     Every beer a person drinks is expected to increase their blood alcohol
     content by 0.018. I use causal language here because this was a randomized
     experiment.
@@ -369,33 +460,449 @@ library(broom)
     The BAC at zero beers is expected to be -0.0127.
     ```
   6. What happens to the standard errors of the estimates when we force
-     the interecept to be 0? Why?
+     the intercept to be 0? Why?
     ```{r, eval=FALSE, echo=FALSE}
     lmout2 <- lm(BAC ~ Beers - 1, data = bac)
     tdat2 <- tidy(lmout2, conf.int = TRUE)
     tdat$std.error[2]
     tdat2$std.error
     ```
-    ```{block, echo=FALSE}
+    ```{block, echo=FALSE, eval = FALSE}
     It shrinks. That's because we are having to estimate one less parameter
     and so we have degrees of freedom.
     ```
+
+# Prediction (Interpolation)
+
+- Definitions
+  - **Interpolation**: Making estimates/predictions within the range of the data.
+  - **Extrapolation**: Making estimates/predictions outside the range of the data.
+  - Interpolation is good. Extrapolation is bad.
+
+- Interpolation
+    ```{r, echo = FALSE}
+    ggplot(data = submt, mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = coef(lmout)[2], intercept = coef(lmout)[1], lwd = 1, col = "blue", alpha = 1/2) +
+      geom_segment(data = data.frame(x    = 1, 
+                                     xend = 1,
+                                     y    = 0,
+                                     yend = coef(lmout)[1] + 1 * coef(lmout)[2]),
+                   mapping = aes(x = x, xend = xend, y = y, yend = yend), 
+                   lty = 2, color = "red", lwd = 1) +
+      geom_hline(yintercept = 0, lty = 2, alpha = 1/2) +
+      ylab("MPG") +
+      xlab("Log-weight")
+    ```
+
+- Extrapolation
+    ```{r, echo = FALSE}
+    ggplot(data = submt, mapping = aes(x = logwt, y = mpg)) +
+      geom_point() +
+      geom_abline(slope = coef(lmout)[2], intercept = coef(lmout)[1], lwd = 1, col = "blue", alpha = 1/2) +
+      geom_segment(data = data.frame(x    = 3, 
+                                     xend = 3,
+                                     y    = 0,
+                                     yend = coef(lmout)[1] + 3 * coef(lmout)[2]),
+                   mapping = aes(x = x, xend = xend, y = y, yend = yend), 
+                   lty = 2, color = "red", lwd = 1) +
+      geom_hline(yintercept = 0, lty = 2, alpha = 1/2) +
+      ylab("MPG") +
+      xlab("Log-weight")
+    ```
+
+- Why is extrapolation bad?
+    1. Not sure if the linear relationship is the same outside the range of
+       the data (because we don't have data there to see the relationship).
+    2. Not sure if the variability is the same outside the range of the 
+       data (because we don't have data there to see the variability).
+
+- To make a prediction:
+  1. You need a data frame with the exact same
+     variable name as the explanatory variable. 
+        ```{r}
+        newdf <- tribble(~logwt,
+                         1, 
+                         1.5)
+        ```
+  2. Then you use the `predict()` function to obtain predictions.
+        ```{r}
+        newdf %>%
+          mutate(predictions = predict(object = lmout, newdata = newdf)) ->
+          newdf
+        newdf
+        ```
+
+- **Exercise**: Derive the predictions above by hand (not using `predict()`).
+    ```{block, eval = FALSE, echo = FALSE}
+    39.3 - 17.1 * 1   = 22.2
+    39.3 - 17.1 * 1.5 = 13.6
+    ```
     
+- **Exercise**: from the BAC dataset, suppose someone had 5 beers. Use
+  `predict()` to predict their BAC.
+  
+    ```{r, eval = FALSE, echo = FALSE}
+    library(openintro)
+    data("bac")
+    lmbeer <- lm(BAC ~ Beers, data = bac)
+    newdata <- tribble(~Beers,
+                       5)
+    predict(object = lmbeer, newdata = newdata)
+    ```
+  
+
+# Assumptions
+
+## Assumptions and Violations
+
+- The linear model has many assumptions.
+
+- **You should always check these assumptions**.
+
+- Assumptions in *decreasing* order of importance
+  1. **Linearity** - The relationship looks like a straight line.
+  2. **Independence** - The knowledge of the value of one observation does not 
+     give you any information on the value of another.
+  3. **Equal Variance** - The spread is the same for every value of $x$
+  4. **Normality** - The distribution of the errors isn't too skewed and there aren't 
+     any *too* extreme points. (Only an issue if you have outliers and a 
+     small number of observations because of the 
+     [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem)).
      
+- Problems when violated
+  1. **Linearity** violated - Linear regression line does not pick up actual 
+     relationship. Results aren't meaningful.
+  2. **Independence** violated - Linear regression line is unbiased, but standard 
+     errors are off. Your $p$-values are too small.
+  3. **Equal Variance** violated - Linear regression line is unbiased, but standard 
+     errors are off. Your $p$-values may be too small, or too large.
+  4. **Normality** violated - Unstable results if outliers are present and sample size 
+     is small. Not usually a big deal.
+     
+- **Exercise**: What assumptions are made about the distribution of the 
+  explanatory variable (the $x_i$'s)?
+    ```{block, eval = FALSE, echo = FALSE}
+    None. Inference is conditional on the $x_i$'s.
+    ```
   
+## Evaluating Independence
+
+- Think about the problem.
+  - Were different responses measured on the same observational/experimental unit?
+  - Were data collected in groups?
+
+- Example of non-independence: The temperature today and the temperature 
+  tomorrow. If it is warm today, it is probably warm tomorrow.
+
+- Example of non-independence: You are collecting a survey. To obtain 
+  individuals, you select a house at random and then ask all participants 
+  in this house to answer the survey. The participants' responses inside 
+  each house are probably not independent because they probably share 
+  similar beliefs/backgrounds/situations.
+  
+- Example of independence: You are collecting a survey. To obtain individuals,
+  you randomly dial phone numbers until an individual picks up the phone.
+
+## Evaluating other assumptions
+
+- **Evaluate issues by plotting the residuals.**
+
+- The **residuals** are the observed values minus the predicted values.
+    $$
+    r_i = y_i - \hat{y}_i
+    $$
+
+- In the linear model, $\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x_i$.
+
+- Obtain the residuals by using `augment()` from broom. They will be the
+  `.resid` variable.
+    ```{r}
+    aout <- augment(lmout)
+    glimpse(aout)
+    ```
+
+- You should always make the following scatterplots. The residuals
+  always go on the $y$-axis.
+    - Fits $\hat{y}_i$ vs residuals $r_i$.
+    - Response $y_i$ vs residuals $r_i$.
+    - Explanatory variable $x_i$ vs residuals $r_i$.
     
+- In the simple linear model, you can probably evaluate these issues by plotting
+  the data ($x_i$ vs $y_i$). But residual plots generalize to *much* 
+  more complicated models, whereas just plotting the data does not.
   
+```{block, eval = FALSE, echo = FALSE}  
+- Solutions:
+  1. Linearity Violated: Try a transformation. If the relationship looks 
+     curved and monotone (i.e. either always increasing or always decreasing) then 
+     try a log transformation.
+  2. Independence Violated: You'll need more sophisticated statistical 
+     techniques. Hire a statistician.
+  3. Equal Variance Violated: If the relationship is also curved and monotone, 
+     try a log transformation on the response variable. Or figure out how 
+     to perform sandwich estimation.
+  4. Normality Violated: Do nothing. But don't use prediction intervals 
+     (confidence intervals are fine). Just report the violations from 
+     normality. 
+```
+     
+### Example 1: A perfect residual plot
 
+```{r, echo = FALSE, message = FALSE}
+set.seed(1)
+x <- rnorm(100, sd = 1); y <- x + rnorm(100);
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data") + geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Means are straight lines
+- Residuals seem to be centered at 0 for all $x$
+- Variance looks equal for all $x$
+- Everything looks perfect
+
+### Example 2: Curved Monotone Relationship, Equal Variances
+
+- Generate fake data:
+    ```{r}
+    set.seed(1)
+    x <- rexp(100)
+    x <- x - min(x) + 0.5
+    y <- log(x) * 20 + rnorm(100, sd = 4)
+    df_fake <- tibble(x, y)
+    ```
+
+```{r, echo = FALSE}
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data")+ geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Curved (but always increasing) relationship between $x$ and $y$.
+- Variance looks equal for all $x$
+- Residual plot has a parabolic shape.
+- **Solution**: These indicate a $\log$ transformation of $x$ could help.
+    ```{r}
+    df_fake %>%
+      mutate(logx = log(x)) ->
+      df_fake
+    lm_fake <- lm(y ~ logx, data = df_fake)
+    ```
+
+
+
+### Example 3: Curved Non-monotone Relationship, Equal Variances
+
+- Generate fake data:
+    ```{r}
+    set.seed(1)
+    x <- rnorm(100)
+    y <- -x^2 + rnorm(100)
+    df_fake <- tibble(x, y)
+    ```
+
+```{r, echo = FALSE}
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data")+ geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Curved relationship between $x$ and $y$
+- Sometimes the relationship is increasing, sometimes it is decreasing.
+- Variance looks equal for all $x$
+- Residual plot has a parabolic form.
+- **Solution**: Include a squared term in the model (or hire a statistician).
+    ```{r}
+    lmout <- lm(y ~ x^2, data = df_fake)
+    ```
+
+### Example 4: Curved Relationship, Variance Increases with $Y$
+
+- Generate fake data:
+    ```{r}
+    set.seed(1)
+    x <- rnorm(100)
+    y <- exp(x + rnorm(100, sd = 1/2))
+    df_fake <- tibble(x, y)
+    ```
+
+```{r, echo = FALSE}
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data")+ geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Curved relationship between $x$ and $y$
+- Variance looks like it increases as $y$ increases
+- Residual plot has a parabolic form.
+- Residual plot variance looks larger to the right and smaller to the left.
+- **Solution**: Take a log-transformation of $y$.
+    ```{r}
+    df_fake %>%
+      mutate(logy = log(y)) ->
+      df_fake
+    lm_fake <- lm(logy ~ x, data = df_fake)
+    ```
+
+
+### Example 5: Linear Relationship, Equal Variances, Skewed Distribution
+
+```{r, echo = FALSE}
+set.seed(1)
+x <- runif(200)
+y <- 15 * x + rexp(200, 0.2)
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data")+ geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Straight line relationship between $x$ and $y$.
+- Variances about equal for all $x$
+- Skew for all $x$
+- Residual plots show skew.
+- **Solution**: Do nothing, but report skew (usually OK to do)
+
+### Example 6: Linear Relationship, Unequal Variances
+
+- Generate fake data:
+    ```{r}
+    set.seed(1)
+    x <- runif(100) * 10
+    y <- 0.85 * x + rnorm(100, sd = (x - 5) ^ 2)
+    df_fake <- tibble(x, y)
+    ```
+
+
+```{r, echo = FALSE}
+lmout <- lm(y ~ x)
+res_vec <- resid(lmout)
+fit_vec <- fitted(lmout)
+qplot(x, y, xlab = "X", ylab = "Y", main = "Raw Data")+ geom_smooth(se = FALSE, method = "lm")
+qplot(fit_vec, res_vec, xlab = "Fitted Values", ylab = "Residuals", main = "Residual Plot") + geom_hline(yintercept = 0)
+```
+
+- Linear relationship between $x$ and $y$.
+- Variance is different for different values of $x$.
+- Residual plots really good at showing this.
+- **Solution**: The modern solution is to use sandwich estimates of the standard errors
+  (hire a statistician).
+    ```{r}
+    library(sandwich)
+    lm_fake <- lm(y ~ x, data = df_fake)
+    semat <- sandwich(lm_fake)
+    tidy(lm_fake) %>%
+      mutate(sandwich_se = sqrt(diag(semat)),
+             sandwich_t  = estimate / sandwich_se,
+             sandwich_p  = 2 * pt(-abs(sandwich_t), df = df.residual(lm_fake)))
+    ```
   
+  
+# Some Exercises
 
+- **Exercise**: From the `mtcars` data frame, run a regression of MPG on displacement.
+  Evaluate the regression fit and fix any issues. Interpret the coefficient estimates.
+    ```{r, eval = FALSE, echo = FALSE}
+    lm_mtcars <- lm(mpg ~ disp, data = mtcars)
+    lmmt_aug <- augment(lm_mtcars)
+    ggplot(lmmt_aug, aes(x = .fitted, y = .resid)) +
+      geom_point() +
+      geom_hline(yintercept = 0, lty = 2)
+    
+    lm_mtcars <- lm(mpg ~ log(disp), data = mtcars)
+    lmmt_aug <- augment(lm_mtcars)
+    ggplot(lmmt_aug, aes(x = .fitted, y = .resid)) +
+      geom_point() +
+      geom_hline(yintercept = 0, lty = 2)
+    ## Looks better but still a little curvey
+    ```
+  
+- **Exercise**: Consider the data frame `case0801` from the Sleuth3 R package:
+    ```{r}
+    library(Sleuth3)
+    data("case0801")
+    ```
+    Find an appropriate linear regression model for relating the effect of 
+    island area on species number. Find the regression estimates. Interpret them.
+    ```{r, echo = FALSE, eval = FALSE}
+    ggplot(case0801, aes(x = Area, y = Species)) +
+      geom_point() +
+      scale_x_log10() +
+      scale_y_log10()
+    
+    case0801 %>%
+      mutate(log_area = log2(Area),
+             log_species = log2(Species)) ->
+      case0801
+    
+    lm_sp <- lm(log_species ~ log_area, data = case0801)
+    tidy(lm_sp)
+    
+    ## Doubling area tends to correspond to having 2^0.25 times as many species
+    ```
 
-## Prediction (Interpolation)
+# Interpreting Coefficients when you use logs
 
-## Residuals
+- Generally, when you use logs, you interpret associations on a 
+  *multiplicative* scale instead of an *additive* scale.
 
-## Assumptions
+- No log:
+  - Model: $E[y_i] = \beta_0 + \beta_1 x_i$
+  - Observations that differ by 1 unit in $x$ tend to differ by $\beta_1$ units in $y$.
 
-## Checking Assumptions with Residuals
+- Log $x$:
+  - Model: $E[y_i] = \beta_0 + \beta_1 \log_2(x_i)$
+  - Observations that are twice as large in $x$ tend to differ by $\beta_1$ units in $y$.
 
+- Log $y$:
+  - Model: $E[\log_2(y_i)] = \beta_0 + \beta_1 x_i$
+  - Observations that differ by 1 unit in $x$ tend to be $2^{\beta_1}$ times larger in $y$. 
 
+- Log both:
+  - Model: $E[\log_2(y_i)] = \beta_0 + \beta_1 \log_2(x_i)$
+  - Observations that are twice as large in $x$ tend to be $2^{\beta_1}$ times larger in $y$. 
+  
+- **Exercise**: Re-interpret the regression coefficients estimates you calculated
+  using the `case0801` dataset.
+    ```{block, eval = FALSE, echo = FALSE}
+    2^0.25 = 1.19, so:
+    
+    Islands that are twice as large tend to have 19\% more species.
+    ```
+
+- **Exercise** Re-interpret the regression coefficient estimates you calculated
+  in the `mtcars` data frame when you were exploring the effect of displacement
+  on mpg.
+    ```{r, eval = FALSE, echo = FALSE}
+    lmout <- lm(mpg ~ log(disp), data = mtcars)
+    tidy(lmout)
+    
+    ## Cars that have twice as large a displacement tend to have mpg's 10 less.
+    ```
+
+# Summary of R commands
+
+- `augment()`:
+  - Residuals $r_i = y_i - \hat{y}_i$: `$.resid`
+  - Fitted Values $\hat{y}_i$: `$.fitted`
+- `tidy()`:
+  - Name of variables: `$term`
+  - Coefficient Estimates: `$estimate`
+  - Standard Error (standard deviation of sampling distribution of coefficient estimates): `$std.error`
+  - t-statistic: `$statistic`
+  - p-value: `$p.value`
+- `glance()`: 
+  - R-squared value (proportion of variance explained by regression line, higher is better): `$r.squared`
+  - AIC (lower is better): `$AIC`
+  - BIC (lower is better): `$BIC`
 
