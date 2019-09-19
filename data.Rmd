@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 - [airfares.csv](./data/airfares.csv): Average first quarter domestic airline
-  fares by origin city for major U.S. airports from 1993 to 2019. The
+  fares by origin airport for major U.S. airports from 1993 to 2019. The
   data are from The Bureau of Transportation Statistics 
   (<https://www.transtats.bts.gov/AverageFare/>). Variables include:
   - `code`: The origin airport code.

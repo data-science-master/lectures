@@ -41,6 +41,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 05 Linear Models
     - [05 Simple Linear Regression](./05_linear_regression/05_simple_linear_regression.html).
     - [05 Many Models](./05_linear_regression/05_many_models.html).
+    - [05 Lab](https://github.com/data-science-master/lab_05).
 - 06 Shiny Apps
     - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
 - 07 Data.table    
