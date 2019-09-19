@@ -9,7 +9,26 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+- [airfares.csv](./data/airfares.csv): Average first quarter domestic airline
+  fares by origin city for major U.S. airports from 1993 to 2019. The
+  data are from The Bureau of Transportation Statistics 
+  (<https://www.transtats.bts.gov/AverageFare/>). Variables include:
+  - `code`: The origin airport code.
+  - `name`: The name of the origin airport.
+  - `city`: The city of the origin airport.
+  - `state`: The state of the origin airport.
+  - `fare`: Average first quarter fare from the origin airport in a given year.
+    "Fares are based on the total ticket value which consists of the price 
+    charged by the airlines plus any additional taxes and fees levied by an 
+    outside entity at the time of purchase. Fares include only the price paid 
+    at the time of the ticket purchase and do not include other fees, such as 
+    baggage fees, paid at the airport or onboard the aircraft. Averages do not
+    include frequent-flyer or 'zero fares' or a few abnormally high reported 
+    fares."
+  - `adj_fare`: Inflation adjusted average fare (in 2019 dollars). 
+    "The inflation adjustment was performed using Consumer Price Index 
+    for all urban consumers."
+  - `year`: The year.
 - [bob.csv](./data/bob.csv): [Bob Ross](https://en.wikipedia.org/wiki/Bob_Ross) 
   was a painter who hosted a popular television series on PBS. Each episode 
   would consist of him completing an entire painting. His paintings almost 
