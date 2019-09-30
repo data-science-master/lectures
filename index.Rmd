@@ -44,6 +44,8 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [05 Lab](https://github.com/data-science-master/lab_05).
 - 06 Shiny Apps
     - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
+    - [06 Reactivity](./06_shiny/06_reactivity.html).
+    - [06 Layouts](./06_shiny/06_layouts.html).
 - 07 Data.table    
     - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
 - 08 Dimensionality Reduction
