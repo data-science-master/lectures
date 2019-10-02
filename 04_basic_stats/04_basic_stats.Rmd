@@ -686,7 +686,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
   suitability of military recruits. There are different subjects tested:
   arithmetic, word knowledge, paragraph comprehension, and mathematics. 
   They also provide a composite score. These data are stored in the
-  `ex0222` data frame from the Sleuth package. For which subjects do we have
+  `ex0222` data frame from the Sleuth3 package. For which subjects do we have
   evidence that the genders differ? Make appropriate exploratory plots, set up
   the appropriate hypotheses, and run appropriate hypothesis tests.
   
@@ -790,7 +790,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     exp(c(low = tout$conf.low, high = tout$conf.high))
     ```
   
-- **Exercise**: Read up on the `ex0330` dataset from the Sleuth R package. Determine
+- **Exercise**: Read up on the `ex0330` dataset from the Sleuth3 R package. Determine
   if education level is associated with income. Interpret any estimates and
   confidence intervals you derive.
   
@@ -859,7 +859,28 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - Estimate with sample proportion, 0.56.
 
-- Question: Do more than half of U.S. adults support nuclear arms reduction?
+- Hypothesis Testing:
+  - We are interested in if more than half of U.S. adults support nuclear 
+    arms reduction.
+  - Two possibilities:
+      1. **Alternative Hypothesis**: Proportion of U.S. adults who support 
+         nuclear arms reduction is different from 0.5.
+      2. **Null Hypothesis**: Proportion of U.S. adults who support 
+         nuclear arms reduction is 0.5. We just happened *by chance* to get
+         a sample proportion far from 0.5
+  - Strategy: We calculate the probability of the data assuming possibility 2
+    (called a *p*-value). If this probability is low, we conclude
+    possibility 1. If this probability is high, we don't conclude anything.
+    
+- Graphic:
+
+    ![](./cartoons/proptest_pvalue.png)\ 
+    
+- The distribution of possible null sample proportions comes from
+  statistical theory. The number of successes has a binomial distribution
+  with success probability 0.5 and size parameter equal to the 
+  sample size. The sample proportion is the number successes divided by
+  the sample size.
 
 - Function: `prop.test()` (when you have a large number of both successes and
   failures) or `binom.test()` (for any number of successes and failures).

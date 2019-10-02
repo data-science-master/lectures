@@ -28,3 +28,21 @@ ggplot2::theme_set(ggplot2::theme_bw())
   - [Shiny Tutorial](https://stat545.com/shiny00_index.html).
 
 # Basic Layouts
+
+- Let's start with a blank Shiny app
+
+    ```{r, echo = FALSE, comment = ""}
+    writeLines(readLines("./cartoons/app_tryouts_1.R"))
+    ```
+
+- You learned in [The Basics of Shiny Apps](https://data-science-master.github.io/lectures/06_shiny/06_basic_shiny.html)
+  how to add input and output elements to the user interface of an app.
+  
+- But the way we added elements was ugly.
+
+    ```{r, echo = FALSE, comment = ""}
+    writeLines(readLines("./cartoons/app_histogram.R"))
+    ```
+
+    ![](./cartoons/tryouts_pic_14.png)\ 
+
