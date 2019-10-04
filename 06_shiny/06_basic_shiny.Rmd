@@ -56,8 +56,27 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - The format of every app.R file looks like this:
 
-    ```{r, echo = FALSE, comment=""}
-    writeLines(readLines("./cartoons/app_base.R"))
+    ```{r, eval = FALSE}
+    library(shiny)
+    
+    # Define UI for application
+    ui <- fluidPage(
+        ## Stuff for defining user-interface
+        ## e.g. Title,
+        ##      Table of contents
+        ##      Location of inputs (sliders and buttons)
+    )
+    
+    # Define server logic
+    server <- function(input, output) {
+        ## Stuff for running R code
+        ## e.g. Run a linear model.
+        ##      Manipulate a data frame
+        ##      Make a plot.
+    }
+    
+    # Run the application
+    shinyApp(ui = ui, server = server)
     ```
 
 - The elements of this file are:
@@ -88,8 +107,56 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - R Studio provides a nice template which should look like this:
 
-    ```{r, echo = FALSE, comment=""}
-    writeLines(readLines("./cartoons/app_boilerplate.R"))
+    ```{r, eval = FALSE}
+    #
+    # This is a Shiny web application. You can run the application by clicking
+    # the 'Run App' button above.
+    #
+    # Find out more about building applications with Shiny here:
+    #
+    #    http://shiny.rstudio.com/
+    #
+    
+    library(shiny)
+    
+    # Define UI for application that draws a histogram
+    ui <- fluidPage(
+    
+        # Application title
+        titlePanel("Old Faithful Geyser Data"),
+    
+        # Sidebar with a slider input for number of bins 
+        sidebarLayout(
+            sidebarPanel(
+                sliderInput("bins",
+                            "Number of bins:",
+                            min = 1,
+                            max = 50,
+                            value = 30)
+            ),
+    
+            # Show a plot of the generated distribution
+            mainPanel(
+               plotOutput("distPlot")
+            )
+        )
+    )
+    
+    # Define server logic required to draw a histogram
+    server <- function(input, output) {
+    
+        output$distPlot <- renderPlot({
+            # generate bins based on input$bins from ui.R
+            x    <- faithful[, 2]
+            bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    
+            # draw the histogram with the specified number of bins
+            hist(x, breaks = bins, col = 'darkgray', border = 'white')
+        })
+    }
+    
+    # Run the application 
+    shinyApp(ui = ui, server = server)
     ```
 
 - With this app.R file open, click on "Run App" at the top right of your 
@@ -116,9 +183,22 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - To do this, start up a new app called "`tryouts`" and make it 
   bare-bones:
-    ```{r, echo = FALSE, comment=""}
-    writeLines(readLines("./cartoons/app_tryouts_1.R"))
+    ```{r, eval = FALSE}
+    library(shiny)
+    
+    ui <- fluidPage(
+    
+    )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```  
+    
+- I would recommend using the above as a template for all future Shiny apps.
+  It is the minimal amount of coded needed to start a Shiny app.
     
 - Running this app should just produce a blank HTML page.
 
@@ -151,11 +231,19 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Add this element to your `tryouts` app:
   
     ```{r, eval = FALSE}
+    library(shiny)    
+    
     ui <- fluidPage(
       textInput("name", "What's your name?"),
       passwordInput("password", "What's your password?"),
       textAreaInput("story", "Tell me about yourself")
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
     
 - Running the app, you should get something like this:
@@ -190,11 +278,19 @@ ggplot2::theme_set(ggplot2::theme_bw())
       a two-sided slider.
       
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       numericInput("num", "Number one", value = 0, min = 0, max = 100),
       sliderInput("num2", "Number two", value = 50, min = 0, max = 100),
       sliderInput("rng", "Range", value = c(10, 20), min = 0, max = 100)
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
       
 - Running the app, you should get something like this:
@@ -221,10 +317,18 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Use `dateRangeInput()` to collect two dates.
 
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       dateInput("dob", "When were you born?"),
       dateRangeInput("holiday", "When do you want to go on vacation next?")
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
     
 - Running the app, you should get something like this:
@@ -250,12 +354,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
   multiple selections are possible.
   
     ```{r, eval = FALSE}
+    library(shiny)
+    
     weekdays <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
     ui <- fluidPage(
       selectInput("state", "Where do you live?", choices = state.name),
       radioButtons("weekday", "What's your favoriate day of the week?", choices = weekdays),
       checkboxGroupInput("weekday2", "What days do you work?", choices = weekdays)
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
  
 - Running the app, you should get something like this:
@@ -274,9 +386,17 @@ ggplot2::theme_set(ggplot2::theme_bw())
   a column.
   
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       varSelectInput("carcol", "Which Column?", data = mtcars)
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
 
 - Running the app, you should get something like this:
@@ -309,9 +429,17 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Use `checkboxInput()` to get a `TRUE`/`FALSE` or Yes/No answer.
 
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       checkboxInput("startrek", "Like Star Trek?")
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
 
 - Running the app, you should get something like this:
@@ -353,10 +481,18 @@ ggplot2::theme_set(ggplot2::theme_bw())
   create a clickable link.
   
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       actionButton("click", "Click me!"),
       actionLink("Link", "No, click me!")
     )
+    
+    server <- function(input, output) {
+    
+    }
+    
+    shinyApp(ui = ui, server = server)
     ```
   
 - Running the app, you should get something like this:
@@ -374,7 +510,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - For example, if the label is `"plot"`, then the server function can
       insert a plot into `output$plot`.
       
-- Each output function in the UI is associated with a render function in the 
+- Each output function in the UI is associated with a *render* function in the 
   `servor()`.
     - A render function basically creates HTML code given an expression.
     - An expression is just R code surrounded by curly braces `{}`.
@@ -396,6 +532,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       textOutput("text"),
       verbatimTextOutput("code")
@@ -410,6 +548,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
         summary(c(1, 2, 3, 4))
       })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
 
 - Running the app, you should get something like this:
@@ -426,6 +566,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - Should only be used for small tables.
         
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       tableOutput("static")
     )
@@ -435,6 +577,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
         head(mtcars)
         })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
 
 - Running the app, you should get something like this:
@@ -446,6 +590,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
   in the server by `renderDataTable()`.
   
     ```{r, eval = FALSE}
+    library(shiny)
+    
     ui <- fluidPage(
       dataTableOutput("dynamic")
     )
@@ -455,6 +601,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
         mtcars
         })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
   
 - Running the app, you should get something like this:
@@ -468,15 +616,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
     renderDataTable({ mtcars }, options = list(pageLength = 5))
     ```
 
-
-
 ## Output Plots
 
 - Use `plotOutput()` to output plots created by `renderPlot()` in the
   `server()` function.
   
     ```{r, eval = FALSE}
+    library(shiny)
     library(ggplot2)
+    
     ui <- fluidPage(
       plotOutput("plot")
     )
@@ -490,6 +638,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
           ylab("Highway MPG")
         })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
   
 - Running the app, you should get something like this:
@@ -508,20 +658,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Let's build a very simple shiny app that let's the user choose
   two variables from `mtcars` and then plots them.
       
-    ```{r, eval = FALSE, echo = FALSE}
+    ```{r, eval = FALSE, echo = TRUE}
+    library(shiny)
+    library(ggplot2)
+    
     ui <- fluidPage(
         varSelectInput("var1", "Variable 1", data = mtcars),
         varSelectInput("var2", "Variable 2", data = mtcars),
         plotOutput("plot")
     )
     
-    library(ggplot2)
     server <- function(input, output) {
         output$plot <- renderPlot({
             ggplot(mtcars, aes(x = !!input$var1, y = !!input$var2)) +
                 geom_point()
         })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
   
 - Running the app, you should get something like this:
@@ -530,6 +684,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - In the `server()` function, notice that we accessed the inputs via
   the `input` variable.
+    - These inputs must be used *inside* a render function in order to 
+      obtain reactivity.
   
 - In the `server()` function, notice that we set the outputs to the `output()`
   variable.
@@ -543,6 +699,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - **Exercise**: Let the user choose whether they want red points or blue points.
 
     ```{r, eval = FALSE, echo = FALSE}
+    library(shiny)
+    library(ggplot2)
+    
     ui <- fluidPage(
         varSelectInput("var1", "Variable 1", data = mtcars),
         varSelectInput("var2", "Variable 2", data = mtcars),
@@ -552,13 +711,14 @@ ggplot2::theme_set(ggplot2::theme_bw())
         plotOutput("plot")
     )
     
-    library(ggplot2)
     server <- function(input, output) {
         output$plot <- renderPlot({
             ggplot(mtcars, aes(x = !!input$var1, y = !!input$var2)) +
                 geom_point(color = input$color)
         })
     }
+    
+    shinyApp(ui = ui, server = server)
     ```
 
 

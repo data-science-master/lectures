@@ -29,3 +29,19 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # The Server Function
 
+## Render Fuctions
+
+- You've already seen render functions. They are of the form:
+    ```{r, eval = FALSE}
+    render*({
+      ## Code goes here.
+    })
+    ```
+    
+- The curly braces allow you to write multiple lines of code and submit that
+  as the argument.
+    
+- Always save output of render function as an element of the `output` list.
+
+- Any `input` elements inside the `render*()` function will trigger
+  the render code to be re-evaluated when those `input` elements change.
