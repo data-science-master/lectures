@@ -84,6 +84,10 @@ klippy::klippy()
 - The most basic layouts are created by adding arguments to the 
   `fluidPage()` function.
     - You add arguments to `fluidPage()` to specify the layout of your app.
+
+- We'll also talk about grid layouts later, but to see more advanced layouts try out:
+    - `navbarPage()`.
+    - `dashboardPage()`: <https://rstudio.github.io/shinydashboard/>
   
 ## Title Panel
 
@@ -203,7 +207,7 @@ klippy::klippy()
     
     Your final Shiny App should look like this:
     
-    ![](./cartoons/layouts_3.png)\     
+    ![](./cartoons/layouts_10.png)\     
     
     
 ## Grid Layout
@@ -456,7 +460,44 @@ klippy::klippy()
     
     ![](./cartoons/layouts_7.png)\ 
     
+# Group Elements Together
+
+- You can group elements together in a slightly inset border with
+  `wellPanel()`.
+  
+    ```{r, eval = FALSE}
+    library(shiny)
+    library(ggplot2)
     
+    ui <- fluidPage(
+      wellPanel(
+        sliderInput("bins", "How many bins?", min = 1, max = 50, value = 20),
+        plotOutput("hist")
+      )
+    )
     
+    server <- function(input, output, session) {
+      output$hist <- renderPlot({
+        ggplot(mtcars, aes(x = mpg)) +
+          geom_histogram(bins = input$bins)
+      })
+    }
+    
+    shinyApp(ui, server)
+    ```
+
+    ![](./cartoons/layouts_9.png)\ 
+    
+- There are many other visual styles for groupings.
+
+# Other Panels
+
+- Here are some other panels you can look at to group elements together.
+  - `absolutePanel()`.
+  - `conditionalPanel()`.
+  - `fixedPanel()`.
+  - `headerPanel()`.
+  - `inputPanel()`.
+  - `navlistPanel()`.
     
   

@@ -24,7 +24,7 @@ klippy::klippy()
 
 # Learning Objectives
 
-- Learn how to upload and download datasets for use in the Shiny App.
+- Learn how to upload datasets for use in the Shiny App.
 - Chapter 8 of [Mastering Shiny](https://mastering-shiny.org/).
 - [Shiny Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/shiny.pdf).
 - Optional Resources
