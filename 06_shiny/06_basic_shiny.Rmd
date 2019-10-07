@@ -9,7 +9,6 @@ output:
 urlcolor: "blue"
 ---
 
-
 ```{r setup, include=FALSE}
 set.seed(1)
 knitr::opts_chunk$set(echo       = TRUE, 
@@ -17,6 +16,10 @@ knitr::opts_chunk$set(echo       = TRUE,
                       fig.width  = 6,
                       fig.align  = "center")
 ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
 ```
 
 # Learning Objectives
@@ -27,6 +30,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - [Shiny Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/shiny.pdf).
 - Optional Resources
   - [Shiny Tutorial](https://stat545.com/shiny00_index.html).
+  - [Shiny Video, Part 1](https://vimeo.com/rstudioinc/review/131218530/212d8a5a7a/#t=0m0s)
+  - [Shiny Examples](https://github.com/rstudio/shiny-examples).
 
 # Motivation
 
@@ -187,15 +192,18 @@ ggplot2::theme_set(ggplot2::theme_bw())
     library(shiny)
     
     ui <- fluidPage(
-    
+      
     )
     
-    server <- function(input, output) {
-    
+    server <- function(input, output, session) {
+      
     }
     
-    shinyApp(ui = ui, server = server)
+    shinyApp(ui, server)
     ```  
+
+- The above code "snippet" will we be populated if you start typing "shinyapp"
+  in R Studio and select it from the auto-complete list.
     
 - I would recommend using the above as a template for all future Shiny apps.
   It is the minimal amount of coded needed to start a Shiny app.
@@ -359,7 +367,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     weekdays <- c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
     ui <- fluidPage(
       selectInput("state", "Where do you live?", choices = state.name),
-      radioButtons("weekday", "What's your favoriate day of the week?", choices = weekdays),
+      radioButtons("weekday", "What's your favorite day of the week?", choices = weekdays),
       checkboxGroupInput("weekday2", "What days do you work?", choices = weekdays)
     )
     
@@ -416,7 +424,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ### Using `varSelectInput()`
 
 - `varSelectInput()` gives the server access to a 
-  `name` object, which we haven't encounted before.
+  `name` object, which we haven't encountered before.
   
 - You can read about it using `help(name)`.
 
@@ -527,7 +535,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - `renderText()` will display text *returned* by code. Functions can only return
   one thing.
   
-- `renderPrint()` will dispaly text *printed* by code. Functions can print 
+- `renderPrint()` will display text *printed* by code. Functions can print 
   multiple things.
 
 
@@ -609,7 +617,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     ![](./cartoons/tryouts_pic_11.png) 
     
-- You can change the appearence of `dataTableOutput()` by passing arguments
+- You can change the appearance of `dataTableOutput()` by passing arguments
   as a list to the `options` argument in `renderDataTable()`.
     - You can find these options at: <https://datatables.net/reference/option/>
     ```{r, eval = FALSE}

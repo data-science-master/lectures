@@ -35,7 +35,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [03 Iteration](./03_vectors_iterators/03_iterators.html).
     - [03 Lab](https://github.com/data-science-master/lab_03).
 - 04 Basic Statistics
-    - [04 Basic Statistcs](./04_basic_stats/04_basic_stats.html).
+    - [04 Basic Statistics](./04_basic_stats/04_basic_stats.html).
     - [04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf).
     - [04 Lab](https://github.com/data-science-master/lab_04).
 - 05 Linear Models
@@ -46,7 +46,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
     - [06 Layouts](./06_shiny/06_layouts.html).
     - [06 Reactivity](./06_shiny/06_reactivity.html).
-    - [06 Uploads/Downloads](./06_shiny/06_upload_download.html).
+    - [06 File Uploads](./06_shiny/06_upload.html).
 - 07 Data.table    
     - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
 - 08 Dimensionality Reduction

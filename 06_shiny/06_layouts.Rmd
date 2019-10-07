@@ -18,6 +18,10 @@ knitr::opts_chunk$set(echo       = TRUE,
 ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
 # Learning Objectives
 
 - Learn the basics layouts.
@@ -25,6 +29,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - [Shiny Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/shiny.pdf).
 - Optional Resources
   - [Shiny Tutorial](https://stat545.com/shiny00_index.html).
+  - [Shiny Video, Part 3](https://vimeo.com/rstudioinc/review/131218530/212d8a5a7a/#t=1h32m41s).
+  - [Shiny Examples](https://github.com/rstudio/shiny-examples).
 
 # Motivation
 
