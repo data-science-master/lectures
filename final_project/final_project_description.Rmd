@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Important Dates
 
-- 10/15/2019 at 5:30 PM: Teams and datasets are chosen.
+- 10/17/2019 at 5:30 PM: Teams and datasets are chosen.
 - 11/19/2019 at 5:30 PM: Progress report due.
 - 12/10/2019 at 5:30 PM: Shiny apps due.
 - 12/10/2019 from 5:30 PM to 8:00 PM (final exam period): Project presentations.
