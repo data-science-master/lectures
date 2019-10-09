@@ -211,6 +211,9 @@ Your Shiny app should contain all of the following elements:
       - Do you save cleaned data to the output folder to be used later (good)
         or do you re-clean the dataset each time you open up an analysis
         file (bad)?
+  - Informative README
+      - Does your README file contain an informative title? Does it
+        *briefly* describe the goals of the project?
   
 
 
