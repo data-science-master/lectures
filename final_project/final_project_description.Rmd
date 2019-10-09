@@ -138,7 +138,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - What additional analyses will you perform?
     - What are some tentative ideas for your Shiny app?
     
-- You should call this document "TODO.txt".
+- You should call this document "TODO.md".
 
   
 # (20 pts) Shiny App
