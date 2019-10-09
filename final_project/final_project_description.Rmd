@@ -1,0 +1,237 @@
+---
+title: "Final Project"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Important Dates
+
+- 10/15/2019 at 5:30 PM: Teams and datasets are chosen.
+- 11/19/2019 at 5:30 PM: Progress report due.
+- 12/10/2019 at 5:30 PM: Shiny apps due.
+- 12/10/2019 from 5:30 PM to 8:00 PM (final exam period): Project presentations.
+
+# Grade Breakdown
+
+- (5 pts) Team and data selection.
+- (5 pts) Progress report.
+- (10 pts) GitHub repo.
+- (20 pts) Shiny App
+- (10 pts) Presentation
+
+
+# General Description
+
+- The final project consists of a real data analysis, culminating in
+  presenting the results of your analysis in the form of a Shiny App.
+  
+- You will choose a dataset to analyse. Based on the results of the analysis,
+  you will choose what to present in your Shiny App. 
+
+- The final project is required for all those enrolled in STAT 613. It is
+  optional for those enrolled in STAT 413.
+
+# (5 pts) Team and Data Selection
+
+- For the final project you will work in groups of size 2 (minimum) or 3 (maximum). 
+
+- Below are some possible sources for data. Each dataset may only be used by 
+  one group.
+
+- If you have had a class with me before using these datasets, then you must
+  choose a different dataset to analyze.
+
+- Please email me your top three dataset choices, along with your group members.
+
+- I will accept other sources as long as they are comparably large and 
+  complicated. For example, there are many open data portals from state 
+  agencies (<https://opendata.dc.gov/>).
+
+- I will not accept small curated datasets, or those that come from a paper
+  where the data has already been analyzed.
+
+- Datasets:
+
+    - Federal bridge inspections from the Federal Highway Admin: 
+    
+        <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>
+        
+    - Drinking water violations from the EPA: 
+    
+        <https://www.epa.gov/ground-water-and-drinking-water/drinking-water-data-and-reports>
+    
+    - Contracts or grants from USA Spending: 
+    
+        <https://www.usaspending.gov/#/>
+    
+    - DC Crime incident data from the DC police: 
+    
+        <https://mpdc.dc.gov/page/statistics-and-data>
+    
+    - SBA disaster loans from the Small Business Administration: 
+    
+        <https://www.sba.gov/offices/headquarters/oda/resources/1407821>
+    
+    - Fatal accidents from the NHTSA: 
+    
+        <https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars>
+    
+    - Baltimore crime data from the Baltimore police: 
+    
+        <https://www.baltimorepolice.org/crime-stats/open-data>
+    
+    - Aircraft animal strikes from the FAA: 
+    
+        <https://wildlife.faa.gov/databaseSearch.aspx>
+    
+    - Bank health data from the FDIC (also see banktracker at IRW): 
+    
+        <https://www.fdic.gov/bank/statistical/guide/data.html>
+    
+    - WMATA elevators and escalators from the WMATA: 
+    
+        <http://data.codefordc.org/dataset/wmata-escalators-elevators-hotcars>
+    
+    - USGS water quality data from the USGS: 
+    
+        <https://water.usgs.gov/owq/data.html>
+    
+    - Prison data: 
+    
+        <http://www.dc.state.fl.us/pub/obis_request.html>
+        
+    - College Scorecard: 
+    
+        <https://catalog.data.gov/dataset/college-scorecard>
+        
+    - Reporting Carrier On-Time Performance (1987-present) from the Bureau of 
+      Transportation Statistics:
+    
+        <https://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236>
+        
+    - The General Social Survey from the non-partisan and objective research organization at the University of Chicago (NORC):
+    
+        <https://gssdataexplorer.norc.org/>
+        
+    - FBI National Incident-Based Reporting System (NIBRS) 
+    
+        <https://crime-data-explorer.fr.cloud.gov/downloads-and-docs>
+      
+# (5 pts) Progress Report
+
+- Midway through the semester, I will look at your GitHub repo to make sure
+  that you are making progress.
+  
+- You will be graded on the following:
+    - Datasets are downloaded and placed in the data folder.
+    - Initial explorations have occurred in the analysis folder. These
+      should include plots and summary statistics.
+
+- Additionally, you should place in the analysis folder a document that
+  describes:
+    - What additional analyses will you perform?
+    - What are some tentative ideas for your Shiny app?
+    
+- You should call this document "TODO.txt".
+
+  
+# (20 pts) Shiny App
+
+You will be graded on the complexity of your app, the complexity of the analysis,
+and **how well the reactive elements improve your data presentation**.
+
+- Examples for what reactive elements improve:
+    - Highly improves: 
+        - Change a plot based on the time the units were collected, 
+          demonstrating an evolving relationship between variables.
+        - Plot data according to the different levels of a categorical variable
+          to better explore multidimensional relationships.
+    - Moderately improves: 
+        - Selecting variables to plot.
+        - Changing bin width of a histogram to look at different
+          scales of the distribution.
+        - Demonstrating how variable transformations result in
+          linear relationships.
+    - Does not improve: 
+        - Delayed evaluation where the evaluation would be
+          instantaneous anyway.
+
+Your Shiny app should contain all of the following elements:
+
+- A sophisticated and visually pleasing layout.
+- Reactive elements that improve the presentation of results.
+- At least one statistical inference procedure ($t$-tests, simple linear 
+  regressions, ANOVA, etc).
+- Interactive graphics.
+- Modified HTML elements.
+
+# (10 pts) Presentation
+
+- During the final exam period, each group will showcase their Shiny app
+  with a 15 minute presentation.
+
+- This presentation should **not** contain any slides, just the Shiny app.
+
+- You should present the conclusions of your analysis using your Shiny app
+  by interactively showing the class the results that you've found.
+  
+- Each group member should talk for a proportionate amount of time. So if there
+  are two group members, each one should speak for about 7 or 8 minutes. 
+  If there are three group members, each one should speak for about 5 minutes.
+
+# (10 pts) GitHub Repo
+
+- Each group will share a single GitHub repo. What work was done by 
+  whom will be viewable in the commit history in the repo.
+  
+- Your repo will consist of the following folders:
+  - app: The location of the Shiny app.
+  - analysis: Analysis scripts and Rmd files used to clean and explore data.
+  - data: Location of raw, unmodified datasets.
+  - output: Location of modified datasets.
+  
+- You will be graded on:
+  - Frequency of commits.
+      - Do you just commit whole files (bad), or do you commit each time
+        you make significant progress (good)?
+  - Organization of files.
+      - Do you have all of your analyses in one big mega file (bad) or do 
+        you split up your analyses into small analysis files in the 
+        analysis folder that perform specific tasks (good)?
+  - Division of labor.
+      - Is there one person doing all of the work (bad) or do 
+        all group members contribute (good)?
+  - Intermediate results.
+      - Do you save cleaned data to the output folder to be used later (good)
+        or do you re-clean the dataset each time you open up an analysis
+        file (bad)?
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

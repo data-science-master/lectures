@@ -20,6 +20,10 @@ University by [David Gerard](https://dcgerard.github.io/).
   09 from my STAT 412/612 teaching website.
 - [Tentative Schedule](./admin/schedule.html)
 
+# Final Project
+
+- [Final Project Description](./final_project/final_project_description.html)
+
 # Lectures
 
 - 01 Git and the Terminal
