@@ -55,6 +55,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
 - 07 Data.table    
     - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
+    - [07 Lab](https://github.com/data-science-master/lab_07).
 - 08 Dimensionality Reduction
     - [08 Dimensionality Reduction](./08_dimension_reduction/08_dimension_reduction.html).
 - 09 Web Scraping
