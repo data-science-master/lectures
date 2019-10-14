@@ -499,5 +499,53 @@ klippy::klippy()
   - `headerPanel()`.
   - `inputPanel()`.
   - `navlistPanel()`.
+  
+# Shiny Themes
+
+- For extreme customizability on the look of your Shiny App, you'll have to 
+  learn [CSS](https://en.wikipedia.org/wiki/Cascading_Style_Sheets).
+  
+- We will not learn CSS.
+
+- But the shinythemes package allows you to access many different 
+  themes available in [Bootstrap](https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)).
+  
+- Inside `fluidPage()`, list the `theme` argument to be `shinytheme("theme_name")`,
+  where `"theme_name"` is one of the themes that comes with shinythemes.
+  
+- The full list of available themes can be found by
+
+    ```{r, eval = FALSE}
+    help("shinythemes")
+    ```
+
+- Example:
+    ```{r, eval = FALSE}
+    library(shiny)
+    library(shinythemes)
+    
+    ui <- fluidPage(theme = shinytheme("darkly"),
+                    sidebarLayout(
+                      sidebarPanel(
+                        sliderInput("number", "select a number", 0, 100, 40)
+                        ), 
+                      mainPanel(
+                        tabsetPanel(
+                          tabPanel("a"),
+                          tabPanel("b"),
+                          tabPanel("c")
+                          )
+                        )
+                    )
+    )
+    
+    server <- function(input, output, session) {
+      
+    }
+    
+    shinyApp(ui, server)
+    ```
+  
+    ![](./cartoons/layouts_11.png)\ 
     
   

@@ -53,6 +53,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 HTML](./06_shiny/06_html.html).
     - [06 File Uploads](./06_shiny/06_upload.html).
     - [06 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
+    - [06 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
 - 07 Data.table    
     - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
     - [07 Lab](https://github.com/data-science-master/lab_07).
