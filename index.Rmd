@@ -63,6 +63,9 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [09 Web Scraping](./09_web_scraping/09_web_scraping.html).
 - 10 Websites with R Markdown
     - [10 Websites with R Markdown](./10_websites/10_websites.html).
-- 11 Data Ethics
-    - [11 Data Ethics](./11_ethics/11_ethics.html).
-    - [11 Technology Is Biased Too. How Do We Fix It?](./11_ethics/data_science_bias.pdf).
+- 11 Workflow
+    - [11 Workflow with workflowr](./11_workflowr/11_workflowr.html).
+    - [11 Creating and sharing reproducible research code the workflowr way](https://doi.org/10.12688/f1000research.20843.1).
+- 12 Data Ethics
+    - [12 Data Ethics](./12_ethics/12_ethics.html).
+    - [12 Technology Is Biased Too. How Do We Fix It?](./12_ethics/data_science_bias.pdf).
