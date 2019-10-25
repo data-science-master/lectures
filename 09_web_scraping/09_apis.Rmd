@@ -21,7 +21,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Basics of web scraping.
+- APIs and R.
 - [Chapter 1, 2, and 3 from An Introduction to APIs](https://zapier.com/learn/apis/).
 - [Chapter 40 from STAT 545](https://stat545.com/diy-web-data.html).
 - [API Package Best Practices](https://httr.r-lib.org/articles/api-packages.html).
@@ -56,6 +56,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - Think of it like a webpage for a program. You click a button and expect 
       the website to do something. An API let's a program click a metaphorical 
       "button" and expect to get something back.
+    - There are lots of free and public APIs: <https://github.com/public-apis/public-apis>
 
 - Many of the most popular databases/websites have an R package that 
   wraps the API through R functions. 
@@ -97,7 +98,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
         <https://cran.r-project.org/web/packages/WikipediR/vignettes/WikipediR.html>
         
 - Each package will be entirely unique, and you have to read its documentation
-  to know how to download data. So we won't covery any of them.
+  to know how to download data. So we won't cover any of them.
 
 - Example: The following will find all of the
   PLoS journal articles that contain the word "polyploid" in the abstract.

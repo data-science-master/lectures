@@ -21,6 +21,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
+- Basics of Web Scraping
 - [Overview of rvest](https://rvest.tidyverse.org/).
 - [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
 
@@ -40,7 +41,77 @@ ggplot2::theme_set(ggplot2::theme_bw())
     library(tidyverse)
     ```
 
-# Scrape from HTML files with rvest
+# CSS
+
+- We have to know a little bit about CSS in order to understand how to extract
+  certain elements from a website.
+  
+- CSS stands from "Cascading Style Sheets". It's a formatting language that
+  indicates how HTML files should look. Every website you have been on is formatted
+  with CSS.
+  
+- Here is some example CSS:
+
+    ``` css
+    h3 {
+      color: red;
+      font-style: italic;
+    }
+    
+    footer div.alert {
+      display: none;
+    }
+    ```
+    
+- The part before the curly braces is called a *selector*. It corresponds
+  to HTML tags. Specifically, for those two they would correspond to:
+  
+    ``` html
+    <h3>Some text</h3>
+    
+    <footer>
+    <div class="alert">More text</div>
+    </footer>
+    ```
+    
+- The code inside the curly braces are *properties*. For example, the h3
+  properties tells us to make the h3 headers red and in italics. The second
+  CSS chunk says that all `<div>` tags of class `"alert"` in the `<footer>`
+  should be hidden.
+  
+- CSS applies the same *properties* to the same *selectors*. So every time
+  we use h3 will result in the h3 styling of red and italicized text.
+  
+
+# SelectorGadget
+
+- SelectorGadget is a tool for you to see what selector influences 
+  a particular element on a website.
 
 - To install SelectorGadget, drag this link to your bookmark bar on Chrome: [SelectorGadget](javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();)
+
+- Go to the IMDB page for Star Trek: The Motion Picture <https://www.imdb.com/title/tt0079945/>
+
+
+# rvest
+
+- We'll use rvest to extract elements (usually tables) from HTML files.
+
+    ```{r, message = FALSE}
+    library(rvest)
+    ```
+
+- Use `read_html()` to save an HTML file to a variable. The variable will
+  be an "`xml_document`" object
+
+    ```{r}
+    html_obj <- read_html("https://www.imdb.com/title/tt0079945/")
+    html_obj
+    class(html_obj)
+    ```
+    
+```{r}
+cast <- html_nodes(html_obj, "td")
+```
+    
 

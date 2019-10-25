@@ -373,13 +373,16 @@ summary {
 <ul>
 <li><a href="#learning-objectives">Learning Objectives</a></li>
 <li><a href="#data-on-the-web">Data on the Web</a></li>
-<li><a href="#scrape-from-html-files-with-rvest">Scrape from HTML files with rvest</a></li>
+<li><a href="#css">CSS</a></li>
+<li><a href="#selectorgadget">SelectorGadget</a></li>
+<li><a href="#rvest">rvest</a></li>
 </ul>
 </div>
 
 <div id="learning-objectives" class="section level1">
 <h1>Learning Objectives</h1>
 <ul>
+<li>Basics of Web Scraping</li>
 <li><a href="https://rvest.tidyverse.org/">Overview of rvest</a>.</li>
 <li><a href="https://rvest.tidyverse.org/articles/selectorgadget.html">SelectorGadget</a>.</li>
 </ul>
@@ -399,11 +402,54 @@ summary {
 <pre class="r"><code>library(tidyverse)</code></pre></li>
 </ul>
 </div>
-<div id="scrape-from-html-files-with-rvest" class="section level1">
-<h1>Scrape from HTML files with rvest</h1>
+<div id="css" class="section level1">
+<h1>CSS</h1>
 <ul>
-<li>To install SelectorGadget, drag this link to your bookmark bar on Chrome: <a href="javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();">SelectorGadget</a></li>
+<li><p>We have to know a little bit about CSS in order to understand how to extract certain elements from a website.</p></li>
+<li><p>CSS stands from “Cascading Style Sheets”. It’s a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.</p></li>
+<li><p>Here is some example CSS:</p>
+<pre class="css"><code>h3 {
+  color: red;
+  font-style: italic;
+}
+
+footer div.alert {
+  display: none;
+}</code></pre></li>
+<li><p>The part before the curly braces is called a <em>selector</em>. It corresponds to HTML tags. Specifically, for those two they would correspond to:</p>
+<pre class="html"><code>&lt;h3&gt;Some text&lt;/h3&gt;
+
+&lt;footer&gt;
+&lt;div class=&quot;alert&quot;&gt;More text&lt;/div&gt;
+&lt;/footer&gt;</code></pre></li>
+<li><p>The code inside the curly braces are <em>properties</em>. For example, the h3 properties tells us to make the h3 headers red and in italics. The second CSS chunk says that all <code>&lt;div&gt;</code> tags of class <code>&quot;alert&quot;</code> in the <code>&lt;footer&gt;</code> should be hidden.</p></li>
+<li><p>CSS applies the same <em>properties</em> to the same <em>selectors</em>. So every time we use h3 will result in the h3 styling of red and italicized text.</p></li>
 </ul>
+</div>
+<div id="selectorgadget" class="section level1">
+<h1>SelectorGadget</h1>
+<ul>
+<li><p>SelectorGadget is a tool for you to see what selector influences a particular element on a website.</p></li>
+<li><p>To install SelectorGadget, drag this link to your bookmark bar on Chrome: <a href="javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();">SelectorGadget</a></p></li>
+<li><p>Go to the IMDB page for Star Trek: The Motion Picture <a href="https://www.imdb.com/title/tt0079945/" class="uri">https://www.imdb.com/title/tt0079945/</a></p></li>
+</ul>
+</div>
+<div id="rvest" class="section level1">
+<h1>rvest</h1>
+<ul>
+<li><p>We’ll use rvest to extract elements (usually tables) from HTML files.</p>
+<pre class="r"><code>library(rvest)</code></pre></li>
+<li><p>Use <code>read_html()</code> to save an HTML file to a variable. The variable will be an “<code>xml_document</code>” object</p>
+<pre class="r"><code>html_obj &lt;- read_html(&quot;https://www.imdb.com/title/tt0079945/&quot;)
+html_obj</code></pre>
+<pre><code>## {html_document}
+## &lt;html xmlns:og=&quot;http://ogp.me/ns#&quot; xmlns:fb=&quot;http://www.facebook.com/2008/fbml&quot;&gt;
+## [1] &lt;head&gt;\n&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset= ...
+## [2] &lt;body id=&quot;styleguide-v2&quot; class=&quot;fixed&quot;&gt;\n            &lt;img height=&quot;1&quot; ...</code></pre>
+<pre class="r"><code>class(html_obj)</code></pre>
+<pre><code>## [1] &quot;xml_document&quot; &quot;xml_node&quot;</code></pre></li>
+</ul>
+<pre class="r"><code>cast &lt;- html_nodes(html_obj, &quot;td&quot;)</code></pre>
 </div>
 
 
