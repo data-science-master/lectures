@@ -1,0 +1,251 @@
+---
+title: "Getting Data Through APIs"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Basics of web scraping.
+- [Chapter 1, 2, and 3 from An Introduction to APIs](https://zapier.com/learn/apis/).
+- [Chapter 40 from STAT 545](https://stat545.com/diy-web-data.html).
+- [API Package Best Practices](https://httr.r-lib.org/articles/api-packages.html).
+
+# Data on the Web
+
+- There are at least 4 ways people download data on the web:
+    1. Click to download a csv/xls/txt file.
+    2. Use a package that interacts with an API.
+    3. Use an API directly.
+    4. Scrape from directly from the HTML file.
+    
+- We know how to do 1.
+
+- This lesson is about doing 2 and 3.
+
+- Let's load the tidyverse:
+    
+    ```{r, message = FALSE}
+    library(tidyverse)
+    ```
+
+# R Package API Wrappers
+
+- API: Application Programming Interface
+    - A description of how you can request data
+      from a particular software, and a description of what 
+      type of response you get after the request.
+    - Usually, the data you get back are [XML](https://en.wikipedia.org/wiki/XML) 
+      or [JSON](https://en.wikipedia.org/wiki/JSON) files.
+    - API's are an abstraction and can be implemented in many languages.
+    - Think of it like a webpage for a program. You click a button and expect 
+      the website to do something. An API let's a program click a metaphorical 
+      "button" and expect to get something back.
+
+- Many of the most popular databases/websites have an R package that 
+  wraps the API through R functions. 
+    - I.e.: You can use an R function to request data.
+    
+- If an R package exists for an API, you should use it.
+    
+- Examples:
+    - tidycensus: U.S. Census data API. 
+        
+        <https://walkerke.github.io/tidycensus/>
+        
+    - twitteR: Twitter API.
+    
+        <http://geoffjentry.hexdump.org/twitteR.pdf>
+        
+    - gh: GitHub API.
+    
+        <https://github.com/r-lib/gh#readme>
+        
+    - wbstats: World Bank data.
+    
+        <https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html>
+
+    - rebird: Ebird dataset for bird sitings.
+    
+        <https://cran.r-project.org/web/packages/rebird/vignettes/rebird_vignette.html>
+        
+    - geonames: Dataset containing unique names for geographic locations.
+    
+        <https://docs.ropensci.org/geonames/>
+        
+    - rplos: The PLoS journal articles.
+    
+        <https://cran.r-project.org/web/packages/rplos/vignettes/rplos_vignette.html>
+        
+    - WikipediR: Wikipedia API:
+    
+        <https://cran.r-project.org/web/packages/WikipediR/vignettes/WikipediR.html>
+        
+- Each package will be entirely unique, and you have to read its documentation
+  to know how to download data. So we won't covery any of them.
+
+- Example: The following will find all of the
+  PLoS journal articles that contain the word "polyploid" in the abstract.
+    ```{r, eval = FALSE}
+    library(rplos)
+    plout <- plosabstract("polyploid", limit = 1000)
+    plout
+    ```
+  
+# Use API's directly with httr
+
+- The goal of this section is not to provide a comprehensive lesson on 
+  HTTP and extracting data using API's. Rather, this is just to point you
+  to some resources and give you some examples.
+  
+- Each API is different, and so you'll always have to figure out how to interact
+  with a new API.
+
+- API's always have documentation on what parameters you can send,
+  how you can send them, and what data you would get back based on the 
+  values of those parameters.
+  
+- E.g.: OMDB (an open-source version of IMDB) has a simple API <http://www.omdbapi.com/>
+
+## API keys
+- In order to access an API, you usually have to obtain an API key. 
+
+- To obtain a free key from OMDB and access it in R:
+    1. Sign up for a free key: <https://www.omdbapi.com/apikey.aspx>
+    2. Open up your .Renviron file using the usethis package.
+        ```{r, eval = FALSE}
+        library(usethis)
+        edit_r_environ()
+        ```
+    3. Add the key OMDB sent you by email to the .Renviron package. You can
+       call it `OMDB_API_KEY`, for example. In which case you would write
+       the following in .Renviron:
+       
+        ```
+        OMDB_API_KEY = <your-private-key>
+        ```
+
+        Where "`<your-private-key>`" is the private key OMDB sent you by email.
+    4. Restart R.
+    5. You can now always access your private key by
+        ```{r}
+        movie_key <- Sys.getenv("OMDB_API_KEY")
+        ```
+
+- It is important to never save or display your private key in a file you could share. 
+  You are responsible for all behavior associated with your key. That is
+  why we saved it to our .Renviron and am only accessing it secretly through
+  `Sys.getenv()`.
+  
+- It is still not great that your key is in a plain text environment. You
+  can add a layer of security by using the keyring package: <https://github.com/r-lib/keyring>
+  
+    ```{r, eval = FALSE}
+    library(keyring)
+    key_set("OMDB_API_KEY_SECURE") ## do this once to save the key
+    movie_key_2 <- key_get("OMDB_API_KEY_SECURE") ## do this each time you need the key
+    ```
+    
+    A person with access to your computer who knows R and the keyring package
+    could still get to your key. But it is more secure than placing your
+    key in a plain text file (which is what .Renviron is).
+  
+## httr
+
+- Most API's on the web use HTTP (Hyper-Text Transfer Protocol).
+
+- We won't learn HTTP, but we will use R's interface for HTTP through the
+  httr package.
+  
+    ```{r}
+    library(httr)
+    ```
+
+- The major function we will use is `GET()`, which fetches data.
+
+- There are many other function in httr used to interact with API's.
+
+- Let's use `GET()` to fetch the movie information on 
+  [The Lighthouse](https://en.wikipedia.org/wiki/The_Lighthouse_(2019_film)).
+    ```{r}
+    mout <- GET(url = "http://www.omdbapi.com/",
+                query = list(t = "The Lighthouse",
+                             plot = "short", 
+                             r = "json", 
+                             apikey = movie_key))
+    ```
+    
+- The `url` argument is the URL where all API requests should be sent. This
+  is usually documents in the API documentation. In our case, OMDB says
+  to send all requests to "http://www.omdbapi.com/?apikey=[yourkey]&". The
+  terms after `?` are queries, so I just used the base URL.
+  
+- The variable after `?` indicates that `apikey` is a query, so I included
+  that in the list of queries.
+    
+- You use the `query` argument to modify the parameters of your request. 
+  It needs to be a named list where the names are the parameters that
+  you get from the API documentation.
+  
+- Other API's use headers or body information instead of queries to modify requests. 
+  See <https://httr.r-lib.org/articles/api-packages.html#first-steps>
+  
+- In the API documentation:
+
+    ![](./cartoons/OMDB_API_DOC.png)\ 
+    
+- The *status code* describes whether your request was successful.
+    - List of codes: <https://www.flickr.com/photos/girliemac/sets/72157628409467125>
+    - Use `status_code()` to get the code for our request:
+        ```{r}
+        status_code(mout)
+        ```
+        
+- *Headers* provide infromation on the request. Use the `headers()` function
+  to see what headers we got in our request.
+  
+    ```{r, eval = FALSE}
+    headers(mout)
+    ```
+  
+- The *body* contains the data you are probably most interested in. Use
+  `content()` to access the body:
+  
+    ```{r, eval = FALSE}
+    content(mout)
+    ```
+  
+- Background: The body comes in the form of either a JSON or XML data structure.
+  `content()` will parse this into an R object (usually a list). You can see
+  the raw JSON data structure here with the `as = "text"` argument:
+  
+    ```{r}
+    content(mout, as = "text")
+    ```
+    
+## Basic Authentication
+
+- Other API's use what's called "Basic" authentation, where you provide
+  a username and password. The basic syntax for this is:
+  
+    ```{r, eval = FALSE}
+    GET("url", authenticate("username", "password"))
+    ```
+
+- You should already have a username and password set up. Again, I would
+  suggest keeping your password secure using keyring.

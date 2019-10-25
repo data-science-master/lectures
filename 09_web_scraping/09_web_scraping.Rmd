@@ -21,8 +21,26 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Basics of web scraping.
 - [Overview of rvest](https://rvest.tidyverse.org/).
-- [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html)
+- [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
 
-# Motivation
+# Data on the Web
+
+- There are at least 4 ways people download data on the web:
+    1. Click to download a csv/xls/txt file.
+    2. Use a package that interacts with an API.
+    3. Use an API directly.
+    4. Scrape from directly from the HTML file.
+    
+- This lesson, we talk about how to do 4.
+
+- Let's load the tidyverse:
+    
+    ```{r, message = FALSE}
+    library(tidyverse)
+    ```
+
+# Scrape from HTML files with rvest
+
+- To install SelectorGadget, drag this link to your bookmark bar on Chrome: [SelectorGadget](javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();)
+
