@@ -98,6 +98,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     ![](./cartoons/IMDB_100_1.png)\ 
     
+    ```{block, eval = FALSE, echo = FALSE}
+    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/imdb_100.html>
+    ```
+    
 - If we click on the ranking of the Godfather, the "1" turns green (indicating
   what we have selected).
   
@@ -122,6 +126,25 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Only the ranking and the name remain, which are under the selector 
   ".lister-item-header a , .text-primary".
+  
+- **Exercise**: What selector can we use to get just the genres of each film,
+  the metacritic score, and the IMDB rating?
+  
+    ```{block, eval = FALSE, echo = FALSE}
+    ".ipl-rating-star.small .ipl-rating-star__rating , .ratings-metascore, .genre"
+    ```
+  
+# Chrome developer tools:
+
+- If you have trouble with SelectorGadget, you can also use the Chrome
+  developer tools.
+  
+- Open up the list of selectors with: &#8942; > More tools > Developer tools.
+  
+- Clicking on the element selector on the top left of the developer tools
+  will show you what selectors are possible with each element.
+  
+    ![](./cartoons/IMDB_100_6.png)\ 
   
 # rvest
 
@@ -183,7 +206,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
   HTML file. SelectorGadget doesn't always get all of what you want, or
   it sometimes gets too much.
   
-## Bigger example using rvest
+- **Exercise**: Extract the directors and the names of each film. You can
+  extract them separately and combine them.
+  
+    ```{r, echo = FALSE, eval = FALSE}
+    dirdat <- html_nodes(html_obj, ".text-small a:nth-child(1)")
+    dirdat <- html_text(dirdat)
+    dirdat <- dirdat[-1] ## got an extra one
+    filmdat <- html_nodes(html_obj, ".lister-item-header a")
+    filmdat <- html_text(filmdat)
+    
+    data.frame(film = filmdat, director = dirdat)
+    ```
+  
+# Bigger example using rvest
   
 - Let's try and get the name, rank, year, genre, and metascore for each 
   movie:
@@ -311,12 +347,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
     datawide
     ```
 
-## `html_table()`
+# `html_table()`
 
 - When data is in the form of a table, you can format it more easily with
   `html_table()`.
 
 - The Wikipedia article on hurricanes: <https://en.wikipedia.org/wiki/Atlantic_hurricane_season>
+
+    ```{block, eval = FALSE, echo = FALSE}
+    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/wiki.html>
+    ```
+    
+    This contains many tables which might be a pain to copy and paste
+    into Excel (and we would be prone to error if we did so).
+    Let's try to automate this procedure.
   
 - Save the HTML
 
@@ -346,17 +390,81 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - You can clean up, bind, or merge these tables after you have read them in.
 
-
+- **Exercise**: The Wikipedia page on the oldest mosques in the world
+  has many tables. 
+  
+    <https://en.wikipedia.org/wiki/List_of_the_oldest_mosques>
     
-
+    ```{block, eval = FALSE, echo = FALSE}
+    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/mosque.html>
+    ```
   
-
-  
-  
-
-
-
-  
+    1. Use rvest to read these tables into R.
+    2. Use rvest and SelectorGadget to extract out the category for the 
+       table (mentioned in Quran, in northeast Africa, etc).
+    3. Merge the data frames together. You only need to keep the building
+       name, the country, and the time it was first build. 
+       
+    *Hint*: It's easier if you use a css selector of `"table.wikitable"`
+    to get the table rather than just `"table"`. I found this out by getting
+    to the developer tools in Chrome with CTRL + Shift + I then playing around
+    with the tables.
     
+    The first 15 rows should look like this:
+       
+    ```{r, echo = FALSE}
+    mosque <- read_html("https://en.wikipedia.org/wiki/List_of_the_oldest_mosques")
+    ```
     
-
+    ```{r, eval = FALSE, echo = FALSE}
+    mosque <- read_html("mosque.html")
+    ```
+    
+    ```{r, echo = FALSE}
+    headers <- html_text(html_nodes(mosque, css = "caption , #Mentioned_in_the_Quran"))
+    tabnode  <- html_nodes(mosque, css = "table.wikitable")
+    tablist <- html_table(tabnode, fill = TRUE)
+    
+    ## length(tablist)
+    ## length(headers)
+    
+    ## See what variables are in each table
+    ## map(tablist, names)
+    
+    ## Table 18 doesn't have a country
+    ## headers[[18]]
+    tablist[[18]] %>%
+      mutate(Country = "Russia") ->
+      tablist[[18]]
+    
+    ## table 13 has an NA row
+    names(tablist[[13]])[ncol(tablist[[13]])] <- "blah"
+    
+    ## select variables of interest
+    map(tablist, ~select(., Building, Country, fb = `First built`)) ->
+      tablist
+    
+    ## replace, e.g., 15th century with 1500 century
+    map(tablist, ~mutate(., fb = str_replace(fb, "th", "00"))) %>%
+      map(~mutate(., fb = str_extract(fb, "^\\d+"))) ->
+      tablist
+    
+    ## clean up headers
+    str_replace_all(headers, "\\n", "") %>%
+      str_replace_all("\\(.+\\)", "") %>%
+      str_squish() ->
+      headers
+    
+    ## add category information    
+    for (index in seq_along(tablist)) {
+      mutate(tablist[[index]], category = headers[[index]]) ->
+        tablist[[index]]
+    }
+    
+    ## bind rows
+    bind_rows(tablist) ->
+      tabdf
+    
+    ## print
+    head(tabdf, n = 15)
+    ```
