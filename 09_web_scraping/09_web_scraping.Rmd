@@ -24,6 +24,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Basics of Web Scraping
 - [Overview of rvest](https://rvest.tidyverse.org/).
 - [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
+- [rvest tutorial](http://bradleyboehmke.github.io//2015/12/scraping-html-text.html)
+- [HTML tables](http://bradleyboehmke.github.io/2015/12/scraping-html-tables.html).
 
 # Data on the Web
 
@@ -81,7 +83,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - CSS applies the same *properties* to the same *selectors*. So every time
   we use h3 will result in the h3 styling of red and italicized text.
-  
 
 # SelectorGadget
 
@@ -90,12 +91,41 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - To install SelectorGadget, drag this link to your bookmark bar on Chrome: [SelectorGadget](javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();)
 
-- Go to the IMDB page for Star Trek: The Motion Picture <https://www.imdb.com/title/tt0079945/>
+- Suppose we wanted to get the top 100 movies of all time from IMDB. The
+  web page is very unstructured:
+  
+    <https://www.imdb.com/list/ls055592025/>
+    
+    ![](./cartoons/IMDB_100_1.png)\ 
+    
+- If we click on the ranking of the Godfather, the "1" turns green (indicating
+  what we have selected).
+  
+    ![](./cartoons/IMDB_100_2.png)\ 
+  
+- The ".text-primary" is the selector associated with the "1" we clicked on.
 
+- Everything highlighted in yellow also has the ".text-primary" selector
+  associated with it.
+  
+- We will also want the name of the movie. So if we click on that
+  we get the selector associated with both the rank and the movie name:
+  "a , .text-primary".
+  
+    ![](./cartoons/IMDB_100_3.png)\ 
+  
+- But we also got a lot of stuff we don't want (in yellow). If we click
+  one of the yellow items that we don't want, it turns red. This indicates
+  that we don't want to select it.
+  
+    ![](./cartoons/IMDB_100_4.png)\ 
 
+- Only the ranking and the name remain, which are under the selector 
+  ".lister-item-header a , .text-primary".
+  
 # rvest
 
-- We'll use rvest to extract elements (usually tables) from HTML files.
+- We'll use rvest to extract elements from HTML files.
 
     ```{r, message = FALSE}
     library(rvest)
@@ -105,13 +135,228 @@ ggplot2::theme_set(ggplot2::theme_bw())
   be an "`xml_document`" object
 
     ```{r}
-    html_obj <- read_html("https://www.imdb.com/title/tt0079945/")
+    html_obj <- read_html("https://www.imdb.com/list/ls055592025/")
     html_obj
     class(html_obj)
     ```
     
-```{r}
-cast <- html_nodes(html_obj, "td")
-```
+    ```{r, eval = FALSE, echo = FALSE}
+    html_obj <- read_html("./imdb_100.html")
+    ```
+    
+- XML stands for "Extensible Markup Language". It is a format for storing
+  data, and rvest will store the HTML file as an XML.
+
+- We can use `html_nodes()` and the selectors we found in the previous section 
+  to get the elements we want. Insert the found selectors as the `css`
+  argument.
+  
+    ```{r}
+    ranking_elements <- html_nodes(html_obj, css = ".lister-item-header a , .text-primary")
+    head(ranking_elements)
+    ```
+
+- To extract the text inside the obtained nodes, use `html_text()`:
+
+    ```{r}
+    ranking_text <- html_text(ranking_elements)
+    head(ranking_text)
+    ```
+    
+- After you do this, you need to tidy the data using your data munging 
+  tools.
+  
+    ```{r}
+    tibble(text = ranking_text) %>%
+      mutate(rownum = row_number(),
+             iseven = rownum %% 2 == 0,
+             movie = rep(1:100, each = 2)) %>%
+      select(-rownum) %>%
+      spread(key = "iseven", value = "text") %>%
+      select(-movie, "Rank" = "FALSE", movie = "TRUE") %>%
+      mutate(Rank = parse_number(Rank)) ->
+      movierank
+    movierank
+    ```
+    
+- It's important to visually inspect the selected elements throughout the whole
+  HTML file. SelectorGadget doesn't always get all of what you want, or
+  it sometimes gets too much.
+  
+## Bigger example using rvest
+  
+- Let's try and get the name, rank, year, genre, and metascore for each 
+  movie:
+  
+    ![](./cartoons/IMDB_100_5.png)\ 
+  
+- We copy the CSS selectors and make a text vector
+
+    ```{r}
+    dataobj <- html_nodes(html_obj, css = ".favorable , .genre, .unbold, .lister-item-header a")
+    datatext <- html_text(dataobj)
+    ```
+  
+- We now have a *lot* of cleaning to do. Note that the first 132 elements
+  we didn't even want:
+    ```{r}
+    head(datatext)
+    datatext[130:136]
+    ```
+  
+  
+- The rankings are always of the form `"\\d+\\."`. We'll use this and a
+  cumulative sum to indicate which movies the variables belong to.
+  This is necessary because some data have elements that are missing (e.g. 
+  "The Great Dictator" doesn't have a metacritic score).
+
+    ```{r}
+    datadf <- tibble(text = datatext)
+    
+    datadf %>%
+      mutate(ismovierank = str_detect(text, "^\\d+\\.$")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$ismovierank)
+    
+    ## get movie numbers and remove non-movie elements:
+    datadf %>%
+      mutate(movienum = cumsum(ismovierank)) %>%
+      filter(movienum > 0) ->
+      datadf
+    
+    datadf
+    ```
+
+- We'll use the `movierank$movie` variable we created before see
+  which rows are movie names
+  
+    ```{r}
+    datadf %>%
+      mutate(isname = text %in% movierank$movie) ->
+      datadf
+    
+    ## make sure we have 100 movies:
+    sum(datadf$isname)
+    
+    datadf
+    ```
+    
+- Years are surrounded by parentheses:
+
+    ```{r}
+    datadf %>%
+      mutate(isyear = str_detect(text, "\\(\\d+\\)")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$isyear)
+    
+    datadf
+    ```
+
+- Genre's begin with a new line:
+    
+    ```{r}
+    datadf %>%
+      mutate(isgenre = str_detect(text, "^\\n")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$isgenre)
+    ```
+
+- Everything else should be the metacritic score:
+
+    ```{r}
+    datadf %>%
+      group_by(ismovierank, isname, isyear, isgenre) %>%
+      count()
+    
+    datadf %>%
+      mutate(ismeta = !ismovierank & !isname & !isyear & !isgenre) ->
+      datadf
+    
+    datadf
+    ```
+
+- Let's create a key for these data then spread them:
+
+    ```{r}
+    datadf %>%
+      mutate(key = case_when(ismovierank ~ "rank",
+                             isname ~ "name",
+                             isyear ~ "year",
+                             isgenre ~ "genre",
+                             ismeta ~ "metacritic")) %>%
+      select(key, text, movienum) %>%
+      spread(key = "key", value = "text") ->
+      datawide
+    
+    datawide
+    ```
+    
+- Let's clean up the remaining variables:
+
+    ```{r}
+    datawide %>%
+      mutate(genre = str_replace_all(genre, "\\n", ""),
+             genre = str_squish(genre),
+             metacritic = parse_number(metacritic),
+             rank = parse_number(rank),
+             year = parse_number(year)) ->
+      datawide
+    
+    datawide
+    ```
+
+## `html_table()`
+
+- When data is in the form of a table, you can format it more easily with
+  `html_table()`.
+
+- The Wikipedia article on hurricanes: <https://en.wikipedia.org/wiki/Atlantic_hurricane_season>
+  
+- Save the HTML
+
+    ```{r}
+    wikixml <- read_html("https://en.wikipedia.org/wiki/Atlantic_hurricane_season")
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    wikixml <- read_html("./wiki.html")
+    ```
+    
+- We'll extract all of the "table" elements.
+
+    ```{r}
+    wikidat <- html_nodes(wikixml, "table")
+    ```
+
+- Use `html_table()` to get a list of tables from table elements:
+
+    ```{r}
+    tablist <- html_table(wikidat)
+    class(tablist)
+    length(tablist)
+    tablist[[19]] %>%
+      select(1:4)
+    ```
+    
+- You can clean up, bind, or merge these tables after you have read them in.
+
+
+    
+
+  
+
+  
+  
+
+
+
+  
+    
     
 

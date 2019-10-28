@@ -29,7 +29,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Data Frames and Motivation
 
-- Big data: Can't read data into memory. Need to do distributed computing (like [Spark](https://spark.apache.org/)).
+- Big data: Can't read data into memory. Need to do distributed computing (like [Spark](https://therinspark.com/intro.html)).
 
 - Biggish data: Can read data into memory, but it's very slow to manipulate it.
 
