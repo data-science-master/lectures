@@ -53,8 +53,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - Usually, the data you get back are [XML](https://en.wikipedia.org/wiki/XML) 
       or [JSON](https://en.wikipedia.org/wiki/JSON) files.
     - API's are an abstraction and can be implemented in many languages.
-    - Think of it like a webpage for a program. You click a button and expect 
-      the website to do something. An API let's a program click a metaphorical 
+    - Think of it like a user interface for a computer program. You click a button and expect 
+      the user interface to do something. An API let's a program click a metaphorical 
       "button" and expect to get something back.
     - There are lots of free and public APIs: <https://github.com/public-apis/public-apis>
 
@@ -150,7 +150,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - It is important to never save or display your private key in a file you could share. 
   You are responsible for all behavior associated with your key. That is
-  why we saved it to our .Renviron and am only accessing it secretly through
+  why we saved it to our .Renviron and are only accessing it secretly through
   `Sys.getenv()`.
   
 - It is still not great that your key is in a plain text environment. You
@@ -164,11 +164,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     A person with access to your computer who knows R and the keyring package
     could still get to your key. But it is more secure than placing your
-    key in a plain text file (which is what .Renviron is).
+    key in a plain text file (which is what .Renviron is). There are
+    more secure ways to access keys in R.
   
 ## httr
 
-- Most API's on the web use HTTP (Hyper-Text Transfer Protocol).
+- Most API's on the web use HTTP (Hyper-Text Transfer Protocol). It's a 
+  language for querying and obtaining data.
 
 - We won't learn HTTP, but we will use R's interface for HTTP through the
   httr package.

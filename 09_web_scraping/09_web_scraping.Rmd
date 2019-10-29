@@ -37,6 +37,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - This lesson, we talk about how to do 4.
 
+- Note that you shouldn't download thousands of HTML files from a website
+  to parse --- the admins might block you if you send too many requests.
+
 - Let's load the tidyverse:
     
     ```{r, message = FALSE}
@@ -127,6 +130,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Only the ranking and the name remain, which are under the selector 
   ".lister-item-header a , .text-primary".
   
+- It's important to visually inspect the selected elements throughout the whole
+  HTML file. SelectorGadget doesn't always get all of what you want, or
+  it sometimes gets too much.
+  
 - **Exercise**: What selector can we use to get just the genres of each film,
   the metacritic score, and the IMDB rating?
   
@@ -167,8 +174,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     html_obj <- read_html("./imdb_100.html")
     ```
     
-- XML stands for "Extensible Markup Language". It is a format for storing
-  data, and rvest will store the HTML file as an XML.
+- [XML](https://en.wikipedia.org/wiki/XML) stands for 
+  "Extensible Markup Language". It's a markup language 
+  (like HTML and Markdown), useful for representing data.
+  rvest will store the HTML file as an XML.
 
 - We can use `html_nodes()` and the selectors we found in the previous section 
   to get the elements we want. Insert the found selectors as the `css`
@@ -201,10 +210,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
       movierank
     movierank
     ```
-    
-- It's important to visually inspect the selected elements throughout the whole
-  HTML file. SelectorGadget doesn't always get all of what you want, or
-  it sometimes gets too much.
   
 - **Exercise**: Extract the directors and the names of each film. You can
   extract them separately and combine them.
