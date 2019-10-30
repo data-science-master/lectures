@@ -102,7 +102,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ![](./cartoons/IMDB_100_1.png)\ 
     
     ```{block, eval = FALSE, echo = FALSE}
-    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/imdb_100.html>
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/imdb_100.html>
     ```
     
 - If we click on the ranking of the Godfather, the "1" turns green (indicating
@@ -360,7 +360,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - The Wikipedia article on hurricanes: <https://en.wikipedia.org/wiki/Atlantic_hurricane_season>
 
     ```{block, eval = FALSE, echo = FALSE}
-    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/wiki.html>
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/wiki.html>
     ```
     
     This contains many tables which might be a pain to copy and paste
@@ -401,7 +401,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <https://en.wikipedia.org/wiki/List_of_the_oldest_mosques>
     
     ```{block, eval = FALSE, echo = FALSE}
-    If the above link fails, try: <https://data-science-master.github.io/lectures/09_web_scraping/mosque.html>
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/mosque.html>
     ```
   
     1. Use rvest to read these tables into R.
