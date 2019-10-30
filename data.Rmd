@@ -81,6 +81,10 @@ knitr::opts_chunk$set(echo = TRUE)
     - `ICLEVEL`: Level of institution (`1` = 4-year, `2` = 2-year, `3` = less than 2-year).
     - `MN_EARN_WNE_P6`: Mean earnings of students working and not enrolled 6 years 
       after entry (so students who graduated in the 2009 to 2010 academic year).
+- [English Women Artists](./data/engart.html): This is a copy of the Wikipedia
+  page on the list of English women artists. I use this for an example
+  on webscraping.
+    - Original Wikipedia page: <https://en.wikipedia.org/wiki/List_of_English_women_artists>
 - [estate.csv](./data/estate.csv): Data on 522 home sales in a Midwestern
   city during the year 2002. The 13 variables are
     - `Price`: Sales price of residence (in dollars)
