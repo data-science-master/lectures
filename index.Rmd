@@ -57,11 +57,11 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 07 Data.table    
     - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
     - [07 Lab](https://github.com/data-science-master/lab_07).
-- 08 Dimensionality Reduction
-    - [08 Dimensionality Reduction](./08_dimension_reduction/08_dimension_reduction.html).
-- 09 Web Scraping
-    - [09 APIs](./09_web_scraping/09_apis.html).
-    - [09 Web Scraping](./09_web_scraping/09_web_scraping.html).
+- 08 Web Scraping
+    - [08 APIs](./08_web_scraping/08_apis.html).
+    - [08 Web Scraping](./08_web_scraping/08_web_scraping.html).
+- 09 Dimensionality Reduction
+    - [09 Dimensionality Reduction](./09_dimension_reduction/09_dimension_reduction.html).
 - 10 Websites with R Markdown
     - [10 Websites with R Markdown](./10_websites/10_websites.html).
 - 11 Workflow
