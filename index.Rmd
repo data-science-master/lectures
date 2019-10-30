@@ -60,6 +60,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 08 Web Scraping
     - [08 APIs](./08_web_scraping/08_apis.html).
     - [08 Web Scraping](./08_web_scraping/08_web_scraping.html).
+    - [08 Lab](https://github.com/data-science-master/lab_08).
 - 09 Dimensionality Reduction
     - [09 Dimensionality Reduction](./09_dimension_reduction/09_dimension_reduction.html).
 - 10 Websites with R Markdown
