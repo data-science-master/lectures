@@ -85,6 +85,19 @@ knitr::opts_chunk$set(echo = TRUE)
   page on the list of English women artists. I use this for an example
   on webscraping.
     - Original Wikipedia page: <https://en.wikipedia.org/wiki/List_of_English_women_artists>
+- [eqbig.csv](./data/eqbig.csv): Summary information on the largest earthquakes
+  for each year between 1999 and 2019. The data are from 
+  [Wikipedia](https://en.wikipedia.org/wiki/Lists_of_earthquakes#Lists_by_country)
+  The variables include
+    - `Year`: The year of the earthquake.
+    - `Magnitude`: The 
+      [seismic magnitude](https://en.wikipedia.org/wiki/Seismic_magnitude_scales) 
+      of the earthquake (larger means more intense).
+    - `Deathtoll`: The number of people who died as a result of the earthquake.
+    - `Location`: The region of the [epicenter](https://en.wikipedia.org/wiki/Epicenter)
+      of the earthquake.
+    - `Event`: The name of the earthquake event.
+    - `Date`: The month and day of the earthquake.
 - [estate.csv](./data/estate.csv): Data on 522 home sales in a Midwestern
   city during the year 2002. The 13 variables are
     - `Price`: Sales price of residence (in dollars)
