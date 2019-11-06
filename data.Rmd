@@ -127,6 +127,11 @@ knitr::opts_chunk$set(echo = TRUE)
     - `air_time`: The amount of time in the air, in minutes.
     - `distance`: The distance traveled, in miles.
     - `hour`: Hour of scheduled departure.
+- [remakes_1.html](./data/remakes_1.html) and 
+  [remakes_2.html](./data/remakes_2.html): These are copies of the Wikipedia
+  pages on film remakes. I use these for exercises on webscraping.
+    - A-M original link: <https://en.wikipedia.org/wiki/List_of_film_remakes_(A-M)>
+    - N-Z original link: <https://en.wikipedia.org/wiki/List_of_film_remakes_(N-Z)>
 - [smoke.csv](./data/smoke.csv): A data frame containing information on 
   smoking status and cancer status for 172 individuals. Data are from 
   Dorn, Harold F. "The relationship of cancer of the lung and the use of 
