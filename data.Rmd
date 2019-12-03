@@ -127,6 +127,20 @@ knitr::opts_chunk$set(echo = TRUE)
     - `air_time`: The amount of time in the air, in minutes.
     - `distance`: The distance traveled, in miles.
     - `hour`: Hour of scheduled departure.
+- [regnal.csv](./data/regnal.csv): Table of regnal years of English monarchs,
+  taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
+  
+    "Regnal years" are years that correspond to a monarch, and might differ from
+    the actual reign of that monarch. It's mostly used for dating legal
+    documents ("nth year of the reign of King X"). It's a weird English thing.
+    The variables include:
+    
+    - `monarch`: The name of the monarch.
+    - `num_years`: The number of years of the reign.
+    - `first`: The start year of the reign.
+    - `start_date`: The date in the first year when the regnal year began.
+    - `end_date`: The date in the final year when the regnal year ends.
+    - `final`: The final date of the reign.
 - [remakes_1.html](./data/remakes_1.html) and 
   [remakes_2.html](./data/remakes_2.html): These are copies of the Wikipedia
   pages on film remakes. I use these for exercises on webscraping.

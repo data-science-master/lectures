@@ -208,6 +208,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Other API's use headers or body information instead of queries to modify requests. 
   See <https://httr.r-lib.org/articles/api-packages.html#first-steps>
   
+    1. URL path: the `path` argument in `GET()`.
+    2. Query arguments: The `query` argument in `GET()`.
+    3. HTTP headers: `add_headers()`
+    4. Request body: The body argument in `GET()`.
+  
 - In the API documentation:
 
     ![](./cartoons/OMDB_API_DOC.png)\ 

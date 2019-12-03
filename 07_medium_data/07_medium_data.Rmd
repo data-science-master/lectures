@@ -39,7 +39,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - There are many competitors to `data.frame`s: [`tibble`s](https://tibble.tidyverse.org/), [`DataFrame`s](https://bioconductor.org/packages/release/bioc/html/S4Vectors.html) (from Bioconductor), and [`data.table`s](https://github.com/Rdatatable/data.table/wiki).
 
-- Julia (another statistical programming language) has its own [`DataFrames`](https://juliadata.github.io/DataFrames.jl/stable/man/getting_started.html) class. Python's data frames package is called [`pandas`](https://pandas.pydata.org/).
+- Julia (another statistical programming language) has its own [`DataFrames`](https://juliadata.github.io/DataFrames.jl/stable/) class. Python's data frames package is called [`pandas`](https://pandas.pydata.org/).
 
 - `data.table` is the fastest: <https://h2oai.github.io/db-benchmark/>.
 

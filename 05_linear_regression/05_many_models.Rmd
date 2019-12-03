@@ -20,7 +20,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Use a column of lists to run many models at once.
+- Use a list-column to run many models at once.
 - Chapter 25 from [RDS](https://r4ds.had.co.nz/).
 
 # Motivation
