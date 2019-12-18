@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-11-19" />
+<meta name="date" content="2019-12-18" />
 
 <title>Data</title>
 
@@ -236,6 +235,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -300,13 +300,13 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Data</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-11-19</h4>
+<h4 class="date">2019-12-18</h4>
 
 </div>
 
 
 <ul>
-<li><a href="./data/airfares.csv">airfares.csv</a>: Average first quarter domestic airline fares by origin airport for major U.S. airports from 1993 to 2019. The data are from The Bureau of Transportation Statistics (<a href="https://www.transtats.bts.gov/AverageFare/" class="uri">https://www.transtats.bts.gov/AverageFare/</a>). Variables include:
+<li><p><a href="./data/airfares.csv">airfares.csv</a>: Average first quarter domestic airline fares by origin airport for major U.S. airports from 1993 to 2019. The data are from The Bureau of Transportation Statistics (<a href="https://www.transtats.bts.gov/AverageFare/" class="uri">https://www.transtats.bts.gov/AverageFare/</a>). Variables include:</p>
 <ul>
 <li><code>code</code>: The origin airport code.</li>
 <li><code>name</code>: The name of the origin airport.</li>
@@ -316,21 +316,26 @@ $(document).ready(function () {
 <li><code>adj_fare</code>: Inflation adjusted average fare (in 2019 dollars). “The inflation adjustment was performed using Consumer Price Index for all urban consumers.”</li>
 <li><code>year</code>: The year.</li>
 </ul></li>
-<li><a href="./data/bob.csv">bob.csv</a>: <a href="https://en.wikipedia.org/wiki/Bob_Ross">Bob Ross</a> was a painter who hosted a popular television series on PBS. Each episode would consist of him completing an entire painting. His paintings almost always consisted heavily of elements from nature: trees, clouds, mountains, lakes, etc. These data consist of indicators for what elements are in each episode. This dataset was taken from the excellent crew at <a href="https://github.com/fivethirtyeight/data/tree/master/bob-ross">fivethirtyeight</a>. See <a href="https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/">here</a> for their article. The data were obtained using <a href="https://github.com/dcgerard/stat234/blob/master/analysis/clean_datasets/bob_ross/get_bob.R">this</a> code. The variables are:
+<li><p><a href="./data/big_mac.csv">big_mac.csv</a>: Measurements from the Economist’s famous <a href="https://en.wikipedia.org/wiki/Big_Mac_Index">Big Mac Index</a> from 2000 to 2017. It contains the price (in 2018 US dollars) of a Big Mac for each country during this time. It also contains the data on the implied <a href="https://en.wikipedia.org/wiki/Purchasing_power_parity">purchasing power parity</a> using Big Mac prices. Specifically, the variables are of the form:</p>
+<ul>
+<li><code>price_&lt;year&gt;</code>: The average price of a Big Mac in a given year. For example, <code>price_2017</code> contains the average price of a Big Mac in 2017.</li>
+<li><code>ppp_&lt;year&gt;</code>: The purchasing power parity based on the Big Mac in a given year. For example, <code>ppp_2011</code> contains the purchasing power parity of a Big Mac in 2011.</li>
+</ul></li>
+<li><p><a href="./data/bob.csv">bob.csv</a>: <a href="https://en.wikipedia.org/wiki/Bob_Ross">Bob Ross</a> was a painter who hosted a popular television series on PBS. Each episode would consist of him completing an entire painting. His paintings almost always consisted heavily of elements from nature: trees, clouds, mountains, lakes, etc. These data consist of indicators for what elements are in each episode. This dataset was taken from the excellent crew at <a href="https://github.com/fivethirtyeight/data/tree/master/bob-ross">fivethirtyeight</a>. See <a href="https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/">here</a> for their article. The data were obtained using <a href="https://github.com/dcgerard/stat234/blob/master/analysis/clean_datasets/bob_ross/get_bob.R">this</a> code. The variables are:</p>
 <ul>
 <li><code>EPISODE</code>: The season and episode number of the episode.</li>
 <li><code>TITLE</code>: The title of the painting.</li>
 <li>Every other variable is an indicator for whether the episode contains the element described by the variable name. For example, <code>BARN</code> is <code>0</code> if the episode does not have a barn in the painting and <code>1</code> if the episode does have a barn in the painting.</li>
 </ul></li>
-<li><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:
+<li><p><a href="./data/civil_war.csv">civil_war.csv</a>: List of American Civil War battles, taken from <a href="https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles">Wikipedia</a>. Variables include:</p>
 <ul>
 <li><code>Battle</code>: The name of the battle.</li>
 <li><code>Date</code>: The date(s) of the battle. If it took place on one day, then the format is “month day, year”. If it took place over multiple days, then the format is “month day_start-day_end, year”. If it took place over multiple days spanning multiple months then the format is “month_start day_start - month_end day_end, year”. If it took place over multiple days spanning multiple years then the format is “month_start day_start, year_start - month_end day_end, year_end”.</li>
-<li><code>State</code>: The state where the battle took place. Annotations (e.g. describing that the state was a territory at the time) are in parentheses.</li>
+<li><code>State</code>: The state where the battle took place. Annotations (e.g.  describing that the state was a territory at the time) are in parentheses.</li>
 <li><code>CWSAC</code>: A rating of the military significance of the battle by the Civil War Sites Advisory Commission. <code>A</code> = Decisive, <code>B</code> = Major, <code>C</code> = Formative, <code>D</code> = Limited.</li>
-<li><code>Outcome</code>: Usually <code>&quot;Confederate victory&quot;</code>, <code>&quot;Union victory&quot;</code>, or <code>&quot;Inconclusive&quot;</code>, followed by notes.</li>
+<li><code>Outcome</code>: Usually <code>"Confederate victory"</code>, <code>"Union victory"</code>, or <code>"Inconclusive"</code>, followed by notes.</li>
 </ul></li>
-<li><a href="./data/college_score.csv">college_score.csv</a>: Contains a subset of the variables found in the 2016 to 2017 <a href="https://collegescorecard.ed.gov/data/">College Scorecard</a> database. These data contain information on colleges in the United States. The variables included are:
+<li><p><a href="./data/college_score.csv">college_score.csv</a>: Contains a subset of the variables found in the 2016 to 2017 <a href="https://collegescorecard.ed.gov/data/">College Scorecard</a> database. These data contain information on colleges in the United States. The variables included are:</p>
 <ul>
 <li><code>UNITID</code> and <code>OPEID</code>: Identifiers for the colleges.</li>
 <li><code>INSTNM</code>: Institution name</li>
@@ -344,11 +349,22 @@ $(document).ready(function () {
 <li><code>ICLEVEL</code>: Level of institution (<code>1</code> = 4-year, <code>2</code> = 2-year, <code>3</code> = less than 2-year).</li>
 <li><code>MN_EARN_WNE_P6</code>: Mean earnings of students working and not enrolled 6 years after entry (so students who graduated in the 2009 to 2010 academic year).</li>
 </ul></li>
-<li><a href="./data/engart.html">English Women Artists</a>: This is a copy of the Wikipedia page on the list of English women artists. I use this for an example on webscraping.
+<li><p><a href="./data/engart.html">English Women Artists</a>: This is a copy of the Wikipedia page on the list of English women artists. I use this for an example on webscraping.</p>
 <ul>
 <li>Original Wikipedia page: <a href="https://en.wikipedia.org/wiki/List_of_English_women_artists" class="uri">https://en.wikipedia.org/wiki/List_of_English_women_artists</a></li>
 </ul></li>
-<li><a href="./data/eqbig.csv">eqbig.csv</a>: Summary information on the largest earthquakes for each year between 1999 and 2019. The data are from <a href="https://en.wikipedia.org/wiki/Lists_of_earthquakes#Lists_by_country">Wikipedia</a> The variables include
+<li><p><a href="./data/engart.csv">engart.csv</a>: Contains a partially cleaned table of English women artists scraped from Wikipedia (see above). The variables include:</p>
+<ul>
+<li><code>artist</code>: The full name of the artist, as shown on Wikipedia.</li>
+<li><code>years</code>: The year information provided by Wikipedia. Most of the time, the format is birth-death. However, these are the following exceptions:
+<ul>
+<li><code>born YYYY</code>: Gives the birth date with the death date missing because the artist is still alive (or the death date is unknown).</li>
+<li><code>died YYYY</code>: Gives the death date with the birth date missing because it is unknown.</li>
+<li><code>fl.YYYY-YYYY</code>: “fl” means “floruit” which is Latin for “he/she flourished”. So these are the artist’s active years and the birth/death years are unknown.</li>
+</ul></li>
+<li><code>media</code>: The media with which the artist primarily worked: <a href="https://en.wikipedia.org/wiki/List_of_art_media" class="uri">https://en.wikipedia.org/wiki/List_of_art_media</a></li>
+</ul></li>
+<li><p><a href="./data/eqbig.csv">eqbig.csv</a>: Summary information on the largest earthquakes for each year between 1999 and 2019. The data are from <a href="https://en.wikipedia.org/wiki/Lists_of_earthquakes#Lists_by_country">Wikipedia</a> The variables include</p>
 <ul>
 <li><code>Year</code>: The year of the earthquake.</li>
 <li><code>Magnitude</code>: The <a href="https://en.wikipedia.org/wiki/Seismic_magnitude_scales">seismic magnitude</a> of the earthquake (larger means more intense).</li>
@@ -357,7 +373,7 @@ $(document).ready(function () {
 <li><code>Event</code>: The name of the earthquake event.</li>
 <li><code>Date</code>: The month and day of the earthquake.</li>
 </ul></li>
-<li><a href="./data/estate.csv">estate.csv</a>: Data on 522 home sales in a Midwestern city during the year 2002. The 13 variables are
+<li><p><a href="./data/estate.csv">estate.csv</a>: Data on 522 home sales in a Midwestern city during the year 2002. The 13 variables are</p>
 <ul>
 <li><code>Price</code>: Sales price of residence (in dollars)</li>
 <li><code>Area</code>: Finished area of residence (in square feet)</li>
@@ -372,7 +388,7 @@ $(document).ready(function () {
 <li><code>Lot</code>: Lot size (in square feet)</li>
 <li><code>Highway</code>: 1 = highway adjacent, 0 = highway not adjacent.</li>
 </ul></li>
-<li><a href="./data/flights14.csv">flights14.csv</a>: Data from 253,316 flights originating from New York City in 2014. This is from the <a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> vignettes. The 11 variables include:
+<li><p><a href="./data/flights14.csv">flights14.csv</a>: Data from 253,316 flights originating from New York City in 2014. This is from the <a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">data.table</a> vignettes. The 11 variables include:</p>
 <ul>
 <li><code>year</code>: Year of scheduled departure.</li>
 <li><code>month</code>: Month of scheduled departure.</li>
@@ -396,18 +412,18 @@ $(document).ready(function () {
 <li><code>end_date</code>: The date in the final year when the regnal year ends.</li>
 <li><code>final</code>: The final date of the reign.</li>
 </ul></li>
-<li><a href="./data/remakes_1.html">remakes_1.html</a> and <a href="./data/remakes_2.html">remakes_2.html</a>: These are copies of the Wikipedia pages on film remakes. I use these for exercises on webscraping.
+<li><p><a href="./data/remakes_1.html">remakes_1.html</a> and <a href="./data/remakes_2.html">remakes_2.html</a>: These are copies of the Wikipedia pages on film remakes. I use these for exercises on webscraping.</p>
 <ul>
 <li>A-M original link: <a href="https://en.wikipedia.org/wiki/List_of_film_remakes_(A-M)" class="uri">https://en.wikipedia.org/wiki/List_of_film_remakes_(A-M)</a></li>
 <li>N-Z original link: <a href="https://en.wikipedia.org/wiki/List_of_film_remakes_(N-Z)" class="uri">https://en.wikipedia.org/wiki/List_of_film_remakes_(N-Z)</a></li>
 </ul></li>
-<li><a href="./data/smoke.csv">smoke.csv</a>: A data frame containing information on smoking status and cancer status for 172 individuals. Data are from Dorn, Harold F. “The relationship of cancer of the lung and the use of tobacco.” <em>The American Statistician</em> 8, no. 5 (1954): 7-13. Variables include
+<li><p><a href="./data/smoke.csv">smoke.csv</a>: A data frame containing information on smoking status and cancer status for 172 individuals. Data are from Dorn, Harold F. “The relationship of cancer of the lung and the use of tobacco.” <em>The American Statistician</em> 8, no. 5 (1954): 7-13. Variables include</p>
 <ul>
 <li><code>individual</code>: The individual number.</li>
 <li><code>smoke</code>: Whether the individual smoked (<code>smoker</code>) or did not (<code>nonsmoker</code>).</li>
 <li><code>cancer</code>: Whether the individual had cancer (<code>cancer</code>) or was a control (<code>control</code>).</li>
 </ul></li>
-<li>Tidying exercise datasets:
+<li><p>Tidying exercise datasets:</p>
 <ul>
 <li><a href="./data/tidy_exercise/flowers1.csv">flowers1.csv</a></li>
 <li><a href="./data/tidy_exercise/flowers2.csv">flowers2.csv</a></li>
@@ -418,14 +434,14 @@ $(document).ready(function () {
 <li><a href="./data/tidy_exercise/weather.csv">weather.csv</a></li>
 <li><a href="./data/tidy_exercise/wine.csv">wine.csv</a></li>
 </ul></li>
-<li><a href="./data/words.txt">words.txt</a>: The list of acceptable 2015 Scrabble Words.</li>
-<li>World Bank Data: The World Bank is an international organization that provides loans to countries with the goal of reducing poverty. The following data frames were all taken from the public data repositories of the World Bank.
+<li><p><a href="./data/words.txt">words.txt</a>: The list of acceptable 2015 Scrabble Words.</p></li>
+<li><p>World Bank Data: The World Bank is an international organization that provides loans to countries with the goal of reducing poverty. The following data frames were all taken from the public data repositories of the World Bank.</p>
 <ul>
 <li><a href="./data/country.csv">country.csv</a>: Contains information on the countries in the data set. The variables are:
 <ul>
 <li><code>Country_Code</code>: A three-letter code for the country. Note that not all rows are countries; some are regions.</li>
 <li><code>Region</code>: The region of the country.</li>
-<li><code>IncomeGroup</code>: Either <code>&quot;High income&quot;</code>, <code>&quot;Upper middle income&quot;</code>, <code>&quot;Lower middle income&quot;</code>, or <code>&quot;Low income&quot;</code>.</li>
+<li><code>IncomeGroup</code>: Either <code>"High income"</code>, <code>"Upper middle income"</code>, <code>"Lower middle income"</code>, or <code>"Low income"</code>.</li>
 <li><code>TableName</code>: The full name of the country.</li>
 </ul></li>
 <li><a href="./data/fertility.csv">fertility.csv</a>: Contains the fertility rate information for each country for each year. For the variables <code>1960</code> to <code>2017</code>, the values in the cells represent the fertility rate in total births per woman for the that year. Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.</li>
