@@ -14,74 +14,62 @@ knitr::opts_chunk$set(echo       = TRUE,
                       fig.align  = "center")
 ```
 
+The below list contains the tentative schedule and required 
+readings for STAT 413/613 during Spring Semester 2019.
+
 - Week 1:
-    - Version control with git and GitHub.
-    - [Git Appendix in r-pkgs](http://r-pkgs.had.co.nz/git.html)
-    - [Setting up GitHub Classroom](https://github.com/jfiksel/github-classroom-for-students)
-    - [Git for Scientists](https://milesmcbain.github.io/git_4_sci/).
+    - Version Control with git.
+    - Collaboration and software-hosting with GitHub.
     - [A Quick Introduction to Version Control with Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
-    - [Oh s**t, git!](https://ohshitgit.com/).
+    - [Setting up GitHub Classroom](https://github.com/jfiksel/github-classroom-for-students)
 - Week 2:
-    - Dates and times with lubridate.
+    - Manipulating dates and times with lubridate.
     - Chapter 16 of [RDS](https://r4ds.had.co.nz/).
-    - [Dates and Times Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf).
-    - [Lubridate Overview](https://lubridate.tidyverse.org/).
 - Week 3:
-    - Vectors and lists.
-    - Iterators and purrr.
-    - Chapters 20 and 21 of [RDS](https://r4ds.had.co.nz/).
-    - [Purrr Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf)
-    - [Purrr Overview](https://purrr.tidyverse.org/).
-- Week 4:
-    - Probability and statistics basics refresher.
-    - Distributions in R.
-    - One/two sample inference in R ($t$-tests).
-    - Tests for two-way tables.
-    - Tidy output with broom.
-- Week 5:
-    - Linear regression in R.
-    - Tidy output with broom.
+    - Manipulating Vectors and Lists using base R syntax.
+    - Chapter 20 of [RDS](https://r4ds.had.co.nz/).
+- Week 4: 
+    - Learn about iteration.
+    - Iterators in base R.
+    - Iterators in purrr.
+    - Chapter 21 of [RDS](https://r4ds.had.co.nz/).
 - Week 6:
-    - Communicating results with Shiny.
-    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
-- Week 7:
-    - Exam 1.
-    - Weeks covered: 1 through 5
-- Week 8:
-    - Communicating results with Shiny.
-    - [R Studio Shiny Tutorial](https://shiny.rstudio.com/tutorial/).
-- Week 9:
-    - Reading large datasets into R.
-    - `data.table` syntax for manipulating data frames.
-    - [A data.table and dplyr tour](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/)
-    - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
-    - [Efficient reshaping using data.tables](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
-- Week 10: 
-    - Multivariate EDA techniques in R.
-    - Dimensionality Reduction
-    - PCA/tSNE/MDS.
-    - Clustering
+    - Midterm 1. 
+    - Covers weeks 1 through 4.
+- Weeks 5/7: 
+    - Learn the basics of Shiny Apps.
+    - Learn the basics of Shiny layouts.
+    - Learn the basics reactivity and the the `server()` function in Shiny Apps.
+    - Edit style of Shiny App with HTML elements.
+    - Chapters 1, 2, 3, 4, and 13 of [Mastering Shiny](https://mastering-shiny.org/).
+- Week 8/9: 
+    - Review intermediate Statistics (STAT 302/320/614).
+    - Probability distributions in R.
+    - P-values/confidence intervals.
+    - $t$-tests for means in R.
+    - Proportion tests in R.
+    - Skim OpenIntro book: <https://leanpub.com/openintro-statistics>
+- Week 9/10:
+    - Simple Linear Regression in R.
+    - Use a list-column to run many models at once.
+    - The broom package.
+    - Chapter 25 from [RDS](https://r4ds.had.co.nz/).
+    - Chapter 8 of [OpenIntro Statistics (Fourth Edition)](https://www.openintro.org/stat/textbook.php)
 - Week 11:
-    - Machine learning introduction.
-    - Machine learning with caret.
-    - [caret tutorial](https://www.machinelearningplus.com/machine-learning/caret-package/).
-    - Chapters 28, 30, and 31 of [IDS](https://rafalab.github.io/dsbook/).
-- Week 12: 
-    - Exam 2.
-    - Weeks covered: 6 through 10
+    - Reading and manipulating large datasets in R.
+    - `data.table` syntax for manipulating data frames.
+    - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
+- Week 12:
+    - APIs and R.
+    - Basics of Web Scraping
+    - [Overview of rvest](https://rvest.tidyverse.org/).
 - Week 13:
-    - Machine learning with caret.
-    - Machine learning lab.
-    - Chapters 28, 30, and 31 of [IDS](https://rafalab.github.io/dsbook/).
-- Week 14
-    - Databases, `dbplyr`, and SQL.
-    - [Introduction to dbplyr](https://cran.r-project.org/web/packages/dbplyr/vignettes/dbplyr.html).
-    - [Introduction to MySQL with R](https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r#going-further-with-mysql).
-    - [hrsample](https://github.com/harryahlas/sample-hr-database).
-    - Getting data from XML, HTML, SQL, JSON, API.
-- Week 15:
-    - Data ethics (bias of machine learning algorithms).
-    - Building a professional website.
+    - Midterm 2.
+    - Covers weeks 5 through 11
+- Week 14:
+    - Learn how to create a website with R Markdown.
+    - Create a personal or project website.
+    - Chapter 1 and Section 3.1 of the [Bookdown Book](https://bookdown.org/yihui/blogdown/)
 - Final Exam Period:
     - Final project presentations.
     

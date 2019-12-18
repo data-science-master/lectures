@@ -22,11 +22,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Review Intermediate Statistics (STAT 302/320/614)
-- Probability Distributions in R
-- P-values/Confidence Intervals
-- $t$-tests for Means
-- Proportion Tests
+- Review intermediate Statistics (STAT 302/320/614).
+- Probability distributions in R.
+- P-values/confidence intervals.
+- $t$-tests for means in R.
+- Proportion tests in R.
 
 # A Note on this Review
 

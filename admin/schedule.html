@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-07-29" />
+<meta name="date" content="2019-12-18" />
 
 <title>Course Plan for STAT 413/613</title>
 
@@ -271,7 +270,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -333,6 +331,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -366,109 +365,89 @@ summary {
 
 <h1 class="title toc-ignore">Course Plan for STAT 413/613</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-07-29</h4>
+<h4 class="date">2019-12-18</h4>
 
 </div>
 
 
+<p>The below list contains the tentative schedule and required readings for STAT 413/613 during Spring Semester 2019.</p>
 <ul>
 <li>Week 1:
 <ul>
-<li>Version control with git and GitHub.</li>
-<li><a href="http://r-pkgs.had.co.nz/git.html">Git Appendix in r-pkgs</a></li>
-<li><a href="https://github.com/jfiksel/github-classroom-for-students">Setting up GitHub Classroom</a></li>
-<li><a href="https://milesmcbain.github.io/git_4_sci/">Git for Scientists</a>.</li>
+<li>Version Control with git.</li>
+<li>Collaboration and software-hosting with GitHub.</li>
 <li><a href="https://doi.org/10.1371/journal.pcbi.1004668">A Quick Introduction to Version Control with Git and GitHub</a>.</li>
-<li><a href="https://ohshitgit.com/">Oh s**t, git!</a>.</li>
+<li><a href="https://github.com/jfiksel/github-classroom-for-students">Setting up GitHub Classroom</a></li>
 </ul></li>
 <li>Week 2:
 <ul>
-<li>Dates and times with lubridate.</li>
+<li>Manipulating dates and times with lubridate.</li>
 <li>Chapter 16 of <a href="https://r4ds.had.co.nz/">RDS</a>.</li>
-<li><a href="https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf">Dates and Times Cheat Sheet</a>.</li>
-<li><a href="https://lubridate.tidyverse.org/">Lubridate Overview</a>.</li>
 </ul></li>
 <li>Week 3:
 <ul>
-<li>Vectors and lists.</li>
-<li>Iterators and purrr.</li>
-<li>Chapters 20 and 21 of <a href="https://r4ds.had.co.nz/">RDS</a>.</li>
-<li><a href="https://github.com/rstudio/cheatsheets/raw/master/purrr.pdf">Purrr Cheat Sheet</a></li>
-<li><a href="https://purrr.tidyverse.org/">Purrr Overview</a>.</li>
+<li>Manipulating Vectors and Lists using base R syntax.</li>
+<li>Chapter 20 of <a href="https://r4ds.had.co.nz/">RDS</a>.</li>
 </ul></li>
 <li>Week 4:
 <ul>
-<li>Probability and statistics basics refresher.</li>
-<li>Distributions in R.</li>
-<li>One/two sample inference in R (<span class="math inline">\(t\)</span>-tests).</li>
-<li>Tests for two-way tables.</li>
-<li>Tidy output with broom.</li>
-</ul></li>
-<li>Week 5:
-<ul>
-<li>Linear regression in R.</li>
-<li>Tidy output with broom.</li>
+<li>Learn about iteration.</li>
+<li>Iterators in base R.</li>
+<li>Iterators in purrr.</li>
+<li>Chapter 21 of <a href="https://r4ds.had.co.nz/">RDS</a>.</li>
 </ul></li>
 <li>Week 6:
 <ul>
-<li>Communicating results with Shiny.</li>
-<li><a href="https://shiny.rstudio.com/tutorial/">R Studio Shiny Tutorial</a>.</li>
+<li>Midterm 1.</li>
+<li>Covers weeks 1 through 4.</li>
 </ul></li>
-<li>Week 7:
+<li>Weeks 5/7:
 <ul>
-<li>Exam 1.</li>
-<li>Weeks covered: 1 through 5</li>
+<li>Learn the basics of Shiny Apps.</li>
+<li>Learn the basics of Shiny layouts.</li>
+<li>Learn the basics reactivity and the the <code>server()</code> function in Shiny Apps.</li>
+<li>Edit style of Shiny App with HTML elements.</li>
+<li>Chapters 1, 2, 3, 4, and 13 of <a href="https://mastering-shiny.org/">Mastering Shiny</a>.</li>
 </ul></li>
-<li>Week 8:
+<li>Week 8/9:
 <ul>
-<li>Communicating results with Shiny.</li>
-<li><a href="https://shiny.rstudio.com/tutorial/">R Studio Shiny Tutorial</a>.</li>
+<li>Review intermediate Statistics (STAT 302/320/614).</li>
+<li>Probability distributions in R.</li>
+<li>P-values/confidence intervals.</li>
+<li><span class="math inline">\(t\)</span>-tests for means in R.</li>
+<li>Proportion tests in R.</li>
+<li>Skim OpenIntro book: <a href="https://leanpub.com/openintro-statistics" class="uri">https://leanpub.com/openintro-statistics</a></li>
 </ul></li>
-<li>Week 9:
+<li>Week 9/10:
 <ul>
-<li>Reading large datasets into R.</li>
-<li><code>data.table</code> syntax for manipulating data frames.</li>
-<li><a href="https://atrebas.github.io/post/2019-03-03-datatable-dplyr/">A data.table and dplyr tour</a></li>
-<li><a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">Introduction to data.table</a>.</li>
-<li><a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html">Efficient reshaping using data.tables</a></li>
-</ul></li>
-<li>Week 10:
-<ul>
-<li>Multivariate EDA techniques in R.</li>
-<li>Dimensionality Reduction</li>
-<li>PCA/tSNE/MDS.</li>
-<li>Clustering</li>
+<li>Simple Linear Regression in R.</li>
+<li>Use a list-column to run many models at once.</li>
+<li>The broom package.</li>
+<li>Chapter 25 from <a href="https://r4ds.had.co.nz/">RDS</a>.</li>
+<li>Chapter 8 of <a href="https://www.openintro.org/stat/textbook.php">OpenIntro Statistics (Fourth Edition)</a></li>
 </ul></li>
 <li>Week 11:
 <ul>
-<li>Machine learning introduction.</li>
-<li>Machine learning with caret.</li>
-<li><a href="https://www.machinelearningplus.com/machine-learning/caret-package/">caret tutorial</a>.</li>
-<li>Chapters 28, 30, and 31 of <a href="https://rafalab.github.io/dsbook/">IDS</a>.</li>
+<li>Reading and manipulating large datasets in R.</li>
+<li><code>data.table</code> syntax for manipulating data frames.</li>
+<li><a href="https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html">Introduction to data.table</a>.</li>
 </ul></li>
 <li>Week 12:
 <ul>
-<li>Exam 2.</li>
-<li>Weeks covered: 6 through 10</li>
+<li>APIs and R.</li>
+<li>Basics of Web Scraping</li>
+<li><a href="https://rvest.tidyverse.org/">Overview of rvest</a>.</li>
 </ul></li>
 <li>Week 13:
 <ul>
-<li>Machine learning with caret.</li>
-<li>Machine learning lab.</li>
-<li>Chapters 28, 30, and 31 of <a href="https://rafalab.github.io/dsbook/">IDS</a>.</li>
+<li>Midterm 2.</li>
+<li>Covers weeks 5 through 11</li>
 </ul></li>
-<li>Week 14
+<li>Week 14:
 <ul>
-<li>Databases, <code>dbplyr</code>, and SQL.</li>
-<li><a href="https://cran.r-project.org/web/packages/dbplyr/vignettes/dbplyr.html">Introduction to dbplyr</a>.</li>
-<li><a href="https://programminghistorian.org/en/lessons/getting-started-with-mysql-using-r#going-further-with-mysql">Introduction to MySQL with R</a>.</li>
-<li><a href="https://github.com/harryahlas/sample-hr-database">hrsample</a>.</li>
-<li>Getting data from XML, HTML, SQL, JSON, API.</li>
-</ul></li>
-<li>Week 15:
-<ul>
-<li>Data ethics (bias of machine learning algorithms).</li>
-<li>Building a professional website.</li>
+<li>Learn how to create a website with R Markdown.</li>
+<li>Create a personal or project website.</li>
+<li>Chapter 1 and Section 3.1 of the <a href="https://bookdown.org/yihui/blogdown/">Bookdown Book</a></li>
 </ul></li>
 <li>Final Exam Period:
 <ul>
