@@ -26,6 +26,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Grade Breakdown
 
+50 pts total:
+
 - (5 pts) Team and data selection.
 - (5 pts) Progress report.
 - (10 pts) GitHub repo.
@@ -184,6 +186,9 @@ Your Shiny app should contain all of the following elements:
   regressions, ANOVA, etc).
 - Interactive graphics.
 - Modified HTML elements.
+- You should not be doing intensive data cleaning inside your shiny app. 
+  Your shiny app should use cleaned datasets that were cleaned by scripts in
+  your analysis folder.
 
 # (10 pts) Presentation
 
