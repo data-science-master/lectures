@@ -9,12 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- **Time**: Tuesdays, 5:30 PM to 8:00 PM, DMTI 109
+- **Time**: Tuesdays or Thursdays, 5:30 PM to 8:00 PM
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
 - **Phone**: 202-885-3022
-- **Office Hours**: Monday 4pm -- 5pm, Thursday 3pm -- 4pm.
+- **Office Hours**: TBD
 
 # Overview of Topics and Course Objectives
 This course focuses on the collection, organization, analysis, interpretation, and presentation of data. Topics include the acquisition, cleaning, and imputation of data from a variety of sources; data visualization and graphing; data presentation and packaging; and programming considerations for large datasets. The course uses R packages and programming language.
@@ -33,10 +33,12 @@ This course focuses on the collection, organization, analysis, interpretation, a
 - **Required**: Laptop computer 
 - **Books**: 
     - R for Data Science by Wickham and Grolemund (O'Reilly): <http://r4ds.had.co.nz/>
-    - Advanced R – Wickham (O’Reilly): <https://adv-r.hadley.nz/>
+    - Advanced R by Wickham (O’Reilly): <https://adv-r.hadley.nz/>
+    - Mastering Shiny by Wickham: <https://mastering-shiny.org/>
     - Git for Scientists: <https://milesmcbain.github.io/git_4_sci/>
     - OpenIntro Statistics: <https://www.openintro.org/stat/textbook.php?stat_book=os>
-- **Course Website**: https://github.com/orgs/data-science-fall-2019/
+    - blogdown: Creating Websites with R Markdown by Xie, Thomas, and Hill: <https://bookdown.org/yihui/blogdown/>
+- **Course Website**: https://github.com/data-science-spring-2020
 
 # Class Structure
 

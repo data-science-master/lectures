@@ -23,6 +23,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Learn how to create a website with R Markdown.
 - Create a personal or project website.
-- Chapter 1 and Section 3.1 of the [Bookdown Book](https://bookdown.org/yihui/blogdown/)
+- Chapter 1 and Section 3.1 of [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
 
 # Motivation
