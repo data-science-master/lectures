@@ -1,0 +1,35 @@
+---
+title: "Collaboration through Branches"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+linkcolor: "green"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Learn the branch-commit-merge workflow for collaborative repos.
+- [Understanding the GitHub flow](https://guides.github.com/introduction/flow/)
+- [About branches](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-branches)
+- [Resolving a merge conflict](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/resolving-a-merge-conflict-using-the-command-line)
+
+# Motivation
+
+- We previously learned how to fork a repo. This allows you to collaborate
+  on a repo that you don't own.
+
+- You might also share a repo with someone. In this case, we use *branches*
+  rather than forks.
