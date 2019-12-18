@@ -74,10 +74,10 @@ Your final grade will be determined by:
 ```{r, echo=FALSE, message = FALSE}
 library(tidyverse)
 gradedf <- tribble(~Component, ~`Graduate (613)`, ~`Undergraduate (413)`,
-                   "Assignments", 0.3, 0.3,
+                   "Assignments", 0.30, 0.30,
                    "Exam 1", 0.25, 0.25,
                    "Exam 2", 0.25, 0.25,
-                   "Final Project", 0.2, 0,
+                   "Final Project", 0.20, 0,
                    "Attendance and Participation", 0, 0.2)
 knitr::kable(gradedf)
 ```
@@ -145,11 +145,20 @@ print(pl)
 
 Note that exam dates are subject to (and probably will) change.
 
-- 10/01: Exam 1
-- 11/12: Exam 2
-- 11/19: Final Project Progress Report Due.
-- 11/26: Thanksgiving Holiday (Friday classes meet instead of Tuesday classes).
-- 12/10, 5:30 pm - 8:00 pm: Final Project Presentations (During Final Exam Period)
+- Tuesday Section Important Dates:
+    - 02/18: Midterm 1.
+    - 03/10: Spring break. No class.
+    - 04/14: Midterm 2.
+    - 04/17: Final Project Progress Report Due.
+    - 04/28: Spring study day. No class.
+    - 05/05: Final Project Presentations (During Final Exam Period).
+
+- Thursday Section Important Dates:
+    - 02/20: Midterm 1.
+    - 03/12: Spring break. No class.
+    - 04/16: Midterm 2.
+    - 04/17: Final Project Progress Report Due.
+    - 04/30: Final Project Presentations (During Final Exam Period).
 
 # Assistance/Support
 
@@ -175,6 +184,7 @@ Before receiving any assistance on a specific homework problem, please make sure
 - It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who are currently taking the course.
 - Copying my solutions and just changing variable names is a violation of the academic code of integrity.
 - All solutions that I provide are under my copyright. These solutions are for personal use only and may not be distributed to anyone else. Giving these solutions to others, including other students or posting them on the internet, is a violation of my copyright and a violation of the student code of conduct.
+- Communicating with anyone during a midterm is a violation of the Academic Code of Integrity. I will compare student exams and report solutions that are too similar to each other.
     
 # A Few Additional Notes
 
