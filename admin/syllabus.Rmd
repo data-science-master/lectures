@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
 - **Phone**: 202-885-3022
-- **Office Hours**: TBD
+- **Office Hours**: Wednesdays and Thursdays from 3:00 PM to 5:00 PM
 
 # Overview of Topics and Course Objectives
 This course focuses on the collection, organization, analysis, interpretation, and presentation of data. Topics include the acquisition, cleaning, and imputation of data from a variety of sources; data visualization and graphing; data presentation and packaging; and programming considerations for large datasets. The course uses R packages and programming language.
@@ -22,7 +22,7 @@ This course focuses on the collection, organization, analysis, interpretation, a
 # Learning Objectives:
 - Produce reproducible research using R
 - Import and analyze a dataset from .csv, .xml, JSON, API, MySQL
-- Deal effectively with missing data
+- Effectively manipulate large data in R
 - Use graphical tools to visualize and understand data
 - Present results in both report and presentation form
 - Share results with others using tools such as shiny app and R presenter.
@@ -76,9 +76,9 @@ Your final grade will be determined by:
 ```{r, echo=FALSE, message = FALSE}
 library(tidyverse)
 gradedf <- tribble(~Component, ~`Graduate (613)`, ~`Undergraduate (413)`,
-                   "Assignments", 0.30, 0.30,
-                   "Exam 1", 0.25, 0.25,
-                   "Exam 2", 0.25, 0.25,
+                   "Assignments", 0.40, 0.40,
+                   "Exam 1", 0.20, 0.20,
+                   "Exam 2", 0.20, 0.20,
                    "Final Project", 0.20, 0,
                    "Attendance and Participation", 0, 0.2)
 knitr::kable(gradedf)
