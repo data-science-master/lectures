@@ -73,3 +73,9 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 12 Data Ethics
     - [12 Data Ethics](./12_ethics/12_ethics.html).
     - [12 Technology Is Biased Too. How Do We Fix It?](./12_ethics/data_science_bias.pdf).
+
+# Code of Conduct
+
+Please note that the 'lectures' project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
