@@ -58,11 +58,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
 - There is no built-in R function to find the current time without the date. 
-  But you can use `hms::as.hms(now())` to get the current time.
+  But you can use `hms::as_hms(now())` to get the current time.
 
     ```{r}
-    hms::as.hms(now())
-    class(hms::as.hms(now()))
+    hms::as_hms(now())
+    class(hms::as_hms(now()))
     ```
 
 
@@ -135,6 +135,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     ## No dym_hms() function is defined, so need to use parse_datetime()
     parse_datetime("26 2004 05 UTC 11/11/11.444", "%d %Y %m UTC %H/%M/%S")
+    
+    parse_date_time(x = "26 2004 05 UTC 11/11/11.444", orders = "dYmHMS")
     ```
     
 - **Exercise** (RDS 16.2.4.3): Use the appropriate lubridate function to parse 

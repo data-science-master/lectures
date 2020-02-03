@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-10-07" />
+<meta name="date" content="2020-02-03" />
 
 <title>The Basics of Shiny Apps</title>
 
@@ -492,6 +491,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -525,7 +525,7 @@ summary {
 
 <h1 class="title toc-ignore">The Basics of Shiny Apps</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-10-07</h4>
+<h4 class="date">2020-02-03</h4>
 
 </div>
 
@@ -1062,7 +1062,7 @@ shinyApp(ui = ui, server = server)</code></pre></li>
 <li>These inputs must be used <em>inside</em> a render function in order to obtain reactivity.</li>
 </ul></li>
 <li><p>In the <code>server()</code> function, notice that we set the outputs to the <code>output()</code> variable.</p></li>
-<li><p>Notice that I used <code>!!</code> in front of <code>input$var1</code> and <code>input$var2</code>. You have to do this to use variable names in the tidyverse (ggplot, dplyr, tidyr, etc).</p></li>
+<li><p>Notice that I used <code>!!</code> in front of <code>input$var1</code> and <code>input$var2</code>. This is called the “bang-bang operator” and you have to do this to use variable names in the tidyverse (ggplot, dplyr, tidyr, etc).</p></li>
 <li><p>The <code>!!</code> is only necessary if you are requesting the names of variables in a data frame in the tidyverse.</p></li>
 <li><p><strong>Exercise</strong>: Let the user choose whether they want red points or blue points.</p></li>
 </ul>
