@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2020-02-11" />
 
 <title>The Basics of Shiny Apps</title>
 
@@ -525,7 +525,7 @@ summary {
 
 <h1 class="title toc-ignore">The Basics of Shiny Apps</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2020-02-03</h4>
+<h4 class="date">2020-02-11</h4>
 
 </div>
 
@@ -552,7 +552,9 @@ summary {
 <li><a href="#output-tables">Output Tables</a></li>
 <li><a href="#output-plots">Output Plots</a></li>
 </ul></li>
-<li><a href="#putting-inputs-and-outputs-together">Putting Inputs and Outputs Together</a></li>
+<li><a href="#putting-inputs-and-outputs-together">Putting Inputs and Outputs Together</a><ul>
+<li><a href="#alternative-pipeline-to">Alternative pipeline to <code>!!</code></a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -1066,6 +1068,41 @@ shinyApp(ui = ui, server = server)</code></pre></li>
 <li><p>The <code>!!</code> is only necessary if you are requesting the names of variables in a data frame in the tidyverse.</p></li>
 <li><p><strong>Exercise</strong>: Let the user choose whether they want red points or blue points.</p></li>
 </ul>
+<div id="alternative-pipeline-to" class="section level2">
+<h2>Alternative pipeline to <code>!!</code></h2>
+<ul>
+<li><p>This content is from Chapter 11 of <a href="https://mastering-shiny.org/">Mastering Shiny</a>.</p></li>
+<li><p>If you use <code>varSelectInput()</code>, you need to use <code>!!</code>.</p></li>
+<li><p>But you can use <code>selectInput()</code> for variable selection, in which case you can use the <code>.data</code> object.</p>
+<pre class="r"><code>library(shiny)
+library(ggplot2)
+
+ui &lt;- fluidPage(
+    selectInput(&quot;var1&quot;, &quot;Variable 1&quot;, choices = names(mtcars)),
+    selectInput(&quot;var2&quot;, &quot;Variable 2&quot;, choices = names(mtcars)),
+    plotOutput(&quot;plot&quot;)
+)
+
+server &lt;- function(input, output) {
+    output$plot &lt;- renderPlot({
+        ggplot(mtcars, aes(x = .data[[input$var1]], y = .data[[input$var2]])) +
+            geom_point()
+    })
+}
+
+shinyApp(ui = ui, server = server)</code></pre></li>
+<li>Compare UI:
+<ul>
+<li>Way 1: <code>varSelectInput(&quot;var1&quot;, &quot;Variable 1&quot;, data = mtcars)</code></li>
+<li>Way 2: <code>selectInput(&quot;var1&quot;, &quot;Variable 1&quot;, choices = names(mtcars))</code></li>
+</ul></li>
+<li>Compare Server:
+<ul>
+<li>Way 1: <code>x = !!input$var1</code></li>
+<li>Way 2: <code>x = .data[[input$var1]]</code></li>
+</ul></li>
+</ul>
+</div>
 </div>
 
 
