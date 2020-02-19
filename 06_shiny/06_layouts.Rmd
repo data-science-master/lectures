@@ -547,3 +547,148 @@ klippy::klippy()
     ```
   
     ![](./cartoons/layouts_11.png)\ 
+
+# Shiny Dashboards
+
+- The shinydashboard package lets you obtain more proffesional looking Shiny apps.
+
+- The only thing that changes in a shinydashboard is the user interface.
+
+- The structure of a shinydashboard looks like this:
+    ```{r, eval = FALSE}
+    library(shiny)
+    library(shinydashboard)
+    
+    ui <- dashboardPage(
+      dashboardHeader(),
+      dashboardSidebar(),
+      dashboardBody()
+    )
+    
+    server <- function(input, output, session) {
+      
+    }
+    
+    shinyApp(ui, server)
+    ```
+    
+- `dashboardHeader()` just changes the title of the Shiny app.
+
+- `dashboardSidebar()` is where you place a menu.
+
+- `dashboardBody()` is where you place content.
+
+- Use `fluidRow()` and `box()` (or `column()`) to add content to `dashboardBody()`.
+
+    ```{r, eval = FALSE}
+    library(shiny)
+    library(shinydashboard)
+    library(ggplot2)
+    
+    ui <- dashboardPage(
+      dashboardHeader(),
+      dashboardSidebar(),
+      dashboardBody(
+        fluidRow(
+          box(
+            plotOutput("hist")
+          ),
+          
+          box(
+            sliderInput("nobs", "Number of observations", min = 1, max = 100, value = 50),
+            title = "Controls"
+          )  
+        )
+        )
+    )
+    
+    server <- function(input, output, session) {
+      output$hist <- renderPlot({
+        x <- rnorm(input$nobs)
+        qplot(x, bins = 10)
+      })
+    }
+    
+    shinyApp(ui, server)
+    ```
+    
+- Create tabs by:
+  - using `sidebarMenu()` and `menuItem()` in `dashboardSidebar()`.
+  - using `tabItems()` and `tabitem()` in `dashboardBody()`.
+  
+    ```{r, eval = FALSE}
+    library(shiny)
+    library(shinydashboard)
+    library(ggplot2)
+    
+    ui <- dashboardPage(
+      dashboardHeader(),
+      dashboardSidebar(
+        sidebarMenu(
+          menuItem(text = "Histogram", tabName = "tabhist"),
+          menuItem(text = "Scatterplot", tabName = "tabscat")
+        )
+        ),
+      dashboardBody(
+        tabItems(
+          tabItem(tabName = "tabhist",
+            fluidRow(
+              box(
+                plotOutput("hist")
+              ),
+              
+              box(
+                sliderInput("nobs", "Number of observations", 
+                            min = 1,
+                            max = 100, 
+                            value = 50),
+                title = "Controls"
+              )
+            )
+          ),
+          tabItem(tabName = "tabscat",
+            fluidRow(
+              box(
+                plotOutput("scatter")
+              ),
+              box(
+                sliderInput("nobs2", "Number of observations",
+                            min = 1, 
+                            max = 100, 
+                            value = 50),
+                sliderInput("corr", "Correlation",
+                            min = 0, 
+                            max = 1, 
+                            value = 0,
+                            step = 0.1),
+                title = "Controls"
+                )
+            )
+          )
+        )
+      )
+    )
+    
+    server <- function(input, output, session) {
+      output$hist <- renderPlot({
+        x <- rnorm(input$nobs)
+        qplot(x, bins = 10)
+      })
+      
+      output$scatter <- renderPlot({
+        x <- rnorm(n = input$nobs2)
+        y <- rnorm(n    = input$nobs2, 
+                   mean = input$corr * x, 
+                   sd   = sqrt(1 - input$corr^2))
+        qplot(x, y)
+      })
+    }
+    
+    shinyApp(ui, server)
+    ```
+    
+    
+- Use the `skin` argument in `dashboardPage()` to change the appearence 
+  of your dashboard.
+  
+- For more information on shinydashboards, see: <https://rstudio.github.io/shinydashboard/index.html>
