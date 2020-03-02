@@ -65,8 +65,8 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [08 Lab](https://github.com/data-science-master/lab_08).
 - 09 Introduction to Python
     - [09 Python Setup and Basics](./09_python/09_python_setup.html)
-    - [09 Pandas](./09/09_python/09_pandas.html)
-    - [09 Matplotlib](./09/09_python/09_matplotlib.html)
+    - [09 Pandas](./09_python/09_pandas.html)
+    - [09 Matplotlib](./09_python/09_matplotlib.html)
 
 # Code of Conduct
 
