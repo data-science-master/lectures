@@ -106,6 +106,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: lightblue">Python</mark>
     ```{python}
     estate.info()
+    ```
+    
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
     estate.head()
     ```
     
@@ -572,7 +576,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: lightblue">R</mark>
     ```{r}
     spread(table2, key = "type", value = "count")
+    ```
     
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
     pivot_wider(table2, id_cols = c("country", "year"), 
                 names_from = "type", 
                 values_from = "count")

@@ -541,6 +541,7 @@ import pandas as pd</code></pre></li>
 ## Highway    522 non-null int64
 ## dtypes: int64(11), object(1)
 ## memory usage: 49.0+ KB</code></pre>
+<p><mark style="background-color: lightblue">Python</mark></p>
 <pre class="python"><code>estate.head()</code></pre>
 <pre><code>##     Price  Area  Bed  Bath  AC  ...  Year  Quality  Style    Lot  Highway
 ## 0  360000  3032    4     4   1  ...  1972   Medium      1  22221        0
@@ -900,6 +901,7 @@ table2</code></pre>
 ## 4 Brazil       2000  80488  174504898
 ## 5 China        1999 212258 1272915272
 ## 6 China        2000 213766 1280428583</code></pre>
+<p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>pivot_wider(table2, id_cols = c(&quot;country&quot;, &quot;year&quot;), 
             names_from = &quot;type&quot;, 
             values_from = &quot;count&quot;)</code></pre>
