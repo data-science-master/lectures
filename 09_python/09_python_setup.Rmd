@@ -1,0 +1,350 @@
+---
+title: "Python and Reticulate"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Set up R Studio environment for Python.
+- Python REPL.
+- Python chunks and Python scripts.
+- Basics of Python
+- [Getting Started with Reticulate](https://rstudio.github.io/reticulate/)
+- [Installing Python Packages](https://rstudio.github.io/reticulate/articles/python_packages.html)
+
+# Setting Up Python for R Studio
+
+- Most Python pros use [Jupyter Notebook](https://jupyter.org/) as their 
+  [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
+  when developing in Python.
+
+- But for R programmers who only need to dabble in Python (me, for example), 
+  we can use R Studio and the reticulate package.
+  
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    install.packages("reticulate")
+    ```
+
+- To install a version of Python that reticulate will use, run in the terminal:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::install_miniconda()
+    ```
+    
+- To validate that Python was installed and is available, run
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::py_available()
+    ```
+
+- To install Python packages, use `py_install()`. For example, we can install
+  the numpy, pandass, and matplotlib packages via
+  
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::py_install(packages = c("numpy", "pandas", "matplotlib"))
+    ```
+
+# Python REPL's, Chunks, and Scripts
+
+- To start an [IPython shell](https://en.wikipedia.org/wiki/IPython) --- similar
+  to the R command promp --- run the following in R:
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::repl_python()
+    ```
+    
+    ![](./fig/python1.png)\ 
+    
+- "REPL" stands for "read–eval–print loop", which is an interactive 
+  programming environment (like the R command prompt or the IPython shell).
+  
+- You can exit the REPL by typing the following:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    exit
+    ```
+
+- You can have Python chunks in R Markdown files by replacing the "`r`" at the
+  beginning of the chunk by "`python`":
+
+    ```{r, eval = TRUE, echo = FALSE, comment = ""}
+    cat({
+    "  ```{python}
+      # Code goes here
+      ```"
+      })
+    ```
+    
+- Sometimes it's buggy, but you can usually begin a Python REPL by also
+  hitting Control/Command + Enter inside the Python chunk:
+  
+    ![](./fig/python3.png)\ 
+    
+- Python scripts (where there is only Python code and no plain text) end in
+  ".py". You can create a Python script in R Studio:
+  
+    ![](./fig/python2.png)\ 
+    
+- Hitting Control/Command + Enter inside a Python script will also 
+  start a Python REPL.
+  
+# Python Overview
+
+| In R I Want | In Python I Use |
+|-------------|-----------------|
+| Base R      | numpy           |
+| dplyr/tidyr | pandas          |
+| ggplot2     | matplotlib      |
+
+# Numpy Arrays
+
+- Let's import the numpy package:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    import numpy as np
+    ```
+
+- In Python, we assign variables with `=`, not `<-`
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = 10
+    x
+    ```
+    
+- The arithmetic operations (`+`, `-`, `*`, `/`) are the exact same
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    x * 2
+    x + 2
+    x / 2
+    x - 2
+    x ** 2 # square
+    x % 2 # remainder
+    ```
+    
+- Comments also begin with a `#`:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    # This is a comment
+    ```
+    
+- Help files are called the same way
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    help(min)
+    ?min
+    ```
+
+- Python lists are like R lists, in that they can have the different types. 
+  You create Python lists with brackets `[]`
+  
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = ["hello", 1, True]
+    x
+    ```
+
+- NumPy Arrays are the Python equivalent to R vectors (where each element
+  is the same type). You use the `array()` method of the numpy package to 
+  create a numpy array (note that you give it a list as input)
+  
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    vec = np.array([2, 3, 5, 1])
+    vec
+    ```
+    
+- You can do vectorized operations on NumPy arrays
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    vec + 2
+    vec - 2
+    vec * 2
+    vec / 2
+    2 / vec
+    ```
+    
+- Two vectors of the same size can be added/subtracted/multiplied/divided:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    x = np.array([1, 2, 3, 4])
+    y = np.array([5, 6, 7, 8])
+    x + y
+    x - y
+    x / y
+    x * y
+    x ** y
+    ```
+
+- You extract individual elements just like in R, using brackets `[]`
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    vec[0]
+    vec[0:2]
+    ```
+    
+- Extract arbitrary elements by passing an index array:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    ind = np.array([0, 2])
+    vec[ind]
+    # or
+    vec[np.array([0, 2])]
+    ```
+
+- **Key Difference:** **Python starts counting from 0**, not 1. So the first element
+  of a vector is `vec[0]`, **not** `vec[1]`.
+
+- Combine two arrays via `np.concatenate()` (notice the use of brackets here)
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = np.array([1, 2, 3, 4])
+    y = np.array([5, 6, 7, 8])
+    np.concatenate([x, y])
+    ```
+    
+## Useful functions over vectors
+
+- In R, we have functions operate on objects (e.g. `log(x)`, `sort(x)`, etc).
+
+- Python also has functions that operate on objects. 
+  But objects usually have functions associated with them **directly**. 
+  You access these functions by a period after the object name. 
+  These functions are called "methods". Use tab completion to scroll
+  through the available methods of an object.
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    vec.sort() # sort
+    vec.min() # minimum
+    vec.max() # maximum
+    vec.mean() # mean
+    vec.sum() # sum
+    vec.var() # variance
+    ```
+
+- But there are still loads of useful functions that operate on objects.
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    np.sort(vec)
+    np.min(vec)
+    np.max(vec)
+    np.mean(vec)
+    np.sum(vec)
+    np.var(vec)
+    np.size(vec)
+    np.exp(vec)
+    np.log(vec)
+    ```
+    
+# Booleans (Python's logicals)
+
+- Python uses `True` and `False`. It uses the same comparison operators as R
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    vec > 3
+    vec < 3
+    vec == 3
+    vec != 3
+    vec <= 3
+    vec >= 3
+    ```
+
+
+- The logical operators are: **Key Difference**: "Not" uses a different character.
+  - `&` And
+  - `|` Or
+  - `~` Not
+  
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    np.array([True, True, False, False]) & np.array([True, False, True, False])
+    np.array([True, True, False, False]) | np.array([True, False, True, False])
+    ~np.array([True, True, False, False])
+    ```
+
+- You subset a vector using Booleans as you would in R
+  
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    vec[vec <= 3]
+    ```
+    
+- When you are dealing with single logicals, instead of arrays of logicals,
+  use `and`, `or`, and `not` instead
+   
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    True and False
+    True or False
+    not True
+    ```
+
+- **Exercise**: Consider two vectors
+    $$
+    y = (1, 7, 1, 2, 8, 2)\\
+    x = (4, 6, 2, 7, 8, 2)
+    $$
+    Calculate their inner product:
+    $$
+    y_1x_1 + y_2x_2 + y_3x_3 + y_4x_4 + y_5x_5 + y_6x_6
+    $$
+    Do this using *vectorized* operations.
+    ```{python, eval = FALSE, echo = FALSE}
+    y = np.array([1, 7, 1, 2, 8, 2])
+    x = np.array([4, 6, 2, 7, 8, 2])
+    np.sum(x * y)
+    ```
+
+- **Exercise**: Provide two ways of extracting the 2nd and 5th elements of this vector
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = np.array([4, 7, 8, 1, 2])
+    ```
+    ```{python, echo = FALSE, eval = FALSE}
+    x[np.array([1, 4])]
+    x[np.array([False, True, False, False, True])]
+    ```
+    
+    
+- **Exercise**: Extract all elements from the previous vector between 5 and 8 (inclusive). Use predicates.
+    ```{python, echo = FALSE, eval = FALSE}
+    # Note: Need parentheses here for multiple conditions
+    x[(x >= 5) & (x <= 8)]
+    ```
+

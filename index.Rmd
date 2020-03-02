@@ -63,16 +63,10 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [08 APIs](./08_web_scraping/08_apis.html).
     - [08 Web Scraping](./08_web_scraping/08_web_scraping.html).
     - [08 Lab](https://github.com/data-science-master/lab_08).
-- 09 Dimensionality Reduction
-    - [09 Dimensionality Reduction](./09_dimension_reduction/09_dimension_reduction.html).
-- 10 Websites with R Markdown
-    - [10 Websites with R Markdown](./10_websites/10_websites.html).
-- 11 Workflow
-    - [11 Workflow with workflowr](./11_workflowr/11_workflowr.html).
-    - [11 Creating and sharing reproducible research code the workflowr way](https://doi.org/10.12688/f1000research.20843.1).
-- 12 Data Ethics
-    - [12 Data Ethics](./12_ethics/12_ethics.html).
-    - [12 Technology Is Biased Too. How Do We Fix It?](./12_ethics/data_science_bias.pdf).
+- 09 Introduction to Python
+    - [09 Python Setup and Basics](./09_python/09_python_setup.html)
+    - [09 Pandas](./09/09_python/09_pandas.html)
+    - [09 Matplotlib](./09/09_python/09_matplotlib.html)
 
 # Code of Conduct
 

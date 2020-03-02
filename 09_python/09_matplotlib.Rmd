@@ -1,5 +1,5 @@
 ---
-title: "Reproducible Workflow with workflowr"
+title: "Matplotlib"
 author: "David Gerard"
 date: "`r Sys.Date()`"
 output:  
@@ -21,8 +21,5 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Improve reproducibility at every step of a data science project.
-- Learn about key workflow strategies to improve your data analysis efficiency.
-- Creating and sharing reproducible research code the workflowr way: <https://doi.org/10.12688/f1000research.20843.1>
-
-# Motivation
+- Data visualization with matplotlib
+- Chapter 4 of [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/03.00-introduction-to-pandas.html).
