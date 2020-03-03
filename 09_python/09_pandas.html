@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2020-03-02" />
+<meta name="date" content="2020-03-03" />
 
 <title>Data Manipulation with Pandas</title>
 
@@ -365,13 +365,14 @@ summary {
 
 <h1 class="title toc-ignore">Data Manipulation with Pandas</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2020-03-02</h4>
+<h4 class="date">2020-03-03</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#learning-objectives">Learning Objectives</a></li>
+<li><a href="#python-overview">Python Overview</a></li>
 <li><a href="#pandas-versus-tidyverse">Pandas versus Tidyverse</a></li>
 <li><a href="#importing-libraries">Importing libraries</a></li>
 <li><a href="#reading-in-and-printing-data">Reading in and Printing Data</a></li>
@@ -396,8 +397,33 @@ summary {
 <h1>Learning Objectives</h1>
 <ul>
 <li>Read in and manipulate data with pandas.</li>
-<li>Chapter 3 of <a href="https://jakevdp.github.io/PythonDataScienceHandbook/03.00-introduction-to-pandas.html">Python Data Science Handbook</a>.</li>
+<li>Chapter 3 of <a href="https://jakevdp.github.io/PythonDataScienceHandbook/">Python Data Science Handbook</a>.</li>
 </ul>
+</div>
+<div id="python-overview" class="section level1">
+<h1>Python Overview</h1>
+<table>
+<thead>
+<tr class="header">
+<th>In R I Want</th>
+<th>In Python I Use</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Base R</td>
+<td>numpy</td>
+</tr>
+<tr class="even">
+<td>dplyr/tidyr</td>
+<td>pandas</td>
+</tr>
+<tr class="odd">
+<td>ggplot2</td>
+<td>matplotlib/seaborn</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="pandas-versus-tidyverse" class="section level1">
 <h1>Pandas versus Tidyverse</h1>
@@ -744,7 +770,7 @@ select(estate, Price, Area)</code></pre></li>
 <pre class="r"><code>estate %&gt;%
   group_by(Bed, Bath) %&gt;%
   summarize(Price = mean(Price), Area = mean(Area))</code></pre></li>
-<li><p>You can get multiple summaries out by passing a vector of functions:</p>
+<li><p>You can get multiple summaries out by passing a list of functions:</p>
 <p><mark style="background-color: lightblue">Python</mark></p>
 <pre class="python"><code>estate.filter([&quot;Price&quot;, &quot;Area&quot;, &quot;Quality&quot;]) \
   .groupby(&quot;Quality&quot;) \

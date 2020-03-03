@@ -22,7 +22,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Learning Objectives
 
 - Read in and manipulate data with pandas.
-- Chapter 3 of [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/03.00-introduction-to-pandas.html).
+- Chapter 3 of [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/).
+
+# Python Overview
+
+| In R I Want | In Python I Use |
+|-------------|-----------------|
+| Base R      | numpy           |
+| dplyr/tidyr | pandas          |
+| ggplot2     | matplotlib/seaborn |
 
 # Pandas versus Tidyverse
 
@@ -413,7 +421,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
       summarize(Price = mean(Price), Area = mean(Area))
     ```
     
-- You can get multiple summaries out by passing a vector of functions:
+- You can get multiple summaries out by passing a list of functions:
 
     <mark style="background-color: lightblue">Python</mark>
     ```{python, eval = FALSE}
