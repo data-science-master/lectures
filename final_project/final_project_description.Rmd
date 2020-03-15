@@ -138,6 +138,10 @@ knitr::opts_chunk$set(echo = TRUE)
     - World Bank Country-level Statistics
     
         <https://databank.worldbank.org/>
+        
+    - O*NET database on work/worker characteristics:
+    
+        <https://www.onetcenter.org/database.html#individual-files>
       
 # (5 pts) Progress Report
 
