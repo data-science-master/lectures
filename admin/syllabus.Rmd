@@ -39,7 +39,7 @@ This course builds on the R/tidyverse programming skills developed in STAT-412/6
     - Git for Scientists by McBain: <https://milesmcbain.github.io/git_4_sci/>
     - OpenIntro Statistics by Diez, Cetinkaya-Rundel, and Barr: <https://www.openintro.org/stat/textbook.php?stat_book=os>
     - blogdown: Creating Websites with R Markdown by Xie, Thomas, and Hill: <https://bookdown.org/yihui/blogdown/>
-- **Course Website**: https://github.com/data-science-spring-2020
+- **Course Website**: <https://github.com/data-science-fall-2020>
 
 # Class Structure
 
