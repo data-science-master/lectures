@@ -26,3 +26,72 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Chapter 1 and Section 3.1 of [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
 
 # Motivation
+
+- **You should have a personal website**
+    - Makes you stand out compared to a LinkedIn page that only boring HR folks
+      seem to care about.
+    - You can post links to class projects and research projects so future
+      employers can tell that you're legit.
+    - My website is a little outdated (I made it back in grad school), but
+      it has still helped me during my career: <https://dcgerard.github.io/>
+  
+- You can create a project website:
+    - This facilitates open-source collaboration between researchers.
+    - E.g. I used such a website for notekeeping and collaborating with
+      my PI during my postdoc: <http://dcgerard.github.io/succotash_sims/analysis/index.html>
+
+- Other uses:
+    - Advertise specific software/papers <https://dcgerard.github.io/updog/>.
+    - Create a blog (say, on data science projects) <https://dcgerard.github.io/research/2018/03/16/updog.html>.
+    
+# Installation
+
+- We'll use the blogdown R package to build a website, so make sure you have
+  it installed:
+  
+    ```{r, eval = FALSE}
+    install.packages("blogdown")
+    ```
+
+- [Hugo](https://gohugo.io/) is a software that builds a website for you. 
+  Blogdown uses Hugo to make clean-looking websites. You can install it via:
+    ```{r, eval = FALSE}
+    blogdown::install_hugo()
+    ```
+
+# Getting started
+
+1. Set your working directory to the location on your local machine
+   where you want to save your website. Do this via 
+   
+    > Session > Set Working Directory > Choose Directory...
+
+2. Run the following in your R consul:
+
+    ```{r, eval = FALSE}
+    blogdown::new_site()
+    ```
+
+- This will populate a bunch of folders containing the contents of your website.
+
+- The `public/` folder contains the contents of your website. You will be able to upload everything in the `public/` folder to a host to publish your website online.
+
+- The other folders contain files used to make the files
+
+- You can view your website via 
+
+    > Addins > Serve Site
+    
+    A window with a preview of the website will pop up.
+    
+# Editing your website
+
+## New Theme
+
+## config.toml
+
+## content/
+
+- This folder is where you place R Markdown files. These R Markdown files will be converted to HTML files.
+
+# Publishing your website
