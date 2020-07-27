@@ -1,7 +1,7 @@
 ---
 title: "STAT 413/613 Data Science"
 author: "David Gerard"
-date: "`r Sys.Date()`"
+date: "Updated: `r Sys.Date()`"
 output: html_document
 ---
 
@@ -9,78 +9,96 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- **Time**: Tuesdays or Thursdays, 5:30 PM to 8:00 PM
+- **Time**: Mondays or Thursdays, 5:30 PM to 8:00 PM
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
-- **Phone**: 202-885-3022
-- **Office Hours**: Wednesdays and Thursdays from 3:00 PM to 5:00 PM
+- **Phone**: 202-885-3022 (not the best way to reach me)
+- **Virtual Office Hours (via Zoom)**: Tuesdays and Wednesdays from 3:00 PM to 5:00 PM
 
 # Overview of Topics and Course Objectives
-This course focuses on the collection, organization, analysis, interpretation, and presentation of data. Topics include the acquisition, cleaning, and imputation of data from a variety of sources; data visualization and graphing; data presentation and packaging; and programming considerations for large datasets. The course uses R packages and programming language.
+
+This course builds on the R/tidyverse programming skills developed in STAT-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, big data manipulation, R's statistical modeling functions, and dimensionality reduction and clustering for data exploration.
 
 # Learning Objectives:
-- Produce reproducible research using R
-- Import and analyze a dataset from .csv, .xml, JSON, API, MySQL
-- Effectively manipulate large data in R
-- Use graphical tools to visualize and understand data
-- Present results in both report and presentation form
-- Share results with others using tools such as shiny app and R presenter.
-- Apply concepts of the course to an application area of interest to the student.
+- Gain expertise in the `git` version control software.
+- Collaborate and share code using [GitHub](https://github.com/)
+- Scrape data from the web, either with or without using an API.
+- Implement vectorized operations in R using functional programming techniques.
+- Build and deploy data science web applications using R Shiny.
+- Review elementary statistics and implement basic statistical procedures in R.
+- Wrangle and analyze large datasets using `data.table`.
 - Understand the ethical questions associated with data collection and analysis.
-    
+
 # Materials
-- **Required**: Laptop computer 
-- **Books**: 
-    - R for Data Science by Wickham and Grolemund (O'Reilly): <http://r4ds.had.co.nz/>
-    - Advanced R by Wickham (O’Reilly): <https://adv-r.hadley.nz/>
+- **Required**: A computer with [R](https://cran.r-project.org/), [RStudio](https://rstudio.com/products/rstudio/download/), and [git](https://git-scm.com/downloads) installed.
+- **Books**: All course material is freely available online.
+    - R for Data Science by Wickham and Grolemund: <http://r4ds.had.co.nz/>
+    - Advanced R by Wickham: <http://adv-r.had.co.nz/>
     - Mastering Shiny by Wickham: <https://mastering-shiny.org/>
-    - Git for Scientists: <https://milesmcbain.github.io/git_4_sci/>
-    - OpenIntro Statistics: <https://www.openintro.org/stat/textbook.php?stat_book=os>
+    - Git for Scientists by McBain: <https://milesmcbain.github.io/git_4_sci/>
+    - OpenIntro Statistics by Diez, Cetinkaya-Rundel, and Barr: <https://www.openintro.org/stat/textbook.php?stat_book=os>
     - blogdown: Creating Websites with R Markdown by Xie, Thomas, and Hill: <https://bookdown.org/yihui/blogdown/>
 - **Course Website**: https://github.com/data-science-spring-2020
 
 # Class Structure
 
-This class will be a blend of lecture, class discussion and labs. I want you all to be involved during class and please do not hesitate to ask questions whenever something is unclear to you.  You are expected to attend all class meetings, as I believe that attending class regularly contributes greatly to your performance in the course. It is understandable that you may have to miss class on the rare occasion. You are responsible for any assignments or papers given out during any missed class. Please obtain these materials from a colleague BEFORE the next class meeting.
+We will hold virtual classes via Zoom during the scheduled class times. Class sessions will be a blend of lecture, class discussion, exercises, and labs. During exercises and labs, I will split the class up into breakout sessions of 3-4 students. They will code together using repl.it multiplayer and one group will be chosen to present their results to the class.
 
-I will use GitHub to post all class materials.
+Though we will be holding live lectures, I will also post video lectures to Blackboard (in case your video feed drops, or other commitments pop up).
+
+We will have three live sessions during the semester. These sessions will consist of hackathons --- a collaborative project environment targeting the completion of some software/analytic task in a short period of time. Because of the extraordinary and historical significance of this year, there are many topical subjects we can explore, depending on student interest:
+
+- [Election polling data](https://projects.fivethirtyeight.com/polls/) and [FiveThirdyEight's](https://github.com/fivethirtyeight/checking-our-work-data) predictive accuracy for presidential elections.
+- [COVID-19 model predictive accuracy](https://github.com/youyanggu/covid19_projections).
+- The impact of racial inequality on [higher education](https://collegescorecard.ed.gov/data/), [general socioeconomic indicators](https://gssdataexplorer.norc.org/), and [criminal justice](https://www.bjs.gov/index.cfm?ty=dcdetail&iid=269).
+
+Attendance during live sessions is **entirely voluntary**. A short, alternative assignment will be provided for those who do not wish to or cannot attend.
+
+# Course Material
+
+Almost all course material will be posted and accessed through GitHub. `git` is a widely used [version control system](https://en.wikipedia.org/wiki/Version_control) for collaborating, deploying, and managing data science projects. `git` works by saving snapshots, or "commits", of your projects. These snapshots are always retrievable, even if you make further changes to your code/notes/reports. You can also write small descriptions of what you have accomplished since the last time you committed. [GitHub](https://github.com/) is a website that hosts `git` repositories. We will spend the first week or two covering `git` and the command line. Following that, all assignments will be accessed and submitted through `git`.
 
 # Graded Work
 
 ## Assignments 
 
-- During the semester I will assign, collect, and grade assignments.  There will be approximately 8-10 formal assignments throughout the semester. 
-- Assignments will be posted and returned on GitHub. **I expect frequent commits while you are completing your assignment.** Lack of frequent commits may result in point deductions.
-- You may receive assistance from other students in the class and me, but your submissions must be composed of your own thoughts, coding and words. I expect you to get ideas from online resources such as Stackoverflow or GitHub when you get stuck.  Please cite your source when you do so and be specific about what you have added to it.  You should be able to redo the code "cold" when you do this.  Failure to do so is a violation of AU’s Academic Integrity Code.
-- Under extraordinary circumstances, I may accept a late assignment if I see some progress and a **consistent commit history** in that assignment. Though, I also will drop the lowest assignment grade. You should not use this as an excuse to skip an assignment, but rather to handle a situation where you are unable to turn in your assignment in a timely manner.
+- There will be approximately 8-10 formal homework assignments throughout the semester. 
+- Homework assignments will be posted and returned on GitHub. 
+    - Best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
+    - I expect frequent commits. At the minimum, I expect you to commit after you have completed each question.
+    - I expect informative messages for each commit.
+    - Example good message: "Completes Question 1.2 that required tidying the college scorecard data."
+    - Example bad message: "More stuff"
+    - **Lack of frequent and informative commits will result in up to a 20% reduction in an assignment grade.**
+- Because `git` allows me to view your progress on an assignment, I will sometimes accept a late assignment if I see some progress and a **consistent commit history** in that assignment. This should only be used under extraordinary circumstances. If I do not see any progress in an assignment, I will not accept a late submission.
+- To account for life circumstances that pop up, I will also drop the lowest homework assignment grade.
 
-## Exams
+## Hackathons
 
-We will have approximately two in-class exams.  Any material covered in class, reading assigned, or on assignments is "fair game."  No make-up exams will be given unless you have an extremely compelling excuse such as observance of a religious holiday (in which case you need to let me know in advance) or a documented medical emergency.
+- There will be three in-person sessions during this semester. I plan on running a hackathon each session. 
+- You will be graded on your participation during the hackathon. Don't stress too much about this. Just try your hardest and try to have some fun analyzing the data.
+- Attending the live sessions is entirely voluntary. I will provide reading assignments for students who cannot or do not wish to attend in-person.
 
-Exams will be a mix of closed-note questions and code review and open book coding exercises.
+## Group Project
 
-## Project
+All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved.
 
-Students taking the course for graduate credit (STAT 613) will prepare a final project using the tools learned in the class.  Work with me to get your topic approved.  Undergraduate students may complete a final project at their option.  
+Your project will involve creating a Shiny app to interactively analyze a real-world dataset. As a part of the project, you will present this Shiny app to the rest of the class during a virtual presentation during final exam week.
 
-Your project will involve creating a Shiny app to interactively analyze a real-world dataset. Your Shiny app should be able to perform at least one interactive inference task (e.g. choosing variables to run a simple linear regression on). As a part of the project, you will present this Shiny app to the rest of the class.
+Those taking this course for graduate credit (STAT 613) will also be required to submit a written report detailing a statistical analysis concerning their project topics. You will run a statistical inference procedure, verify the assumptions of your statistical procedure, and write up concluding remarks.
 
 # Grading
-
-You should be able to explain your work on assignments, exams, and project and your rationale.  Based on your explanation (or lack thereof), I may modify your grade.
 
 Your final grade will be determined by:
 
 ```{r, echo=FALSE, message = FALSE}
 library(tidyverse)
-gradedf <- tribble(~Component, ~`Graduate (613)`, ~`Undergraduate (413)`,
-                   "Assignments", 0.40, 0.40,
-                   "Exam 1", 0.20, 0.20,
-                   "Exam 2", 0.20, 0.20,
-                   "Final Project", 0.20, 0,
-                   "Attendance and Participation", 0, 0.2)
+gradedf <- tribble(~Component, ~`Weight`,
+                   "Assignments", 0.5,
+                   "Hackathons", 0.15,
+                   "Final Project", 0.3,
+                   "Attendance and Participation", 0.05)
 knitr::kable(gradedf)
 ```
 
@@ -143,56 +161,51 @@ pl <- ggplot(dfdat, aes(x = x, y = y, color = lg)) +
 print(pl)
 ```
 
+# Academic Integrity and Group Work
+
+- All students should familiarize themselves with American University's Academic Code of Integrity: <https://www.american.edu/academics/integrity/code.cfm>.
+- You may receive assistance from other students in the class and me, but your submissions must be composed of your own thoughts, coding and words. 
+- I expect you to get ideas from online resources such as Stackoverflow or GitHub when you get stuck (this is what real programmers and data scientists do).  Please cite your source **using urls** when you do so.
+- You should be able to explain your work on assignments and the project and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.**
+- I wish to emphasize that looking/using past homework solutions is a violation of the Academic Code of Integrity (even if it is "just" for confirmation purposes).
+- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously. 
+- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who are currently taking the course.
+- There are a bunch of small mistakes in my old homework solutions. It is easy for me to see if you copied these mistakes and have been using my solutions. It is usually not enough to just change variable names to avoid detection.
+- All solutions that I provide are under my copyright. These solutions are for personal use only and may not be distributed to anyone else. Giving these solutions to others, including other students or posting them on the internet, is a violation of my copyright and a violation of the student code of conduct.
+
 # Important Dates
 
-Note that exam dates are subject to (and probably will) change.
-
-- Tuesday Section Important Dates:
-    - 02/18: Midterm 1.
-    - 03/10: Spring break. No class.
-    - 04/14: Midterm 2.
-    - 04/17: Final Project Progress Report Due.
-    - 04/28: Spring study day. No class.
-    - 05/05: Final Project Presentations (During Final Exam Period).
+- Monday Section Important Dates:
+    - 09/07/2020: Labor Day, no classes, university offices closed.
+    - 11/09/2020: Final Project Progress Report Due.
+    - 12/07/2020--12/12/2020 (TBD): Final Project Presentations (During Final Exam Period). Shiny apps and written reports (for graduate students) also due.
 
 - Thursday Section Important Dates:
-    - 02/20: Midterm 1.
-    - 03/12: Spring break. No class.
-    - 04/16: Midterm 2.
-    - 04/17: Final Project Progress Report Due.
-    - 04/30: Final Project Presentations (During Final Exam Period).
+    - 11/12/2020: Final Project Progress Report Due.
+    - 11/26/2020: Thanksgiving holiday; no classes; university offices closed
+    - 12/07/2020--12/12/2020 (TBD): Final Project Presentations (During Final Exam Period). Shiny apps and written reports (for graduate students) also due.
 
 # Assistance/Support
 
 Before receiving any assistance on a specific homework problem, please make sure that you have read through the class materials, and that you have made a fair attempt at the problem. 
 
-1. Always feel welcome to come visit me during my office hours (no appointment necessary). I sometimes provide tea. Office hours can be busy so please come prepared with specific questions.  **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
-2. I also set aside a few hours each week to meet with students outside of office hours. To accommodate students who commute, I can also meet over Skype or Google Hangouts. Please send me an email if you are unable to come to my office hours and need help.
-3. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
-4. You are also encouraged to ask me questions online via email. 
-5. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
+1. **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
+2. Always feel welcome to talk to me during my office hours (no appointment necessary). These hours are for you to ask questions. Office hours can be busy so please come prepared with specific questions.
+3. I also set aside a few hours each week to meet with students outside of office hours. Just send me an email to ask for a private meeting.
+4. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
+5. You are also encouraged to ask me questions online via email. 
+6. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
     - The Academic Support and Access Center (x3360, MGC 243) supports the academic development and educational goals of all AU students while also providing support to students with disabilities. They offer workshops on topics of interest to all students such as time management, note taking, critical thinking, memory skills, and test taking. Additional support includes free private and group tutoring in many subjects, supplemental instruction, The Math Lab and The Writing Lab. 
     - Students wishing to receive accommodations for a disability, are to bring their documentation directly to the Academic Support and Access Center (ASAC-<http://www.american.edu/ocl/asac/index.cfm>), in MGC 243, x3360. ASAC, in turn, will notify me of the accommodation required. Keep in mind that accommodations can only begin when I have been notified. This means that students should take care of this at the start of the semester, **before** the work for which they require accommodation is due.
     - The Counseling Center (x3500, MGC 214) is here to help students make the most of their university experience, both personally and academically. We offer individual and group counseling, urgent care, self-help resources, referrals to private care, as well as programming to help you gain the skills and insight needed to overcome adversity and thrive while you are in college. Contact the Counseling Center to make an appointment in person or by telephone, or visit the Counseling Center page on the AU website for additional information.
     - Center for Diversity & Inclusion (X3651, MGC 201) is dedicated to enhancing LGBTQ, Multicultural, First Generation, and Women's experiences on campus and to advance AU's commitment to respecting & valuing diversity by serving as a resource and liaison to students, staff, and faculty on issues of equity through education, outreach, and advocacy.
     - OASIS: The Office of Advocacy Services for Interpersonal and Sexual Violence (X7070) provides free and confidential advocacy services for anyone in the campus community who is impacted by sexual violence (sexual assault, dating or domestic violence, and stalking).
     
-# Cheating
-
-- All students should familiarize themselves with American University's Academic Code of Integrity: <https://www.american.edu/academics/integrity/code.cfm>.
-- I wish to emphasize that looking/using past homework solutions is a violation of the Academic Code of Integrity (even if it is "just" for confirmation purposes). 
-- **Note**: I purposefully make unconventional (weird) decisions in my homework solutions. These are decisions that students would never make. I check for these throughout the semester for evidence of cheating.
-- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously. 
-- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who are currently taking the course.
-- Copying my solutions and just changing variable names is a violation of the academic code of integrity.
-- All solutions that I provide are under my copyright. These solutions are for personal use only and may not be distributed to anyone else. Giving these solutions to others, including other students or posting them on the internet, is a violation of my copyright and a violation of the student code of conduct.
-- Communicating with anyone during a midterm is a violation of the Academic Code of Integrity. I will compare student exams and report solutions that are too similar to each other.
-    
 # A Few Additional Notes
 
 - I expect you to be courteous to me and your fellow classmates both inside and outside of the classroom. This generally just involves a bit of common sense.  Cell phones need to be silenced and put away during class. Laptops should be out during class time for use only on class activities. Please save texting, typing/sending emails, checking Facebook, etc. for outside of class time.  Any correspondence pertaining to the course needs to be handled in a respectful manner.
 - A grade of incomplete will only be given under extreme circumstances and will not be granted to any student who is failing.
-- In the event of an emergency, please refer to the AU Web site (<http://www.american.edu/emergency>) and the AU information line at (202) 885-1100 for general university-wide information. In the event that class is cancelled for ANY reason I will communicate with you via email and Blackboard to let you know what work, reading, etc. you will be responsible for.
+- In the event of an emergency, please refer to the AU Web site (<http://www.american.edu/emergency>) and the AU information line at (202) 885-1100 for general university-wide information. In the event that class is canceled for ANY reason I will communicate with you via email and Blackboard to let you know what work, reading, etc. you will be responsible for.
 
 
 
