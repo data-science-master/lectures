@@ -15,16 +15,13 @@ knitr::opts_chunk$set(echo       = TRUE,
 ```
 
 The below list contains the tentative schedule and required 
-readings for STAT 413/613 during Spring Semester 2019.
+readings for STAT 413/613 during Fall Semester 2020.
 
-- Week 1:
+- Weeks 1/2:
     - Version Control with git.
     - Collaboration and software-hosting with GitHub.
     - [A Quick Introduction to Version Control with Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
     - [Setting up GitHub Classroom](https://github.com/jfiksel/github-classroom-for-students)
-- Week 2:
-    - Manipulating dates and times with lubridate.
-    - Chapter 16 of [RDS](https://r4ds.had.co.nz/).
 - Week 3:
     - Manipulating Vectors and Lists using base R syntax.
     - Chapter 20 of [RDS](https://r4ds.had.co.nz/).
@@ -33,15 +30,16 @@ readings for STAT 413/613 during Spring Semester 2019.
     - Iterators in base R.
     - Iterators in purrr.
     - Chapter 21 of [RDS](https://r4ds.had.co.nz/).
-- Week 6:
-    - Midterm 1. 
-    - Covers weeks 1 through 4.
-- Weeks 5/7: 
+- Weeks 5/6: 
     - Learn the basics of Shiny Apps.
     - Learn the basics of Shiny layouts.
-    - Learn the basics reactivity and the the `server()` function in Shiny Apps.
+    - Learn the basics of reactivity and the the `server()` function in Shiny Apps.
     - Edit style of Shiny App with HTML elements.
     - Chapters 1, 2, 3, 4, and 13 of [Mastering Shiny](https://mastering-shiny.org/).
+- Week 7:
+    - APIs and R.
+    - Basics of Web Scraping
+    - [Overview of rvest](https://rvest.tidyverse.org/).
 - Week 8/9: 
     - Review intermediate Statistics (STAT 302/320/614).
     - Probability distributions in R.
@@ -56,20 +54,19 @@ readings for STAT 413/613 during Spring Semester 2019.
     - Chapter 25 from [RDS](https://r4ds.had.co.nz/).
     - Chapter 8 of [OpenIntro Statistics (Fourth Edition)](https://www.openintro.org/stat/textbook.php)
 - Week 11:
+    - Manipulating dates and times with lubridate.
+    - Chapter 16 of [RDS](https://r4ds.had.co.nz/).
+- Week 12:
     - Reading and manipulating large datasets in R.
     - `data.table` syntax for manipulating data frames.
     - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
-- Week 12:
-    - APIs and R.
-    - Basics of Web Scraping
-    - [Overview of rvest](https://rvest.tidyverse.org/).
 - Week 13:
-    - Midterm 2.
-    - Covers weeks 5 through 11
-- Week 14:
     - Learn how to create a website with R Markdown.
     - Create a personal or project website.
     - Chapter 1 and Section 3.1 of the [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
+- Week 14: 
+    - Dimensionality reduction in R.
+    - PCA, t-SNE
 - Final Exam Period:
     - Final project presentations.
     
