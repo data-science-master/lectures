@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
-- **Phone**: 202-885-3022 (not the best way to reach me)
 - **Virtual Office Hours (via Zoom)**: Tuesdays and Wednesdays from 3:00 PM to 5:00 PM
 
 # Overview of Topics and Course Objectives
@@ -43,17 +42,15 @@ This course builds on the R/tidyverse programming skills developed in STAT-412/6
 
 # Class Structure
 
-We will hold virtual classes via Zoom during the scheduled class times. Class sessions will be a blend of lecture, class discussion, exercises, and labs. During exercises and labs, I will split the class up into breakout sessions of 3-4 students. They will code together using repl.it multiplayer and one group will be chosen to present their results to the class.
+We will hold virtual classes via Zoom during the scheduled class times. Class sessions will be a blend of lecture, class discussion, exercises, and labs. There is no expectation to share video during class if you do not want to, unless you have a really cool Zoom background.
 
 Though we will be holding live lectures, I will also post video lectures to Blackboard (in case your video feed drops, or other commitments pop up).
 
-We will have three live sessions during the semester. These sessions will consist of hackathons --- a collaborative project environment targeting the completion of some software/analytic task in a short period of time. Because of the extraordinary and historical significance of this year, there are many topical subjects we can explore, depending on student interest:
+To foster collaboration, at the beginning of the semester I will divide students into teams of about 4 students. You can discuss homework issues, coding problems, etc with your teammates. The forum for team communication will be through GitHub.
 
-- [Election polling data](https://projects.fivethirtyeight.com/polls/) and [FiveThirdyEight's](https://github.com/fivethirtyeight/checking-our-work-data) predictive accuracy for presidential elections.
-- [COVID-19 model predictive accuracy](https://github.com/youyanggu/covid19_projections).
-- The impact of racial inequality on [higher education](https://collegescorecard.ed.gov/data/), [general socioeconomic indicators](https://gssdataexplorer.norc.org/), and [criminal justice](https://www.bjs.gov/index.cfm?ty=dcdetail&iid=269).
+These are trying times, and so attending lectures will be voluntary. I still expect you to learn the material. There is a participation portion for the class grade. If you cannot attend lectures, you can fulfill the participation requirement by posting comments/questions on GitHub, or answering other students' questions on GitHub.
 
-Attendance during live sessions is **entirely voluntary**. A short, alternative assignment will be provided for those who do not wish to or cannot attend.
+During exercises and labs, I will split the class up into breakout sessions of 2-4 students. One student should share their screen and the other students can discuss and type suggestions while the group solves the exercise. One group will be chosen to present their results to the class.
 
 # Course Material
 
@@ -65,7 +62,7 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 - There will be approximately 8-10 formal homework assignments throughout the semester. 
 - Homework assignments will be posted and returned on GitHub. 
-    - Best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
+    - The best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
     - I expect frequent commits. At the minimum, I expect you to commit after you have completed each question.
     - I expect informative messages for each commit.
     - Example good message: "Completes Question 1.2 that required tidying the college scorecard data."
@@ -73,12 +70,6 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
     - **Lack of frequent and informative commits will result in up to a 20% reduction in an assignment grade.**
 - Because `git` allows me to view your progress on an assignment, I will sometimes accept a late assignment if I see some progress and a **consistent commit history** in that assignment. This should only be used under extraordinary circumstances. If I do not see any progress in an assignment, I will not accept a late submission.
 - To account for life circumstances that pop up, I will also drop the lowest homework assignment grade.
-
-## Hackathons
-
-- There will be three in-person sessions during this semester. I plan on running a hackathon each session. 
-- You will be graded on your participation during the hackathon. Don't stress too much about this. Just try your hardest and try to have some fun analyzing the data.
-- Attending the live sessions is entirely voluntary. I will provide reading assignments for students who cannot or do not wish to attend in-person.
 
 ## Group Project
 
@@ -96,9 +87,8 @@ Your final grade will be determined by:
 library(tidyverse)
 gradedf <- tribble(~Component, ~`Weight`,
                    "Assignments", 0.5,
-                   "Hackathons", 0.15,
-                   "Final Project", 0.3,
-                   "Attendance and Participation", 0.05)
+                   "Final Project", 0.4,
+                   "Attendance and Participation", 0.1)
 knitr::kable(gradedf)
 ```
 
