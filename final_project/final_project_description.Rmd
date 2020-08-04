@@ -63,6 +63,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - I will accept other sources as long as they are comparably large and complicated. For example, there are many open data portals from state agencies (<https://opendata.dc.gov/>).
 
+- Lots of API's to cool datasets can be found here: <https://github.com/public-apis/public-apis>
+
 - I will not accept small curated datasets, or those that come from a paper where the data has already been analyzed.
 
 - I will not accept any data that is too clean. For example, I will not accept any data obtained from Kaggle.
@@ -143,6 +145,18 @@ knitr::opts_chunk$set(echo = TRUE)
     - O*NET database on work/worker characteristics:
     
         <https://www.onetcenter.org/database.html#individual-files>
+        
+    - Google trends
+      
+        <https://trends.google.com/trends/>
+        
+        <https://cran.r-project.org/package=gtrendsR>
+
+    - eBird database
+    
+        <https://ebird.org/science/download-ebird-data-products>
+        
+        <https://cran.r-project.org/package=auk>
       
 # (5 pts) Progress Report
 
