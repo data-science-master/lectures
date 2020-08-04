@@ -67,6 +67,22 @@ ggplot2::theme_set(ggplot2::theme_bw())
     2. Make sure you have "New terminals open with: Git Bash".
     3. Exit out of the old terminal. Restart R Studio.
     4. Then do Tools > Terminal > New Terminal.
+    
+# List of git commands
+
+- `git init`: Initialize a git repository. *Only do this once per project*.
+- `git status`: Show which files are staged in your working directory, and which are modified but not staged.
+- `git add`: Add modified files from your working directory to the stage.
+- `git diff`: Look at how files in the working directory have been modified.
+- `git diff --staged`: Look at how files in the stage have been modified.
+- `git commit -m "[descriptive message]"`: commit your staged content as a new commit snapshot.
+- `git clone <url>`: Download a fresh copy of a remote repository onto your local machine.
+- `git remote add <remote> <url>`: Link a local repository with a remote repository. The nickname of the remote repository is `<remote>`.
+- `git push <remote> <branch>`: Push the changes from branch `<branch>` to the remote repository named `<remote>`
+- `git pull <remote> <branch>`: Pull any modifications from `<remote>` into your local machine in branch `<branch>`.
+- `git branch <branch>`: Create a branch called `<branch>`. Note that the default branch is called `master`.
+- `git checkout <branch>`: Move to the `<branch>` branch.
+- `git merge <branch>`: Merge the changes in `<branch>` into the current branch.
 
 # Version Control: 
 
@@ -345,10 +361,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - **Exercise**: Commit your changes. Use a nice commit message.
 
-# Collaborate Using GitHub
+# Share Code Using GitHub
 
-- GitHub is a website that hosts git repositories. Only noobs confuse git 
-  with GitHub.
+- GitHub is a website that hosts git repositories. Only noobs confuse git with GitHub. So when you write up your resume, you should say you know git, *not* GitHub.
   
 - To host a repository on GitHub you need to
     1. Create a repo on GitHub.
@@ -415,15 +430,131 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - **Exercise**: Add some comments before your code chunk in life_exp.Rmd
   describing what the code is doing. Then save the file, stage the file for commit,
   commit the changes, then push the changes to GitHub.
+  
+# Collaborate Using GitHub
+
+- There are two workflows for collaborating depending on the nature of the collaboration:
+    1. [Branching](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging): for group projects.
+    2. [Forking](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo): for contributing to someone else's project.
+    
+## Branching workflow for collaboration
+
+- A branch is an "alternative universe" of your project, where you can experiment with new ideas (e.g. new data analyses, new data transformations, new statistical methods). After experimenting, you can then "merge" your changes back into the master branch.
+
+- Branching isn't just for group collaborations, you can use branching to collaborate with yourself, e.g., if you have a new idea you want to play with but do not want to have that idea in master yet.
+  
+- The "master" branch (the default in GitHub) is your best draft. You should consider anything in "master" as the best thing you've got.
+  
+- The workflow using branches consists of
+    1. Create a branch with an informative title describing its goal(s).
+    2. Add commits to this new branch.
+    3. Merge the commits to master
+
+### Create a branch
+
+- You create a branch with the name `<branch>` by
+
+    ```{bash, eval = FALSE}
+    git branch <branch>
+    ```
+
+- Suppose we wanted to calculate some summary statistics, but we are not sure if we want to include these in the report. Let's create a branch where we explore these summary statistics.
+
+    ```{bash, eval=FALSE}
+    git branch sumstat
+    ```
+
+- You can see the list of branches (and the current branch) with
+    ```{bash, eval = FALSE}
+    git branch
+    ```
+
+### Move between branches
+
+- You switch between branches with:
+
+    ```{bash, eval = FALSE}
+    git checkout <branch>
+    ```
+    
+- Move to the sumstat branch with
+
+    ```{bash, eval = FALSE}
+    git checkout sumstat
+    ```
+
+### Edit Branch
+
+- When you are on a branch, you can edit and commit as usual. Do this now with the following exercise:
+
+- **Exercise**: Calculate the average life expectancy (averaging over countries) in 2000. Add this to life_exp_analysis.Rmd. Commit your changes.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    gapminder_unfiltered %>%
+      filter(year == 2000) %>%
+      summarize(meanlife = mean(lifeExp))
+    ```
+    
+### Push branch to GitHub
+
+- You can push your new branch to GitHub just like you can push your master branch to GitHub:
+    ```{bash, eval=FALSE}
+    git push origin <branch>
+    ```
+    
+### Merge changes into master
+
+- Suppose you are satisfied with your changes in your new branch, then you'll want to merge these into the master branch. You can do this on GitHub ([see here](./01_git_branch.html)). If you do so, then don't forget to pull the changes from master back into your local machine.
+    ```{bash, eval=FALSE}
+    git pull origin master
+    ```
+
+- Alternatively, you can merge the changes in your local machine. First, checkout the master branch.
+
+    ```{bash, eval=FALSE}
+    git checkout master
+    ```
+
+- Then use `merge` to merge the changes from `<branch>` into master.
+
+    ```{bash, eval=FALSE}
+    git merge sumstat
+    ```
+
+- Don't forget to push your changes to GitHub
+
+    ```{bash, eval=FALSE}
+    git push origin master
+    ```
+
+### Resolving Merge Conflicts
+
+- If two branches with incompatible histories try to merge, 
+  then git does not merge them.
+
+- Instead, it creates a "merge conflict", which you need to resolve.
+
+- Instructions on resolving merge conflicts can be found here:
+  <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/resolving-a-merge-conflict-using-the-command-line>
+
+## Forking workflow for collaboration
+
+- "Forking" is another form of collaboration, where you contribute to a repo that you do not own.
+
+- "Forking" means to create a copy of a repo. 
+
+- The steps to collaborate in the forking pipeline is:
+  1. Fork a repo to your GitHub account.
+  2. Clone your forked repo to your local machine.
+  3. Edit-stage-commit the files.
+  4. Push the files back to your forked repo.
+  5. Request the original owner to pull your changes into their repo (a "pull request").
+
+- Let's use the forking pipeline to extend each-other's code to finalize the plot.
 
 ### Fork
 
-- We are going to extend each-other's code to finalize the plot.
-
-- Pair-up and exchange your GitHub username. Search for that person on GitHub,
-  and go to their "life_exp_USERNAME" repository. The url should be something like
-  "https://github.com/PARTNERNAME/life_exp_PARTNERNAME" where "PARTNERNAME" is your
-  partner's username.
+- Pair-up and exchange your GitHub username. Search for that person on GitHub, and go to their "life_exp_USERNAME" repository. The url should be something like "https://github.com/PARTNERNAME/life_exp_PARTNERNAME" where "PARTNERNAME" is your partner's username.
   
 - At the top right, click the "Fork" button. 
 
@@ -431,13 +562,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ### Clone
 
-- If there is a repo already up on GitHub, you can clone a copy to your 
-  local machine.
+- If there is a repo already up on GitHub, you can clone a copy to your local machine.
 
 - Use `git clone` to create a local version of a repo on GitHub.
 
-- Navigate to a directory (outside of your own git repo) where you would
-  like to place your partner's git repo.
+- Navigate to a directory (outside of your own git repo) where you would like to place your partner's git repo.
   
 - Clone the forked version of your partner's repo to your local machine:
 
@@ -450,16 +579,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{bash, eval=FALSE}
     ls
     ```
+    
+- *Note*: You can clone not just repos that you've forked, but *any* git repo that you have access to online (e.g. public repos).
   
 ### Edit, commit, push
 
 - Enter the new repo (the forked version of your partner's repo).
 
-- **Exercise**: In your partner's file, create a scatterplot of year versus 
-  maximum life expectancy. Color code by country, and add a single OLS line.
-  Your plot should look like this:
+- **Exercise**: In your partner's file, create a scatterplot of year versus maximum life expectancy. Color code by country, and add a single OLS line. Your plot should look like this:
   
-    ```{r, eval=TRUE, echo=FALSE}
+    ```{r, eval=TRUE, echo=FALSE, message=FALSE}
     sumdat %>%
       ggplot(aes(x = year, y = lifeExp)) +
       geom_point(aes(color = country)) +
@@ -471,43 +600,33 @@ ggplot2::theme_set(ggplot2::theme_bw())
       scale_color_discrete(name = "Country")
     ```
     
-- **Exercise**: Save the modified file, then stage and commit the changes. 
-  Finally, push the changes to your forked repo.
+- **Exercise**: Save the modified file, then stage and commit the changes. Finally, push the changes to your forked repo.
 
 ### Submit pull request
 
-- A "pull request" is a request for your partner to incorporate the changes
-  that you made in your forked version of their repository.
+- A "pull request" is a request for your partner to incorporate the changes that you made in your forked version of their repository.
 
-- Navigate to your forked version of your partner's repo up on GitHub. Then
-  click on "New pull request".
+- Navigate to your forked version of your partner's repo up on GitHub. Then click on "New pull request".
   
     ![](./graphics/pull_request.png)\ 
     
-- Write an informative title and message on what your code does,
-  then click "Create pull request".
+- Write an informative title and message on what your code does, then click "Create pull request".
   
     ![](./graphics/repo7.png)\ 
   
 ### Accept pull request
 
-- You can view all pull requests that folks have sent you from the
-  "Pull requests" tab.
+- You can view all pull requests that folks have sent you from the "Pull requests" tab.
   
     ![](./graphics/repo8.png)\ 
     
-- After you navigate to the pull request your partner sent you, you can
-  see the changes that they made under the "Files changed" tab. You can
-  write comments --- for example asking them to change the code before
-  you accept the merge request. Or you can can just accept the merge
-  request by hitting "Merge pull request".
+- After you navigate to the pull request your partner sent you, you can see the changes that they made under the "Files changed" tab. You can write comments --- for example asking them to change the code before you accept the merge request. Or you can can just accept the merge request by hitting "Merge pull request".
   
     ![](./graphics/repo9.png)\
 
 ### Pull changes to your local machine.
 
-- Use `git pull` whenever there are modifications on GitHub and you want 
-  to bring your local repo up-to-date.
+- Use `git pull` whenever there are modifications on GitHub and you want to bring your local repo up-to-date.
   
     ```{bash, eval=FALSE}
     git pull
@@ -518,11 +637,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Commit fairly frequently. On the homework, 
   **you should commit each time you complete a homework question.**
   
-- Usually, you should only commit plain text. The reason for this is that 
-  git is actually tracking **changes** in files, not the files themselves.
-  This is very efficient for plain text files. But for
-  non-plain text files the whole file is usally changed when you change a 
-  component, so git ends up saving the whole file each each time you change it.
+- Usually, you should only commit plain text. The reason for this is that  git is actually tracking **changes** in files, not the files themselves. This is very efficient for plain text files. But for non-plain text files the whole file is usally changed when you change a component, so git ends up saving the whole file each each time you change it.
 
 # Parting Wisdom from [XKCD](https://xkcd.com/1597/)
 

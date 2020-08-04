@@ -28,17 +28,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Motivation and Background
 
-- We previously learned how to fork a repo. This allows you to collaborate
-  on a repo that you don't own.
+- We previously learned how to fork a repo. This allows you to collaborate on a repo that you don't own.
 
-- You might also share a repo with someone. In this case, we use *branches*
-  rather than forks.
+- You might also share a repo with someone. In this case, we use *branches* rather than forks.
   
-- A branch is a copy of your repo where you experiment with new ideas
-  (e.g. new data analyses, new data transformations, new statistical methods).
+- A branch is an "alternative universe" of your project, where you can experiment with new ideas (e.g. new data analyses, new data transformations, new statistical methods). After experimenting, you can then "merge" your changes back into the master branch.
   
-- The "master" branch (the default in GitHub) is your best draft. You should
-  consider anything in "master" as the best thing you've got.
+- The "master" branch (the default in GitHub) is your best draft. You should consider anything in "master" as the best thing you've got.
   
 - The workflow using branches consists of
     1. Create a branch with an informative title describing its goal(s).
