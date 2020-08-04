@@ -12,61 +12,62 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Important Dates
 
-- Tuesday Section Important Dates:
-    - 03/06/2020 at 5:30 PM: Teams and datasets are chosen.
-    - 04/17/2020 at 11:59 PM: Progress report due.
-    - 05/05/2020 at 5:30 PM: Shiny apps due.
-    - 05/05/2020 from 5:30 PM to 8:00 PM (final exam period): Project presentations.
-
+- Monday Section Important Dates:
+    - 10/05/2020 at 5:30 PM: Teams and datasets are chosen.
+    - 11/09/2020 at 5:30 PM: Progress Report Due.
+    - 12/07/2020 at 5:30 PM: Shiny apps and written reports (for graduate students) also due.
+    - 12/07/2020--12/12/2020 (TBD): Project Presentations (During Final Exam Period). 
+    
 - Thursday Section Important Dates:
-    - 03/06/2020 at 5:30 PM: Teams and datasets are chosen.
-    - 04/17/2020 at 11:59 PM: Progress report due.
-    - 04/30/2020 at 5:30 PM: Shiny apps due.
-    - 04/30/2020 from 5:30 PM to 8:00 PM (final exam period): Project presentations.
+    - 10/08/2020 at 5:30 PM: Teams and datasets are chosen.
+    - 11/12/2020 at 5:30 PM: Progress Report Due.
+    - 12/07/2020 at 5:30 PM: Shiny apps and written reports (for graduate students) also due.
+    - 12/07/2020--12/12/2020 (TBD): Project Presentations (During Final Exam Period). 
 
 # Grade Breakdown
 
 50 pts total:
 
-- (5 pts) Team and data selection.
-- (5 pts) Progress report.
-- (10 pts) GitHub repo.
-- (20 pts) Shiny App
-- (10 pts) Presentation
-
+- Undergraduate Students (413)
+    - (5 pts) Team and data selection.
+    - (5 pts) Progress report.
+    - (10 pts) GitHub repo.
+    - (20 pts) Shiny App
+    - (10 pts) Presentation
+    
+- Graduate Students (613)
+    - (5 pts) Team and data selection.
+    - (5 pts) Progress report.
+    - (10 pts) GitHub repo.
+    - (10 pts) Shiny App.
+    - (10 pts) Statistical analysis written report.
+    - (10 pts) Presentation.
 
 # General Description
 
-- The final project consists of a real data analysis, culminating in
-  presenting the results of your analysis in the form of a Shiny App.
-  
-- You will choose a dataset to analyse. Based on the results of the analysis,
-  you will choose what to present in your Shiny App. 
+- The final project consists of a real data analysis, culminating in presenting the results of your analysis in the form of a Shiny App.
 
-- The final project is required for all those enrolled in STAT 613. It is
-  optional for those enrolled in STAT 413.
+- For graduate students, each **individual** will have to also submit a report detailing a statistical analysis concerning the selected project. That is, the written report is *not* a group activity.
+  
+- You will choose a dataset to analyze. Based on the results of the analysis, you will choose what to present in your Shiny App. 
 
 # (5 pts) Team and Data Selection
 
 - For the final project you will work in groups of size 2 (minimum) or 3 (maximum). 
 
-- Below are some possible sources for data. Each dataset may only be used by 
-  one group.
+- Below are some possible sources for data. Each dataset may only be used by one group.
 
-- If you have had a class with me before using these datasets, then you must
-  choose a different dataset to analyze.
+- If you have had a class with me before using these datasets, then you must choose a different dataset to analyze.
 
 - Please email me your top three dataset choices, along with your group members.
 
-- I will accept other sources as long as they are comparably large and 
-  complicated. For example, there are many open data portals from state 
-  agencies (<https://opendata.dc.gov/>).
+- I will accept other sources as long as they are comparably large and complicated. For example, there are many open data portals from state agencies (<https://opendata.dc.gov/>).
 
-- I will not accept small curated datasets, or those that come from a paper
-  where the data has already been analyzed.
+- I will not accept small curated datasets, or those that come from a paper where the data has already been analyzed.
+
+- I will not accept any data that is too clean. For example, I will not accept any data obtained from Kaggle.
   
-- You should not select a dataset that you have used before, or are currently 
-  using in another class.
+- You should not select a dataset that you have used before, or are currently using in another class.
 
 - Datasets:
 
@@ -102,7 +103,7 @@ knitr::opts_chunk$set(echo = TRUE)
     
         <https://wildlife.faa.gov/databaseSearch.aspx>
     
-    - Bank health data from the FDIC (also see banktracker at IRW): 
+    - Bank health data from the FDIC (also see banktracker at IRW):
     
         <https://www.fdic.gov/bank/statistical/guide/data.html>
     
@@ -161,7 +162,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - You should call this document "TODO.md".
 
   
-# (20 pts) Shiny App
+# (Undergrad: 20 pts) or (Grad: 10 pts) Shiny App
 
 You will be graded on the complexity of your app, the complexity of the analysis,
 and **how well the reactive elements improve your data presentation**.
@@ -218,46 +219,34 @@ Your Shiny app should contain all of the following elements:
   - analysis: Analysis scripts and Rmd files used to clean and explore data.
   - data: Location of raw, unmodified datasets.
   - output: Location of modified datasets.
+  - reports: Location where graduate students place their final project reports.
   
 - You will be graded on:
-  - Frequency of commits.
-      - Do you just commit whole files (bad), or do you commit each time
-        you make significant progress (good)?
-  - Organization of files.
-      - Do you have all of your analyses in one big mega file (bad) or do 
-        you split up your analyses into small analysis files in the 
-        analysis folder that perform specific tasks (good)?
-  - Division of labor.
-      - Is there one person doing all of the work (bad) or do 
-        all group members contribute (good)?
-  - Intermediate results.
-      - Do you save cleaned data to the output folder to be used later (good)
-        or do you re-clean the dataset each time you open up an analysis
-        file (bad)?
-  - Informative README
-      - Does your README file contain an informative title? Does it
-        *briefly* describe the goals of the project?
+  - Frequency of commits. (2 pts)
+      - Do you just commit whole files (bad), or do you commit each time you make significant progress (good)?
+  - Division of labor. (1.5 pt)
+      - Is there one person doing all of the work (bad) or do all group members contribute (good)?
+  - Intermediate results. (1.5 pt)
+      - Do you save cleaned data to the output folder to be used later (good) or do you re-clean the dataset each time you open up an analysis file (bad)?
+  - Detailed analyses. (3 pts)
+      - Do you have all of your analyses in one big mega file (bad) or do you split up your analyses into small analysis files in the analysis folder that perform specific tasks (good)?
+      - You should create a bunch of small Rmd files that run small analyses to answer some small question. At a minimum, I expect each person to have two Rmd analysis files.
+      - I provided an example analysis in the template repo to give you a sense of what I am expecting. It can be a bit smaller than that, though.
+      - Each code block should be prefaced with why you are running that code. Describe your analyses in plain English.
+  - Informative README (2 pts)
+      - Does your README file contain an informative title? Does it briefly describe the goals of the project? An example README file is presented in the template repo.
   
+# (Grad: 10 pts) Statistical Report
 
+- Each graduate student (those taking STAT 613 for credit) should also prepare a written report detailing a statistical analysis concerning their data. This is an individual report, not a group report. Though you can obtain feedback from your group members.
 
+- Your report should consist of the following
+  1. An introductory paragraph detailing *in plain English* your question of interest and why this is interesting.
+  2. A few paragraphs with accompanying graphics and summary statistics detailing an exploratory data analysis to informally answer your scientific question of interest.
+  3. A paragraph transforming your scientific question into a formal statistical hypothesis, using notation where appropriate.
+  4. A few paragraphs implementing your statistical analysis. You should include graphics to check modeling assumptions.
+  5. A concluding paragraph.
+  
+- You should write this in R Markdown. It should not be more than 4 pages of text using the default settings (figures and tables do not count against the page limit).
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- You should submit your report on GitHub in a folder called "reports".
