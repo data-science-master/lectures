@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2020-08-04" />
+<meta name="date" content="2020-08-12" />
 
 <title>Git and GitHub</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Git and GitHub</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2020-08-04</h4>
+<h4 class="date">2020-08-12</h4>
 
 </div>
 
@@ -376,6 +376,7 @@ summary {
 <li><a href="#extra-setup-step-for-windows-users">Extra Setup Step for Windows Users</a></li>
 </ul></li>
 <li><a href="#list-of-git-commands">List of git commands</a></li>
+<li><a href="#vocabulary-list-blischak-et.-al.-2016">Vocabulary List (<span>Blischak et. al., 2016</span>)</a></li>
 <li><a href="#version-control">Version Control:</a><ul>
 <li><a href="#motivation-1-change-code-without-the-fear-of-breaking-it">Motivation 1: Change code without the fear of breaking it</a></li>
 <li><a href="#motivation-2-easy-collaboration">Motivation 2: Easy Collaboration</a></li>
@@ -486,6 +487,26 @@ git config --global user.email &quot;YOUR EMAIL ADDRESS&quot;</code></pre>
 <li><code>git branch &lt;branch&gt;</code>: Create a branch called <code>&lt;branch&gt;</code>. Note that the default branch is called <code>master</code>.</li>
 <li><code>git checkout &lt;branch&gt;</code>: Move to the <code>&lt;branch&gt;</code> branch.</li>
 <li><code>git merge &lt;branch&gt;</code>: Merge the changes in <code>&lt;branch&gt;</code> into the current branch.</li>
+</ul>
+</div>
+<div id="vocabulary-list-blischak-et.-al.-2016" class="section level1">
+<h1>Vocabulary List (<a href="https://doi.org/10.1371/journal.pcbi.1004668">Blischak et. al., 2016</a>)</h1>
+<ul>
+<li><strong>Version Control System</strong> (VCS): (<em>noun</em>) a program that tracks changes to specified files over time and maintains a library of all past versions of those files</li>
+<li><strong>Git</strong>: (<em>noun</em>) a version control system</li>
+<li><strong>repository</strong> (<strong>repo</strong>): (<em>noun</em>) folder containing all tracked files as well as the version control history</li>
+<li><strong>commit</strong>: (<em>noun</em>) a snapshot of changes made to the staged file(s); (<em>verb</em>) to save a snapshot of changes made to the staged file(s)</li>
+<li><strong>stage</strong>: (<em>noun</em>) the staging area holds the files to be included in the next commit; (<em>verb</em>) to mark a file to be included in the next commit</li>
+<li><strong>track</strong>: (<em>noun</em>) a tracked file is one that is recognized by the Git repository</li>
+<li><strong>branch</strong>: (<em>noun</em>) a parallel version of the files in a repository</li>
+<li><strong>local</strong>: (<em>noun</em>) the version of your repository that is stored on your personal computer</li>
+<li><strong>remote</strong>: (<em>noun</em>) the version of your repository that is stored on a remote server; for instance, on GitHub</li>
+<li><strong>clone</strong>: (<em>verb</em>) to create a local copy of a remote repository on your personal computer</li>
+<li><strong>fork</strong>: (<em>noun</em>) a copy of another user’s repository on GitHub; (<em>verb</em>) to copy a repository; for instance, from one user’s GitHub account to your own</li>
+<li><strong>merge</strong>: (<em>verb</em>) to update files by incorporating the changes introduced in new commits</li>
+<li><strong>pull</strong>: (<em>verb</em>) to retrieve commits from a remote repository and merge them into a local repository</li>
+<li><strong>push</strong>: (<em>verb</em>) to send commits from a local repository to a remote repository</li>
+<li><strong>pull request</strong>: (<em>noun</em>) a message sent by one GitHub user to merge the commits in their remote repository into another user’s remote repository</li>
 </ul>
 </div>
 <div id="version-control" class="section level1">

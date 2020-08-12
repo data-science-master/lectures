@@ -84,6 +84,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - `git checkout <branch>`: Move to the `<branch>` branch.
 - `git merge <branch>`: Merge the changes in `<branch>` into the current branch.
 
+# Vocabulary List ([Blischak et. al., 2016](https://doi.org/10.1371/journal.pcbi.1004668))
+
+- **Version Control System** (VCS): (*noun*) a program that tracks changes to specified files over time and maintains a library of all past versions of those files
+- **Git**: (*noun*) a version control system
+- **repository** (**repo**): (*noun*) folder containing all tracked files as well as the version control history
+- **commit**: (*noun*) a snapshot of changes made to the staged file(s); (*verb*) to save a snapshot of changes made to the staged file(s)
+- **stage**: (*noun*) the staging area holds the files to be included in the next commit; (*verb*) to mark a file to be included in the next commit
+- **track**: (*noun*) a tracked file is one that is recognized by the Git repository
+- **branch**: (*noun*) a parallel version of the files in a repository
+- **local**: (*noun*) the version of your repository that is stored on your personal computer
+- **remote**: (*noun*) the version of your repository that is stored on a remote server; for instance, on GitHub
+- **clone**: (*verb*) to create a local copy of a remote repository on your personal computer
+- **fork**: (*noun*) a copy of another user’s repository on GitHub; (*verb*) to copy a repository; for instance, from one user’s GitHub account to your own
+- **merge**: (*verb*) to update files by incorporating the changes introduced in new commits
+- **pull**: (*verb*) to retrieve commits from a remote repository and merge them into a local repository
+- **push**: (*verb*) to send commits from a local repository to a remote repository
+- **pull request**: (*noun*) a message sent by one GitHub user to merge the commits in their remote repository into another user’s remote repository
+
 # Version Control: 
 
 - **Version control system**: a program that tracks iterative changes of files. 
