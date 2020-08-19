@@ -29,10 +29,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - [A Quick Introduction to Version Control with Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
     - [Setting up GitHub Classroom](https://github.com/jfiksel/github-classroom-for-students)
 - Additional Resources:
-    - [Git and GitHub Chapter from R Packages](http://r-pkgs.had.co.nz/git.html).
-    - Chapters 6 and 7 from [Git for Scientists](https://milesmcbain.github.io/git_4_sci/).
-    - [Oh s**t, git!](https://ohshitgit.com/).
-
+    - Chapters 6 and 7 from [Git for Scientists](https://milesmcbain.github.io/git_4_sci/) for a practical introduction.
+    - [Oh s**t, git!](https://ohshitgit.com/) for undoing common mistakes.
+    - [Git from the bottom up](http://www.ftp.newartisans.com/pub/git.from.bottom.up.pdf) for a theoretical understanding of git.
+    - [Git and GitHub Chapter from R Packages](http://r-pkgs.had.co.nz/git.html) for and R Studio focused introduction to git.
+    
 # Set-up: Do this before class
 
 1. Install git:
