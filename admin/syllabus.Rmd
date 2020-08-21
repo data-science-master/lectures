@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
-- **Virtual Office Hours (via Zoom)**: Tuesdays and Wednesdays from 3:00 PM to 5:00 PM
+- **Virtual Office Hours (via Zoom)**: TBD
 
 # Overview of Topics and Course Objectives
 
