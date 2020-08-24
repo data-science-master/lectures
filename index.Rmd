@@ -26,6 +26,8 @@ University by [David Gerard](https://dcgerard.github.io/).
 
 # Lectures
 
+- 00 Workflow
+    - [00 Workflow Tips](./00_workflow/00_workflow_tips.html)
 - 01 Git and the Terminal
     - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
     - [01 Git and GitHub](./01_git/01_git_github.html).
