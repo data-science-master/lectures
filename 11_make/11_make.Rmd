@@ -1,0 +1,78 @@
+---
+title: "Managing Workflows with GNU Make"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Automated workflow with GNU make.
+- [Minimal Make](https://kbroman.org/minimal_make/)
+- [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
+
+# Installation
+
+- If you are using Mac of Linux, you probably have make already installed.
+    - To verify, open up the terminal and run `make --version`
+- If you are using Windows, install make here: <http://gnuwin32.sourceforge.net/packages/make.htm>
+
+# Motivation
+
+- There are a lot of steps in a data analysis
+    - Download data (`httr`) %>% <br>
+      tidy data (`dplyr`, `tidyr`) %>% <br>
+      exploratory data analysis (`ggplot2`, `dplyr`) %>% <br>
+      statistical analysis (`stats`, `broom`, `tidymodels`) %>% <br>
+      present results (`shiny`, `rmarkdown`, `ggplot2`).
+  
+- Each of these steps should be done in separate files. But a more typical pipeline would include *multiple files for each step*. 
+    - Download multiple datasets using multiple scripts
+    - Breakdown complex tidying into multiple scripts.
+    - Explore many aspects of your data, using multiple scripts.
+    - Develop multiple reports on different aspects of your project.
+    
+- Files downstream in this pipeline typically depend on files upstream in this pipeline.
+
+- Here is a really basic example from a recent project of mine. Each node is a file name. The direction of the arrows indicates the dependency between the files. E.g. "sims.R" is used to create "sims_out.csv".
+
+    ```{r, message = FALSE, echo = FALSE}
+    library(tidyverse)
+    library(ggdag)
+    set.seed(15)
+    dagify(`sims_out.csv` ~ `sims.R`,
+           `simplots.pdf` ~ `sim_plots.R`,
+           `simplots.pdf` ~ `sims_out.csv`,
+           `qqplots.pdf` ~ `sim_se_plots.R`,
+           `qqplots.pdf` ~ `sims_out.csv`,
+           `time.pdf` ~ `time.R`,
+           `time.pdf` ~ `sims_out.csv`) %>%
+      ggdag(layout = "sugiyama",
+            text_col = "black",
+            node = FALSE) +
+      theme_void()
+    ```
+
+    The top row contains R scripts. The middle row contains some simulation output (sims_out.csv), and the bottom row contains the output of my analyses.
+
+- If I make a modification to "time.R", I would only need to re-generate "time.pdf", since that is the only downstream file.
+
+- However, if I modify "sims.R" and re-generate "sims_out.csv", then I should also re-generate "simplots.pdf", "qqplots.pdf", and "time.pdf" because all of those files are created using "sims_out.csv".
+
+- Having to manually remember to re-run all these scripts is prone to error (because of forgetfulness, tediousness, etc), so ideally there should be some automated way to know that when a file upstream as been changed, then all downstream files need to be re-generated.
+
+- *This is exactly what make does!*
