@@ -23,6 +23,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Automated workflow with GNU make.
 - [Minimal Make](https://kbroman.org/minimal_make/)
+- [Makefile Wiki Page](https://en.wikipedia.org/wiki/Makefile)
 - [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
 
 # Installation
@@ -76,3 +77,157 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Having to manually remember to re-run all these scripts is prone to error (because of forgetfulness, tediousness, etc), so ideally there should be some automated way to know that when a file upstream as been changed, then all downstream files need to be re-generated.
 
 - *This is exactly what make does!*
+
+# Make
+
+- You place all commands for `make` in a file exactly titled "Makefile". You can create this file in the terminal via
+
+    ```{bash, eval = FALSE}
+    touch Makefile
+    ```
+    
+## Recipes
+
+- Inside the Makefile, you prepare a series of recipes of the form
+
+    ```
+    target: prereq_1 prereq_2 prereq_3 ...
+        first bash command to make target
+        second bash command and so on
+    ```
+
+- `target` is the name of the file that will be generated.
+- `prereq_1`, `prereq_2`, `prereq_3`, etc are the names of the files which are used to generate `target`.
+- Each subsequent line is a *bash* command that will be evaluated in the terminal in the order listed.
+    - **IMPORTANT**: Make sure each bash command has one tab at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!
+    - From the terminal, it is possible to evaluate R scripts, python scripts, and knit R Markdown files.
+    - You can also use the usual bash commands you are used do (`touch`, `cp`, `mv`, `rm`, etc...)
+    - There are loads of other commands that allow you to do things like download files ([`curl`](https://en.wikipedia.org/wiki/CURL) and [`wget`](https://en.wikipedia.org/wiki/Wget)), unzip files ([`7z`](https://en.wikipedia.org/wiki/7-Zip)), and various other tasks.
+
+## Useful bash commands for data science
+
+- Run an R script
+    ```{bash, eval = FALSE}
+    R CMD BATCH input_file.R output_file.Rout
+    ```
+    
+    Make sure to change "input_file.R" and "output_file.Rout"
+
+- Knit an R Markdown file
+    ```{bash, eval = FALSE}
+    R -e "rmarkdown::render('rmarkdown_file.Rmd')"
+    ```
+
+    Make sure to change "rmarkdown_file.Rmd"
+
+- Run python script
+
+    ```{bash, eval = FALSE}
+    python3 input_file.py
+    ```
+    
+    Make sure to change "input_file.R"
+    
+- Download data from the web
+
+    ```{bash, eval = FALSE}
+    wget --no-clobber url_to_data
+    ```
+
+## Phony Targets
+
+- If you have multiple, related, final outputs, it is common to place these as prerequisites to "phony" targets:
+
+    ```
+    .PHONY : phony_target
+    phony_target : target1 target2 target3 ...
+    ```
+    
+    where "phony_target" is a name you provide to represent the operation being performed.
+    
+- "Phony" targets are not real files. They are just convenient names to use to describe a collection of targets that should be generated.
+    
+- At the *top* of the makefile, you then list the phony targets after `all`:
+
+    ```
+    all : phony_target1 phony_target2 phony_target3 ...
+    ```
+    
+## Pseudo-code for makefile
+
+``` make
+all : phony_target1 phony_target2
+
+.PHONY : phony_target1
+phony_target1 : target1 target2
+
+.PHONY : phony_target2
+phony_target2 : target3
+
+target1 : prereq1.R
+    R CMD BATCH prereq1.R prereq_out.Rout
+
+target2 : prereq2.py
+    python prereq2.py
+
+target3 : prereq3.Rmd
+    R -e "rmarkdown::render('prereq3.Rmd')"
+```
+
+## Evaluate a makefile
+
+- You can generate all target files by running the following in the terminal
+
+    ``` bash
+    make
+    ```
+
+- You can run just the targets in a phony target by specifying the phony target
+
+    ``` bash
+    make phony_target
+    ```
+
+## How it works
+
+- Make will check if any of the prequisites have changes for `target` and, if so, will re-run the bash commands.
+
+- `Make` will not re-run commands if the prequisites have not changed. That is, if no upstream files to `target` were modified, then `target` will not be re-generated. This makes `make` very efficient.
+
+## Working directory considerations
+
+- Make will evaluate everything assuming that the working directory (both R and the terminal) is the location of the Makefile. 
+
+- So if your file structure is
+
+    ```
+    Makefile
+    analysis/script.R
+    data/data.csv
+    ```
+    
+    Then you need specify your targets according to this structure
+    
+    ``` make
+    data/data.csv : analysis/script.R
+        R CMD BATCH analysis/script.R
+    ```
+    
+    And any file manipulation in "script.R" needs to be done assuming the working directory is where Makefile is (*notice* the single dot):
+    
+    ```{r, eval = FALSE}
+    library(readr)
+    dat <- read_csv("./data/data.csv")
+    ```
+
+# A worked example
+
+# Competitors
+
+- There are lots of workflow management competitors to `make`. The two most-likely that you'll run across are
+    - [`drake`](https://cran.r-project.org/package=drake) is an R package for interacting with `make`.
+    - [`snakemake`](https://snakemake.github.io/) is a python-based tool for workflow management that is perhaps more readable than `make` and allows for more options than only using shell commands.
+
+- But `make` has been around since the 1970s, is widely used, and isn't going anywhere.
+
+- It is also relatively simple compared to more sophisticated pipeline management tools, so I think that makes it easier to setup and use with fewer chances for bugs.

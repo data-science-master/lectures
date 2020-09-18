@@ -374,6 +374,17 @@ summary {
 <li><a href="#learning-objectives">Learning Objectives</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#motivation">Motivation</a></li>
+<li><a href="#make">Make</a><ul>
+<li><a href="#recipes">Recipes</a></li>
+<li><a href="#useful-bash-commands-for-data-science">Useful bash commands for data science</a></li>
+<li><a href="#phony-targets">Phony Targets</a></li>
+<li><a href="#pseudo-code-for-makefile">Pseudo-code for makefile</a></li>
+<li><a href="#evaluate-a-makefile">Evaluate a makefile</a></li>
+<li><a href="#how-it-works">How it works</a></li>
+<li><a href="#working-directory-considerations">Working directory considerations</a></li>
+</ul></li>
+<li><a href="#a-worked-example">A worked example</a></li>
+<li><a href="#competitors">Competitors</a></li>
 </ul>
 </div>
 
@@ -382,6 +393,7 @@ summary {
 <ul>
 <li>Automated workflow with GNU make.</li>
 <li><a href="https://kbroman.org/minimal_make/">Minimal Make</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Makefile">Makefile Wiki Page</a></li>
 <li><a href="./baker_2020.pdf">Using <em>GNU Make</em> to Manage the Workflow of Data Analysis Projects</a></li>
 </ul>
 </div>
@@ -417,6 +429,125 @@ summary {
 <li><p>However, if I modify “sims.R” and re-generate “sims_out.csv”, then I should also re-generate “simplots.pdf”, “qqplots.pdf”, and “time.pdf” because all of those files are created using “sims_out.csv”.</p></li>
 <li><p>Having to manually remember to re-run all these scripts is prone to error (because of forgetfulness, tediousness, etc), so ideally there should be some automated way to know that when a file upstream as been changed, then all downstream files need to be re-generated.</p></li>
 <li><p><em>This is exactly what make does!</em></p></li>
+</ul>
+</div>
+<div id="make" class="section level1">
+<h1>Make</h1>
+<ul>
+<li><p>You place all commands for <code>make</code> in a file exactly titled “Makefile”. You can create this file in the terminal via</p>
+<pre class="bash"><code>touch Makefile</code></pre></li>
+</ul>
+<div id="recipes" class="section level2">
+<h2>Recipes</h2>
+<ul>
+<li><p>Inside the Makefile, you prepare a series of recipes of the form</p>
+<pre><code>target: prereq_1 prereq_2 prereq_3 ...
+    first bash command to make target
+    second bash command and so on</code></pre></li>
+<li><p><code>target</code> is the name of the file that will be generated.</p></li>
+<li><p><code>prereq_1</code>, <code>prereq_2</code>, <code>prereq_3</code>, etc are the names of the files which are used to generate <code>target</code>.</p></li>
+<li><p>Each subsequent line is a <em>bash</em> command that will be evaluated in the terminal in the order listed.</p>
+<ul>
+<li><strong>IMPORTANT</strong>: Make sure each bash command has one tab at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!</li>
+<li>From the terminal, it is possible to evaluate R scripts, python scripts, and knit R Markdown files.</li>
+<li>You can also use the usual bash commands you are used do (<code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, etc…)</li>
+<li>There are loads of other commands that allow you to do things like download files (<a href="https://en.wikipedia.org/wiki/CURL"><code>curl</code></a> and <a href="https://en.wikipedia.org/wiki/Wget"><code>wget</code></a>), unzip files (<a href="https://en.wikipedia.org/wiki/7-Zip"><code>7z</code></a>), and various other tasks.</li>
+</ul></li>
+</ul>
+</div>
+<div id="useful-bash-commands-for-data-science" class="section level2">
+<h2>Useful bash commands for data science</h2>
+<ul>
+<li><p>Run an R script</p>
+<pre class="bash"><code>R CMD BATCH input_file.R output_file.Rout</code></pre>
+<p>Make sure to change “input_file.R” and “output_file.Rout”</p></li>
+<li><p>Knit an R Markdown file</p>
+<pre class="bash"><code>R -e &quot;rmarkdown::render(&#39;rmarkdown_file.Rmd&#39;)&quot;</code></pre>
+<p>Make sure to change “rmarkdown_file.Rmd”</p></li>
+<li><p>Run python script</p>
+<pre class="bash"><code>python3 input_file.py</code></pre>
+<p>Make sure to change “input_file.R”</p></li>
+<li><p>Download data from the web</p>
+<pre class="bash"><code>wget --no-clobber url_to_data</code></pre></li>
+</ul>
+</div>
+<div id="phony-targets" class="section level2">
+<h2>Phony Targets</h2>
+<ul>
+<li><p>If you have multiple, related, final outputs, it is common to place these as prerequisites to “phony” targets:</p>
+<pre><code>.PHONY : phony_target
+phony_target : target1 target2 target3 ...</code></pre>
+<p>where “phony_target” is a name you provide to represent the operation being performed.</p></li>
+<li><p>“Phony” targets are not real files. They are just convenient names to use to describe a collection of targets that should be generated.</p></li>
+<li><p>At the <em>top</em> of the makefile, you then list the phony targets after <code>all</code>:</p>
+<pre><code>all : phony_target1 phony_target2 phony_target3 ...</code></pre></li>
+</ul>
+</div>
+<div id="pseudo-code-for-makefile" class="section level2">
+<h2>Pseudo-code for makefile</h2>
+<pre class="make"><code>all : phony_target1 phony_target2
+
+.PHONY : phony_target1
+phony_target1 : target1 target2
+
+.PHONY : phony_target2
+phony_target2 : target3
+
+target1 : prereq1.R
+    R CMD BATCH prereq1.R prereq_out.Rout
+
+target2 : prereq2.py
+    python prereq2.py
+
+target3 : prereq3.Rmd
+    R -e &quot;rmarkdown::render(&#39;prereq3.Rmd&#39;)&quot;</code></pre>
+</div>
+<div id="evaluate-a-makefile" class="section level2">
+<h2>Evaluate a makefile</h2>
+<ul>
+<li><p>You can generate all target files by running the following in the terminal</p>
+<pre class="bash"><code>make</code></pre></li>
+<li><p>You can run just the targets in a phony target by specifying the phony target</p>
+<pre class="bash"><code>make phony_target</code></pre></li>
+</ul>
+</div>
+<div id="how-it-works" class="section level2">
+<h2>How it works</h2>
+<ul>
+<li><p>Make will check if any of the prequisites have changes for <code>target</code> and, if so, will re-run the bash commands.</p></li>
+<li><p><code>Make</code> will not re-run commands if the prequisites have not changed. That is, if no upstream files to <code>target</code> were modified, then <code>target</code> will not be re-generated. This makes <code>make</code> very efficient.</p></li>
+</ul>
+</div>
+<div id="working-directory-considerations" class="section level2">
+<h2>Working directory considerations</h2>
+<ul>
+<li><p>Make will evaluate everything assuming that the working directory (both R and the terminal) is the location of the Makefile.</p></li>
+<li><p>So if your file structure is</p>
+<pre><code>Makefile
+analysis/script.R
+data/data.csv</code></pre>
+<p>Then you need specify your targets according to this structure</p>
+<pre class="make"><code>data/data.csv : analysis/script.R
+    R CMD BATCH analysis/script.R</code></pre>
+<p>And any file manipulation in “script.R” needs to be done assuming the working directory is where Makefile is (<em>notice</em> the single dot):</p>
+<pre class="r"><code>library(readr)
+dat &lt;- read_csv(&quot;./data/data.csv&quot;)</code></pre></li>
+</ul>
+</div>
+</div>
+<div id="a-worked-example" class="section level1">
+<h1>A worked example</h1>
+</div>
+<div id="competitors" class="section level1">
+<h1>Competitors</h1>
+<ul>
+<li><p>There are lots of workflow management competitors to <code>make</code>. The two most-likely that you’ll run across are</p>
+<ul>
+<li><a href="https://cran.r-project.org/package=drake"><code>drake</code></a> is an R package for interacting with <code>make</code>.</li>
+<li><a href="https://snakemake.github.io/"><code>snakemake</code></a> is a python-based tool for workflow management that is perhaps more readable than <code>make</code> and allows for more options than only using shell commands.</li>
+</ul></li>
+<li><p>But <code>make</code> has been around since the 1970s, is widely used, and isn’t going anywhere.</p></li>
+<li><p>It is also relatively simple compared to more sophisticated pipeline management tools, so I think that makes it easier to setup and use with fewer chances for bugs.</p></li>
 </ul>
 </div>
 
