@@ -190,9 +190,9 @@ target3 : prereq3.Rmd
 
 ## How it works
 
-- Make will check if any of the prequisites have changes for `target` and, if so, will re-run the bash commands.
+- Make will check if any of the prerequisites have changes for `target` and, if so, will re-run the bash commands.
 
-- `Make` will not re-run commands if the prequisites have not changed. That is, if no upstream files to `target` were modified, then `target` will not be re-generated. This makes `make` very efficient.
+- `Make` will not re-run commands if the prerequisites have not changed. That is, if no upstream files to `target` were modified, then `target` will not be re-generated. This makes `make` very efficient.
 
 ## Working directory considerations
 

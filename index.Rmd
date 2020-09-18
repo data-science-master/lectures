@@ -70,6 +70,8 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [09 Numpy](./09_python/09_numpy.html).
     - [09 Pandas](./09_python/09_pandas.html).
     - [09 Matplotlib](./09_python/09_matplotlib.html).
+- 11 GNU Make
+    - [11 GNU Make](./11_make/11_make.html)
 
 # Code of Conduct
 
