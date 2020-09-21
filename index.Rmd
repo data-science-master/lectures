@@ -72,6 +72,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [09 Matplotlib](./09_python/09_matplotlib.html).
 - 11 GNU Make
     - [11 GNU Make](./11_make/11_make.html)
+    - [11 Penguins Exercise](https://github.com/data-science-master/penguins)
 
 # Code of Conduct
 
