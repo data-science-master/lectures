@@ -267,6 +267,8 @@ target3 : prereq3.Rmd
 
 # A worked example
 
+- I created a repo with a very basic example of using a Makefile: <https://github.com/data-science-master/pvalue_sims>
+
 # Your turn
 
 - Clone the penguins repo: <https://github.com/data-science-master/penguins>
@@ -320,8 +322,6 @@ target3 : prereq3.Rmd
 3. Change the color scheme in the pairs plot and re-run `make`.
 
 4. Correct the date field in the YAML header in "penguin_report.html" and re-run `make`
-
-
 
 # Variables
 

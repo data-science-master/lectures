@@ -73,6 +73,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 11 GNU Make
     - [11 GNU Make](./11_make/11_make.html)
     - [11 Penguins Exercise](https://github.com/data-science-master/penguins)
+    - [11 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims)
 
 # Code of Conduct
 
