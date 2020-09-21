@@ -474,8 +474,11 @@ summary {
 <h2>Useful bash commands for data science</h2>
 <ul>
 <li><p>Run an R script</p>
-<pre class="bash"><code>R CMD BATCH input_file.R output_file.Rout</code></pre>
-<p>Make sure to change “input_file.R” and “output_file.Rout”</p></li>
+<pre class="bash"><code>R CMD BATCH --no-save --no-restore input_file.R output_file.Rout</code></pre>
+<p>Make sure to change “input_file.R” and “output_file.Rout”</p>
+<ul>
+<li>The <code>--no-save --no-restore</code> options make sure that you are working with a clean environment and that you don’t save this environment after the command is executed. This is a good thing for reproducibility.</li>
+</ul></li>
 <li><p>Knit an R Markdown file</p>
 <pre class="bash"><code>Rscript -e &quot;rmarkdown::render(&#39;rmarkdown_file.Rmd&#39;)&quot;</code></pre>
 <p>Make sure to change “rmarkdown_file.Rmd”</p></li>
@@ -516,7 +519,7 @@ phony_target2 : target3
 
 # Comment 1
 target1 : prereq1.R
-    R CMD BATCH prereq1.R prereq_out.Rout
+    R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
 
 # Comment 2
 target2 : prereq2.py
@@ -558,16 +561,16 @@ analysis/report.Rmd
 data/data.csv</code></pre>
 <p>Then you need specify your targets according to this structure</p>
 <pre class="make"><code>data/data.csv : analysis/script.R
-    R CMD BATCH analysis/script.R</code></pre>
+    R CMD BATCH --no-save --no-restore analysis/script.R</code></pre>
 <p><strong>NOTE</strong> that the following will <strong>not</strong> work because each command is executed in its <em>own</em> subshell (assuming the working directory is the location of the Makefile):</p>
 <pre class="make"><code># DOES NOT WORK
 data/data.csv : analysis/script.R
     cd analysis 
-    R CMD BATCH script.R</code></pre>
+    R CMD BATCH --no-save --no-restore script.R</code></pre>
 <p>But you can get around this by putting these commands on one line, with each command separated by a semicolon:</p>
 <pre class="make"><code># Works, but not recommended
 data/data.csv : analysis/script.R
-    cd analysis; R CMD BATCH script.R</code></pre></li>
+    cd analysis; R CMD BATCH --no-save --no-restore script.R</code></pre></li>
 <li><p>Any file manipulation in “script.R” needs to be done assuming the working directory is where Makefile is (<strong>notice the single dot</strong>):</p>
 <pre class="r"><code>library(readr)
 dat &lt;- read_csv(&quot;./data/data.csv&quot;)</code></pre></li>
@@ -627,14 +630,14 @@ library(palmerpenguins)</code></pre></li>
 <li><p>So when a makefile comes across <code>$(my_first_variable)</code>, it will actually read it as <code>fig.pdf</code>.</p></li>
 <li><p>For example, suppose the file <code>fig_create.R</code> generates multiple pdf files: <code>fig1.pdf</code>, <code>fig2.pdf</code>, and <code>fig3.pdf</code>. Then we could write this rule in the two equivalent ways:</p>
 <pre class="make"><code>fig1.pdf fig2.pdf fig3.pdf : fig_create.R
-    R CMD BATCH fig_create.R</code></pre>
+    R CMD BATCH --no-save --no-restore fig_create.R</code></pre>
 <pre class="make"><code>figs = fig1.pdf fig2.pdf fig3.pdf
 $(figs) : fig_create.R
-    R CMD BATCH fig_create.R</code></pre></li>
-<li><p>If you do not like writing <code>R CMD BATCH</code> each time, then you can save this command as a variable. The two rules are equivalent:</p>
+    R CMD BATCH --no-save --no-restore fig_create.R</code></pre></li>
+<li><p>If you do not like writing <code>R CMD BATCH --no-save --no-restore</code> each time, then you can save this command as a variable. The two rules are equivalent:</p>
 <pre class="make"><code>fig.pdf : script.R
-    R CMD BATCH script.R</code></pre>
-<pre class="make"><code>rexec = R CMD BATCH
+    R CMD BATCH --no-save --no-restore script.R</code></pre>
+<pre class="make"><code>rexec = R CMD BATCH --no-save --no-restore
 fig.pdf : script.R
     $(rexec) script.R</code></pre></li>
 <li><p><strong>Exercise</strong>:</p></li>
@@ -656,7 +659,7 @@ fig.pdf : script.R
 </ul></li>
 <li><p><em>Example</em>: Suppose I have the following rule:</p>
 <pre class="make"><code>output/figs/foo.pdf : analysis/scripts/gaa.R data/hii.csv
-    R CMD BATCH analysis/scripts/gaa.R</code></pre>
+    R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R</code></pre>
 <p>Then the following are these automatic variable values:</p>
 <ul>
 <li><code>$@</code>: output/figs/foo.pdf</li>
@@ -670,8 +673,10 @@ fig.pdf : script.R
 </ul></li>
 <li><p>For example, if you always place the R script first that generates the target, and the datasets that the R script uses second, then the following is typically how I evaluate the R script.</p>
 <pre class="make"><code>figure.pdf : script.R data1.csv data2.csv
-    R CMD BATCH $&lt; $(basename $(&lt;F)).Rout</code></pre></li>
-<li><p><strong>Exercise</strong>:</p></li>
+    R CMD BATCH --no-save --no-restore $&lt; $(basename $(&lt;F)).Rout</code></pre></li>
+<li><p><strong>Exercise</strong>: Re-write the following to use an automatic variable instead of the Rmd’s file name in the recipe.</p>
+<pre class="make"><code>report.html : report.Rmd
+  Rscript -e &quot;rmarkdown::render(&#39;report.Rmd&#39;)&quot;</code></pre></li>
 </ul>
 </div>
 </div>

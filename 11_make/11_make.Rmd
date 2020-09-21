@@ -115,10 +115,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Run an R script
     ```{bash, eval = FALSE}
-    R CMD BATCH input_file.R output_file.Rout
+    R CMD BATCH --no-save --no-restore input_file.R output_file.Rout
     ```
     
     Make sure to change "input_file.R" and "output_file.Rout"
+    
+    - The `--no-save --no-restore` options make sure that you are working with a clean environment and that you don't save this environment after the command is executed. This is a good thing for reproducibility.
 
 - Knit an R Markdown file
     ```{bash, eval = FALSE}
@@ -177,7 +179,7 @@ phony_target2 : target3
 
 # Comment 1
 target1 : prereq1.R
-    R CMD BATCH prereq1.R prereq_out.Rout
+    R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
 
 # Comment 2
 target2 : prereq2.py
@@ -229,7 +231,7 @@ target3 : prereq3.Rmd
     
     ``` make
     data/data.csv : analysis/script.R
-        R CMD BATCH analysis/script.R
+        R CMD BATCH --no-save --no-restore analysis/script.R
     ```
     
      **NOTE** that the following will **not** work because each command is executed in its *own* subshell (assuming the working directory is the location of the Makefile): 
@@ -238,7 +240,7 @@ target3 : prereq3.Rmd
     # DOES NOT WORK
     data/data.csv : analysis/script.R
         cd analysis 
-        R CMD BATCH script.R
+        R CMD BATCH --no-save --no-restore script.R
     ```
     
     But you can get around this by putting these commands on one line, with each command separated by a semicolon:
@@ -246,7 +248,7 @@ target3 : prereq3.Rmd
     ``` make
     # Works, but not recommended
     data/data.csv : analysis/script.R
-        cd analysis; R CMD BATCH script.R
+        cd analysis; R CMD BATCH --no-save --no-restore script.R
     ```
     
 - Any file manipulation in "script.R" needs to be done assuming the working directory is where Makefile is (**notice the single dot**):
@@ -337,24 +339,24 @@ target3 : prereq3.Rmd
 
     ``` make
     fig1.pdf fig2.pdf fig3.pdf : fig_create.R
-        R CMD BATCH fig_create.R
+        R CMD BATCH --no-save --no-restore fig_create.R
     ```
     
     ``` make
     figs = fig1.pdf fig2.pdf fig3.pdf
     $(figs) : fig_create.R
-        R CMD BATCH fig_create.R
+        R CMD BATCH --no-save --no-restore fig_create.R
     ```
     
-- If you do not like writing `R CMD BATCH` each time, then you can save this command as a variable. The two rules are equivalent:
+- If you do not like writing `R CMD BATCH --no-save --no-restore` each time, then you can save this command as a variable. The two rules are equivalent:
 
     ``` make
     fig.pdf : script.R
-        R CMD BATCH script.R
+        R CMD BATCH --no-save --no-restore script.R
     ```
     
     ``` make
-    rexec = R CMD BATCH
+    rexec = R CMD BATCH --no-save --no-restore
     fig.pdf : script.R
         $(rexec) script.R
     ```
@@ -380,7 +382,7 @@ target3 : prereq3.Rmd
     
     ``` make
     output/figs/foo.pdf : analysis/scripts/gaa.R data/hii.csv
-        R CMD BATCH analysis/scripts/gaa.R
+        R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R
     ```
     
     Then the following are these automatic variable values:
@@ -398,10 +400,21 @@ target3 : prereq3.Rmd
 
     ``` make
     figure.pdf : script.R data1.csv data2.csv
-    	R CMD BATCH $< $(basename $(<F)).Rout
+    	R CMD BATCH --no-save --no-restore $< $(basename $(<F)).Rout
     ```
     
-- **Exercise**:
+- **Exercise**: Re-write the following to use an automatic variable instead of the Rmd's file name in the recipe.
+
+    ``` make
+    report.html : report.Rmd
+      Rscript -e "rmarkdown::render('report.Rmd')"
+    ```
+    
+    ```{eval = FALSE, echo = FALSE}
+    report.html : report.Rmd
+      Rscript -e "rmarkdown::render('$<')"
+    ```
+
 
 # Competitors
 
