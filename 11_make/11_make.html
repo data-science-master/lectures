@@ -372,7 +372,11 @@ summary {
 <div id="TOC">
 <ul>
 <li><a href="#learning-objectives">Learning Objectives</a></li>
-<li><a href="#installation">Installation</a></li>
+<li><a href="#installation-maclinux">Installation Mac/Linux</a></li>
+<li><a href="#installation-windows">Installation Windows</a><ul>
+<li><a href="#use-rtools-light">Use Rtools (light)</a></li>
+<li><a href="#windows-subsystem-for-linux-heavy">Windows Subsystem for Linux (heavy)</a></li>
+</ul></li>
 <li><a href="#motivation">Motivation</a></li>
 <li><a href="#make">Make</a><ul>
 <li><a href="#rules">Rules</a></li>
@@ -409,15 +413,56 @@ summary {
 </ul></li>
 </ul>
 </div>
-<div id="installation" class="section level1">
-<h1>Installation</h1>
+<div id="installation-maclinux" class="section level1">
+<h1>Installation Mac/Linux</h1>
 <ul>
-<li>If you are using Mac of Linux, you probably have <code>make</code> already installed.
+<li>If you are using Mac or Linux, you probably have <code>make</code> already installed.
 <ul>
 <li>To verify, open up the terminal and run <code>make --version</code></li>
 </ul></li>
-<li>If you are using Windows, install <code>make</code> here: <a href="http://gnuwin32.sourceforge.net/packages/make.htm" class="uri">http://gnuwin32.sourceforge.net/packages/make.htm</a></li>
 </ul>
+</div>
+<div id="installation-windows" class="section level1">
+<h1>Installation Windows</h1>
+<ul>
+<li>This is one of the cases where Windows is really inferior to Mac and Linux. I will show you two pipelines. You only need to choose one pipeline.</li>
+</ul>
+<div id="use-rtools-light" class="section level2">
+<h2>Use Rtools (light)</h2>
+<ul>
+<li>Download and install Rtools: <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a></li>
+</ul>
+<!-- - You can use `make` in windows (<http://gnuwin32.sourceforge.net/packages/make.htm>) -->
+<ul>
+<li><p>Add <code>make</code> to the path via typing the following in R:</p>
+<pre class="r"><code>writeLines(&#39;PATH=&quot;${RTOOLS40_HOME}\\usr\\bin;${PATH}&quot;&#39;, con = &quot;~/.Renviron&quot;)</code></pre></li>
+<li><p>Restart R</p></li>
+<li><p>Change R Studio’s settings “Global Options… &gt; Terminal &gt; New terminals open with” so that it reads “Windows Powershell”. This will make it so that the terminal is <a href="https://en.wikipedia.org/wiki/PowerShell">Windows PowerShell</a>, <strong>not</strong> git bash (so it will look a little weird and act a little differently).</p></li>
+<li><p>Open a new terminal. Again, this is a <a href="https://en.wikipedia.org/wiki/PowerShell">Windows PowerShell</a></p></li>
+<li><p>When you edit a Makefile, use the following commands instead (with the “.exe” suffix after “R” and “Rscript”)</p>
+<pre class="bash"><code>R.exe CMD BATCH --no-save --no-restore input_file.R output_file.Rout</code></pre>
+<pre class="bash"><code>Rscript.exe -e &quot;rmarkdown::render(&#39;rmarkdown_file.Rmd&#39;)&quot;</code></pre></li>
+<li><p>Always run <code>make</code> in the Windows PowerShell.</p></li>
+<li><p>You can always convert the terminal back to git bash.</p></li>
+</ul>
+</div>
+<div id="windows-subsystem-for-linux-heavy" class="section level2">
+<h2>Windows Subsystem for Linux (heavy)</h2>
+<ul>
+<li><p>You can install Ubuntu on Windows to use all of its powerful features. This is what you would need to do for more advanced computational operations.</p></li>
+<li><p>But on Ubuntu, you’ll need to install a <em>separate</em> version of R, all of the R packages that you usually use, and git.</p></li>
+<li><p><strong>NOTE</strong>: This strategy could take up to a gigabyte of storage.</p></li>
+<li><p>Install Ubuntu using these directions: <a href="https://ubuntu.com/wsl" class="uri">https://ubuntu.com/wsl</a></p></li>
+<li><p>Install <code>r-base-dev</code> using these instructions: <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> there naviage to “Download R for Linux &gt; ubunut/”</p>
+<ul>
+<li>You’ll probably need to use the “Secure Apt” section as well.</li>
+</ul></li>
+<li><p>In Ubuntu open up the command line for R</p>
+<pre><code>R</code></pre></li>
+<li><p>In the R command prompt, install all of the R packages you will need with <code>install.packages()</code>. You can exit R afterwards with <code>q()</code>.</p></li>
+<li><p>Change R Studio’s settings “Global Options… &gt; Terminal &gt; New terminals open with” so that it reads “Bash (Windows Subsystem for Linux)”.</p></li>
+</ul>
+</div>
 </div>
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>

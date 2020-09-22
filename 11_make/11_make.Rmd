@@ -30,11 +30,70 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - [Managing Projects with GNU Make](http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf)
     - [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
     
-# Installation
+# Installation Mac/Linux
 
-- If you are using Mac of Linux, you probably have `make` already installed.
+- If you are using Mac or Linux, you probably have `make` already installed.
     - To verify, open up the terminal and run `make --version`
-- If you are using Windows, install `make` here: <http://gnuwin32.sourceforge.net/packages/make.htm>
+    
+# Installation Windows
+
+- This is one of the cases where Windows is really inferior to Mac and Linux. I will show you two pipelines. You only need to choose one pipeline.
+
+## Use Rtools (light)
+
+- Download and install Rtools: <https://cran.r-project.org/bin/windows/Rtools/>
+
+<!-- - You can use `make` in windows (<http://gnuwin32.sourceforge.net/packages/make.htm>) -->
+
+- Add `make` to the path via typing the following in R:
+
+    ```{r, eval = FALSE}
+    writeLines('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
+    ```
+
+- Restart R
+
+- Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Windows Powershell". This will make it so that the terminal is [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell), **not** git bash (so it will look a little weird and act a little differently).
+
+- Open a new terminal. Again, this is a [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell)
+
+- When you edit a Makefile, use the following commands instead (with the ".exe" suffix after "R" and "Rscript")
+
+    ```{bash, eval = FALSE}
+    R.exe CMD BATCH --no-save --no-restore input_file.R output_file.Rout
+    ```
+    
+    ```{bash, eval = FALSE}
+    Rscript.exe -e "rmarkdown::render('rmarkdown_file.Rmd')"
+    ```
+    
+- Always run `make` in the Windows PowerShell.
+
+- You can always convert the terminal back to git bash.
+    
+## Windows Subsystem for Linux (heavy)
+
+- You can install Ubuntu on Windows to use all of its powerful features. This is what you would need to do for more advanced computational operations.
+
+- But on Ubuntu, you'll need to install a *separate* version of R, all of the R packages that you usually use, and git.
+
+- **NOTE**: This strategy could take up to a gigabyte of storage.
+
+- Install Ubuntu using these directions: <https://ubuntu.com/wsl>
+
+- Install `r-base-dev` using these instructions: <https://cran.r-project.org/> there naviage to "Download R for Linux > ubunut/"
+
+    - You'll probably need to use the "Secure Apt" section as well.
+
+- In Ubuntu open up the command line for R
+
+    ```
+    R
+    ```
+    
+- In the R command prompt, install all of the R packages you will need with `install.packages()`. You can exit R afterwards with `q()`.
+
+- Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Bash (Windows Subsystem for Linux)".
 
 # Motivation
 
