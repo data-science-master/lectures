@@ -97,8 +97,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     ```
     target: prereq_1 prereq_2 prereq_3 ...
-        first bash command to make target
-        second bash command and so on
+      first bash command to make target
+      second bash command and so on
     ```
 
 - Each *rule* contains three things: a *target*, *prerequisites*, and *commands*.
@@ -179,15 +179,15 @@ phony_target2 : target3
 
 # Comment 1
 target1 : prereq1.R
-    R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
+  R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
 
 # Comment 2
 target2 : prereq2.py
-    python prereq2.py
+  python prereq2.py
 
 # Comment 3
 target3 : prereq3.Rmd
-    Rscript -e "rmarkdown::render('prereq3.Rmd')"
+  Rscript -e "rmarkdown::render('prereq3.Rmd')"
 ```
 
 ## Evaluate a makefile
@@ -231,7 +231,7 @@ target3 : prereq3.Rmd
     
     ``` make
     data/data.csv : analysis/script.R
-        R CMD BATCH --no-save --no-restore analysis/script.R
+      R CMD BATCH --no-save --no-restore analysis/script.R
     ```
     
      **NOTE** that the following will **not** work because each command is executed in its *own* subshell (assuming the working directory is the location of the Makefile): 
@@ -239,8 +239,8 @@ target3 : prereq3.Rmd
     ``` make
     # DOES NOT WORK
     data/data.csv : analysis/script.R
-        cd analysis 
-        R CMD BATCH --no-save --no-restore script.R
+      cd analysis 
+      R CMD BATCH --no-save --no-restore script.R
     ```
     
     But you can get around this by putting these commands on one line, with each command separated by a semicolon:
@@ -248,7 +248,7 @@ target3 : prereq3.Rmd
     ``` make
     # Works, but not recommended
     data/data.csv : analysis/script.R
-        cd analysis; R CMD BATCH --no-save --no-restore script.R
+      cd analysis; R CMD BATCH --no-save --no-restore script.R
     ```
     
 - Any file manipulation in "script.R" needs to be done assuming the working directory is where Makefile is (**notice the single dot**):
@@ -268,6 +268,65 @@ target3 : prereq3.Rmd
 # A worked example
 
 - I created a repo with a very basic example of using a Makefile: <https://github.com/data-science-master/pvalue_sims>
+
+- The files after everything is evaluated are:
+    - Makefile
+    - Readme.Rmd
+    - Readme.md
+    - analysis
+        - add_alt_sims.R
+        - null_sims.R
+        - panal.html
+        - panal.Rmd
+    - output
+        - add_alt_sims.Rout
+        - null_sims.Rout
+        - pdat.csv
+        - pnull.RDS
+
+- These files have the following dependency structure:
+
+    ```{r another-dependency, message = FALSE, echo = FALSE}
+    library(tidyverse)
+    library(ggdag)
+    set.seed(15)
+    dagify("pnull.RDS" ~ "null_sims.R",
+           "pdat.csv" ~ "add_alt_sims.R",
+           "pdat.csv" ~ "pnull.RDS",
+           "panal.html" ~ "panal.Rmd",
+           "panal.html" ~ "pdat.csv") %>%
+      ggdag(layout = "sugiyama",
+            text_col = "black",
+            node = FALSE) +
+      theme_void() +
+      xlim(-0.5, 2.5)
+    ```
+
+- The Makefile that organizes this structure is
+
+    ``` make
+    all : sims
+    
+    .PHONY : sims
+    sims : analysis/panal.html
+    
+    analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    	Rscript -e "rmarkdown::render('analysis/panal.Rmd')"
+    
+    output/pnull.RDS : analysis/null_sims.R
+    	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+    
+    output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    	R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+    ```
+    
+- **Exercise**: Clone this repo and run `make` in the terminal.
+
+- **Exercise**: What happens when you modify "panal.Rmd" and you rerun `make`?
+
+- **Exercise**: What happens when you modify "add_alt_sims.R" and rerun `make`?
+
+- **Exercise**: What happens when you modify "null_sims.R" and rerun `make`?
 
 # Your turn
 
@@ -339,29 +398,46 @@ target3 : prereq3.Rmd
 
     ``` make
     fig1.pdf fig2.pdf fig3.pdf : fig_create.R
-        R CMD BATCH --no-save --no-restore fig_create.R
+      R CMD BATCH --no-save --no-restore fig_create.R
     ```
     
     ``` make
     figs = fig1.pdf fig2.pdf fig3.pdf
     $(figs) : fig_create.R
-        R CMD BATCH --no-save --no-restore fig_create.R
+      R CMD BATCH --no-save --no-restore fig_create.R
     ```
     
 - If you do not like writing `R CMD BATCH --no-save --no-restore` each time, then you can save this command as a variable. The two rules are equivalent:
 
     ``` make
     fig.pdf : script.R
-        R CMD BATCH --no-save --no-restore script.R
+      R CMD BATCH --no-save --no-restore script.R
     ```
     
     ``` make
     rexec = R CMD BATCH --no-save --no-restore
     fig.pdf : script.R
-        $(rexec) script.R
+      $(rexec) script.R
     ```
     
-- **Exercise**:
+- **Exercise**: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:
+
+    ``` make
+    all : sims
+    
+    .PHONY : sims
+    sims : analysis/panal.html
+    
+    analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    	Rscript -e "rmarkdown::render('analysis/panal.Rmd')"
+    
+    output/pnull.RDS : analysis/null_sims.R
+    	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+    
+    output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    	R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+    ```
+
 
 ## Automatic Variables
 
@@ -382,7 +458,7 @@ target3 : prereq3.Rmd
     
     ``` make
     output/figs/foo.pdf : analysis/scripts/gaa.R data/hii.csv
-        R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R
+      R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R
     ```
     
     Then the following are these automatic variable values:
@@ -399,10 +475,18 @@ target3 : prereq3.Rmd
 - For example, if you always place the R script first that generates the target, and the datasets that the R script uses second, then the following is typically how I evaluate the R script.
 
     ``` make
+    rexec = R CMD BATCH --no-save --no-restore
     figure.pdf : script.R data1.csv data2.csv
-    	R CMD BATCH --no-save --no-restore $< $(basename $(<F)).Rout
+      $(rexec) $< $(basename $(<F)).Rout
     ```
     
+    The variables and automatic variables would interpret this as
+    
+    ``` make
+    figure.pdf : script.R data1.csv data2.csv
+      R CMD BATCH --no-save --no-restore script.R script.Rout
+    ```
+
 - **Exercise**: Re-write the following to use an automatic variable instead of the Rmd's file name in the recipe.
 
     ``` make
@@ -410,7 +494,7 @@ target3 : prereq3.Rmd
       Rscript -e "rmarkdown::render('report.Rmd')"
     ```
     
-    ```{eval = FALSE, echo = FALSE}
+    ```{bash, eval = FALSE, echo = FALSE}
     report.html : report.Rmd
       Rscript -e "rmarkdown::render('$<')"
     ```

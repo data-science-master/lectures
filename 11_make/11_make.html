@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2020-09-21" />
+<meta name="date" content="2020-09-22" />
 
 <title>Managing Workflows with GNU Make</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Managing Workflows with GNU Make</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2020-09-21</h4>
+<h4 class="date">2020-09-22</h4>
 
 </div>
 
@@ -456,8 +456,8 @@ summary {
 <ul>
 <li><p>Inside the Makefile, you prepare a series of <em>rules</em> of the form</p>
 <pre><code>target: prereq_1 prereq_2 prereq_3 ...
-    first bash command to make target
-    second bash command and so on</code></pre></li>
+  first bash command to make target
+  second bash command and so on</code></pre></li>
 <li><p>Each <em>rule</em> contains three things: a <em>target</em>, <em>prerequisites</em>, and <em>commands</em>.</p></li>
 <li><p><code>target</code> is the name of the file that will be generated.</p></li>
 <li><p><code>prereq_1</code>, <code>prereq_2</code>, <code>prereq_3</code>, etc are the names of the files which are used to generate <code>target</code>. These can be datasets, R scripts, etc.</p></li>
@@ -519,15 +519,15 @@ phony_target2 : target3
 
 # Comment 1
 target1 : prereq1.R
-    R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
+  R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
 
 # Comment 2
 target2 : prereq2.py
-    python prereq2.py
+  python prereq2.py
 
 # Comment 3
 target3 : prereq3.Rmd
-    Rscript -e &quot;rmarkdown::render(&#39;prereq3.Rmd&#39;)&quot;</code></pre>
+  Rscript -e &quot;rmarkdown::render(&#39;prereq3.Rmd&#39;)&quot;</code></pre>
 </div>
 <div id="evaluate-a-makefile" class="section level2">
 <h2>Evaluate a makefile</h2>
@@ -561,16 +561,16 @@ analysis/report.Rmd
 data/data.csv</code></pre>
 <p>Then you need specify your targets according to this structure</p>
 <pre class="make"><code>data/data.csv : analysis/script.R
-    R CMD BATCH --no-save --no-restore analysis/script.R</code></pre>
+  R CMD BATCH --no-save --no-restore analysis/script.R</code></pre>
 <p><strong>NOTE</strong> that the following will <strong>not</strong> work because each command is executed in its <em>own</em> subshell (assuming the working directory is the location of the Makefile):</p>
 <pre class="make"><code># DOES NOT WORK
 data/data.csv : analysis/script.R
-    cd analysis 
-    R CMD BATCH --no-save --no-restore script.R</code></pre>
+  cd analysis 
+  R CMD BATCH --no-save --no-restore script.R</code></pre>
 <p>But you can get around this by putting these commands on one line, with each command separated by a semicolon:</p>
 <pre class="make"><code># Works, but not recommended
 data/data.csv : analysis/script.R
-    cd analysis; R CMD BATCH --no-save --no-restore script.R</code></pre></li>
+  cd analysis; R CMD BATCH --no-save --no-restore script.R</code></pre></li>
 <li><p>Any file manipulation in “script.R” needs to be done assuming the working directory is where Makefile is (<strong>notice the single dot</strong>):</p>
 <pre class="r"><code>library(readr)
 dat &lt;- read_csv(&quot;./data/data.csv&quot;)</code></pre></li>
@@ -583,7 +583,47 @@ dat &lt;- read_csv(&quot;../data/data.csv&quot;)</code></pre></li>
 <div id="a-worked-example" class="section level1">
 <h1>A worked example</h1>
 <ul>
-<li>I created a repo with a very basic example of using a Makefile: <a href="https://github.com/data-science-master/pvalue_sims" class="uri">https://github.com/data-science-master/pvalue_sims</a></li>
+<li><p>I created a repo with a very basic example of using a Makefile: <a href="https://github.com/data-science-master/pvalue_sims" class="uri">https://github.com/data-science-master/pvalue_sims</a></p></li>
+<li><p>The files after everything is evaluated are:</p>
+<ul>
+<li>Makefile</li>
+<li>Readme.Rmd</li>
+<li>Readme.md</li>
+<li>analysis
+<ul>
+<li>add_alt_sims.R</li>
+<li>null_sims.R</li>
+<li>panal.html</li>
+<li>panal.Rmd</li>
+</ul></li>
+<li>output
+<ul>
+<li>add_alt_sims.Rout</li>
+<li>null_sims.Rout</li>
+<li>pdat.csv</li>
+<li>pnull.RDS</li>
+</ul></li>
+</ul></li>
+<li><p>These files have the following dependency structure:</p>
+<p><img src="data:image/png;base64,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" width="576" style="display: block; margin: auto;" /></p></li>
+<li><p>The Makefile that organizes this structure is</p>
+<pre class="make"><code>all : sims
+
+.PHONY : sims
+sims : analysis/panal.html
+
+analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    Rscript -e &quot;rmarkdown::render(&#39;analysis/panal.Rmd&#39;)&quot;
+
+output/pnull.RDS : analysis/null_sims.R
+    R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+
+output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
+<li><p><strong>Exercise</strong>: Clone this repo and run <code>make</code> in the terminal.</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “panal.Rmd” and you rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “add_alt_sims.R” and rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “null_sims.R” and rerun <code>make</code>?</p></li>
 </ul>
 </div>
 <div id="your-turn" class="section level1">
@@ -633,17 +673,30 @@ library(palmerpenguins)</code></pre></li>
 <li><p>So when a makefile comes across <code>$(my_first_variable)</code>, it will actually read it as <code>fig.pdf</code>.</p></li>
 <li><p>For example, suppose the file <code>fig_create.R</code> generates multiple pdf files: <code>fig1.pdf</code>, <code>fig2.pdf</code>, and <code>fig3.pdf</code>. Then we could write this rule in the two equivalent ways:</p>
 <pre class="make"><code>fig1.pdf fig2.pdf fig3.pdf : fig_create.R
-    R CMD BATCH --no-save --no-restore fig_create.R</code></pre>
+  R CMD BATCH --no-save --no-restore fig_create.R</code></pre>
 <pre class="make"><code>figs = fig1.pdf fig2.pdf fig3.pdf
 $(figs) : fig_create.R
-    R CMD BATCH --no-save --no-restore fig_create.R</code></pre></li>
+  R CMD BATCH --no-save --no-restore fig_create.R</code></pre></li>
 <li><p>If you do not like writing <code>R CMD BATCH --no-save --no-restore</code> each time, then you can save this command as a variable. The two rules are equivalent:</p>
 <pre class="make"><code>fig.pdf : script.R
-    R CMD BATCH --no-save --no-restore script.R</code></pre>
+  R CMD BATCH --no-save --no-restore script.R</code></pre>
 <pre class="make"><code>rexec = R CMD BATCH --no-save --no-restore
 fig.pdf : script.R
-    $(rexec) script.R</code></pre></li>
-<li><p><strong>Exercise</strong>:</p></li>
+  $(rexec) script.R</code></pre></li>
+<li><p><strong>Exercise</strong>: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:</p>
+<pre class="make"><code>all : sims
+
+.PHONY : sims
+sims : analysis/panal.html
+
+analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    Rscript -e &quot;rmarkdown::render(&#39;analysis/panal.Rmd&#39;)&quot;
+
+output/pnull.RDS : analysis/null_sims.R
+    R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+
+output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
 </ul>
 <div id="automatic-variables" class="section level2">
 <h2>Automatic Variables</h2>
@@ -662,7 +715,7 @@ fig.pdf : script.R
 </ul></li>
 <li><p><em>Example</em>: Suppose I have the following rule:</p>
 <pre class="make"><code>output/figs/foo.pdf : analysis/scripts/gaa.R data/hii.csv
-    R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R</code></pre>
+  R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R</code></pre>
 <p>Then the following are these automatic variable values:</p>
 <ul>
 <li><code>$@</code>: output/figs/foo.pdf</li>
@@ -675,8 +728,12 @@ fig.pdf : script.R
 <li><code>$(basename $(&lt;F))</code>: gaa</li>
 </ul></li>
 <li><p>For example, if you always place the R script first that generates the target, and the datasets that the R script uses second, then the following is typically how I evaluate the R script.</p>
+<pre class="make"><code>rexec = R CMD BATCH --no-save --no-restore
+figure.pdf : script.R data1.csv data2.csv
+  $(rexec) $&lt; $(basename $(&lt;F)).Rout</code></pre>
+<p>The variables and automatic variables would interpret this as</p>
 <pre class="make"><code>figure.pdf : script.R data1.csv data2.csv
-    R CMD BATCH --no-save --no-restore $&lt; $(basename $(&lt;F)).Rout</code></pre></li>
+  R CMD BATCH --no-save --no-restore script.R script.Rout</code></pre></li>
 <li><p><strong>Exercise</strong>: Re-write the following to use an automatic variable instead of the Rmd’s file name in the recipe.</p>
 <pre class="make"><code>report.html : report.Rmd
   Rscript -e &quot;rmarkdown::render(&#39;report.Rmd&#39;)&quot;</code></pre></li>
