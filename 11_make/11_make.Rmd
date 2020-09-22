@@ -26,10 +26,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - [Minimal Make](https://kbroman.org/minimal_make/)
     - [Makefile Wiki Page](https://en.wikipedia.org/wiki/Makefile)
 - Additional Resources
-    - [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
-    - [Managing Projects with GNU Make](http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf)
     - [Official Manual](https://www.gnu.org/software/make/manual/make.html)
-
+    - [Managing Projects with GNU Make](http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf)
+    - [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
+    
 # Installation
 
 - If you are using Mac of Linux, you probably have `make` already installed.
@@ -161,7 +161,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     all : phony_target1 phony_target2 phony_target3 ...
     ```
-    
+
+- **NOTE**: It is important to have `all : phony_target1 phony_target2` as the very first *rule* because by default `make` will only evaluate the very first rule in the file. So if `all` is first, then `make` will evaluate all targets.
+
 ## Comments
 
 - Use a hashtag `#` for comments in a makefile.
@@ -178,11 +180,11 @@ phony_target1 : target1 target2
 phony_target2 : target3
 
 # Comment 1
-target1 : prereq1.R
-  R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
+target1 : prereq1.R data0.csv data1.RDS
+  R CMD BATCH --no-save --no-restore prereq1.R prereq1_out.Rout
 
 # Comment 2
-target2 : prereq2.py
+target2 : prereq2.py data2.csv
   python prereq2.py
 
 # Comment 3
@@ -203,10 +205,6 @@ target3 : prereq3.Rmd
     ``` bash
     make phony_target
     ```
-
-## How it works
-
-- It is important to have `all : phony_target1 phony_target2` as the very first *rule* because by default `make` will only evaluate the very first rule in the file. So if `all` is first, then `make` will evaluate all targets.
 
 - Make will check if any of the prerequisites have changes for each `target` and, if so, will re-run the bash commands of that *rule*.
 

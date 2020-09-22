@@ -381,7 +381,6 @@ summary {
 <li><a href="#comments">Comments</a></li>
 <li><a href="#pseudo-code-for-makefile">Pseudo-code for Makefile</a></li>
 <li><a href="#evaluate-a-makefile">Evaluate a makefile</a></li>
-<li><a href="#how-it-works">How it works</a></li>
 <li><a href="#working-directory-considerations">Working directory considerations</a></li>
 </ul></li>
 <li><a href="#a-worked-example">A worked example</a></li>
@@ -404,9 +403,9 @@ summary {
 </ul></li>
 <li>Additional Resources
 <ul>
-<li><a href="./baker_2020.pdf">Using <em>GNU Make</em> to Manage the Workflow of Data Analysis Projects</a></li>
-<li><a href="http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf">Managing Projects with GNU Make</a></li>
 <li><a href="https://www.gnu.org/software/make/manual/make.html">Official Manual</a></li>
+<li><a href="http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf">Managing Projects with GNU Make</a></li>
+<li><a href="./baker_2020.pdf">Using <em>GNU Make</em> to Manage the Workflow of Data Analysis Projects</a></li>
 </ul></li>
 </ul>
 </div>
@@ -499,6 +498,7 @@ phony_target : target1 target2 target3 ...</code></pre>
 <li><p>“Phony” targets are not real files. They are just convenient names to use to describe a collection of targets that should be generated.</p></li>
 <li><p>At the <em>top</em> of the makefile, you then list the phony targets after <code>all</code>:</p>
 <pre><code>all : phony_target1 phony_target2 phony_target3 ...</code></pre></li>
+<li><p><strong>NOTE</strong>: It is important to have <code>all : phony_target1 phony_target2</code> as the very first <em>rule</em> because by default <code>make</code> will only evaluate the very first rule in the file. So if <code>all</code> is first, then <code>make</code> will evaluate all targets.</p></li>
 </ul>
 </div>
 <div id="comments" class="section level2">
@@ -518,11 +518,11 @@ phony_target1 : target1 target2
 phony_target2 : target3
 
 # Comment 1
-target1 : prereq1.R
-  R CMD BATCH --no-save --no-restore prereq1.R prereq_out.Rout
+target1 : prereq1.R data0.csv data1.RDS
+  R CMD BATCH --no-save --no-restore prereq1.R prereq1_out.Rout
 
 # Comment 2
-target2 : prereq2.py
+target2 : prereq2.py data2.csv
   python prereq2.py
 
 # Comment 3
@@ -536,12 +536,6 @@ target3 : prereq3.Rmd
 <pre class="bash"><code>make</code></pre></li>
 <li><p>You can run just the targets in a phony target by specifying the phony target</p>
 <pre class="bash"><code>make phony_target</code></pre></li>
-</ul>
-</div>
-<div id="how-it-works" class="section level2">
-<h2>How it works</h2>
-<ul>
-<li><p>It is important to have <code>all : phony_target1 phony_target2</code> as the very first <em>rule</em> because by default <code>make</code> will only evaluate the very first rule in the file. So if <code>all</code> is first, then <code>make</code> will evaluate all targets.</p></li>
 <li><p>Make will check if any of the prerequisites have changes for each <code>target</code> and, if so, will re-run the bash commands of that <em>rule</em>.</p></li>
 <li><p><code>Make</code> will not re-run commands if the prerequisites have not changed. That is, if no upstream files to <code>target</code> were modified, then <code>target</code> will not be re-generated. This makes <code>make</code> very efficient.</p></li>
 </ul>
