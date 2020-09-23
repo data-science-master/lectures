@@ -61,6 +61,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Always run `make` in the Windows PowerShell from R Studio. This pipeline won't work if you try to directly open the PowerShell outside of R Studio.
 
 - You can always convert the terminal back to git bash later.
+
+- I am not a big fan of RStudio Projects, but if you like them then there is some R Studio `make` functionality when you use an RStudio Project (<https://stat545.com/make-test-drive.html>). This lets you avoid using Windows PowerShell.
     
 ## Windows Subsystem for Linux (heavy)
 
