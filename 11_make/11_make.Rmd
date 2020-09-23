@@ -29,6 +29,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - [Official Manual](https://www.gnu.org/software/make/manual/make.html)
     - [Managing Projects with GNU Make](http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf)
     - [Using *GNU Make* to Manage the Workflow of Data Analysis Projects](./baker_2020.pdf)
+    - [Stat 545 Chapter on Make](https://stat545.com/automating-pipeline.html)
     
 # Installation Mac/Linux
 
