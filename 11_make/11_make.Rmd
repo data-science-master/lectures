@@ -45,7 +45,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 <!-- - You can use `make` in windows (<http://gnuwin32.sourceforge.net/packages/make.htm>) -->
 
-- Add `make` to the path via typing the following in R:
+- Add `make` to the PATH whenever you open R via typing the following in R:
 
     ```{r, eval = FALSE}
     writeLines('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
@@ -55,25 +55,17 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Windows Powershell". This will make it so that the terminal is [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell), **not** git bash (so it will look a little weird and act a little differently).
 
-- Open a new terminal. Again, this is a [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell)
+- Open a new terminal. Again, this is a [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell).
 
-- When you edit a Makefile, use the following commands instead (with the ".exe" suffix after "R" and "Rscript")
+- Always run `make` in the Windows PowerShell from R Studio. This pipeline won't work if you try to directly open the PowerShell outside of R Studio.
 
-    ```{bash, eval = FALSE}
-    R.exe CMD BATCH --no-save --no-restore input_file.R output_file.Rout
-    ```
-    
-    ```{bash, eval = FALSE}
-    Rscript.exe -e "rmarkdown::render('rmarkdown_file.Rmd')"
-    ```
-    
-- Always run `make` in the Windows PowerShell.
-
-- You can always convert the terminal back to git bash.
+- You can always convert the terminal back to git bash later.
     
 ## Windows Subsystem for Linux (heavy)
 
-- You can install Ubuntu on Windows to use all of its powerful features. This is what you would need to do for more advanced computational operations.
+- Only start this if you are willing to spend a few hours fiddling around your computer.
+
+- You can install Ubuntu on Windows to use all of its powerful features. This is what you would need to do for more advanced computational operations. This is how I use Windows.
 
 - But on Ubuntu, you'll need to install a *separate* version of R, all of the R packages that you usually use, and git.
 
@@ -81,9 +73,14 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Install Ubuntu using these directions: <https://ubuntu.com/wsl>
 
-- Install `r-base-dev` using these instructions: <https://cran.r-project.org/> there naviage to "Download R for Linux > ubunut/"
+- Install `r-base-dev` using the instructions found by heading to <https://cran.r-project.org/> then navigating to "Download R for Linux > ubuntu/"
 
-    - You'll probably need to use the "Secure Apt" section as well.
+    - Try installing it without Secure Apt first. But you'll probablly need to run the following to install it:
+    
+        ```{bash, eval=FALSE}
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+        ```
+    
 
 - In Ubuntu open up the command line for R
 
@@ -94,6 +91,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - In the R command prompt, install all of the R packages you will need with `install.packages()`. You can exit R afterwards with `q()`.
 
 - Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Bash (Windows Subsystem for Linux)".
+
+- Open up a new terminal, and you should now be using Ubuntu for your terminal.
 
 # Motivation
 
@@ -183,7 +182,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Knit an R Markdown file
     ```{bash, eval = FALSE}
-    Rscript -e "rmarkdown::render('rmarkdown_file.Rmd')"
+    Rscript -e "library(rmarkdown);render('rmarkdown_file.Rmd')"
     ```
 
     Make sure to change "rmarkdown_file.Rmd"
@@ -248,7 +247,7 @@ target2 : prereq2.py data2.csv
 
 # Comment 3
 target3 : prereq3.Rmd
-  Rscript -e "rmarkdown::render('prereq3.Rmd')"
+  Rscript -e "library(rmarkdown);render('prereq3.Rmd')"
 ```
 
 ## Evaluate a makefile
@@ -368,7 +367,7 @@ target3 : prereq3.Rmd
     sims : analysis/panal.html
     
     analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    	Rscript -e "rmarkdown::render('analysis/panal.Rmd')"
+    	Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
     
     output/pnull.RDS : analysis/null_sims.R
     	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
@@ -429,6 +428,7 @@ target3 : prereq3.Rmd
     library(tidymodels)
     library(GGally)
     library(palmerpenguins)
+    library(randomForest)
     ```
 
 1. Modify the Makefile to automatically manage this pipeline.
@@ -451,7 +451,7 @@ target3 : prereq3.Rmd
 
 - So when a makefile comes across `$(my_first_variable)`, it will actually read it as `fig.pdf`.
 
-- For example, suppose the file `fig_create.R` generates multiple pdf files: `fig1.pdf`, `fig2.pdf`, and `fig3.pdf`. Then we could write this rule in the two equivalent ways:
+- For example, suppose the file `fig_create.R` generates multiple pdf files: `fig1.pdf`, `fig2.pdf`, and `fig3.pdf`. Then we could write this rule in the following two equivalent ways:
 
     ``` make
     fig1.pdf fig2.pdf fig3.pdf : fig_create.R
@@ -464,7 +464,7 @@ target3 : prereq3.Rmd
       R CMD BATCH --no-save --no-restore fig_create.R
     ```
     
-- If you do not like writing `R CMD BATCH --no-save --no-restore` each time, then you can save this command as a variable. The two rules are equivalent:
+- If you do not like writing `R CMD BATCH --no-save --no-restore` each time, then you can save this command as a variable. The following two rules are equivalent:
 
     ``` make
     fig.pdf : script.R
@@ -486,7 +486,7 @@ target3 : prereq3.Rmd
     sims : analysis/panal.html
     
     analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    	Rscript -e "rmarkdown::render('analysis/panal.Rmd')"
+    	Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
     
     output/pnull.RDS : analysis/null_sims.R
     	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
@@ -548,12 +548,12 @@ target3 : prereq3.Rmd
 
     ``` make
     report.html : report.Rmd
-      Rscript -e "rmarkdown::render('report.Rmd')"
+      Rscript -e "library(rmarkdown);render('report.Rmd')"
     ```
     
     ```{bash, eval = FALSE, echo = FALSE}
     report.html : report.Rmd
-      Rscript -e "rmarkdown::render('$<')"
+      Rscript -e "library(rmarkdown);render('$<')"
     ```
 
 
