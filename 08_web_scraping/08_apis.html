@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-12-03" />
+<meta name="date" content="2020-09-24" />
 
 <title>Getting Data Through APIs</title>
 
@@ -365,7 +365,7 @@ summary {
 
 <h1 class="title toc-ignore">Getting Data Through APIs</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-12-03</h4>
+<h4 class="date">2020-09-24</h4>
 
 </div>
 
@@ -513,7 +513,7 @@ movie_key_2 &lt;- key_get(&quot;OMDB_API_KEY_SECURE&quot;) ## do this each time 
 <li><p>List of codes: <a href="https://www.flickr.com/photos/girliemac/sets/72157628409467125" class="uri">https://www.flickr.com/photos/girliemac/sets/72157628409467125</a></p></li>
 <li><p>Use <code>status_code()</code> to get the code for our request:</p>
 <pre class="r"><code>status_code(mout)</code></pre>
-<pre><code>## [1] 200</code></pre></li>
+<pre><code>## [1] 401</code></pre></li>
 </ul></li>
 <li><p><em>Headers</em> provide infromation on the request. Use the <code>headers()</code> function to see what headers we got in our request.</p>
 <pre class="r"><code>headers(mout)</code></pre></li>
@@ -521,7 +521,7 @@ movie_key_2 &lt;- key_get(&quot;OMDB_API_KEY_SECURE&quot;) ## do this each time 
 <pre class="r"><code>content(mout)</code></pre></li>
 <li><p>Background: The body comes in the form of either a JSON or XML data structure. <code>content()</code> will parse this into an R object (usually a list). You can see the raw JSON data structure here with the <code>as = &quot;text&quot;</code> argument:</p>
 <pre class="r"><code>content(mout, as = &quot;text&quot;)</code></pre>
-<pre><code>## [1] &quot;{\&quot;Title\&quot;:\&quot;The Lighthouse\&quot;,\&quot;Year\&quot;:\&quot;2019\&quot;,\&quot;Rated\&quot;:\&quot;R\&quot;,\&quot;Released\&quot;:\&quot;01 Nov 2019\&quot;,\&quot;Runtime\&quot;:\&quot;109 min\&quot;,\&quot;Genre\&quot;:\&quot;Drama, Fantasy, Horror, Mystery\&quot;,\&quot;Director\&quot;:\&quot;Robert Eggers\&quot;,\&quot;Writer\&quot;:\&quot;Max Eggers, Robert Eggers\&quot;,\&quot;Actors\&quot;:\&quot;Willem Dafoe, Robert Pattinson, Valeriia Karaman\&quot;,\&quot;Plot\&quot;:\&quot;Two lighthouse keepers try to maintain their sanity while living on a remote and mysterious New England island in the 1890s.\&quot;,\&quot;Language\&quot;:\&quot;English\&quot;,\&quot;Country\&quot;:\&quot;Canada, USA\&quot;,\&quot;Awards\&quot;:\&quot;N/A\&quot;,\&quot;Poster\&quot;:\&quot;https://m.media-amazon.com/images/M/MV5BZmE0MGJhNmYtOWNjYi00Njc5LWE2YjEtMWMxZTVmODUwMmMxXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_SX300.jpg\&quot;,\&quot;Ratings\&quot;:[{\&quot;Source\&quot;:\&quot;Internet Movie Database\&quot;,\&quot;Value\&quot;:\&quot;8.3/10\&quot;},{\&quot;Source\&quot;:\&quot;Rotten Tomatoes\&quot;,\&quot;Value\&quot;:\&quot;92%\&quot;},{\&quot;Source\&quot;:\&quot;Metacritic\&quot;,\&quot;Value\&quot;:\&quot;83/100\&quot;}],\&quot;Metascore\&quot;:\&quot;83\&quot;,\&quot;imdbRating\&quot;:\&quot;8.3\&quot;,\&quot;imdbVotes\&quot;:\&quot;13,804\&quot;,\&quot;imdbID\&quot;:\&quot;tt7984734\&quot;,\&quot;Type\&quot;:\&quot;movie\&quot;,\&quot;DVD\&quot;:\&quot;N/A\&quot;,\&quot;BoxOffice\&quot;:\&quot;N/A\&quot;,\&quot;Production\&quot;:\&quot;A24\&quot;,\&quot;Website\&quot;:\&quot;N/A\&quot;,\&quot;Response\&quot;:\&quot;True\&quot;}&quot;</code></pre></li>
+<pre><code>## [1] &quot;{\&quot;Response\&quot;:\&quot;False\&quot;,\&quot;Error\&quot;:\&quot;No API key provided.\&quot;}&quot;</code></pre></li>
 </ul>
 </div>
 <div id="basic-authentication" class="section level2">
