@@ -15,14 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 - Monday Section Important Dates:
     - 10/05/2020 at 5:30 PM: Teams and datasets are chosen.
     - 11/09/2020 at 5:30 PM: Progress Report Due.
-    - 12/07/2020 at 5:30 PM: Shiny apps and written reports (for graduate students) also due.
-    - 12/07/2020--12/12/2020 (TBD): Project Presentations (During Final Exam Period). 
+    - 12/07/2020 at 5:30 PM: Shiny apps, video presentations, and written reports (for graduate students) due.
     
 - Thursday Section Important Dates:
     - 10/08/2020 at 5:30 PM: Teams and datasets are chosen.
     - 11/12/2020 at 5:30 PM: Progress Report Due.
-    - 12/07/2020 at 5:30 PM: Shiny apps and written reports (for graduate students) also due.
-    - 12/07/2020--12/12/2020 (TBD): Project Presentations (During Final Exam Period). 
+    - 12/07/2020 at 5:30 PM: Shiny apps, video presentations, and written reports (for graduate students) due.
 
 # Grade Breakdown
 
@@ -33,7 +31,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - (5 pts) Progress report.
     - (10 pts) GitHub repo.
     - (20 pts) Shiny App
-    - (10 pts) Presentation
+    - (10 pts) Video Presentation
     
 - Graduate Students (613)
     - (5 pts) Team and data selection.
@@ -41,7 +39,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - (10 pts) GitHub repo.
     - (10 pts) Shiny App.
     - (10 pts) Statistical analysis written report.
-    - (10 pts) Presentation.
+    - (10 pts) Video Presentation.
 
 # General Description
 
@@ -59,7 +57,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - If you have had a class with me before using these datasets, then you must choose a different dataset to analyze.
 
-- Please email me your top three dataset choices, along with your group members.
+- Please email me your dataset choice, along with your group members.
 
 - I will accept other sources as long as they are comparably large and complicated. For example, there are many open data portals from state agencies (<https://opendata.dc.gov/>).
 
@@ -77,7 +75,7 @@ knitr::opts_chunk$set(echo = TRUE)
     
         <https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm>
         
-    - Drinking water violations from the EPA: 
+    - Drinking water EPA data: 
     
         <https://www.epa.gov/ground-water-and-drinking-water/drinking-water-data-and-reports>
     
@@ -85,21 +83,21 @@ knitr::opts_chunk$set(echo = TRUE)
     
         <https://www.usaspending.gov/#/>
     
-    - DC Crime incident data from the DC police: 
+    <!-- - DC Crime incident data from the DC police:  -->
+
+    <!--     <https://mpdc.dc.gov/page/statistics-and-data> -->
     
-        <https://mpdc.dc.gov/page/statistics-and-data>
-    
-    - SBA disaster loans from the Small Business Administration: 
-    
-        <https://www.sba.gov/offices/headquarters/oda/resources/1407821>
+    <!-- - SBA disaster loans from the Small Business Administration:  -->
+
+    <!--     <https://www.sba.gov/offices/headquarters/oda/resources/1407821> -->
     
     - Fatal accidents from the NHTSA: 
     
         <https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars>
     
-    - Baltimore crime data from the Baltimore police: 
-    
-        <https://www.baltimorepolice.org/crime-stats/open-data>
+    <!-- - Baltimore crime data from the Baltimore police:  -->
+
+    <!--     <https://www.baltimorepolice.org/crime-stats/open-data> -->
     
     - Aircraft animal strikes from the FAA: 
     
@@ -121,9 +119,9 @@ knitr::opts_chunk$set(echo = TRUE)
     
         <http://www.dc.state.fl.us/pub/obis_request.html>
         
-    - College Scorecard: 
-    
-        <https://catalog.data.gov/dataset/college-scorecard>
+    <!-- - College Scorecard:  -->
+
+    <!--     <https://catalog.data.gov/dataset/college-scorecard> -->
         
     - Reporting Carrier On-Time Performance (1987-present) from the Bureau of 
       Transportation Statistics:
@@ -211,22 +209,23 @@ Your Shiny app should contain all of the following elements:
 
 # (10 pts) Presentation
 
-- During the final exam period, each group will showcase their Shiny app
-  with a 15 minute presentation.
+- Each group should showcase their Shiny app with a 15 minute video presentation. I will post these on Blackboard so that your colleagues can see all the cool things you've been up to!
 
 - This presentation should **not** contain any slides, just the Shiny app.
 
-- You should present the conclusions of your analysis using your Shiny app
-  by interactively showing the class the results that you've found.
+- You should present the conclusions of your analysis using your Shiny app by interactively showing the class the results that you've found.
   
-- Each group member should talk for a proportionate amount of time. So if there
-  are two group members, each one should speak for about 7 or 8 minutes. 
-  If there are three group members, each one should speak for about 5 minutes.
+- Each group member should talk for a proportionate amount of time. So if there are two group members, each one should speak for about 7 or 8 minutes. If there are three group members, each one should speak for about 5 minutes.
+
+- My favorite software for recording is OBS Studio: <https://obsproject.com/>. But you can use whatever is most comfortable for you.
+
+- I usually use Kdenlive when I edit my videos: <https://kdenlive.org/en/>
+
+- Please save your video in MP4 Format
 
 # (10 pts) GitHub Repo
 
-- Each group will share a single GitHub repo. What work was done by 
-  whom will be viewable in the commit history in the repo.
+- Each group will share a single GitHub repo. What work was done by whom will be viewable in the commit history in the repo.
   
 - Your repo will consist of the following folders:
   - app: The location of the Shiny app.
