@@ -48,6 +48,8 @@ klippy::klippy()
 
 - Folks showcase some pretty sophisticated interactive data visualizations:
   <https://shiny.rstudio.com/gallery/>.
+  
+- I have students who have used Shiny to start a business: <https://www.finplyapp.com/>
 
 - If you get really good at Shiny, you can make sophisticated websites with it: 
   <http://letsrun.com/shoes>.
@@ -183,7 +185,7 @@ klippy::klippy()
   
 # Input UI Elements
 
-- In this section we'll describe how to format the user interface. This i
+- In this section we'll describe how to format the user interface. This
   is the stuff that goes within the `fluidPage()` call.
   
 - To do this, start up a new app called "`tryouts`" and make it 

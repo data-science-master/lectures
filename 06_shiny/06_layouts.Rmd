@@ -88,6 +88,7 @@ klippy::klippy()
 - We'll also talk about grid layouts later, but to see more advanced layouts try out:
     - `navbarPage()`.
     - `dashboardPage()`: <https://rstudio.github.io/shinydashboard/>
+    - Enhanced `dashboardPage()`: <https://rinterface.github.io/shinydashboardPlus/>
   
 ## Title Panel
 

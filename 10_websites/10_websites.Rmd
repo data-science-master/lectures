@@ -1,5 +1,5 @@
 ---
-title: "Create your own Website with R Markdown"
+title: "Create your own Website with Markdown"
 author: "David Gerard"
 date: "`r Sys.Date()`"
 output:  
@@ -21,9 +21,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Learn how to create a website with R Markdown.
+- Learn how to create a website with Markdown.
 - Create a personal or project website.
-- Chapter 1 and Section 3.1 of [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
+- [Setting up a GitHub Pages site with Jekyll](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll)
 
 # Motivation
 
@@ -44,54 +44,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - Advertise specific software/papers <https://dcgerard.github.io/updog/>.
     - Create a blog (say, on data science projects) <https://dcgerard.github.io/research/2018/03/16/updog.html>.
     
-# Installation
+- We will be using GitHub's [Jekyll](https://jekyllrb.com/) support to create a website. 
 
-- We'll use the blogdown R package to build a website, so make sure you have
-  it installed:
-  
-    ```{r, eval = FALSE}
-    install.packages("blogdown")
-    ```
+- But there is a whole book on how you can create a website using just R and the blogdown package which you might want to check out: <https://bookdown.org/yihui/blogdown/>
 
-- [Hugo](https://gohugo.io/) is a software that builds a website for you. 
-  Blogdown uses Hugo to make clean-looking websites. You can install it via:
-    ```{r, eval = FALSE}
-    blogdown::install_hugo()
-    ```
+# Jekyll
 
-# Getting started
+- The full instructions for creating a GitHub pages website using Jekyll is up on GitHub: <https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll>
 
-1. Set your working directory to the location on your local machine
-   where you want to save your website. Do this via 
-   
-    > Session > Set Working Directory > Choose Directory...
+- You should use those instructions if you are creating a new website.
 
-2. Run the following in your R consul:
+- But we'll go through creating a personal website together so that you can show off your current work.
 
-    ```{r, eval = FALSE}
-    blogdown::new_site()
-    ```
 
-- This will populate a bunch of folders containing the contents of your website.
+- On the GitHub repo page for your website, go to Settings > GitHub Pages and select source to be "master". Make sure you click "Save".
 
-- The `public/` folder contains the contents of your website. You will be able to upload everything in the `public/` folder to a host to publish your website online.
+- Under Settings > GitHub Pages, GitHub will tell you the URL of your website.
 
-- The other folders contain files used to make the files
-
-- You can view your website via 
-
-    > Addins > Serve Site
-    
-    A window with a preview of the website will pop up.
-    
-# Editing your website
-
-## New Theme
-
-## config.toml
-
-## content/
-
-- This folder is where you place R Markdown files. These R Markdown files will be converted to HTML files.
-
-# Publishing your website
