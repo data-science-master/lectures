@@ -25,7 +25,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Create a personal or project website.
 - Chapters 1 and 2, and section 3.1 of [blogdown: Creating Websites with R Markdown](https://bookdown.org/yihui/blogdown/)
 - Alternative method:
-    - [Setting up a GitHub Pages site with Jekyll](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll)
+    - [Setting up a GitHub Pages site with Jekyll](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll) (this is what I use for my personal website).
 
 # Motivation
 
@@ -56,7 +56,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 - [Hugo](https://gohugo.io/) is a software that builds a website for you. 
-  Blogdown uses Hugo to make clean-looking websites. You can install it via:
+  Blogdown uses Hugo to make clean-looking websites. You can install it by 
+  running the following in R:
     ```{r, eval = FALSE}
     blogdown::install_hugo()
     ```
@@ -138,6 +139,41 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## config.toml
 
+- Most Hugo sites contain a `config.toml` file, where "toml" stands for ["Tom’s Obvious, Minimal Language"](https://en.wikipedia.org/wiki/TOML)
+
+- TOML files consist of `key = value` pairs, where the `key` is the variable and the `value` is the assigned variable. For example
+
+    ```
+    author = "David Gerard"
+    ```
+
+- You can usually just edit the TOML file of the theme that you have downloaded.
+
+- The double brackets in a TOML file are used in Hugo to denote a menu. So, for example
+
+    ```
+    [[menu.main]]
+        name = "Home"
+        url = "https://nanx.me"
+        weight = 1
+    [[menu.main]]
+        name = "GitHub"
+        url = "https://github.com/nanxstats"
+        weight = 2
+    ```
+    
+    is used to define the items in the default main menu of the Tanka theme.
+    
+- The single brackets in a TOML file are used in Hugo to denote a collection of related options. E.g.
+
+    ``` 
+    [params]
+        author = "David Gerard"
+        dateFormat = "2020/10/10"
+    ```
+    
+    will set options under `[params]`
+
 ## content/
 
 - This folder is where you place R Markdown files. These R Markdown files will be converted to HTML files.
@@ -146,36 +182,50 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - We will discuss how to publish your website using Netlify.
 
+- Initialize a git repository in your website directory. Add all of the files not in the "public" folder and commit them. You can exclude all files in "public" by adding a file called ".gitignore" in your website directory that contains the following code:
+
+    ```
+    public
+    ```
+    
+    You can automatically create this file via running the following in the terminal
+    
+    ```{bash, eval = FALSE}
+    echo "public" > .gitignore
+    ```
+    
+    You can add everything then to the stage via
+    
+    ```{bash, eval = FALSE}
+    git add --all
+    ```
+    
+- Create a repo on GitHub that will contain the source for your website. Make sure this is a public repository.
+
+- Link the remote to your local and push your changes to the remote.
+
 - Sign up for a new account on Netlify through your GitHub login: <https://app.netlify.com/signup>
 
+- On the netflify homepage, then click on "New Site from Git"
 
-<!-- - To build your website in the "public" folder, first **restart R**, then run -->
-<!--     ```{r, eval = FALSE} -->
-<!--     blogdown::hugo_build() -->
-<!--     ``` -->
+    ![](./figs/net1.png)
+    
+- Click on "GitHub" when it asks where to create a new site from
 
-<!-- - To publish your website on GitHub, follow these steps: -->
-<!--     1. Create a public repo on GitHub. If this is your personal website, make sure your repo is named "username.github.io" where "username" is your GitHub username. -->
-<!--     2. Add an empty file called ".nojekyll" in the "public" folder. You can do this by running the following in the public folder. -->
-<!--         ``` bash -->
-<!--         touch .nojekyll -->
-<!--         ``` -->
+    ![](./figs/net2.png)
+    
+- Follow the prompts to choose the repository where the website source exists, authorizing Netlify at the appropriate prompt.
 
-<!--         This is so that GitHub doesn't use [jekyll](https://jekyllrb.com/) to build your website. -->
+- Your build settings should look something like this:
 
-<!--     3. Initialize a git repo **in the public folder**. -->
-<!--         ``` bash -->
-<!--         cd public -->
-<!--         git init -->
-<!--         ``` -->
-<!--         Commit all of the files in the public folder. -->
+    ![](./figs/net3.png)
+    
+- Click on "Deploy Site"
 
-<!--     4. Link and push this git repo to GitHub. -->
-<!--     5. On GitHub, under "Settings > GitHub Pages", make sure the "Source" says "Branch: main" -->
+- Netlify should give you an automatically generated URL where you website is deployed. E.g. mine is deployed to <>
 
-<!--         ![](./figs/screenshot_options.png)\  -->
+- You can set up a custom domain by following the links on Netlify. A custom domain name is only about \$10--\$15 per year.
 
+- You can also get a free subdomain from rbind: <https://support.rbind.io/about/>
 
-
-
-
+- After setting up Netlify and linking it to your GitHub repo, whenever you push changes to GitHub, Netlify will automatically deploy those changes.
