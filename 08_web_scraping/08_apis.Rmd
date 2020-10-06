@@ -25,6 +25,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - [Chapter 1, 2, and 3 from An Introduction to APIs](https://zapier.com/learn/apis/).
 - [Chapter 40 from STAT 545](https://stat545.com/diy-web-data.html).
 - [API Package Best Practices](https://httr.r-lib.org/articles/api-packages.html).
+- [Rectangling](https://tidyr.tidyverse.org/articles/rectangle.html)
 
 # Data on the Web
 
@@ -166,6 +167,18 @@ ggplot2::theme_set(ggplot2::theme_bw())
     could still get to your key. But it is more secure than placing your
     key in a plain text file (which is what .Renviron is). There are
     more secure ways to access keys in R.
+    
+### Basic Authentication
+
+- Other API's use what's called "Basic" authentation, where you provide
+  a username and password. The basic syntax for this is:
+  
+    ```{r, eval = FALSE}
+    GET("url", authenticate("username", "password"))
+    ```
+
+- You should already have a username and password set up. Again, I would
+  suggest keeping your password secure using your .Renviron file or keyring.
   
 ## httr
 
@@ -245,15 +258,149 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r}
     content(mout, as = "text")
     ```
-    
-## Basic Authentication
 
-- Other API's use what's called "Basic" authentation, where you provide
-  a username and password. The basic syntax for this is:
-  
-    ```{r, eval = FALSE}
-    GET("url", authenticate("username", "password"))
+## Rectangling
+
+- The format for the data you typically get from an API is a list of lists.
+
+- The `repurrrsive` package contains a few examples.
+
+    ```{r}
+    library(repurrrsive)
     ```
 
-- You should already have a username and password set up. Again, I would
-  suggest keeping your password secure using keyring.
+- The dataset `gh_users` contains information from 6 users, obtained using GitHub's API: <https://developer.github.com/v3/users/#get-a-single-user>
+
+    ```{r}
+    data("gh_users")
+    typeof(gh_users)
+    length(gh_users)
+    names(gh_users[[1]])
+    ```
+
+- There are a few functions from `tidyr` package that can be used to "unnest" a list into a data frame.
+
+    - `unnest_wider()`: Each list element becomes its own column
+    - `hoist()`: Similar as `unnest_wider()`, but you can choose what elements to extract to their own columns.
+    - `unnest_longer()`: Each list element becomes its own row.
+
+- Because this is the tidyverse, your list needs to be a column in a data frame:
+
+    ```{r}
+    df <- tibble(users = gh_users)
+    df
+    ```
+
+- In which case, you can consider the unnest functions via:
+
+    - `unnest_wider()` preserves the rows, but changes the columns.
+    - `unnest_longer()` preserves the columns, but changes the rows
+    
+- Use `unnest_wider()` to make each of those list elements their own column.
+
+    ```{r}
+    unnest_wider(df, users)
+    ```
+
+- Graphic:
+
+    ![](./cartoons/unnest_wider.png)\ 
+    
+- Use `hoist()` to only extract some elements of a list:
+
+    ```{r}
+    df2 <- hoist(df, users, 
+                 login = "login",
+                 follows = "follows")
+    df2
+    ```
+    
+- Notice that the new data frame still has a list column, but each each list now only has 28 elements instead of 30. That's because `hoist()` has removed the `login` and `follows` elements from each list in the list column.
+
+    ```{r}
+    df2$users[[1]]$login
+    df2$users[[1]]$follows
+    ```
+
+- Graphic:
+
+    ![](./cartoons/hoist.png)\ 
+    
+
+- Let's look at the list `gh_repos`, which was also obtained using the GitHub API: <https://developer.github.com/v3/repos/#list-user-repositories>
+
+    ```{r}
+    data("gh_repos")
+    typeof(gh_repos)
+    length(gh_repos)
+    df <- tibble(repo = gh_repos)
+    df
+    ```
+
+- This list is very complicated!
+
+    ![](./cartoons/github_repos.png)\ 
+    
+- Ideally, each repo would be its own row (since the repositories are the observational units). We can do this with `unnest_longer()`.
+
+    ```{r}
+    df2 <- unnest_longer(df, repo)
+    df2
+    ```
+
+- Graphic:
+
+    ![](./cartoons/unnest_longer.png)\ 
+    
+- We can then use `unnest_wider()` or `hoist()` on this new data frame to get a tidy dataset.
+
+    ```{r}
+    df3 <- unnest_wider(df2, repo)
+    df3
+    ```
+
+- Graphic:
+
+    ![](./cartoons/unnest_wider_2.png)\ 
+    
+
+- **Exercise**: Clean up the `sw_people` list from the `repurrrsive` package:
+
+    ```{r}
+    library(repurrrsive)
+    data("sw_people")
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    tibble(people = sw_people) %>%
+      unnest_wider(people)
+    ```
+  
+- **Exercise**: Clean up the `got_chars` list from the `repurrrsive` package
+
+    ```{r}
+    library(repurrrsive)
+    data("got_chars")
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    tibble(chars = got_chars) %>%
+      unnest_wider(chars)
+    ```
+
+- **Exercise**: Consider the Studio Ghibli API: <https://ghibliapi.herokuapp.com/#tag/Films%2Fpaths%2F~1films%2Fget>
+
+    Extract all of the films from this API and clean the data. Your final data frame should look like this:
+
+    ```{r, echo = FALSE}
+    library(httr)
+    url <- modify_url(url = "https://ghibliapi.herokuapp.com/films", 
+                      query = list(limit = 250))
+    gout <- GET(url = url)
+    glist <- content(gout)
+    tibble(film = glist) %>%
+      unnest_wider(film)
+    ```
+    
+    
+    
