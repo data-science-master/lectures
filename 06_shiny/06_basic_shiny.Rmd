@@ -219,8 +219,8 @@ klippy::klippy()
   `sliderInput()`, `selectInput()`, `textInput()`, and `numericInput()`.
 
 - Each of these input calls take at least three arguments:
-    - `inputID`: The name of the input. The `server()` function will
-      access user inputs through `inputID`, so it needs to follow
+    - `inputId`: The name of the input. The `server()` function will
+      access user inputs through `inputId`, so it needs to follow
       the conventions of variable naming.
     - `label`: The name displayed on the web-app to the user.
     - `value`: A default input.
