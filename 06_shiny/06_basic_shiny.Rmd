@@ -732,6 +732,43 @@ klippy::klippy()
     shinyApp(ui = ui, server = server)
     ```
     
+- **Exercise**: Create a shiny app that will plot a histogram of the the variable of the user's choosing from `mtcars`. The user should also be able to select (i) the number of bins, (ii) the fill color of the bins (either `"red"` or `"black"`) and (iii) the theme of the plot (either `theme_bw()` or `theme_dark()`).
+
+    ```{r, echo=FALSE, eval=FALSE}
+    library(shiny)
+    library(ggplot2)
+    data("mtcars")
+    
+    colvec <- c("red", "black")
+    
+    ui <- fluidPage(
+      varSelectInput(inputId = "var", label = "Column?", data = mtcars),
+      sliderInput(inputId = "bins", label = "Number of bins?", min = 1, max = 50, value = 25),
+      selectInput(inputId = "col", label = "Bin Color", choices = colvec),
+      selectInput(inputId = "theme", label = "Theme", choices = c("bw", "dark")),
+      plotOutput(outputId = "hist")
+    )
+    
+    server <- function(input, output, session) {
+      
+      output$hist <- renderPlot({
+        pl <- ggplot(mtcars, aes(x = !!input$var)) +
+          geom_histogram(bins = input$bins, fill = input$col)
+        
+        if (input$theme == "bw") {
+          pl + theme_bw()
+        } else if (input$theme == "dark") {
+          pl + theme_dark()
+        }
+        
+      })
+      
+    }
+    
+    shinyApp(ui, server)
+    ```
+
+    
 ## Alternative pipeline to `!!`
 
 - This content is from Chapter 11 of [Mastering Shiny](https://mastering-shiny.org/).
@@ -768,3 +805,42 @@ klippy::klippy()
   - Way 1: `x = !!input$var1`
   - Way 2: `x = .data[[input$var1]]`
 
+- **Exercise**: Create a Shiny app that will take as input 
+    
+    1. A column from `mtcars`
+    2. A numeric value
+    
+    and it will print out an interactive table containing just the rows from
+    `mtcars` that have a value of the selected variable above the provided 
+    numeric value. For example, if the user selects `mpg` as the column and
+    `30` as the numeric value, then the code that would effectively be run
+    would be:
+    
+    ```{r, eval = FALSE}
+    mtcars %>%
+      filter(mpg > 30)
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    library(shiny)
+    library(tidyverse)
+    data("mtcars")
+    
+    ui <- fluidPage(
+      varSelectInput(inputId = "var", label = "Column?", data = mtcars),
+      numericInput(inputId = "value", label = "Value?", value = 0),
+      dataTableOutput(outputId = "dt")
+    )
+    
+    server <- function(input, output, session) {
+      
+      output$dt <- renderDataTable({
+        mtcars %>%
+          filter(!!input$var > input$value)
+      })
+      
+    }
+    
+    shinyApp(ui, server)
+    ```
+    

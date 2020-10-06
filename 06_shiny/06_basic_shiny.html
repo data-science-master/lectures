@@ -1077,6 +1077,7 @@ shinyApp(ui = ui, server = server)</code></pre></li>
 <li><p>Notice that I used <code>!!</code> in front of <code>input$var1</code> and <code>input$var2</code>. This is called the “bang-bang operator” and you have to do this to use variable names in the tidyverse (ggplot, dplyr, tidyr, etc).</p></li>
 <li><p>The <code>!!</code> is only necessary if you are requesting the names of variables in a data frame in the tidyverse.</p></li>
 <li><p><strong>Exercise</strong>: Let the user choose whether they want red points or blue points.</p></li>
+<li><p><strong>Exercise</strong>: Create a shiny app that will plot a histogram of the the variable of the user’s choosing from <code>mtcars</code>. The user should also be able to select (i) the number of bins, (ii) the fill color of the bins (either <code>&quot;red&quot;</code> or <code>&quot;black&quot;</code>) and (iii) the theme of the plot (either <code>theme_bw()</code> or <code>theme_dark()</code>).</p></li>
 </ul>
 <div id="alternative-pipeline-to" class="section level2">
 <h2>Alternative pipeline to <code>!!</code></h2>
@@ -1111,6 +1112,14 @@ shinyApp(ui = ui, server = server)</code></pre></li>
 <li>Way 1: <code>x = !!input$var1</code></li>
 <li>Way 2: <code>x = .data[[input$var1]]</code></li>
 </ul></li>
+<li><p><strong>Exercise</strong>: Create a Shiny app that will take as input</p>
+<ol style="list-style-type: decimal">
+<li>A column from <code>mtcars</code></li>
+<li>A numeric value</li>
+</ol>
+<p>and it will print out an interactive table containing just the rows from <code>mtcars</code> that have a value of the selected variable above the provided numeric value. For example, if the user selects <code>mpg</code> as the column and <code>30</code> as the numeric value, then the code that would effectively be run would be:</p>
+<pre class="r"><code>mtcars %&gt;%
+  filter(mpg &gt; 30)</code></pre></li>
 </ul>
 </div>
 </div>
