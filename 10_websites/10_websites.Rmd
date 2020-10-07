@@ -78,7 +78,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - The `public/` folder contains the contents of your website. You will be able to upload everything in the `public/` folder to a host to publish your website online.
 
-- The other folders contain files used to make the files
+- The other folders contain files used to make the files in `public/`
 
 - You can view your website via 
 
@@ -180,7 +180,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Publishing your website
 
-- We will discuss how to publish your website using Netlify.
+- In principal, you can upload your "public" folder to any host to deploy your webiste.
+
+- We will discuss how to publish your website using Netlify. Netlify will generate the "public" folder from your source, so you do not need to upload it.
 
 - Initialize a git repository in your website directory. Add all of the files not in the "public" folder and commit them. You can exclude all files in "public" by adding a file called ".gitignore" in your website directory that contains the following code:
 
@@ -222,7 +224,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - Click on "Deploy Site"
 
-- Netlify should give you an automatically generated URL where you website is deployed. E.g. mine is deployed to <>
+- Netlify should give you an automatically generated URL where you website is deployed. E.g. mine is deployed to <https://loving-haibt-448d60.netlify.app/>
 
 - You can set up a custom domain by following the links on Netlify. A custom domain name is only about \$10--\$15 per year.
 
