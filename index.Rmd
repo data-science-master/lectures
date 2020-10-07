@@ -70,6 +70,9 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [09 Numpy](./09_python/09_numpy.html).
     - [09 Pandas](./09_python/09_pandas.html).
     - [09 Matplotlib](./09_python/09_matplotlib.html).
+- 10 Personal Websites
+    - [10 A Personal Website using Blogdown](./10_websites/10_websites_blogdown.html)
+    - [10 A Personal Website using GitHub Pages](./10_websites/10_websites_github.html)
 - 11 GNU Make
     - [11 GNU Make](./11_make/11_make.html)
     - [11 Penguins Exercise](https://github.com/data-science-master/penguins)
