@@ -511,4 +511,58 @@ klippy::klippy()
   plot. But when we move the slider, it will update the bin width and the
   plot title.
   
+  
+- You can use `req()` to require an input before evaluating (so if there is no input provided, the code chunk will not be invalidated.
 
+    ```{r, eval = FALSE}
+    library(shiny)
+    
+    ui <- fluidPage(
+      textInput(inputId = "text", label = "Give me a word"),
+      textOutput(outputId = "newtext")
+    )
+    
+    server <- function(input, output, session) {
+      
+      output$newtext <- renderText({
+        paste0("Your word is ", req(input$text), "!")
+      })
+      
+    }
+    
+    shinyApp(ui, server)
+    ```
+
+  
+- **Exercise**: Create an app where the user chooses the variable to plot from `mtcars` and the number of bins, it then outputs a histogram. However, the histogram is not displayed until the user clicks an action button. The variable selection and the number of bins should not make the plot change. The plot should only change when the user clicks the action button.
+
+    ```{r, echo = FALSE, eval = FALSE}
+    library(shiny)
+    library(ggplot2)
+    data("mtcars")
+    
+    ui <- fluidPage(
+      selectInput(inputId = "var", label = "Variable", choices = names(mtcars)),
+      sliderInput(inputId = "bins", label = "Bins", min = 1, max = 50, value = 20),
+      actionButton(inputId = "click", label = "Plot Me!"),
+      plotOutput(outputId = "hist")
+    )
+    
+    server <- function(input, output, session) {
+      
+      output$hist <- renderPlot({
+        
+        ## Require a click before plotting
+        req(input$click)
+        
+        ## do not react to var or bins
+        x <- isolate(input$var)
+        binnum <- isolate(input$bins)
+        
+        ggplot(mtcars, aes(x = .data[[!!x]])) +
+                              geom_histogram(bins = binnum)
+      })
+    }
+    
+    shinyApp(ui, server)
+    ```
