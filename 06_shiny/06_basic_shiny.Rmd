@@ -392,14 +392,13 @@ klippy::klippy()
 
 ## Columns of a Data Frame
 
-- For a data frame already in R, use `varSelectInput()` for a user to select
-  a column.
+- For a data frame named `df`, just use `selectInput()`, with the `choices = names(df)` option.
   
     ```{r, eval = FALSE}
     library(shiny)
     
     ui <- fluidPage(
-      varSelectInput("carcol", "Which Column?", data = mtcars)
+      selectInput("carcol", "Which Column?", choices = names(mtcars))
     )
     
     server <- function(input, output) {
@@ -419,20 +418,8 @@ klippy::klippy()
     It changes the default column.
     ```
     ```{r, echo = FALSE, eval = FALSE}
-    varSelectInput("carcol", "Which Column?", data = mtcars, selected = "disp")
+    selectInput("carcol", "Which Column?", choices = names(mtcars), selected = "disp")
     ```
-    
-    
-### Using `varSelectInput()`
-
-- `varSelectInput()` gives the server access to a 
-  `name` object, which we haven't encountered before.
-  
-- You can read about it using `help(name)`.
-
-- The biggest impact on you is that to use it in the tidyverse, you need
-  to prefex the input with `!!`. We'll do an example of this in the
-  "Putting Inputs and Outputs Together" section.
 
 ## Binary Inputs
 
@@ -661,6 +648,36 @@ klippy::klippy()
 
 - **Exercise**: Change the height and width of the plot by changing the
   argument values in `plotOutput()`.
+  
+# `ggplot2` and non-standard evaluation
+
+- Why won't the following code work?
+
+    ```{r, eval = FALSE}
+    data("mtcars")
+    myvariable <- "mpg"
+    ggplot(mtcars, aes(x = myvariable)) +
+      geom_histogram()
+    ```
+    
+- What we are trying to do is make a histogram of `mpg`. But what `ggplot2` things we want to do is make a histogram of `myvariable`. But there is not variable called `myvariable` in the `mtcars` data frame!
+
+- That is, `ggplot2` does not know that `myvariable` has as a value `"mpg"`. It just looks for a variable literally called "myvariable". 
+
+- This is called [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html), where we don't use the value of a variable (`"mpg"`), but we use the variable name itself (`myvariable`).
+
+- This "data masking" is useful because you don't need quotes around everything, but it makes writing shiny apps (letting a user choose a variable to plot) a little more difficult.
+
+- To overcome this, use the `.data` object that you subset using `myvariable` and double brackets `[[]]`.
+
+    ```{r, eval = FALSE}
+    data("mtcars")
+    myvariable <- "mpg"
+    ggplot(mtcars, aes(x = .data[[myvariable]])) +
+      geom_histogram()
+    ```
+
+- In Shiny, you **only** need to use the `.data` object when interacting with a variable in the tidyverse functions (e.g. `mutate()`, `filter()`, `summarize()`, `ggplot()`, etc...).
 
 
 # Putting Inputs and Outputs Together
@@ -673,14 +690,14 @@ klippy::klippy()
     library(ggplot2)
     
     ui <- fluidPage(
-        varSelectInput("var1", "Variable 1", data = mtcars),
-        varSelectInput("var2", "Variable 2", data = mtcars),
+        selectInput("var1", "Variable 1", choices = names(mtcars)),
+        selectInput("var2", "Variable 2", choices = names(mtcars)),
         plotOutput("plot")
     )
     
     server <- function(input, output) {
         output$plot <- renderPlot({
-            ggplot(mtcars, aes(x = !!input$var1, y = !!input$var2)) +
+            ggplot(mtcars, aes(x = .data[[input$var1]], y = .data[[input$var2]])) +
                 geom_point()
         })
     }
@@ -700,13 +717,9 @@ klippy::klippy()
 - In the `server()` function, notice that we set the outputs to the `output()`
   variable.
   
-- Notice that I used `!!` in front of `input$var1` and `input$var2`. This
-  is called the "bang-bang operator" and you have
-  to do this to use variable names in the tidyverse (ggplot, dplyr, tidyr, etc).
+- Notice that I used the `.data`, subsetted using `input$var1` and `input$var2`. You have
+  to do this to use variable names in the tidyverse (`ggplot`, `dplyr`, `tidyr`, etc).
 
-- The `!!` is only necessary if you are requesting the names of variables 
-  in a data frame in the tidyverse.
-  
 - **Exercise**: Let the user choose whether they want red points or blue points.
 
     ```{r, eval = FALSE, echo = FALSE}
@@ -714,8 +727,8 @@ klippy::klippy()
     library(ggplot2)
     
     ui <- fluidPage(
-        varSelectInput("var1", "Variable 1", data = mtcars),
-        varSelectInput("var2", "Variable 2", data = mtcars),
+        selectInput("var1", "Variable 1", choices = names(mtcars)),
+        selectInput("var2", "Variable 2", choices = names(mtcars)),
         radioButtons("color", "What Color?",
                      choiceNames = c("Red", "Blue"),
                      choiceValues = c("red", "blue")),
@@ -724,7 +737,7 @@ klippy::klippy()
     
     server <- function(input, output) {
         output$plot <- renderPlot({
-            ggplot(mtcars, aes(x = !!input$var1, y = !!input$var2)) +
+            ggplot(mtcars, aes(x = .data[[input$var1]], y = .data[[input$var2]])) +
                 geom_point(color = input$color)
         })
     }
@@ -742,7 +755,7 @@ klippy::klippy()
     colvec <- c("red", "black")
     
     ui <- fluidPage(
-      varSelectInput(inputId = "var", label = "Column?", data = mtcars),
+      selectInput(inputId = "var", label = "Column?", choices = names(mtcars)),
       sliderInput(inputId = "bins", label = "Number of bins?", min = 1, max = 50, value = 25),
       selectInput(inputId = "col", label = "Bin Color", choices = colvec),
       selectInput(inputId = "theme", label = "Theme", choices = c("bw", "dark")),
@@ -752,7 +765,7 @@ klippy::klippy()
     server <- function(input, output, session) {
       
       output$hist <- renderPlot({
-        pl <- ggplot(mtcars, aes(x = !!input$var)) +
+        pl <- ggplot(mtcars, aes(x = .data[[input$var]])) +
           geom_histogram(bins = input$bins, fill = input$col)
         
         if (input$theme == "bw") {
@@ -769,28 +782,26 @@ klippy::klippy()
     ```
 
     
-## Alternative pipeline to `!!`
+## Alternative pipeline to `.data`
 
-- This content is from Chapter 11 of [Mastering Shiny](https://mastering-shiny.org/).
-
-- If you use `varSelectInput()`, you need to use `!!`.
-
-- But you can use `selectInput()` for variable selection, in which case you
+- You can use `selectInput()` for variable selection, in which case you
   can use the `.data` object.
+
+- But if you use `varSelectInput()`, you need to use `!!`.
   
     ```{r, eval = FALSE, echo = TRUE}
     library(shiny)
     library(ggplot2)
     
     ui <- fluidPage(
-        selectInput("var1", "Variable 1", choices = names(mtcars)),
-        selectInput("var2", "Variable 2", choices = names(mtcars)),
+        varSelectInput("var1", "Variable 1", data = mtcars),
+        varSelectInput("var2", "Variable 2", data = mtcars),
         plotOutput("plot")
     )
     
     server <- function(input, output) {
         output$plot <- renderPlot({
-            ggplot(mtcars, aes(x = .data[[input$var1]], y = .data[[input$var2]])) +
+            ggplot(mtcars, aes(x = !!input$var1, y = !!input$var2)) +
                 geom_point()
         })
     }
@@ -827,7 +838,7 @@ klippy::klippy()
     data("mtcars")
     
     ui <- fluidPage(
-      varSelectInput(inputId = "var", label = "Column?", data = mtcars),
+      selectInput(inputId = "var", label = "Column?", choices = names(mtcars)),
       numericInput(inputId = "value", label = "Value?", value = 0),
       dataTableOutput(outputId = "dt")
     )
@@ -836,7 +847,7 @@ klippy::klippy()
       
       output$dt <- renderDataTable({
         mtcars %>%
-          filter(!!input$var > input$value)
+          filter(.data[[input$var]] > input$value)
       })
       
     }

@@ -559,7 +559,7 @@ klippy::klippy()
         x <- isolate(input$var)
         binnum <- isolate(input$bins)
         
-        ggplot(mtcars, aes(x = .data[[!!x]])) +
+        ggplot(mtcars, aes(x = .data[[x]])) +
                               geom_histogram(bins = binnum)
       })
     }
