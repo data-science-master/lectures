@@ -56,15 +56,9 @@ mpg = r.mpg
 
 # One Quantitative Variable: Histogram
 
-- `sns.distplot()` makes a histogram/density plot.
+- `sns.histplot()` makes a histogram.
     ```{python}
-    sns.distplot(mpg.hwy)
-    plt.show()
-    ```
-    
-- Just obtain the histogram and choose number of bins:
-    ```{python}
-    sns.distplot(mpg.hwy, kde=False, bins=20)
+    sns.histplot(mpg.hwy)
     plt.show()
     ```
 
