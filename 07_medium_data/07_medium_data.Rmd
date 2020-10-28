@@ -26,6 +26,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - [A data.table and dplyr tour](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/)
 - [Introduction to data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html).
 - [Efficient reshaping using data.tables](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-reshape.html)
+- [Interactive Cheat Sheet](https://www.infoworld.com/article/3575086/the-ultimate-r-datatable-cheat-sheet.html)
 
 # Data Frames and Motivation
 
