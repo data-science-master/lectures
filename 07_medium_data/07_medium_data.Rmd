@@ -728,5 +728,5 @@ There is **so** much more to data.table. You can do quite complicated and
 sophisticated data manipulations using data.table that would require a lot
 more typing in the tidyverse. I am not an expert in much of this 
 functionality. A large number of articles and
-references are given on the wiki page: 
-<https://github.com/Rdatatable/data.table/wiki>.
+references are given on the homepage: 
+<https://rdatatable.gitlab.io/data.table/>.
