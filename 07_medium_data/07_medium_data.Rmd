@@ -218,12 +218,17 @@ ggplot2::theme_set(ggplot2::theme_bw())
     flights[, keep_vec, with = FALSE]
     ```
   
-- To remove a column, you cannot use the list syntax. Place a `!` before the 
-  columns to remove
+- To remove a column using the range or character methods, place a `!` before the columns to remove
   
     ```{r, results = "hide"}
     flights[, !c("year", "month")]
     flights[, !(year:month)]
+    ```
+    
+- To remove a column using the list method, assign that variable to be `NULL` using modify by reference (see below). If you run the below code, you'll need to reload the `flights` data to get back `year` and `month`.
+
+    ```{r, eval = FALSE}
+    flights[, c("year", "month") := .(NULL, NULL)]
     ```
     
 - **Exercise**: Use data.table to select the `year`, `month`, `day`, and `hour` 
@@ -458,6 +463,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ## Equivalent tidyverse way
     tidyr::table4a %>%
       gather(`1999`, `2000`, key = "year", value = "count")
+    
+    ## or
+    tidyr::table4a %>%
+      pivot_longer(cols = c("1999", "2000"), 
+                   names_to = "year", 
+                   values_to = "count")
     ```
 
 - RDS visualization:
@@ -502,7 +513,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     ## Equivalent tidyverse way
     tidyr::table2 %>%
-          spread(key = type, value = count)
+      spread(key = type, value = count)
+    
+    ## or
+    tidyr::table2 %>%
+      pivot_wider(id_cols = c("country", "year"), 
+                  names_from = "type", 
+                  values_from = "count")
     ```
 
 - RDS visualization:
