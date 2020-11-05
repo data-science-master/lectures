@@ -101,6 +101,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     mdy(c("01/10/2011", "01 adsl; 10 df 2011", "January 10, 2011"))
     ```
 
+
 - To parse times, look at the help page of
     ```{r}
     help(ms)
@@ -120,6 +121,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - To parse date-times, look at the help page of
     ```{r}
     help(ymd_hms)
+    ```
+    
+- More generally, you can choose the order of elements with `parse_date_time()`, which has a different and easier syntax than `readr::parse_datetime()`.
+
+    ```{r}
+    parse_date_time("11, 22, 01 here is a trap! 11/02/2002", orders = "HMSmdy")
     ```
 
 
@@ -215,7 +222,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
                     1999,  "MAr",  1,     3,
                     1987,  "ApR",  3,     4,
                     2020,  "maY",  2,     5,
-                    2010,  "May",  4      5)  
+                    2010,  "May",  4,     5)  
     ```
     
     ```{r, echo = FALSE, eval = FALSE}
@@ -291,7 +298,23 @@ ggplot2::theme_set(ggplot2::theme_bw())
     year(ddat) <- 1988
     ddat
     ```
-    
+- To create a new date with the updated component, rather than overwrite a component, use `update()`.
+
+    ```{r}
+    ddat
+    update(ddat, year = 1999)
+    ddat ## still 1988
+    ```
+
+- The book provides an example of using `update()` on larger elements to see fine scale patterns
+
+    ```{r}
+    flights %>%
+      mutate(dt = update(datetime, yday = 1)) %>%
+      ggplot(aes(x = dt)) +
+      geom_freqpoly(binwidth = 300)
+    ```
+
 - You can round components
 
     ```{r}
@@ -299,8 +322,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ddat
     round_date(ddat, unit = "year")
     ```
-
-  
+    
 # Time Spans
 
 - To count the number of seconds between two dates, use a `duration`. You can
@@ -308,6 +330,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, eval = FALSE}
     help("Duration-class")
     ```
+
+- You first subtract two dates, then use `as.duration()` to create a duration.
 
 - We can find out how old 
   [Patrick Stewart](https://en.wikipedia.org/wiki/Patrick_Stewart) 
@@ -319,7 +343,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     agesec
     ```
 
-- You can create durations from years with `dyears()`, from days with 
+- You can also create durations from years with `dyears()`, from days with 
   `ddays()`, etc...
   
     ```{r}
@@ -329,8 +353,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     dminutes(1)
     dseconds(1)
     ```
-  
-
 
 - You can add durations to date-times, but you always add *seconds*, so if there
   is daylight savings you get weird results (add a day but the time is not the same

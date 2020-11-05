@@ -1,0 +1,45 @@
+---
+title: "Some More Bash Tools"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Learning Objectives
+
+- Learn some other useful terminal/bash tools.
+- `grep`
+- `wget`
+- `reverse-i-search`
+
+# String search with `grep`
+
+- `-r` recursive
+- `-n` line number
+- `-w` whole word only
+- `-e` pattern
+- `pdfgrep` (need to install separately) for searching text in PDFs.
+
+# Download data with `wget`
+
+Non-interactive downloading of data.
+
+- `-nc` Don't download new copies if already there.
+- `-nd` Put all files in current working directory.
+- `-P` Tell where to download the files. Default is current working directory (`.`)
+- `-r` Recursive downloading. Download all files in the directory up to a certain level.
+- `l` Determine the level for recursive downloading.
+
+# `reverse-i-search`
+
+- Search your command history
+1. `ctrl`+`r` to get search prompt
+2. Type a search term
+3. `ctrl`+`r` to navigate through matches
