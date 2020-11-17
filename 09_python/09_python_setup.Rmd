@@ -40,6 +40,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, eval = FALSE}
     install.packages("reticulate")
     ```
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    library(reticulate)
+    ```
 
 - To install a version of Python that reticulate will use, run in the terminal:
 
@@ -56,7 +61,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 - To install Python packages, use `py_install()`. For example, we can install
-  the numpy, pandass, and matplotlib packages via
+  the numpy, pandas, and matplotlib packages via
   
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
@@ -94,6 +99,30 @@ ggplot2::theme_set(ggplot2::theme_bw())
       # Code goes here
       ```"
       })
+    ```
+    
+- You can access R objects in Python using the `r` object. That is, `r.x` will access, in Python, the `x` variable defined using R.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    x <- c(1, 4, 6, 2)
+    ```
+    
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    r.x
+    ```
+    
+- You can access Python objects in R using the `py` object. That is, `py$x` will access, in R, the `x` variable defined using Pythong.
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = [8, 9, 11, 3]
+    ```
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    py$x
     ```
     
 - Sometimes it's buggy, but you can usually begin a Python REPL by also
