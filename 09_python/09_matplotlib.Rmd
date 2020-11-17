@@ -58,7 +58,7 @@ mpg = r.mpg
 
 - `sns.histplot()` makes a histogram.
     ```{python}
-    sns.histplot(mpg.hwy)
+    sns.histplot(x='hwy', data=mpg)
     plt.show()
     ```
 
@@ -80,11 +80,11 @@ mpg = r.mpg
     plt.show()
     ```
 
-- A boxenplot is a cool graphic that gives you more quantiles to look at:
-    ```{python}
-    sns.boxenplot(x='class', y='hwy', data=mpg)
-    plt.show()
-    ```
+<!-- - A boxenplot is a cool graphic that gives you more quantiles to look at: -->
+<!--     ```{python} -->
+<!--     sns.boxenplot(x='class', y='hwy', data=mpg) -->
+<!--     plt.show() -->
+<!--     ``` -->
 
 # Two Quantitative Variables: Scatterplot
 
@@ -152,7 +152,7 @@ mpg = r.mpg
 - Use `sns.FacetGrid()` followed by the `map()` method to plot facets.
     ```{python}
     g = sns.FacetGrid(data=mpg, row='drv')
-    g.map(sns.distplot, 'hwy', kde=False)
+    g.map(sns.histplot, 'hwy', kde=False)
     plt.show()
     ```
     
