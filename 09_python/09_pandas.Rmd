@@ -61,7 +61,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     |`spread()` and `pivot_wider()` | `<DataFrame>.pivot_table().reset_index()`|
     |`summarize()`  | `<DataFrame>.agg()`|
     |`unite()`      | `<Series>.str.cat()`|
-    |`%>%`          | `\` |
+    |`%>%`          | Enclose pipeline in `()`|
 
 
 
@@ -358,13 +358,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
     estate.eval('tot = Bed + Bath').filter(["Price", "tot"])
     ```
     
-- If you want to place these operations on different lines, then you need
-  to place a backslash `\` before the newline
+- If you want to place these operations on different lines, then just place
+  the whole operation within parentheses.
   
     <mark style="background-color: lightblue">Python</mark>
     ```{python, eval = FALSE}
-    estate.eval('tot = Bed + Bath') \
+    (
+    estate.eval('tot = Bed + Bath')
       .filter(["Price", "tot"])
+    )
     ```
   
 - This looks similar to piping in the tidyverse
@@ -381,8 +383,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
   of price. Use piping.
   
     ```{python, eval = FALSE, echo = FALSE}
-    estate.query('(Quality == "Medium") & (Pool > 0)') \ 
+    (
+    estate.query('(Quality == "Medium") & (Pool > 0)')
       .sort_values(by="Price")
+    )
     ```
 
 # Group Summaries
@@ -392,8 +396,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
     <mark style="background-color: lightblue">Python</mark>
     ```{python}
-    estate.filter(["Price", "Area"]) \
+    (
+    estate.filter(["Price", "Area"])
       .agg(np.mean)
+    )
     ```
     
 - R equivalent
@@ -407,9 +413,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">Python</mark>
     ```{python, eval = FALSE}
-    estate.filter(["Price", "Area", "Bed", "Bath"]) \
-      .groupby(["Bed", "Bath"]) \
+    (
+    estate.filter(["Price", "Area", "Bed", "Bath"])
+      .groupby(["Bed", "Bath"])
       .agg(np.mean)
+    )
     ```
     
 - R equivalent
@@ -425,9 +433,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">Python</mark>
     ```{python, eval = FALSE}
-    estate.filter(["Price", "Area", "Quality"]) \
-      .groupby("Quality") \
+    (
+    estate.filter(["Price", "Area", "Quality"])
+      .groupby("Quality")
       .agg([np.mean, np.var])
+    )
     ```
     
 - You can create your own functions and pass those
@@ -437,9 +447,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     def cv(x):
       """Calculate coefficient of variation"""
       return(np.sqrt(np.var(x)) / np.mean(x))
-      
-    estate.filter(["Price", "Area"]) \
+    
+    (
+    estate.filter(["Price", "Area"])
       .agg(cv)
+    )
     ```
 
 # Recoding
@@ -570,8 +582,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">Python</mark>
     ```{python}
-    table2.pivot_table(index=['country', 'year'], columns='type', values='count') \
+    (
+    table2.pivot_table(index=['country', 'year'], columns='type', values='count')
       .reset_index()
+    )
     ```
 
 - `pivot_table()` creates a table with an `index` attribute defined by
@@ -678,8 +692,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">Python</mark>
     ```{python}
-    table5.assign(year = table5.century.str.cat(table5.year)) \
+    (
+    table5.assign(year = table5.century.str.cat(table5.year))
       .drop('century', axis = 1)
+    )
     ```
 
 - R equivalence:
