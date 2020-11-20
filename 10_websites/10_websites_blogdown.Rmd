@@ -238,3 +238,5 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - You can also get a free subdomain from rbind: <https://support.rbind.io/about/>
 
 - After setting up Netlify and linking it to your GitHub repo, whenever you push changes to GitHub, Netlify will automatically deploy those changes.
+
+- One of my students made a very nice website for herself: <https://ruiqi3239sun.netlify.app/>
