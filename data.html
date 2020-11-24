@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2019-12-18" />
+<meta name="date" content="2020-11-24" />
 
 <title>Data</title>
 
@@ -24,8 +24,19 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -300,7 +311,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Data</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2019-12-18</h4>
+<h4 class="date">2020-11-24</h4>
 
 </div>
 
@@ -402,6 +413,12 @@ $(document).ready(function () {
 <li><code>distance</code>: The distance traveled, in miles.</li>
 <li><code>hour</code>: Hour of scheduled departure.</li>
 </ul></li>
+<li><p><a href="./data/hamsters.csv">hamsters.csv</a>: Data from <a href="https://www.doi.org/10.1126/science.abe8499">doi:10.1126/science.abe8499</a>.</p>
+<p>Eight hamsters were exposed to the wild type (WT) of SARS-CoV-2, and eight were exposed to a variant of SARS-CoV-2 that contained a particular mutation that the researchers hypothesized increased transmissibility (D614G). The researchers paired these 16 hamsters with 16 healthy hamsters, where the pairs were placed in cages a few inches apart. The researchers then monitored if the healthy hamsters became infected two days later. The variables include:</p>
+<ul>
+<li><code>Exposure</code>: The virus variant of the infected hamster. Either <code>"WT"</code> or <code>"D614G"</code>.</li>
+<li><code>Infected</code>: Was the healthy hamster infected (<code>"Yes"</code>) or not (<code>"No"</code>)?</li>
+</ul></li>
 <li><p><a href="./data/regnal.csv">regnal.csv</a>: Table of regnal years of English monarchs, taken from Wikipedia: <a href="https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs" class="uri">https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs</a></p>
 <p>“Regnal years” are years that correspond to a monarch, and might differ from the actual reign of that monarch. It’s mostly used for dating legal documents (“nth year of the reign of King X”). It’s a weird English thing. The variables include:</p>
 <ul>
@@ -459,7 +476,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

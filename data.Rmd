@@ -151,6 +151,17 @@ knitr::opts_chunk$set(echo = TRUE)
     - `air_time`: The amount of time in the air, in minutes.
     - `distance`: The distance traveled, in miles.
     - `hour`: Hour of scheduled departure.
+- [hamsters.csv](./data/hamsters.csv): Data from [doi:10.1126/science.abe8499](https://www.doi.org/10.1126/science.abe8499).
+    
+    Eight hamsters were exposed to the wild type (WT) of SARS-CoV-2, 
+    and eight were exposed to a variant of SARS-CoV-2 that contained 
+    a particular mutation that the researchers hypothesized increased 
+    transmissibility (D614G). The researchers paired these 16 hamsters 
+    with 16 healthy hamsters, where the pairs were placed in cages a 
+    few inches apart. The researchers then monitored if the healthy 
+    hamsters became infected two days later. The variables include:
+    - `Exposure`: The virus variant of the infected hamster. Either `"WT"` or `"D614G"`.
+    - `Infected`: Was the healthy hamster infected (`"Yes"`) or not (`"No"`)?
 - [regnal.csv](./data/regnal.csv): Table of regnal years of English monarchs,
   taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
   
