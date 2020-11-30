@@ -23,7 +23,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Create your own personal website using GitHub pages.
 - [Setting up a GitHub Pages site with Jekyll](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll).
-    - In particular, the page on [adding content](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/adding-content-to-your-github-pages-site-using-jekyll).
+    - In particular, the pages on [adding content](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/adding-content-to-your-github-pages-site-using-jekyll) and [troubleshooting build errors](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/troubleshooting-jekyll-build-errors-for-github-pages-sites).
 - [Jekyll Themes](http://jekyllthemes.org/)
 
 # Build your own website
@@ -76,6 +76,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Most of the configuration settings are in "_config.yml". 
 
+- Make sure you use **spaces** instead of tabs in side "_config.yml".
+
+- Make sure you use a space after `:` when setting key-value pairs.
+
 - Most of these settings are self explanatory, and you can edit them to suit your needs. For example, here is the original "_config.yml" file:
 
   ![](./screenshots/theme6.png)\ 
@@ -93,15 +97,38 @@ ggplot2::theme_set(ggplot2::theme_bw())
         - Information on pages: <https://jekyllrb.com/docs/pages/>
     - A **post** is a blog post, that is associated with a particular date.
         - Information on posts: <https://jekyllrb.com/docs/posts/>
-    
+
+### Pages
+
 - To add a page, just include a markdown file (ends with ".md").
+
+- This markdown file will be converted to an HTML file when uploaded to GitHub.
     
 - Each markdown file has a YAML header (just like in R Markdown files) and what goes into this header depends on the theme you chose. Just look at a few examples from that theme.
     - More information on the YAML header: <https://jekyllrb.com/docs/front-matter/>
     
 - You can edit the homepage by editing "index.md"
 
+### Posts
+
 - All posts go in the `_posts` directory. These are also markdown files (ends in ".md"). Your theme will have a default way of displaying posts on the homepage that I would not mess with until you get more experience.
+
+- All posts should be titled with the following format:
+
+    ```
+    YYYY-MM-DD-title.md
+    ```
+    
+    The theme will generally display links to these posts in reverse-chronological order.
+    
+- All posts will again have a YAML header. Just look at a few examples from the theme for what should go there.
+    - More information on the YAML header: <https://jekyllrb.com/docs/front-matter/>
+
+## Troubleshooting Build Errors
+
+- See [here](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/troubleshooting-jekyll-build-errors-for-github-pages-sites) for helpful hints on fixing build errors.
+
+- GitHub will send you an email if your website fails to build. Go to the above link and scroll through the types of errors to see hints on where to look for the error in your source.
 
 ## My Website
 
