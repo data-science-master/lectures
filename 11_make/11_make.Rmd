@@ -562,9 +562,10 @@ target3 : prereq3.Rmd
 
 # Competitors
 
-- There are lots of pipeline management competitors to `make`. The two most-likely that you'll run across are
+- There are lots of pipeline management competitors to `make`. The most-likely that you'll run across are
     - [`drake`](https://cran.r-project.org/package=drake) is an R package for interacting with `make`.
-    - [`snakemake`](https://snakemake.github.io/) is a python-based tool for workflow management that is perhaps more readable than `make` and allows for more options than only using shell commands.
+    - [`targets`](https://cran.r-project.org/package=targets) is another `make`-like R package.
+    - [`snakemake`](https://snakemake.github.io/) is a python-based tool for workflow management that is perhaps more readable than `make` and allows for more options than only using shell commands. This is probably the most popular alternative to `make`.
 
 - But `make` has been around since the 1970s, is widely used, and isn't going anywhere.
 
