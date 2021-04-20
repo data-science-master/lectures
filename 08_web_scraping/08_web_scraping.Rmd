@@ -179,19 +179,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
   (like HTML and Markdown), useful for representing data.
   rvest will store the HTML file as an XML.
 
-- We can use `html_nodes()` and the selectors we found in the previous section 
+- We can use `html_elements()` and the selectors we found in the previous section 
   to get the elements we want. Insert the found selectors as the `css`
   argument.
   
     ```{r}
-    ranking_elements <- html_nodes(html_obj, css = ".lister-item-header a , .text-primary")
+    ranking_elements <- html_elements(html_obj, css = ".lister-item-header a , .text-primary")
     head(ranking_elements)
     ```
 
-- To extract the text inside the obtained nodes, use `html_text()`:
+- To extract the text inside the obtained nodes, use `html_text()` or `html_text2()`:
+  - `html_text2()` just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc).
 
     ```{r}
-    ranking_text <- html_text(ranking_elements)
+    ranking_text <- html_text2(ranking_elements)
     head(ranking_text)
     ```
     
@@ -215,11 +216,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
   extract them separately and combine them.
   
     ```{r, echo = FALSE, eval = FALSE}
-    dirdat <- html_nodes(html_obj, ".text-small a:nth-child(1)")
-    dirdat <- html_text(dirdat)
+    dirdat <- html_elements(html_obj, ".text-small a:nth-child(1)")
+    dirdat <- html_text2(dirdat)
     dirdat <- dirdat[-1] ## got an extra one
-    filmdat <- html_nodes(html_obj, ".lister-item-header a")
-    filmdat <- html_text(filmdat)
+    filmdat <- html_elements(html_obj, ".lister-item-header a")
+    filmdat <- html_text2(filmdat)
     
     data.frame(film = filmdat, director = dirdat)
     ```
@@ -234,7 +235,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - We copy the CSS selectors and make a text vector
 
     ```{r}
-    dataobj <- html_nodes(html_obj, css = ".favorable , .genre, .unbold, .lister-item-header a")
+    dataobj <- html_elements(html_obj, css = ".favorable , .genre, .unbold, .lister-item-header a")
     datatext <- html_text(dataobj)
     ```
   
@@ -380,13 +381,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - We'll extract all of the "table" elements.
 
     ```{r}
-    wikidat <- html_nodes(wikixml, "table")
+    wikidat <- html_elements(wikixml, "table")
     ```
 
 - Use `html_table()` to get a list of tables from table elements:
 
     ```{r}
-    tablist <- html_table(wikidat, fill = TRUE)
+    tablist <- html_table(wikidat)
     class(tablist)
     length(tablist)
     tablist[[19]] %>%
@@ -426,9 +427,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, echo = FALSE}
-    headers <- html_text(html_nodes(mosque, css = "caption , #Mentioned_in_the_Quran"))
-    tabnode  <- html_nodes(mosque, css = "table.wikitable")
-    tablist <- html_table(tabnode, fill = TRUE)
+    headers <- html_text2(html_elements(mosque, css = "caption , #Mentioned_in_the_Quran"))
+    tabnode  <- html_elements(mosque, css = "table.wikitable")
+    tablist <- html_table(tabnode)
     
     ## length(tablist)
     ## length(headers)
@@ -441,6 +442,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     tablist[[18]] %>%
       mutate(Country = "Russia") ->
       tablist[[18]]
+    
+    ## Remove table 17 since it doesn't have the same format
+    tablist[[17]] <- NULL
     
     ## table 13 has an NA row
     names(tablist[[13]])[ncol(tablist[[13]])] <- "blah"
