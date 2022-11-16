@@ -43,6 +43,8 @@ data("mpg")
 All other code will be Python unless otherwise marked.
 
 ```{python}
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 mpg = r.mpg
@@ -62,6 +64,11 @@ mpg = r.mpg
     plt.show()
     ```
 
+    ```{python}
+    plt.clf()
+    ```
+
+
 # One Categorical Variable: Barplot
 
 - Use `sns.countplot()` to make a barplot to look at the distribution of a
@@ -72,12 +79,20 @@ mpg = r.mpg
     plt.show()
     ```
 
+    ```{python}
+    plt.clf()
+    ```
+
 # One Quantitative Variable, One Categorical Variable: Boxplot
 
 - Use `sns.boxplot()` to make boxplots:
     ```{python}
     sns.boxplot(x='class', y='hwy', data=mpg)
     plt.show()
+    ```
+
+    ```{python}
+    plt.clf()
     ```
 
 <!-- - A boxenplot is a cool graphic that gives you more quantiles to look at: -->
@@ -94,6 +109,10 @@ mpg = r.mpg
     plt.show()
     ```
 
+    ```{python}
+    plt.clf()
+    ```
+
 ## Lines/Smoothers
 
 - Use `sns.regplot()` to make a scatterplot with a regression line or a loess smoother.
@@ -104,10 +123,18 @@ mpg = r.mpg
     plt.show()
     ```
     
+    ```{python}
+    plt.clf()
+    ```
+    
 - Loess smoother with confidence interval removed.
     ```{python}
     sns.regplot(x='displ', y='hwy', data=mpg, lowess=True, ci='None')
     plt.show()
+    ```
+    
+    ```{python}
+    plt.clf()
     ```
 
 ## Annotating by Third Variable
@@ -119,8 +146,16 @@ mpg = r.mpg
     ```
     
     ```{python}
+    plt.clf()
+    ```
+    
+    ```{python}
     sns.scatterplot(x='displ', y='hwy', style='class', data=mpg)
     plt.show()
+    ```
+    
+    ```{python}
+    plt.clf()
     ```
 
 - Use the `hue` or `size` arguments to annotate by a quantitative variable:
@@ -131,8 +166,16 @@ mpg = r.mpg
     ```
     
     ```{python}
+    plt.clf()
+    ```
+    
+    ```{python}
     sns.scatterplot(x='cty', y='hwy', size='displ', data=mpg)
     plt.show()
+    ```
+    
+    ```{python}
+    plt.clf()
     ```
 
 # Two Categorical Variables: Mosaic Plot
@@ -140,22 +183,25 @@ mpg = r.mpg
 - Usually, you should just show a table of proportions when you have two
   categorical variables.
   
-- But if your boss wants a graphic, try a mosaic plot from the statsmodels package.
-    ```{python, fig.height = 8, fig.width = 8, results = 'hide', fig.keep = 'all'}
-    from statsmodels.graphics.mosaicplot import mosaic
-    mosaic(data=mpg, index=['class', 'drv'])
-    plt.show()
+    ```{python}
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='all')
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='index')
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='columns')
     ```
     
 # Facets
 
 - Use `sns.FacetGrid()` followed by the `map()` method to plot facets.
-    ```{python}
-    g = sns.FacetGrid(data=mpg, row='drv')
+    ```{python, eval = FALSE}
+    g = sns.FacetGrid(data=mpg, row='drv', )
     g.map(sns.histplot, 'hwy', kde=False)
     plt.show()
     ```
     
+    ```{python}
+    plt.clf()
+    ```    
+
 # Labels
 
 ```{python, echo = FALSE}

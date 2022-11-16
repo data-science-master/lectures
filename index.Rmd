@@ -49,26 +49,30 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [05 APIs](./05_web_scraping/05_apis.html).
     - [05 Web Scraping](./05_web_scraping/05_web_scraping.html).
     - [05 Lab](https://github.com/data-science-master/lab_08).
-- 06 Shiny Apps
-    - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
-    - [06 Layouts](./06_shiny/06_layouts.html).
-    - [06 Reactivity](./06_shiny/06_reactivity.html).
-    - [06 HTML](./06_shiny/06_html.html).
-    - [06 File Uploads](./06_shiny/06_upload.html).
-    - [06 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
-    - [06 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
-- 09 Introduction to Python
-    - [09 Python Setup and Reticulate](./09_python/09_python_setup.html).
-    - [09 Numpy](./09_python/09_numpy.html).
-    - [09 Pandas](./09_python/09_pandas.html).
-    - [09 Matplotlib](./09_python/09_matplotlib.html).
-- 10 Personal Websites
-    - [10 A Personal Website using Blogdown](./10_websites/10_websites_blogdown.html)
-    - [10 A Personal Website using GitHub Pages](./10_websites/10_websites_github.html)
-- 11 GNU Make
-    - [11 GNU Make](./11_make/11_make.html)
-    - [11 Penguins Exercise](https://github.com/data-science-master/penguins)
-    - [11 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims)
+- 06 Introduction to Python
+    - [06 Python Setup and Reticulate](./06_python/06_python_setup.html).
+    - [06 Numpy](./06_python/06_numpy.html).
+    - [06 Pandas](./06_python/06_pandas.html).
+    - [06 Matplotlib](./06_python/06_matplotlib.html).
+- 07 Introduction to SQL
+    - [07 SQL](./07_sql/07_sql.html)
+- 08 Introduction to Spark
+- 09 GNU Make
+    - [09 GNU Make](./09_make/09_make.html)
+    - [09 Penguins Exercise](https://github.com/data-science-master/penguins)
+    - [09 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims)
+- 10 Shiny Apps
+    - [10 Shiny Basics](./10_shiny/10_basic_shiny.html).
+    - [10 Layouts](./10_shiny/10_layouts.html).
+    - [10 Reactivity](./10_shiny/10_reactivity.html).
+    - [10 HTML](./10_shiny/10_html.html).
+    - [10 File Uploads](./10_shiny/10_upload.html).
+    - [10 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
+    - [10 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
+- 11 Personal Websites
+    - [11 A Personal Website using Blogdown](./11_websites/11_websites_blogdown.html)
+    - [11 A Personal Website using GitHub Pages](./11_websites/11_websites_github.html)
+
     
 - A1 Basic Statistics
     - [A1 Basic Statistics](./A1_basic_stats/A1_basic_stats.html).
