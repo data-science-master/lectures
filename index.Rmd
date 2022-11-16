@@ -21,7 +21,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 
 # Final Project
 
-- [Final Project Description](./final_project/final_project_description.html)
+- TBD
 
 # Lectures
 
@@ -44,7 +44,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [04 R Packages](./04_packages/04_packages.html).
     - [04 Unit Testing](./04_packages/04_testing.html).
     - [04 Automated Checks](./04_packages/04_checking.html).
-    - [04 Style](./04_packages/04_style.html)
+    - [04 Style](./04_packages/04_style.html).
 - 05 Web Scraping
     - [05 APIs](./05_web_scraping/05_apis.html).
     - [05 Web Scraping](./05_web_scraping/05_web_scraping.html).
@@ -55,12 +55,13 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 Pandas](./06_python/06_pandas.html).
     - [06 Matplotlib](./06_python/06_matplotlib.html).
 - 07 Introduction to SQL
-    - [07 SQL](./07_sql/07_sql.html)
+    - [07 SQL](./07_sql/07_sql.html).
 - 08 Introduction to Spark
+    - [08 Spark](./08_spark/08_spark.html).
 - 09 GNU Make
-    - [09 GNU Make](./09_make/09_make.html)
-    - [09 Penguins Exercise](https://github.com/data-science-master/penguins)
-    - [09 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims)
+    - [09 GNU Make](./09_make/09_make.html).
+    - [09 Penguins Exercise](https://github.com/data-science-master/penguins).
+    - [09 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims).
 - 10 Shiny Apps
     - [10 Shiny Basics](./10_shiny/10_basic_shiny.html).
     - [10 Layouts](./10_shiny/10_layouts.html).
@@ -70,9 +71,10 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [10 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
     - [10 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
 - 11 Personal Websites
-    - [11 A Personal Website using Blogdown](./11_websites/11_websites_blogdown.html)
-    - [11 A Personal Website using GitHub Pages](./11_websites/11_websites_github.html)
+    - [11 A Personal Website using Blogdown](./11_websites/11_websites_blogdown.html).
+    - [11 A Personal Website using GitHub Pages](./11_websites/11_websites_github.html).
 
+# Extra Lectures
     
 - A1 Basic Statistics
     - [A1 Basic Statistics](./A1_basic_stats/A1_basic_stats.html).
