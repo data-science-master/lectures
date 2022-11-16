@@ -25,8 +25,6 @@ University by [David Gerard](https://dcgerard.github.io/).
 
 # Lectures
 
-- 00 Workflow
-    - [00 Workflow Tips](./00_workflow/00_workflow_tips.html)
 - 01 Git and the Terminal
     - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
     - [01 Git Setup](./01_git/01_git_setup.html).
@@ -42,14 +40,15 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [03 Vectors](./03_vectors_iterators/03_vectors.html).
     - [03 Iteration](./03_vectors_iterators/03_iterators.html).
     - [03 Lab](https://github.com/data-science-master/lab_03).
-- 04 Basic Statistics
-    - [04 Basic Statistics](./04_basic_stats/04_basic_stats.html).
-    - [04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./04_basic_stats/greenland_etal_2016.pdf).
-    - [04 Lab](https://github.com/data-science-master/lab_04).
-- 05 Linear Models
-    - [05 Simple Linear Regression](./05_linear_regression/05_simple_linear_regression.html).
-    - [05 Many Models](./05_linear_regression/05_many_models.html).
-    - [05 Lab](https://github.com/data-science-master/lab_05).
+- 04 R Packages
+    - [04 R Packages](./04_packages/04_packages.html).
+    - [04 Unit Testing](./04_packages/04_testing.html).
+    - [04 Automated Checks](./04_packages/04_checking.html).
+    - [04 Style](./04_packages/04_style.html)
+- 05 Web Scraping
+    - [05 APIs](./05_web_scraping/05_apis.html).
+    - [05 Web Scraping](./05_web_scraping/05_web_scraping.html).
+    - [05 Lab](https://github.com/data-science-master/lab_08).
 - 06 Shiny Apps
     - [06 Shiny Basics](./06_shiny/06_basic_shiny.html).
     - [06 Layouts](./06_shiny/06_layouts.html).
@@ -58,13 +57,6 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 File Uploads](./06_shiny/06_upload.html).
     - [06 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
     - [06 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
-- 07 Data.table    
-    - [07 Manipulating Large(ish) Datasets with data.table](./07_medium_data/07_medium_data.html).
-    - [07 Lab](https://github.com/data-science-master/lab_07).
-- 08 Web Scraping
-    - [08 APIs](./08_web_scraping/08_apis.html).
-    - [08 Web Scraping](./08_web_scraping/08_web_scraping.html).
-    - [08 Lab](https://github.com/data-science-master/lab_08).
 - 09 Introduction to Python
     - [09 Python Setup and Reticulate](./09_python/09_python_setup.html).
     - [09 Numpy](./09_python/09_numpy.html).
@@ -77,6 +69,18 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [11 GNU Make](./11_make/11_make.html)
     - [11 Penguins Exercise](https://github.com/data-science-master/penguins)
     - [11 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims)
+    
+- A1 Basic Statistics
+    - [A1 Basic Statistics](./A1_basic_stats/A1_basic_stats.html).
+    - [A1 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./A1_basic_stats/greenland_etal_2016.pdf).
+    - [A1 Lab](https://github.com/data-science-master/lab_04).
+- A2 Linear Models
+    - [A2 Simple Linear Regression](./A2_linear_regression/A2_simple_linear_regression.html).
+    - [A2 Many Models](./A2_linear_regression/A2_many_models.html).
+    - [A2 Lab](https://github.com/data-science-master/lab_05).
+- A3 Data.table    
+    - [A3 Manipulating Large(ish) Datasets with data.table](./A3_medium_data/A3_medium_data.html).
+    - [A3 Lab](https://github.com/data-science-master/lab_07).
 
 # Code of Conduct
 

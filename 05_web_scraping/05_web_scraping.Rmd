@@ -419,7 +419,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     The first 15 rows should look like this:
        
     ```{r, echo = FALSE}
-    mosque <- read_html("https://en.wikipedia.org/wiki/List_of_the_oldest_mosques")
+    mosque <- read_html("https://data-science-master.github.io/lectures/05_web_scraping/mosque.html")
     ```
     
     ```{r, eval = FALSE, echo = FALSE}
