@@ -12,15 +12,24 @@
 <meta name="author" content="David Gerard" />
 
 
-<title>STAT 413/613 Teaching Website</title>
+<title>DATA 413/613 Teaching Website</title>
 
-<script src="site_libs/header-attrs-2.4/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -34,14 +43,9 @@
   div.column{display: inline-block; vertical-align: top; width: 50%;}
   div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   ul.task-list{list-style: none;}
-      </style>
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -54,32 +58,8 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
+
 
 
 
@@ -89,10 +69,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -109,40 +85,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -170,7 +122,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -182,7 +134,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -192,11 +144,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -208,13 +177,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -222,16 +190,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -275,12 +236,12 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Teaching Website for STAT 413/613</a>
+      <a class="navbar-brand" href="index.html">Teaching Website for Data 413/613</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -303,11 +264,11 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">STAT 413/613 Teaching Website</h1>
+<h1 class="title toc-ignore">DATA 413/613 Teaching Website</h1>
 <h4 class="author">David Gerard</h4>
 
 </div>
@@ -315,20 +276,25 @@ $(document).ready(function () {
 
 <div id="synopsis" class="section level1">
 <h1>Synopsis</h1>
-<p>This website contains the teaching materials for STAT 413/613 Data Science, taught at American University by <a href="https://dcgerard.github.io/">David Gerard</a>.</p>
+<p>This website contains the teaching materials for DATA 413/613 Data
+Science, taught at American University by <a
+href="https://dcgerard.github.io/">David Gerard</a>.</p>
 </div>
 <div id="administrative" class="section level1">
 <h1>Administrative</h1>
 <ul>
 <li><a href="./admin/syllabus.html">Syllabus</a></li>
-<li><a href="https://dcgerard.github.io/stat_412_612/">Prerequisites</a>: You are expected to have already obtained a solid grasp on the materials from Sections 01 to 09 from my STAT 412/612 teaching website.</li>
-<li><a href="./admin/schedule.html">Tentative Schedule</a></li>
+<li><a
+href="https://dcgerard.github.io/stat_412_612/">Prerequisites</a>: You
+are expected to have already obtained a solid grasp on the materials
+from Sections 01 to 09 from my DATA 412/612 teaching website.</li>
 </ul>
 </div>
 <div id="final-project" class="section level1">
 <h1>Final Project</h1>
 <ul>
-<li><a href="./final_project/final_project_description.html">Final Project Description</a></li>
+<li><a href="./final_project/final_project_description.html">Final
+Project Description</a></li>
 </ul>
 </div>
 <div id="lectures" class="section level1">
@@ -336,39 +302,55 @@ $(document).ready(function () {
 <ul>
 <li>00 Workflow
 <ul>
-<li><a href="./00_workflow/00_workflow_tips.html">00 Workflow Tips</a></li>
+<li><a href="./00_workflow/00_workflow_tips.html">00 Workflow
+Tips</a></li>
 </ul></li>
 <li>01 Git and the Terminal
 <ul>
-<li><a href="./01_git/01_basic_bash.html">01 The Terminal and Bash Basics</a>.</li>
+<li><a href="./01_git/01_basic_bash.html">01 The Terminal and Bash
+Basics</a>.</li>
 <li><a href="./01_git/01_git_github.html">01 Git and GitHub</a>.</li>
 <li><a href="./01_git/01_git_branch.html">01 Git Branches</a>.</li>
-<li><a href="./01_git/01_git_lfs.html">01 Git Large File Storage</a>.</li>
-<li><a href="https://doi.org/10.1371/journal.pcbi.1004668">01 A Quick Introduction to Git and GitHub</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_01">01 Lab: Review of Tidyverse Concepts</a>.</li>
+<li><a href="./01_git/01_git_lfs.html">01 Git Large File
+Storage</a>.</li>
+<li><a href="https://doi.org/10.1371/journal.pcbi.1004668">01 A Quick
+Introduction to Git and GitHub</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_01">01 Lab:
+Review of Tidyverse Concepts</a>.</li>
 </ul></li>
 <li>02 Dates and Times
 <ul>
 <li><a href="./02_dates/02_dates.html">02 Dates</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_02">02 Lab</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_02">02
+Lab</a>.</li>
 </ul></li>
 <li>03 Vectors and Iteration
 <ul>
-<li><a href="./03_vectors_iterators/03_vectors.html">03 Vectors</a>.</li>
-<li><a href="./03_vectors_iterators/03_iterators.html">03 Iteration</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_03">03 Lab</a>.</li>
+<li><a href="./03_vectors_iterators/03_vectors.html">03
+Vectors</a>.</li>
+<li><a href="./03_vectors_iterators/03_iterators.html">03
+Iteration</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_03">03
+Lab</a>.</li>
 </ul></li>
 <li>04 Basic Statistics
 <ul>
-<li><a href="./04_basic_stats/04_basic_stats.html">04 Basic Statistics</a>.</li>
-<li><a href="./04_basic_stats/greenland_etal_2016.pdf">04 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_04">04 Lab</a>.</li>
+<li><a href="./04_basic_stats/04_basic_stats.html">04 Basic
+Statistics</a>.</li>
+<li><a href="./04_basic_stats/greenland_etal_2016.pdf">04 Statistical
+Tests, P-values, Confidence Intervals, and Power: A Guide to
+Misinterpretations</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_04">04
+Lab</a>.</li>
 </ul></li>
 <li>05 Linear Models
 <ul>
-<li><a href="./05_linear_regression/05_simple_linear_regression.html">05 Simple Linear Regression</a>.</li>
-<li><a href="./05_linear_regression/05_many_models.html">05 Many Models</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_05">05 Lab</a>.</li>
+<li><a href="./05_linear_regression/05_simple_linear_regression.html">05
+Simple Linear Regression</a>.</li>
+<li><a href="./05_linear_regression/05_many_models.html">05 Many
+Models</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_05">05
+Lab</a>.</li>
 </ul></li>
 <li>06 Shiny Apps
 <ul>
@@ -377,43 +359,56 @@ $(document).ready(function () {
 <li><a href="./06_shiny/06_reactivity.html">06 Reactivity</a>.</li>
 <li><a href="./06_shiny/06_html.html">06 HTML</a>.</li>
 <li><a href="./06_shiny/06_upload.html">06 File Uploads</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_1">06 Shiny Lab 1: World Bank Data</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_2">06 Shiny Lab 2: Cereals Data</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_06_1">06 Shiny
+Lab 1: World Bank Data</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_06_2">06 Shiny
+Lab 2: Cereals Data</a>.</li>
 </ul></li>
 <li>07 Data.table
 <ul>
-<li><a href="./07_medium_data/07_medium_data.html">07 Manipulating Large(ish) Datasets with data.table</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_07">07 Lab</a>.</li>
+<li><a href="./07_medium_data/07_medium_data.html">07 Manipulating
+Large(ish) Datasets with data.table</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_07">07
+Lab</a>.</li>
 </ul></li>
 <li>08 Web Scraping
 <ul>
 <li><a href="./08_web_scraping/08_apis.html">08 APIs</a>.</li>
-<li><a href="./08_web_scraping/08_web_scraping.html">08 Web Scraping</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_08">08 Lab</a>.</li>
+<li><a href="./08_web_scraping/08_web_scraping.html">08 Web
+Scraping</a>.</li>
+<li><a href="https://github.com/data-science-master/lab_08">08
+Lab</a>.</li>
 </ul></li>
 <li>09 Introduction to Python
 <ul>
-<li><a href="./09_python/09_python_setup.html">09 Python Setup and Reticulate</a>.</li>
+<li><a href="./09_python/09_python_setup.html">09 Python Setup and
+Reticulate</a>.</li>
 <li><a href="./09_python/09_numpy.html">09 Numpy</a>.</li>
 <li><a href="./09_python/09_pandas.html">09 Pandas</a>.</li>
 <li><a href="./09_python/09_matplotlib.html">09 Matplotlib</a>.</li>
 </ul></li>
 <li>10 Personal Websites
 <ul>
-<li><a href="./10_websites/10_websites_blogdown.html">10 A Personal Website using Blogdown</a></li>
-<li><a href="./10_websites/10_websites_github.html">10 A Personal Website using GitHub Pages</a></li>
+<li><a href="./10_websites/10_websites_blogdown.html">10 A Personal
+Website using Blogdown</a></li>
+<li><a href="./10_websites/10_websites_github.html">10 A Personal
+Website using GitHub Pages</a></li>
 </ul></li>
 <li>11 GNU Make
 <ul>
 <li><a href="./11_make/11_make.html">11 GNU Make</a></li>
-<li><a href="https://github.com/data-science-master/penguins">11 Penguins Exercise</a></li>
-<li><a href="https://github.com/data-science-master/pvalue_sims">11 Very Basic Makefile Example</a></li>
+<li><a href="https://github.com/data-science-master/penguins">11
+Penguins Exercise</a></li>
+<li><a href="https://github.com/data-science-master/pvalue_sims">11 Very
+Basic Makefile Example</a></li>
 </ul></li>
 </ul>
 </div>
 <div id="code-of-conduct" class="section level1">
 <h1>Code of Conduct</h1>
-<p>Please note that the ‘lectures’ project is released with a <a href="CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the ‘lectures’ project is released with a <a
+href="CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By
+contributing to this project, you agree to abide by its terms.</p>
 </div>
 
 
@@ -425,7 +420,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -443,7 +438,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>

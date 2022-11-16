@@ -1,7 +1,7 @@
-name: "Stat413/613"
+name: "Data 413/613"
 output_dir: "."
 navbar:
-  title: "Teaching Website for STAT 413/613"
+  title: "Teaching Website for Data 413/613"
   left:
     - text: "Home"
       href: index.html

@@ -1,5 +1,5 @@
 ---
-title: "STAT 413/613 Teaching Website"
+title: "DATA 413/613 Teaching Website"
 author: "David Gerard"
 ---
 
@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Synopsis
 
-This website contains the teaching materials for STAT 413/613 Data Science, taught at American 
+This website contains the teaching materials for DATA 413/613 Data Science, taught at American 
 University by [David Gerard](https://dcgerard.github.io/).
 
 # Administrative
@@ -17,8 +17,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 - [Syllabus](./admin/syllabus.html)
 - [Prerequisites](https://dcgerard.github.io/stat_412_612/): You are expected
   to have already obtained a solid grasp on the materials from Sections 01 to
-  09 from my STAT 412/612 teaching website.
-- [Tentative Schedule](./admin/schedule.html)
+  09 from my DATA 412/612 teaching website.
 
 # Final Project
 

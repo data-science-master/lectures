@@ -1,5 +1,5 @@
 ---
-title: "STAT 413/613 Data Science"
+title: "DATA-413/613 Data Science"
 author: "David Gerard"
 date: "Updated: `r Sys.Date()`"
 output: html_document
@@ -9,15 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- **Time**: Mondays or Thursdays, 5:30 PM to 8:00 PM
+- **Time**: TBD
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
-- **Virtual Office Hours (via Zoom)**: TBD
+- **Office Hours**: TBD
 
 # Overview of Topics and Course Objectives
 
-This course builds on the R/tidyverse programming skills developed in STAT-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, big data manipulation, R's statistical modeling functions, and dimensionality reduction and clustering for data exploration.
+This course builds on the R/tidyverse programming skills developed in DATA-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, and big data manipulation.
 
 # Learning Objectives:
 - Gain expertise in the `git` version control software.
@@ -25,9 +25,10 @@ This course builds on the R/tidyverse programming skills developed in STAT-412/6
 - Scrape data from the web, either with or without using an API.
 - Implement vectorized operations in R using functional programming techniques.
 - Build and deploy data science web applications using R Shiny.
-- Review elementary statistics and implement basic statistical procedures in R.
-- Wrangle and analyze large datasets using `data.table`.
+- Understand the basics of data manipulation using Python.
+- Understand the basics of data manipulation using SQL.
 - Understand the ethical questions associated with data collection and analysis.
+- For DATA-615 Students only: Implement the basic statistical methods in R.
 
 # Materials
 - **Required**: A computer with [R](https://cran.r-project.org/), [RStudio](https://rstudio.com/products/rstudio/download/), and [git](https://git-scm.com/downloads) installed.
@@ -38,21 +39,8 @@ This course builds on the R/tidyverse programming skills developed in STAT-412/6
     - Git for Scientists by McBain: <https://milesmcbain.github.io/git_4_sci/>
     - OpenIntro Statistics by Diez, Cetinkaya-Rundel, and Barr: <https://www.openintro.org/stat/textbook.php?stat_book=os>
     - blogdown: Creating Websites with R Markdown by Xie, Thomas, and Hill: <https://bookdown.org/yihui/blogdown/>
+    - DuckDB SQL Introduction: <https://duckdb.org/docs/sql/introduction>
 - **Course Website**: <https://github.com/data-science-fall-2020>
-
-# Class Structure
-
-We will hold virtual classes via Zoom during the scheduled class times. Class sessions will be a blend of lecture, class discussion, exercises, and labs. There is no expectation to share video during class if you do not want to, unless you have a really cool Zoom background.
-
-Though we will be holding live lectures, I will also post video lectures to Blackboard (in case your video feed drops, or other commitments pop up).
-
-To foster collaboration, at the beginning of the semester I will divide students into teams of about 4 students. You can discuss homework issues, coding problems, etc with your teammates. The forum for team communication will be through GitHub.
-
-These are trying times, and so attending lectures will be voluntary. I still expect you to learn the material. There is a participation portion for the class grade. A very easy way to fulfill this participation grade is to just show up for class. 
-
-If you cannot attend lectures, I will expect you to participate in other ways. For example, you can show up to office hours, you can post questions on GitHub, you can answer other students' questions on GitHub, or you can post links relating to data science (e.g. cool blog posts, exciting new R packages, etc).
-
-During exercises and labs, I will split the class up into breakout sessions of 2-4 students. One student should share their screen and the other students can discuss and type suggestions while the group solves the exercise together. Students should alternate on who is the screen sharer. One group will be chosen to present their results to the class.
 
 # Course Material
 
@@ -62,7 +50,6 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 ## Assignments 
 
-- There will be approximately 8-10 formal homework assignments throughout the semester. 
 - Homework assignments will be posted and returned on GitHub. 
     - The best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
     - I expect frequent commits. At the minimum, I expect you to commit after you have completed each question.
@@ -75,37 +62,16 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 ## Group Project
 
-All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved.
-
-Your project will involve creating a Shiny app to interactively analyze a real-world dataset. As a part of the project, you will present this Shiny app to the rest of the class during a virtual presentation during final exam week.
+All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Your project will involve creating an R package for interacting with a web API.
 
 Those taking this course for graduate credit (STAT 613) will also be required to submit a written report detailing a statistical analysis concerning their project topics. You will run a statistical inference procedure, verify the assumptions of your statistical procedure, and write up concluding remarks.
 
-# Grading
+# Assignments and Grading
 
-Your final grade will be determined by:
+- Weekly homeworks: 75%
+- Final Project: 25%
 
-```{r, echo=FALSE, message = FALSE}
-library(tidyverse)
-gradedf <- tribble(~Component, ~`Weight`,
-                   "Assignments", 0.5,
-                   "Final Project", 0.4,
-                   "Attendance and Participation", 0.1)
-knitr::kable(gradedf)
-```
-
-## The Curve
-
-We will curve the final course score, but not each individual assignment/exam score. Your final curved score will be calculated as described below.
-
-Let $S_i$ be the composite score (a number between 0 and 1) for student $i$ based on the grade weighting above.
-
-Let $C = \text{median}(S_1,S_2,\ldots,S_n)$, where $n$ is the number of students in the class. Then student $i$'s post-curve score is
-$$
-\tilde{S}_i = \frac{0.85 - C}{1 - C} * (1 - S_i) + S_i.
-$$
-
-We will then use the following cutoffs on the ceiling of $100 * \tilde{S}_i$ for letter grades:
+Usual grade cutoffs will be used:
 ```{r, echo = FALSE}
 curve_df <- data.frame(Grade = c("A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"),
                        Lower = c(93, 90, 88, 83, 80, 78, 73, 70, 60, 0),
@@ -113,93 +79,44 @@ curve_df <- data.frame(Grade = c("A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D
 knitr::kable(curve_df)
 ```
 
-The idea is that we came up with a linear relationship such that the median student will get an 85\% and any student who received a 100\% will stay at 100\%, post-curve.
+Individual assignments will not be curved. However, at the discretion of the instructor, the overall course grade at the end of the semester may be curved.
 
-If the median pre-curve grade is above 85\%, then there will be no curve.
+# Late Work Policy
 
-Below is a visualization of the curve.
+All assignments must be submitted, in class, on the day they are due. You will be penalized 15% every day an assignment is late. I will not accept assignments submitted over three days after the deadline. If you become ill or the victim of an emergency, please let me know within 48 hours.
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-library(plyr)
-get_curve <- function(x, m) {
-  (0.85 - m) / (1 - m) * (1 - x) + x
-}
-get_lettergrade <- function(x) {
-  cut(x, breaks = c(-Inf, 0.6, 0.7, 0.73, 0.78, 0.8, 0.83, 0.88, 0.9, 0.93, Inf)) %>%
-    mapvalues(from = c("(-Inf,0.6]", "(0.6,0.7]", "(0.7,0.73]", "(0.73,0.78]", "(0.78,0.8]", "(0.8,0.83]", "(0.83,0.88]", "(0.88,0.9]", "(0.9,0.93]", "(0.93, Inf]"), to = c("F", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"))
-}
-x <- seq(0, 1, length = 500)
-y1 <- get_curve(x, 0.7)
-lg1 <- get_lettergrade(y1)
-y2 <- get_curve(x, 0.75)
-lg2 <- get_lettergrade(y2)
-y3 <- get_curve(x, 0.8)
-lg3 <- get_lettergrade(y3)
-y4 <- get_curve(x, 0.85)
-lg4 <- get_lettergrade(y4)
+Students requiring a temporary leave of absence for medical or mental health reasons must provide documentation to the Office of the Dean of Students (<dos@american.edu>), which will verify with the academic unit that the documentation is appropriate and supports the leave. Students with an ASAC-approved accommodation for disability reasons should, to the greatest extent possible, make arrangements in advance of the due date or deadline.
 
-dfdat <- data.frame(x = rep(x, 4),
-                    y = c(y1, y2, y3, y4),
-                    m = rep(c("median = 0.7", "median = 0.75", "median = 0.8", "median >= 0.85"), each = length(x)),
-                    lg = unlist(list(lg1, lg2, lg3, lg4)))
-pl <- ggplot(dfdat, aes(x = x, y = y, color = lg)) +
-  geom_line(lwd = 2) +
-  facet_wrap(~ m) +
-  theme_bw() +
-  theme(strip.background = element_rect(fill = "white")) +
-  xlab("Pre-curve Score") +
-  ylab("Post-curve Score") +
-  guides(color=guide_legend(title="Post-curve\nGrade"))
-print(pl)
-```
+# Academic Integrity Code
 
-# Academic Integrity and Group Work
+- Standards of academic conduct are set forth in the university’s [Academic Integrity Code](http://www.american.edu/academics/integrity/index.cfm). By registering for this course, students have acknowledged their awareness of the Academic Integrity Code and they are obliged to become familiar with their rights and responsibilities as defined by the Code. Violations of the Academic Integrity Code will not be treated lightly and disciplinary action will be taken should violations occur. This includes cheating, fabrication, and plagiarism.
 
-- All students should familiarize themselves with American University's Academic Code of Integrity: <https://www.american.edu/academics/integrity/code.cfm>.
-- You may receive assistance from other students in the class and me, but your submissions must be composed of your own thoughts, coding and words. 
-- I expect you to get ideas from online resources such as Stackoverflow or GitHub when you get stuck (this is what real programmers and data scientists do).  Please cite your source **using urls** when you do so.
-- You should be able to explain your work on assignments and the project and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.**
-- I wish to emphasize that looking/using past homework solutions is a violation of the Academic Code of Integrity (even if it is "just" for confirmation purposes).
-- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously. 
-- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who are currently taking the course.
-- There are a bunch of small mistakes in my old homework solutions. It is easy for me to see if you copied these mistakes and have been using my solutions. It is usually not enough to just change variable names to avoid detection.
+- I expect you to work with others and me, and I expect you to use online resources as you work on your assignments/projects. However, your submissions must be composed of your own thoughts, coding, and words. You should be able to explain your work on assignments/projects and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.** 
+
+- If you use an online resource, please cite it with a URL (this is perfectly fine!).
+
+- If you do not understand an online resource, but believe it to be useful for a project/assignment, please ask me for help.
+
+- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously (whether they wrote those solutions, or I wrote those solutions). There are mistakes in my solutions that students point out to me. I look out for these while I grade to see if you have access to my solutions.
+
 - All solutions that I provide are under my copyright. These solutions are for personal use only and may not be distributed to anyone else. Giving these solutions to others, including other students or posting them on the internet, is a violation of my copyright and a violation of the student code of conduct.
+
+- A [short guide for students](https://american0.sharepoint.com/sites/ctrl-allstaff/Shared%20Documents/Content%20Management/Academic%20Integrity%20Advice%202019.pdf) on how to meet the expectations of the AU’s Academic Integrity Code
 
 # Important Dates
 
-- Monday Section Important Dates:
-    - 09/07/2020: Labor Day, no classes, university offices closed.
-    - 11/09/2020: Final Project Progress Report Due.
-    - 12/07/2020--12/12/2020 (TBD): Final Project Presentations (During Final Exam Period). Shiny apps and written reports (for graduate students) also due.
+TBD
 
-- Thursday Section Important Dates:
-    - 11/12/2020: Final Project Progress Report Due.
-    - 11/26/2020: Thanksgiving holiday; no classes; university offices closed
-    - 12/07/2020--12/12/2020 (TBD): Final Project Presentations (During Final Exam Period). Shiny apps and written reports (for graduate students) also due.
+# Incomplete Policy
 
-# Assistance/Support
+At the discretion of the faculty member and before the end of the semester, the grade of I (Incomplete) may be given to a student who, because of extenuating circumstances, is unable to complete the course during the semester. The grade of Incomplete may be given only if the student is receiving a passing grade for the coursework completed. Students on academic probation may not receive an Incomplete. The instructor must provide in writing to the student the conditions, which are described below, for satisfying the Incomplete and must enter those same conditions when posting the grades for the course. The student is responsible for verifying that the conditions were entered correctly.
 
-Before receiving any assistance on a specific homework problem, please make sure that you have read through the class materials, and that you have made a fair attempt at the problem. 
+Conditions for satisfying the Incomplete must include what work needs to be completed, by when the work must be completed, and what the course grade will be if the student fails to complete that work. At the latest, any outstanding coursework must be completed before the end of the following semester, absent an agreement to the contrary. Instructors will submit the grade of I and the aforementioned conditions to the Office of the University Registrar when submitting all other final grades for the course. If the student does not meet the conditions, the Office of the University Registrar will assign the default grade automatically.
 
-1. **If you are having ANY trouble with the class, please come see me about it as soon as possible. Do not wait until it is too late.**
-2. Always feel welcome to talk to me during my office hours (no appointment necessary). These hours are for you to ask questions. Office hours can be busy so please come prepared with specific questions.
-3. I also set aside a few hours each week to meet with students outside of office hours. Just send me an email to ask for a private meeting.
-4. Use your peers! Feel free to work with your classmates on assignments. Just make sure that you write down the solutions in your own words.
-5. You are also encouraged to ask me questions online via email. 
-6. Additional support services are available on campus that may assist you in successfully completing the course requirements. Details provided by each support service’s office are provided below.
-    - The Academic Support and Access Center (x3360, MGC 243) supports the academic development and educational goals of all AU students while also providing support to students with disabilities. They offer workshops on topics of interest to all students such as time management, note taking, critical thinking, memory skills, and test taking. Additional support includes free private and group tutoring in many subjects, supplemental instruction, The Math Lab and The Writing Lab. 
-    - Students wishing to receive accommodations for a disability, are to bring their documentation directly to the Academic Support and Access Center (ASAC-<http://www.american.edu/ocl/asac/index.cfm>), in MGC 243, x3360. ASAC, in turn, will notify me of the accommodation required. Keep in mind that accommodations can only begin when I have been notified. This means that students should take care of this at the start of the semester, **before** the work for which they require accommodation is due.
-    - The Counseling Center (x3500, MGC 214) is here to help students make the most of their university experience, both personally and academically. We offer individual and group counseling, urgent care, self-help resources, referrals to private care, as well as programming to help you gain the skills and insight needed to overcome adversity and thrive while you are in college. Contact the Counseling Center to make an appointment in person or by telephone, or visit the Counseling Center page on the AU website for additional information.
-    - Center for Diversity & Inclusion (X3651, MGC 201) is dedicated to enhancing LGBTQ, Multicultural, First Generation, and Women's experiences on campus and to advance AU's commitment to respecting & valuing diversity by serving as a resource and liaison to students, staff, and faculty on issues of equity through education, outreach, and advocacy.
-    - OASIS: The Office of Advocacy Services for Interpersonal and Sexual Violence (X7070) provides free and confidential advocacy services for anyone in the campus community who is impacted by sexual violence (sexual assault, dating or domestic violence, and stalking).
+The Associate Dean of the Academic Unit, with the concurrence of the instructor, may grant an extension beyond the agreed deadline, but only in extraordinary circumstances. Incomplete courses may not be retroactively dropped. An Incomplete may not stand as a permanent grade and must be resolved before a degree can be awarded. 
+
+[More information on AU Regulations and Policies](https://www.american.edu/provost/undergrad/undergrad-rules-and-regulations.cfm).
     
-# A Few Additional Notes
+# Sharing Course Content: 
 
-- I expect you to be courteous to me and your fellow classmates both inside and outside of the classroom. This generally just involves a bit of common sense.  Cell phones need to be silenced and put away during class. Laptops should be out during class time for use only on class activities. Please save texting, typing/sending emails, checking Facebook, etc. for outside of class time.  Any correspondence pertaining to the course needs to be handled in a respectful manner.
-- A grade of incomplete will only be given under extreme circumstances and will not be granted to any student who is failing.
-- In the event of an emergency, please refer to the AU Web site (<http://www.american.edu/emergency>) and the AU information line at (202) 885-1100 for general university-wide information. In the event that class is canceled for ANY reason I will communicate with you via email and Blackboard to let you know what work, reading, etc. you will be responsible for.
-
-
-
-
-
+Students are not permitted to make visual or audio recordings (including livestreams) of lectures or any class-related content or use any type of recording device unless prior permission from the instructor is obtained and there are no objections from any student in the class. If permission is granted, only students registered in the course may use or share recordings and any electronic copies of course materials (e.g., PowerPoints, formulas, lecture notes, and any discussions – online or otherwise). Use is limited to educational purposes even after the end of the course. Exceptions will be made for students who present a signed Letter of Accommodation from the Academic Support and Access Center. Further details are available from the [ASAC website](https://www.american.edu/provost/academic-access/index.cfm).
