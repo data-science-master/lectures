@@ -29,7 +29,6 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.html).
     - [01 Git Setup](./01_git/01_git_setup.html).
     - [01 Git and GitHub](./01_git/01_git_github.html).
-    - [01 Git Branches](./01_git/01_git_branch.html).
     - [01 Git Large File Storage](./01_git/01_git_lfs.html).
     - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
     - [01 Lab: Review of Tidyverse Concepts](https://github.com/data-science-master/lab_01).
