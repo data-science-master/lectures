@@ -145,20 +145,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - You can merge branches by the command line, but I would recommend
   doing this on GitHub. Click on the button "Compare & pull request".
   
-    ![](./graphics/pull1.png)\
+    ![](./01_figs/pull1.png)\
 
 - Write an informative message. Then click "Create pull request".
 
 - The following screen is a message board for discussing the pull request.
   After everyone is satisfied, you can click "Merge pull request".
     
-    ![](./graphics/pull3.png)\
+    ![](./01_figs/pull3.png)\
     
 - You can instead pull changes from master to the branch (for example, if
   someone else made some updates to master) by editing the direction
   of the pull request:
   
-    ![](./graphics/pull2.png)\
+    ![](./01_figs/pull2.png)\
     
 - You can pull the changes to master onto your local machine by going back
   to master and pulling:
