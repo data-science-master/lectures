@@ -28,6 +28,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # SQL Introduction
 
+- SQL is pronounced either "ess-kew-ell" or "sequel" (either is fine).
+
+- SQL is a programming language which basically allows you to do everything that dplyr does (filters, selects, joins, etc...). It is the industry standard for interacting with a relational database.
+
 # Use SQL in R with `{DBI}`
 
 - It's best to have SQL written in a separate file (that ends in ".sql").
