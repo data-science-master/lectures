@@ -59,14 +59,40 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, eval = FALSE}
     reticulate::py_available()
     ```
+    
+- Python programmers typically modularize their projects into environments, which are separate installations of python and packages. That way, if you go back to a project, you go back to the exact same version of python and packages that you know work for that project. This reduces chances for breaking changes to affect old projects.
 
-- To install Python packages, use `py_install()`. For example, we can install
-  the numpy, pandas, and matplotlib packages via
+- Use `conda_list()` to list all of the environments.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    reticulate::conda_list()
+    ```
+    
+- Use `conda_create()` to create a new environment. You can choose the version of python that this environment uses.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::conda_create(envname = "objects", python_version = "3.11")
+    ```
+
+- Use `use_condaenv()` to specify the environment you want to use.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::use_condaenv("objects")
+    ```
+
+- To install Python packages, use `py_install()`. You need to specify the environment to which the packages are installed. For example, we can install the numpy, pandas, and matplotlib packages via
   
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
-    reticulate::py_install(packages = c("numpy", "pandas", "matplotlib"))
+    reticulate::py_install(envname = "objects", packages = c("numpy", "pandas", "matplotlib"))
     ```
+
+- Note: We used conda environments here, but there is a competing system of environments called "virtualenv" which some folks use.
+
+- If you want to update the python version of a specific environment, I've found the easiest way was to just remove it with `conda_remove()` and recreate it with the specified python version.
 
 # Python REPL's, Chunks, and Scripts
 
@@ -137,3 +163,4 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - Hitting Control/Command + Enter inside a Python script will also 
   start a Python REPL.
+

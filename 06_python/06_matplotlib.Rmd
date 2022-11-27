@@ -192,10 +192,9 @@ mpg = r.mpg
 # Facets
 
 - Use `sns.FacetGrid()` followed by the `map()` method to plot facets.
-    ```{python, eval = FALSE}
-    g = sns.FacetGrid(data=mpg, row='drv', )
+    ```{python, results = "hide"}
+    g = sns.FacetGrid(data=mpg, row='drv', col='class')
     g.map(sns.histplot, 'hwy', kde=False)
-    plt.show()
     ```
     
     ```{python}
