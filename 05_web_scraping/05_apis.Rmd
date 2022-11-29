@@ -195,40 +195,122 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - The major function we will use is `GET()`, which fetches data.
 
 - There are many other function in httr used to interact with API's.
-
-- Let's use `GET()` to fetch the movie information on 
-  [The Lighthouse](https://en.wikipedia.org/wiki/The_Lighthouse_(2019_film)).
-    ```{r}
-    mout <- GET(url = "http://www.omdbapi.com/",
-                query = list(t = "The Lighthouse",
-                             plot = "short", 
-                             r = "json", 
-                             apikey = movie_key))
-    ```
+    - E.g. `DELETE()` for deleting stuff at a target, `PUT()` for adding stuff to a target, etc..
     
-- The `url` argument is the URL where all API requests should be sent. This
-  is usually documents in the API documentation. In our case, OMDB says
-  to send all requests to "http://www.omdbapi.com/?apikey=[yourkey]&". The
-  terms after `?` are queries, so I just used the base URL.
-  
-- The variable after `?` indicates that `apikey` is a query, so I included
-  that in the list of queries.
-    
-- You use the `query` argument to modify the parameters of your request. 
-  It needs to be a named list where the names are the parameters that
-  you get from the API documentation.
-  
-- Other API's use headers or body information instead of queries to modify requests. 
+- API's typically use the following to modify requests. 
   See <https://httr.r-lib.org/articles/api-packages.html#first-steps>
   
-    1. URL path: the `path` argument in `GET()`.
-    2. Query arguments: The `query` argument in `GET()`.
+    1. URL path: the `path` argument in `GET()` or `modify_url()`.
+    2. Query arguments: The `query` argument in `GET()` or `modify_url()`.
     3. HTTP headers: `add_headers()`
-    4. Request body: The body argument in `GET()`.
+
+- Some API's only modify the URL path, some only modify the query, etc... Let's go through each of these in turn.
+
+### URL Path
+
+- Every API has a URL that you modify.
+
+- Some API's only modify the URL *path* to obtain the endpoint.
+
+- Consider the [Age of Empires II API](https://age-of-empires-2-api.herokuapp.com/docs).
+
+- The documentation says that the base URL is "https://age-of-empires-2-api.herokuapp.com/api/v1/".
+    ```{r}
+    baseurl <- "https://age-of-empires-2-api.herokuapp.com/api/v1"
+    ```
+
+- The documentation just says that we modify this URL to obtain the different objects. E.g., to obtain a list of all the civilizations, we just add "/civilizations" at the end. We can do this with a simple `paste0()` call.
+
+    ```{r}
+    civurl <- paste0(baseurl, "/civilizations")
+    ```
+
+- We then just pass this URL to `GET()`.
+
+    ```{r}
+    civout <- GET(url = civurl)
+    civout
+    ```
+
+- We would then clean this output (see rectangling below). But as a preview, we would do
+    ```{r}
+    tibble(civ = content(civout)[[1]]) |>
+      unnest_wider(col = civ)
+    ```
+
+
+### Queries
+
+- Some APIs require you to modify the URL via *queries*. Queries occur after a question mark and are of the form
+    ```
+    http://www.url.com/?query1=arg1&query2=ar2&query3=arg3
+    ```
+
+- The [OMDB API](https://www.omdbapi.com/) requires you to provide queries. The documentation says 
+
+    >>> Send all data requests to: http://www.omdbapi.com/?apikey=[yourkey]&
+    
+    But that documentation already has a query apart of it (apikey=[yourkey]).
+    
+- You add queries via the `query` argument in `modify_url()`. The query argument should be a named list, where the names are the parameters that you get from the API documentation.
+
+- The documentation has a table called "Parameters", where they list the possible queries.
+
+- Let's fetch information on the film [The Lighthouse](https://en.wikipedia.org/wiki/The_Lighthouse_(2019_film)), obtaining a short plot in json format.
+
+- This is what the URL looks like without my API key:
+    ```{r}
+    baseurl <- "http://www.omdbapi.com/"
+    modify_url(url = baseurl, 
+               query = list(t = "The Lighthouse",
+                            plot = "short", 
+                            r = "json"))
+    ```
+
+- Here is the GET call:
+    ```{r}
+    omdburl <- modify_url(url = baseurl, 
+                          query = list(t = "The Lighthouse",
+                                       plot = "short", 
+                                       r = "json",
+                                       apikey = movie_key))
+    mout <- GET(url = omdburl)
+    mout
+    ```
+  
+- Output is just a list:
+    ```{r}
+    content(mout) |>
+      str()
+    ```
+
   
 - In the API documentation:
 
     ![](./cartoons/OMDB_API_DOC.png)\ 
+    
+### Headers
+
+- Headers supply additional options for the return type.
+
+- Common headers are described by Wikipedia: <https://en.wikipedia.org/wiki/List_of_HTTP_header_fields>
+
+- You supply headers in `GET()` via the `add_headers()`, which takes a named character vector as input.
+
+- Consider the [icanhazdadjoke](https://icanhazdadjoke.com/api) API. One option is to include a header to specify plain text returns, rather than JSON returns.
+
+    ```{r}
+    dadout <- GET(url = "https://icanhazdadjoke.com/search", 
+                  add_headers(Accept = "text/plain"))
+    dadout
+    ```
+    
+- This is different than a JSON output
+    ```{r}
+    GET(url = "https://icanhazdadjoke.com/search")
+    ```
+    
+### Output:
     
 - The *status code* describes whether your request was successful.
     - List of codes: <https://www.flickr.com/photos/girliemac/sets/72157628409467125>
@@ -304,7 +386,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Graphic:
 
-    ![](./cartoons/unnest_wider.png)\ 
+    ```{r, echo=FALSE}
+    knitr::include_graphics(path = "./cartoons/unnest_wider.png")
+    ```
     
 - Use `hoist()` to only extract some elements of a list:
 
@@ -324,8 +408,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Graphic:
 
-    ![](./cartoons/hoist.png)\ 
-    
+    ```{r, echo=FALSE}
+    knitr::include_graphics(path = "./cartoons/hoist.png")
+    ```
 
 - Let's look at the list `gh_repos`, which was also obtained using the GitHub API: <https://developer.github.com/v3/repos/#list-user-repositories>
 
@@ -339,7 +424,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - This list is very complicated!
 
-    ![](./cartoons/github_repos.png)\ 
+    ```{r, echo=FALSE, out.width="40%"}
+    knitr::include_graphics(path = "./cartoons/github_repos.png")
+    ```
     
 - Ideally, each repo would be its own row (since the repositories are the observational units). We can do this with `unnest_longer()`.
 
@@ -350,8 +437,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Graphic:
 
-    ![](./cartoons/unnest_longer.png)\ 
-    
+    ```{r, echo=FALSE, out.width="40%"}
+    knitr::include_graphics(path = "./cartoons/unnest_longer.png")
+    ```
+
 - We can then use `unnest_wider()` or `hoist()` on this new data frame to get a tidy dataset.
 
     ```{r}
@@ -361,8 +450,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Graphic:
 
-    ![](./cartoons/unnest_wider_2.png)\ 
-    
+    ```{r, echo=FALSE, out.width="20%"}
+    knitr::include_graphics(path = "./cartoons/unnest_wider_2.png")
+    ```
 
 - **Exercise**: Clean up the `sw_people` list from the `repurrrsive` package:
 
