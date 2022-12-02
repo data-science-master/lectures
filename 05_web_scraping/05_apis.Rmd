@@ -156,6 +156,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
         ```{r}
         movie_key <- Sys.getenv("OMDB_API_KEY")
         ```
+    6. You typically put your API key as a query parameter in a `GET()` call (see below).
 
 - It is important to never save or display your private key in a file you could share. 
   You are responsible for all behavior associated with your key. That is
@@ -190,15 +191,91 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 ## OAuth: 
 
-- This is the hardest one.
-
-- This section is based on <https://blog.r-hub.io/2021/01/25/oauth-2.0/>
-  
-- OAuth ("Open Autherization) generates a session-specific token that is used for subsequent requests in a single session.
+- OAuth ("Open Authorization") is an open standard for authorization that allows users to securely access resources without giving away their login credentials.
 
 - The idea is that your software asks the user if it can use the user's autherization to access the API. It does this each time it needs to access the API. This is commonly used in big API's, like that of Google, Twitter, or Facebook.
 
-- Consider the [ORCID API](https://info.orcid.org/documentation/features/public-api/). Compare to <https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R#L106-L108>
+- As an example, we will consider the [GitHub API](http://developer.github.com/v3/oauth/).
+
+1. You first need to "register an application" with the API provider before you can access the API. 
+    - You won't actually have an app, but they will think you will!
+    - This typically involves providing a name and a callback URL for your "application". 
+    - The provider will then give you a `client_id` and a `client_secret` that you will need to use.
+    - Neither of these need to be protected like a password since the user will provide their own password/username for authentication.
+    - You put these in `httr::oauth_app()`
+    - The `appname` argument can be whatever you want.
+    
+    ```{r, eval = FALSE}
+    my_app <- httr::oauth_app(
+      appname = "personal_app_name",
+      key = "client_id",
+      secret = "client_secret"
+    )
+    ```
+    
+    - In the case of GitHub, register at <https://github.com/settings/developers>
+    - Use any URL (like <https://github.com/>) as your homepage URL
+    - Use <http://localhost:1410> as the callback url (it seems this is what you should always do).
+    
+    ```{r, eval = FALSE}
+    git_app <- httr::oauth_app(
+      appname = "gitapp",
+      key = "933ffc6f53e466c58aa1",
+      secret = "aa02ef46f93aa51a360f23f30f7640b445118e7f"
+    )
+    ```
+    
+    
+2. You then need to set the "OAuth Endpoints". These are two URL's used for authentications. The API docs should tell you what the "authorization" URL is and what the "access" (or "token") URL is.
+    - Save these using `httr::oauth_endpoint()`
+    ```{r, eval = FALSE}
+    my_endpts <- httr::oauth_endpoint(
+      authorize = "authorize_url",
+      access = "access_token_url"
+    )
+    ```
+    
+    - In the case of the GitHub API, they list their endpoints as
+    
+        > authorize: <https://github.com/login/oauth/authorize>
+        
+        > access: <https://github.com/login/oauth/access_token>
+        
+    ```{r, eval = FALSE}
+    git_endpts <- httr::oauth_endpoint(
+      authorize = "https://github.com/login/oauth/authorize",
+      access = "https://github.com/login/oauth/access_token"
+    )
+    ```
+        
+3. Use the `httr::oauth2.0_token()` function to create an OAuth token using your endpoints and your app.
+    
+    ```{r, eval = FALSE}
+    git_token <- oauth2.0_token(
+      endpoint = git_endpts,
+      app = git_app
+    )
+    ```
+    
+4. You then feed the token into `httr::config()`.
+
+    ```{r, eval = FALSE}
+    gtoken <- config(token = git_token)
+    ```
+
+5. You feed the output of `config()` into `GET()`, along with your API request.
+
+    ```{r, eval = FALSE}
+    GET("https://api.github.com/rate_limit", gtoken)
+    ```
+  
+- Additional reading:
+    - <https://blog.r-hub.io/2021/01/25/oauth-2.0/>
+    - `demo("oauth2-github", package = "httr")`
+    
+- When using OAuth in a package, folks often (i) "cache" the token securely (because the generated token should be kept private), and (ii) ask folks to generate their own app. See the [rorcid](https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R) example of authorization here.
+
+<!-- - Consider the [ORCID API](https://info.orcid.org/documentation/features/public-api/). Compare to <https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R#L106-L108> -->
   
 # httr
 

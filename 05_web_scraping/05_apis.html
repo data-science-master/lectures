@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-30" />
+<meta name="date" content="2022-12-02" />
 
 <title>Getting Data Through APIs</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Getting Data Through APIs</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-30</h4>
+<h4 class="date">2022-12-02</h4>
 
 </div>
 
@@ -511,6 +511,8 @@ sent you by email.</p></li>
 <li><p>Restart R.</p></li>
 <li><p>You can now always access your private key by</p>
 <pre class="r"><code>movie_key &lt;- Sys.getenv(&quot;OMDB_API_KEY&quot;)</code></pre></li>
+<li><p>You typically put your API key as a query parameter in a
+<code>GET()</code> call (see below).</p></li>
 </ol></li>
 <li><p>It is important to never save or display your private key in a
 file you could share. You are responsible for all behavior associated
@@ -543,17 +545,92 @@ via <code>{keyring}</code>.</p></li>
 <div id="oauth" class="section level2">
 <h2>OAuth:</h2>
 <ul>
-<li><p>This is the hardest one.</p></li>
-<li><p>This section is based on <a href="https://blog.r-hub.io/2021/01/25/oauth-2.0/" class="uri">https://blog.r-hub.io/2021/01/25/oauth-2.0/</a></p></li>
-<li><p>OAuth (“Open Autherization) generates a session-specific token
-that is used for subsequent requests in a single session.</p></li>
+<li><p>OAuth (“Open Authorization”) is an open standard for
+authorization that allows users to securely access resources without
+giving away their login credentials.</p></li>
 <li><p>The idea is that your software asks the user if it can use the
 user’s autherization to access the API. It does this each time it needs
 to access the API. This is commonly used in big API’s, like that of
 Google, Twitter, or Facebook.</p></li>
-<li><p>Consider the <a href="https://info.orcid.org/documentation/features/public-api/">ORCID
-API</a>. Compare to <a href="https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R#L106-L108" class="uri">https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R#L106-L108</a></p></li>
+<li><p>As an example, we will consider the <a href="http://developer.github.com/v3/oauth/">GitHub API</a>.</p></li>
 </ul>
+<ol style="list-style-type: decimal">
+<li><p>You first need to “register an application” with the API provider
+before you can access the API.</p>
+<ul>
+<li>You won’t actually have an app, but they will think you will!</li>
+<li>This typically involves providing a name and a callback URL for your
+“application”.</li>
+<li>The provider will then give you a <code>client_id</code> and a
+<code>client_secret</code> that you will need to use.</li>
+<li>Neither of these need to be protected like a password since the user
+will provide their own password/username for authentication.</li>
+<li>You put these in <code>httr::oauth_app()</code></li>
+<li>The <code>appname</code> argument can be whatever you want.</li>
+</ul>
+<pre class="r"><code>my_app &lt;- httr::oauth_app(
+  appname = &quot;personal_app_name&quot;,
+  key = &quot;client_id&quot;,
+  secret = &quot;client_secret&quot;
+)</code></pre>
+<ul>
+<li>In the case of GitHub, register at <a href="https://github.com/settings/developers" class="uri">https://github.com/settings/developers</a></li>
+<li>Use any URL (like <a href="https://github.com/" class="uri">https://github.com/</a>) as your homepage URL</li>
+<li>Use <a href="http://localhost:1410" class="uri">http://localhost:1410</a> as the callback url (it seems this
+is what you should always do).</li>
+</ul>
+<pre class="r"><code>git_app &lt;- httr::oauth_app(
+  appname = &quot;gitapp&quot;,
+  key = &quot;933ffc6f53e466c58aa1&quot;,
+  secret = &quot;aa02ef46f93aa51a360f23f30f7640b445118e7f&quot;
+)</code></pre></li>
+<li><p>You then need to set the “OAuth Endpoints”. These are two URL’s
+used for authentications. The API docs should tell you what the
+“authorization” URL is and what the “access” (or “token”) URL is.</p>
+<ul>
+<li>Save these using <code>httr::oauth_endpoint()</code></li>
+</ul>
+<pre class="r"><code>my_endpts &lt;- httr::oauth_endpoint(
+  authorize = &quot;authorize_url&quot;,
+  access = &quot;access_token_url&quot;
+)</code></pre>
+<ul>
+<li><p>In the case of the GitHub API, they list their endpoints as</p>
+<blockquote>
+<p>authorize: <a href="https://github.com/login/oauth/authorize" class="uri">https://github.com/login/oauth/authorize</a></p>
+</blockquote>
+<blockquote>
+<p>access: <a href="https://github.com/login/oauth/access_token" class="uri">https://github.com/login/oauth/access_token</a></p>
+</blockquote></li>
+</ul>
+<pre class="r"><code>git_endpts &lt;- httr::oauth_endpoint(
+  authorize = &quot;https://github.com/login/oauth/authorize&quot;,
+  access = &quot;https://github.com/login/oauth/access_token&quot;
+)</code></pre></li>
+<li><p>Use the <code>httr::oauth2.0_token()</code> function to create an
+OAuth token using your endpoints and your app.</p>
+<pre class="r"><code>git_token &lt;- oauth2.0_token(
+  endpoint = git_endpts,
+  app = git_app
+)</code></pre></li>
+<li><p>You then feed the token into <code>httr::config()</code>.</p>
+<pre class="r"><code>gtoken &lt;- config(token = git_token)</code></pre></li>
+<li><p>You feed the output of <code>config()</code> into
+<code>GET()</code>, along with your API request.</p>
+<pre class="r"><code>GET(&quot;https://api.github.com/rate_limit&quot;, gtoken)</code></pre></li>
+</ol>
+<ul>
+<li>Additional reading:
+<ul>
+<li><a href="https://blog.r-hub.io/2021/01/25/oauth-2.0/" class="uri">https://blog.r-hub.io/2021/01/25/oauth-2.0/</a></li>
+<li><code>demo(&quot;oauth2-github&quot;, package = &quot;httr&quot;)</code></li>
+</ul></li>
+<li>When using OAuth in a package, folks often (i) “cache” the token
+securely (because the generated token should be kept private), and (ii)
+ask folks to generate their own app. See the <a href="https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R">rorcid</a>
+example of authorization here.</li>
+</ul>
+<!-- - Consider the [ORCID API](https://info.orcid.org/documentation/features/public-api/). Compare to <https://github.com/ropensci-archive/rorcid/blob/afa74daabf18499841e843a755b182c73ab545ea/R/auth.R#L106-L108> -->
 </div>
 </div>
 <div id="httr" class="section level1">
@@ -602,7 +679,7 @@ simple <code>paste0()</code> call.</p>
 <pre class="r"><code>eout &lt;- GET(url = eurl)
 eout</code></pre>
 <pre><code>## Response [https://wizard-world-api.herokuapp.com/Elixirs]
-##   Date: 2022-11-30 21:51
+##   Date: 2022-12-02 22:16
 ##   Status: 200
 ##   Content-Type: application/json; charset=utf-8
 ##   Size: 62.3 kB</code></pre></li>
@@ -638,7 +715,7 @@ to provide queries. The documentation says</p>
 <blockquote>
 <p>Send all data requests to: <a href="http://www.omdbapi.com/?apikey=%5Byourkey%5D&amp;" class="uri">http://www.omdbapi.com/?apikey=[yourkey]&amp;</a></p>
 </blockquote>
-<p>But that documentation already has a query apart of it
+<p>But that documentation already has a query as a part of it
 (apikey=[yourkey]).</p></li>
 <li><p>You add queries via the <code>query</code> argument in
 <code>modify_url()</code>. The query argument should be a named list,
@@ -664,7 +741,7 @@ modify_url(url = baseurl,
 mout &lt;- GET(url = omdburl)
 mout</code></pre>
 <pre><code>## Response [http://www.omdbapi.com/?t=The%20Lighthouse&amp;plot=short&amp;r=json&amp;apikey=18375155]
-##   Date: 2022-11-30 21:51
+##   Date: 2022-12-02 22:16
 ##   Status: 200
 ##   Content-Type: application/json; charset=utf-8
 ##   Size: 1 kB</code></pre></li>
@@ -725,7 +802,7 @@ returns.</p>
               add_headers(Accept = &quot;text/plain&quot;))
 dadout</code></pre>
 <pre><code>## Response [https://icanhazdadjoke.com/search]
-##   Date: 2022-11-30 21:51
+##   Date: 2022-12-02 22:16
 ##   Status: 200
 ##   Content-Type: text/plain
 ##   Size: 1.41 kB
@@ -743,7 +820,7 @@ dadout</code></pre>
 <li><p>This is different than a JSON output</p>
 <pre class="r"><code>GET(url = &quot;https://icanhazdadjoke.com/search&quot;)</code></pre>
 <pre><code>## Response [https://icanhazdadjoke.com/search]
-##   Date: 2022-11-30 21:51
+##   Date: 2022-12-02 22:16
 ##   Status: 200
 ##   Content-Type: text/html; charset=utf-8
 ##   Size: 16.4 kB
@@ -975,7 +1052,7 @@ your R environment file.</p></li>
 <li><p>Read about the APOD API and obtain all images from January of
 2022. Your response should look like this:</p>
 <pre><code>## Response [https://api.nasa.gov/planetary/apod?start_date=2022-01-01&amp;end_date=2022-01-31&amp;api_key=VVo4PTeS8tyl2pO7QmgNRcUZF2tOljtDQSAzekGZ]
-##   Date: 2022-11-30 21:51
+##   Date: 2022-12-02 22:16
 ##   Status: 200
 ##   Content-Type: application/json
 ##   Size: 37.7 kB
