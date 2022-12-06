@@ -136,6 +136,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - `Style`: Categorical variable indicating architectural style 
     - `Lot`: Lot size (in square feet)
     - `Highway`: 1 = highway adjacent, 0 = highway not adjacent.
+- [flights.duckdb](./data/flights.duckdb): DuckDB database of the `{nycflights13}` data. See that package documentation for details.
 - [flights14.csv](./data/flights14.csv): Data from 253,316 flights originating
   from New York City in 2014. This is from the
   [data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) 
