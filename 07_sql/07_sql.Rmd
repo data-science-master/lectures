@@ -74,12 +74,30 @@ ggplot2::theme_set(ggplot2::theme_bw())
     con <- dbConnect(duckdb(dbdir = "../data/flights.duckdb", read_only = TRUE))
     ```
 
-- A basic SQL code chunk looks like this:
+- A basic SQL code chunk looks like this (put SQL code between the chunks):
 
     ```{r, echo = FALSE, comment = ""}
     codechunk <- "```{sql connection=con}\n\n```"
     writeLines(codechunk)
     ```
+
+# Basic SQL
+
+## Showing Tables
+
+- The `SHOW TABLES` command can be used to get a list of all of the tables
+    ```{sql connection=con}
+    SHOW TABLES
+    ```
+
+- The `DESCRIBE` command can be used to show tables and the variables.
+
+    ```{sql connection=con}
+    DESCRIBE
+    ```
+
+
+## Querying a Table
 
 - E.g., this will get the entire `airlines` data frame.
     ```{sql connection=con}

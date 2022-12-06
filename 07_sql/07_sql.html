@@ -362,6 +362,13 @@ display: none;
 Objectives</a></li>
 <li><a href="#sql-introduction-and-setup" id="toc-sql-introduction-and-setup">SQL Introduction and SetUp</a></li>
 <li><a href="#duckdb" id="toc-duckdb">DuckDB</a></li>
+<li><a href="#basic-sql" id="toc-basic-sql">Basic SQL</a>
+<ul>
+<li><a href="#showing-tables" id="toc-showing-tables">Showing
+Tables</a></li>
+<li><a href="#querying-a-table" id="toc-querying-a-table">Querying a
+Table</a></li>
+</ul></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
 <code>{dbplyr}</code></a></li>
 </ul>
@@ -413,10 +420,119 @@ location you can get to: <a href="https://data-science-master.github.io/lectures
 <li><p>Use <code>duckdb()</code> and <code>dbConnect()</code> to create
 a connection to “flights.duckdb”.</p>
 <pre class="r"><code>con &lt;- dbConnect(duckdb(dbdir = &quot;../data/flights.duckdb&quot;, read_only = TRUE))</code></pre></li>
-<li><p>A basic SQL code chunk looks like this:</p>
+<li><p>A basic SQL code chunk looks like this (put SQL code between the
+chunks):</p>
 <pre><code>```{sql connection=con}
 
 ```</code></pre></li>
+</ul>
+</div>
+<div id="basic-sql" class="section level1">
+<h1>Basic SQL</h1>
+<div id="showing-tables" class="section level2">
+<h2>Showing Tables</h2>
+<ul>
+<li><p>The <code>SHOW TABLES</code> command can be used to get a list of
+all of the tables</p>
+<pre class="sql"><code>SHOW TABLES</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">airlines</td>
+</tr>
+<tr class="even">
+<td align="left">airports</td>
+</tr>
+<tr class="odd">
+<td align="left">flights</td>
+</tr>
+<tr class="even">
+<td align="left">planes</td>
+</tr>
+<tr class="odd">
+<td align="left">weather</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>The <code>DESCRIBE</code> command can be used to show tables and
+the variables.</p>
+<pre class="sql"><code>DESCRIBE</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>5 records</caption>
+<colgroup>
+<col width="2%" />
+<col width="56%" />
+<col width="39%" />
+<col width="1%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">table_name</th>
+<th align="left">column_names</th>
+<th align="left">column_types</th>
+<th align="left">temporary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">airlines</td>
+<td align="left">carrier, name</td>
+<td align="left">VARCHAR, VARCHAR</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">airports</td>
+<td align="left">alt , dst , faa , lat , lon , name , tz , tzone</td>
+<td align="left">DOUBLE , VARCHAR, VARCHAR, DOUBLE , DOUBLE , VARCHAR,
+DOUBLE , VARCHAR</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">flights</td>
+<td align="left">air_time , arr_delay , arr_time , carrier , day ,
+dep_delay , dep_time , dest , distance , flight , hour , minute , month
+, origin , sched_arr_time, sched_dep_time, tailnum , time_hour ,
+year</td>
+<td align="left">DOUBLE , DOUBLE , INTEGER , VARCHAR , INTEGER , DOUBLE
+, INTEGER , VARCHAR , DOUBLE , INTEGER , DOUBLE , DOUBLE , INTEGER ,
+VARCHAR , INTEGER , INTEGER , VARCHAR , TIMESTAMP, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">planes</td>
+<td align="left">engine , engines , manufacturer, model , seats , speed
+, tailnum , type , year</td>
+<td align="left">VARCHAR, INTEGER, VARCHAR, VARCHAR, INTEGER, INTEGER,
+VARCHAR, VARCHAR, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">weather</td>
+<td align="left">day , dewp , hour , humid , month , origin , precip ,
+pressure , temp , time_hour , visib , wind_dir , wind_gust , wind_speed,
+year</td>
+<td align="left">INTEGER , DOUBLE , INTEGER , DOUBLE , INTEGER , VARCHAR
+, DOUBLE , DOUBLE , DOUBLE , TIMESTAMP, DOUBLE , DOUBLE , DOUBLE ,
+DOUBLE , INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+</ul>
+</div>
+<div id="querying-a-table" class="section level2">
+<h2>Querying a Table</h2>
+<ul>
 <li><p>E.g., this will get the entire <code>airlines</code> data
 frame.</p>
 <pre class="sql"><code>SELECT * from airlines</code></pre>
@@ -480,6 +596,7 @@ frame.</p>
 <!--     ```{r, eval = FALSE} -->
 <!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
 <!--     ``` -->
+</div>
 </div>
 <div id="use-r-to-generate-sql-with-dbplyr" class="section level1">
 <h1>Use R to generate SQL with <code>{dbplyr}</code></h1>
