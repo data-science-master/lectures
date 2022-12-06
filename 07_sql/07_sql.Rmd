@@ -9,6 +9,19 @@ output:
 urlcolor: "blue"
 ---
 
+```{r createData, eval = FALSE, echo = FALSE}
+library(DBI)
+library(duckdb)
+library(nycflights13)
+con <- dbConnect(duckdb(dbdir = "flights.duckdb", read_only = FALSE))
+dbWriteTable(conn = con, name = "airlines", value = airlines)
+dbWriteTable(conn = con, name = "airports", value = airports)
+dbWriteTable(conn = con, name = "flights", value = flights)
+dbWriteTable(conn = con, name = "planes", value = planes)
+dbWriteTable(conn = con, name = "weather", value = weather)
+dbDisconnect(con, shutdown = TRUE)
+```
+
 
 ```{r setup, include=FALSE}
 set.seed(1)
@@ -22,23 +35,65 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Learning Objectives
 
 - Learn some SQL
-- Interface SQL with R through the `{DBI}` package.
+- Interface SQL with R through the `{DBI}` and `{duckdb}` packages.
+    - Introduction to DBI: <https://solutions.posit.co/connections/db/r-packages/dbi/>
+    - DuckDB SQL Introduction: <https://duckdb.org/docs/sql/introduction>
+    - DuckDB R API: <https://duckdb.org/docs/api/r.html>
 - Write SQL code using the tidyverse and the `{dbplyr}` package.
-- DuckDB Documentation: <https://duckdb.org/docs/sql/introduction>
+    - `{dbplyr}` and SQL: <https://dbplyr.tidyverse.org/articles/sql.html>
 
-# SQL Introduction
+# SQL Introduction and SetUp
 
 - SQL is pronounced either "ess-kew-ell" or "sequel" (either is fine).
 
 - SQL is a programming language which basically allows you to do everything that dplyr does (filters, selects, joins, etc...). It is the industry standard for interacting with a relational database.
 
-# Use SQL in R with `{DBI}`
+- There are a lots of [database management systems](https://en.wikipedia.org/wiki/Database#Database_management_system) (DBMS) that use SQL to connect to their databases.
 
-- It's best to have SQL written in a separate file (that ends in ".sql").
+- In this lecture, we will only consider [DuckDB](https://duckdb.org/) since it has no external dependencies and is pretty easy to install. Just do this in R:
 
-- If you want to load the results of a SQL query in R, saved in "query.sql", do
-    ```{r, eval = FALSE}
-    mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql")))
+    ``` r
+    install.packages("duckdb")
     ```
+
+- The most popular DBMS is probably [SQLite](https://www.sqlite.org/index.html). Another popular one is [MySQL](https://www.mysql.com/).
+
+# DuckDB
+
+- Load the `{duckdb}` package
+
+    ```{r, message = FALSE}
+    library(duckdb)
+    ```
+    
+- Let's download a duck database that I created. Put this in a location you can get to: <https://data-science-master.github.io/lectures/data/flights.duckdb>
+
+- Use `duckdb()` and `dbConnect()` to create a connection to "flights.duckdb".
+
+    ```{r}
+    con <- dbConnect(duckdb(dbdir = "../data/flights.duckdb", read_only = TRUE))
+    ```
+
+- A basic SQL code chunk looks like this:
+
+    ```{r, echo = FALSE, comment = ""}
+    codechunk <- "```{sql connection=con}\n\n```"
+    writeLines(codechunk)
+    ```
+
+- E.g., this will get the entire `airlines` data frame.
+    ```{sql connection=con}
+    SELECT * from airlines
+    ```
+
+
+<!-- # Use SQL in R with `{DBI}` -->
+
+<!-- - It's best to have SQL written in a separate file (that ends in ".sql"). -->
+
+<!-- - If you want to load the results of a SQL query in R, saved in "query.sql", do -->
+<!--     ```{r, eval = FALSE} -->
+<!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
+<!--     ``` -->
 
 # Use R to generate SQL with `{dbplyr}`

@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-27" />
+<meta name="date" content="2022-12-06" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-27</h4>
+<h4 class="date">2022-12-06</h4>
 
 </div>
 
@@ -360,10 +360,8 @@ display: none;
 <ul>
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning
 Objectives</a></li>
-<li><a href="#sql-introduction" id="toc-sql-introduction">SQL
-Introduction</a></li>
-<li><a href="#use-sql-in-r-with-dbi" id="toc-use-sql-in-r-with-dbi">Use
-SQL in R with <code>{DBI}</code></a></li>
+<li><a href="#sql-introduction-and-setup" id="toc-sql-introduction-and-setup">SQL Introduction and SetUp</a></li>
+<li><a href="#duckdb" id="toc-duckdb">DuckDB</a></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
 <code>{dbplyr}</code></a></li>
 </ul>
@@ -373,31 +371,115 @@ SQL in R with <code>{DBI}</code></a></li>
 <h1>Learning Objectives</h1>
 <ul>
 <li>Learn some SQL</li>
-<li>Interface SQL with R through the <code>{DBI}</code> package.</li>
+<li>Interface SQL with R through the <code>{DBI}</code> and
+<code>{duckdb}</code> packages.
+<ul>
+<li>Introduction to DBI: <a href="https://solutions.posit.co/connections/db/r-packages/dbi/" class="uri">https://solutions.posit.co/connections/db/r-packages/dbi/</a></li>
+<li>DuckDB SQL Introduction: <a href="https://duckdb.org/docs/sql/introduction" class="uri">https://duckdb.org/docs/sql/introduction</a></li>
+<li>DuckDB R API: <a href="https://duckdb.org/docs/api/r.html" class="uri">https://duckdb.org/docs/api/r.html</a></li>
+</ul></li>
 <li>Write SQL code using the tidyverse and the <code>{dbplyr}</code>
-package.</li>
-<li>DuckDB Documentation: <a href="https://duckdb.org/docs/sql/introduction" class="uri">https://duckdb.org/docs/sql/introduction</a></li>
+package.
+<ul>
+<li><code>{dbplyr}</code> and SQL: <a href="https://dbplyr.tidyverse.org/articles/sql.html" class="uri">https://dbplyr.tidyverse.org/articles/sql.html</a></li>
+</ul></li>
 </ul>
 </div>
-<div id="sql-introduction" class="section level1">
-<h1>SQL Introduction</h1>
+<div id="sql-introduction-and-setup" class="section level1">
+<h1>SQL Introduction and SetUp</h1>
 <ul>
 <li><p>SQL is pronounced either “ess-kew-ell” or “sequel” (either is
 fine).</p></li>
 <li><p>SQL is a programming language which basically allows you to do
 everything that dplyr does (filters, selects, joins, etc…). It is the
 industry standard for interacting with a relational database.</p></li>
+<li><p>There are a lots of <a href="https://en.wikipedia.org/wiki/Database#Database_management_system">database
+management systems</a> (DBMS) that use SQL to connect to their
+databases.</p></li>
+<li><p>In this lecture, we will only consider <a href="https://duckdb.org/">DuckDB</a> since it has no external
+dependencies and is pretty easy to install. Just do this in R:</p>
+<pre class="r"><code>install.packages(&quot;duckdb&quot;)</code></pre></li>
+<li><p>The most popular DBMS is probably <a href="https://www.sqlite.org/index.html">SQLite</a>. Another popular one
+is <a href="https://www.mysql.com/">MySQL</a>.</p></li>
 </ul>
 </div>
-<div id="use-sql-in-r-with-dbi" class="section level1">
-<h1>Use SQL in R with <code>{DBI}</code></h1>
+<div id="duckdb" class="section level1">
+<h1>DuckDB</h1>
 <ul>
-<li><p>It’s best to have SQL written in a separate file (that ends in
-“.sql”).</p></li>
-<li><p>If you want to load the results of a SQL query in R, saved in
-“query.sql”, do</p>
-<pre class="r"><code>mydf &lt;- DBI::dbGetQuery(conn, statement = read_file(here(&quot;query.sql&quot;)))</code></pre></li>
+<li><p>Load the <code>{duckdb}</code> package</p>
+<pre class="r"><code>library(duckdb)</code></pre></li>
+<li><p>Let’s download a duck database that I created. Put this in a
+location you can get to: <a href="https://data-science-master.github.io/lectures/data/flights.duckdb" class="uri">https://data-science-master.github.io/lectures/data/flights.duckdb</a></p></li>
+<li><p>Use <code>duckdb()</code> and <code>dbConnect()</code> to create
+a connection to “flights.duckdb”.</p>
+<pre class="r"><code>con &lt;- dbConnect(duckdb(dbdir = &quot;../data/flights.duckdb&quot;, read_only = TRUE))</code></pre></li>
+<li><p>A basic SQL code chunk looks like this:</p>
+<pre><code>```{sql connection=con}
+
+```</code></pre></li>
+<li><p>E.g., this will get the entire <code>airlines</code> data
+frame.</p>
+<pre class="sql"><code>SELECT * from airlines</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">carrier</th>
+<th align="left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">9E</td>
+<td align="left">Endeavor Air Inc.</td>
+</tr>
+<tr class="even">
+<td align="left">AA</td>
+<td align="left">American Airlines Inc.</td>
+</tr>
+<tr class="odd">
+<td align="left">AS</td>
+<td align="left">Alaska Airlines Inc.</td>
+</tr>
+<tr class="even">
+<td align="left">B6</td>
+<td align="left">JetBlue Airways</td>
+</tr>
+<tr class="odd">
+<td align="left">DL</td>
+<td align="left">Delta Air Lines Inc.</td>
+</tr>
+<tr class="even">
+<td align="left">EV</td>
+<td align="left">ExpressJet Airlines Inc.</td>
+</tr>
+<tr class="odd">
+<td align="left">F9</td>
+<td align="left">Frontier Airlines Inc.</td>
+</tr>
+<tr class="even">
+<td align="left">FL</td>
+<td align="left">AirTran Airways Corporation</td>
+</tr>
+<tr class="odd">
+<td align="left">HA</td>
+<td align="left">Hawaiian Airlines Inc.</td>
+</tr>
+<tr class="even">
+<td align="left">MQ</td>
+<td align="left">Envoy Air</td>
+</tr>
+</tbody>
+</table>
+</div></li>
 </ul>
+<!-- # Use SQL in R with `{DBI}` -->
+<!-- - It's best to have SQL written in a separate file (that ends in ".sql"). -->
+<!-- - If you want to load the results of a SQL query in R, saved in "query.sql", do -->
+<!--     ```{r, eval = FALSE} -->
+<!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
+<!--     ``` -->
 </div>
 <div id="use-r-to-generate-sql-with-dbplyr" class="section level1">
 <h1>Use R to generate SQL with <code>{dbplyr}</code></h1>
