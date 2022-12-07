@@ -373,6 +373,8 @@ Rows</a></li>
 <li><a href="#mutate" id="toc-mutate">Mutate</a></li>
 <li><a href="#group-summaries" id="toc-group-summaries">Group
 Summaries</a></li>
+<li><a href="#statement-orders" id="toc-statement-orders">Statement
+Orders</a></li>
 <li><a href="#recoding" id="toc-recoding">Recoding</a></li>
 <li><a href="#creating-some-tables" id="toc-creating-some-tables">Creating some Tables</a></li>
 <li><a href="#gathering" id="toc-gathering">Gathering</a></li>
@@ -402,6 +404,7 @@ Summaries</a></li>
 package.
 <ul>
 <li><code>{dbplyr}</code> and SQL: <a href="https://dbplyr.tidyverse.org/articles/sql.html" class="uri">https://dbplyr.tidyverse.org/articles/sql.html</a></li>
+<li>R for Data Science Database Chapter: <a href="https://r4ds.hadley.nz/databases.html" class="uri">https://r4ds.hadley.nz/databases.html</a></li>
 </ul></li>
 </ul>
 </div>
@@ -418,8 +421,8 @@ management systems</a> (DBMS) that use SQL to connect to their
 databases.</p></li>
 <li><p>In this lecture, we will only consider <a href="https://duckdb.org/">DuckDB</a> since it has no external
 dependencies and is pretty easy to install. Just do this in R:</p>
-<p><mark style="background-color: lightblue">R</mark>
-<code>r   install.packages(&quot;duckdb&quot;)</code></p></li>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>install.packages(&quot;duckdb&quot;)</code></pre></li>
 <li><p>The most popular DBMS is probably <a href="https://www.sqlite.org/index.html">SQLite</a>. Another popular one
 is <a href="https://www.mysql.com/">MySQL</a>.</p></li>
 </ul>
@@ -434,6 +437,7 @@ that one too.</p>
 <pre class="r"><code>library(DBI)
 library(duckdb)</code></pre></li>
 <li><p>We will compare to the tidyverse:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>library(nycflights13)
 library(tidyverse)</code></pre></li>
 <li><p>Let’s download a duck database that I created. Put this in a
@@ -1094,10 +1098,11 @@ parentheses around your desired order of operations.</p>
 <pre class="r"><code>flights %&gt;%
   select(flight, origin, dest) %&gt;%
   filter(origin == &quot;JFK&quot; | origin == &quot;LGA&quot;, dest == &quot;CMH&quot;)</code></pre></li>
-<li><p>Remove missing data by</p>
+<li><p>Missing data is <code>NULL</code> in SQL (instead of
+<code>NA</code>). We can remove them by the special command:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT flight, dep_delay FROM flights
-    WHERE NOT(dep_delay IS NULL)</code></pre>
+    WHERE dep_delay IS NOT NULL</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1210,11 +1215,11 @@ missing values so we can see the ordering)</p>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">3318</td>
+<td align="right">2223</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1297,7 +1302,8 @@ order</p>
 <h2>Mutate</h2>
 <ul>
 <li><p>In SQL, you mutate variables while you SELECT. You use
-<code>AS</code> to specify what the new variable is called.</p>
+<code>AS</code> to specify what the new variable is called (choosing a
+variable name is called “aliasing” in SQL).</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &lt;expression&gt; AS &lt;myvariable&gt; FROM &lt;mytable&gt;</code></pre></li>
 <li><p>Let’s calculate average speed from the <code>flights</code>
@@ -1474,6 +1480,14 @@ summaries.</p>
   select(origin, dep_delay) %&gt;%
   group_by(origin) %&gt;%
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre></li>
+</ul>
+</div>
+<div id="statement-orders" class="section level2">
+<h2>Statement Orders</h2>
+<ul>
+<li>You must write SQL commands in the order of <code>SELECT</code>,
+<code>FROM</code>, <code>WHERE</code>, <code>GROUP BY</code>,
+<code>ORDER BY</code>.</li>
 </ul>
 </div>
 <div id="recoding" class="section level2">
@@ -1673,24 +1687,24 @@ chunk.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>CREATE TABLE table4a (
     country VARCHAR,
-    y1999   INTEGER,
-    y2000   INTEGER
+    &quot;1999&quot;   INTEGER,
+    &quot;2000&quot;   INTEGER
 );
 
-INSERT INTO table4a (country, y1999, y2000) 
+INSERT INTO table4a (country, &quot;1999&quot;, &quot;2000&quot;) 
     VALUES
         (&#39;Afghanistan&#39;,    745,   2666),
         (&#39;Brazil&#39;     ,  37737,  80488),
         (&#39;China&#39;      , 212258, 213766);
 
 CREATE TABLE table2 (
-    country   VARCHAR,
-    year      INTEGER,
-    vtype     VARCHAR,
-    casecount INTEGER
+    country VARCHAR,
+    year    INTEGER,
+    &quot;type&quot;  VARCHAR,
+    &quot;count&quot; INTEGER
 );
 
-INSERT INTO table2 (country, year, vtype, casecount)
+INSERT INTO table2 (country, year, &quot;type&quot;, &quot;count&quot;)
     VALUES
         (&#39;Afghanistan&#39;,  1999, &#39;cases&#39;     ,        745),
         (&#39;Afghanistan&#39;,  1999, &#39;population&#39;,   19987071),
@@ -1704,6 +1718,8 @@ INSERT INTO table2 (country, year, vtype, casecount)
         (&#39;China&#39;      ,  1999, &#39;population&#39;, 1272915272),
         (&#39;China&#39;      ,  2000, &#39;cases&#39;     ,     213766),
         (&#39;China&#39;      ,  2000, &#39;population&#39;, 1280428583);</code></pre></li>
+<li><p>Note that I used double quotes to create variables with reserved
+words.</p></li>
 <li><p>Here they are:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>DESCRIBE</code></pre>
@@ -1711,10 +1727,10 @@ INSERT INTO table2 (country, year, vtype, casecount)
 <table>
 <caption>2 records</caption>
 <colgroup>
+<col width="12%" />
+<col width="36%" />
+<col width="39%" />
 <col width="11%" />
-<col width="40%" />
-<col width="37%" />
-<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1727,14 +1743,14 @@ INSERT INTO table2 (country, year, vtype, casecount)
 <tbody>
 <tr class="odd">
 <td align="left">table2</td>
-<td align="left">casecount, country , vtype , year</td>
+<td align="left">count , country, type , year</td>
 <td align="left">INTEGER, VARCHAR, VARCHAR, INTEGER</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">table4a</td>
-<td align="left">country, y1999 , y2000</td>
-<td align="left">VARCHAR, INTEGER, INTEGER</td>
+<td align="left">1999 , 2000 , country</td>
+<td align="left">INTEGER, INTEGER, VARCHAR</td>
 <td align="left">FALSE</td>
 </tr>
 </tbody>
@@ -1756,8 +1772,8 @@ need to Google.</p></li>
 <thead>
 <tr class="header">
 <th align="left">country</th>
-<th align="right">y1999</th>
-<th align="right">y2000</th>
+<th align="right">1999</th>
+<th align="right">2000</th>
 </tr>
 </thead>
 <tbody>
@@ -1831,8 +1847,8 @@ way to learn SQL.</p></li>
 ##   dep_delay
 ##       &lt;dbl&gt;
 ## 1      22.0</code></pre></li>
-<li><p>You typically should be explicit about executing the query by
-using <code>collect()</code> at the end.</p>
+<li><p>You execute the query by using <code>collect()</code> at the
+end.</p>
 <p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>flights2 %&gt;%
   select(flight, origin, dest, dep_delay) %&gt;%

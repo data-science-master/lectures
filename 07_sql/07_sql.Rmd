@@ -42,6 +42,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - DuckDB R API: <https://duckdb.org/docs/api/r.html>
 - Write SQL code using the tidyverse and the `{dbplyr}` package.
     - `{dbplyr}` and SQL: <https://dbplyr.tidyverse.org/articles/sql.html>
+    - R for Data Science Database Chapter: <https://r4ds.hadley.nz/databases.html>
 
 # SQL Introduction and SetUp
 
@@ -54,6 +55,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - In this lecture, we will only consider [DuckDB](https://duckdb.org/) since it has no external dependencies and is pretty easy to install. Just do this in R:
 
     <mark style="background-color: lightblue">R</mark>
+    
     ``` r
     install.packages("duckdb")
     ```
@@ -71,6 +73,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
 - We will compare to the tidyverse:
+
+    <mark style="background-color: lightblue">R</mark>
     ```{r, message = FALSE}
     library(nycflights13)
     library(tidyverse)
@@ -244,12 +248,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
       filter(origin == "JFK" | origin == "LGA", dest == "CMH")
     ```
 
-- Remove missing data by 
+- Missing data is `NULL` in SQL (instead of `NA`). We can remove them by the special command:
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
     SELECT flight, dep_delay FROM flights
-        WHERE NOT(dep_delay IS NULL)
+        WHERE dep_delay IS NOT NULL
     ```
 
 - R equivalent
@@ -304,7 +308,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Mutate
 
-- In SQL, you mutate variables while you SELECT. You use `AS` to specify what the new variable is called.
+- In SQL, you mutate variables while you SELECT. You use `AS` to specify what the new variable is called (choosing a variable name is called "aliasing" in SQL).
 
     <mark style="background-color: #e24e2f">SQL</mark>
     
@@ -385,6 +389,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
       group_by(origin) %>%
       summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
     ```
+
+## Statement Orders
+
+- You must write SQL commands in the order of `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `ORDER BY`.
 
 ## Recoding
 
@@ -468,24 +476,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{sql, connection=tmpcon}
     CREATE TABLE table4a (
         country VARCHAR,
-        y1999   INTEGER,
-        y2000   INTEGER
+        "1999"   INTEGER,
+        "2000"   INTEGER
     );
     
-    INSERT INTO table4a (country, y1999, y2000) 
+    INSERT INTO table4a (country, "1999", "2000") 
         VALUES
             ('Afghanistan',    745,   2666),
             ('Brazil'     ,  37737,  80488),
             ('China'      , 212258, 213766);
             
     CREATE TABLE table2 (
-        country   VARCHAR,
-        year      INTEGER,
-        vtype     VARCHAR,
-        casecount INTEGER
+        country VARCHAR,
+        year    INTEGER,
+        "type"  VARCHAR,
+        "count" INTEGER
     );
     
-    INSERT INTO table2 (country, year, vtype, casecount)
+    INSERT INTO table2 (country, year, "type", "count")
         VALUES
             ('Afghanistan',  1999, 'cases'     ,        745),
             ('Afghanistan',  1999, 'population',   19987071),
@@ -500,6 +508,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
             ('China'      ,  2000, 'cases'     ,     213766),
             ('China'      ,  2000, 'population', 1280428583);
     ```
+    
+- Note that I used double quotes to create variables with reserved words.
+
 - Here they are:
 
     <mark style="background-color: #e24e2f">SQL</mark>
@@ -578,7 +589,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
       summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
     ```
     
-- You typically should be explicit about executing the query by using `collect()` at the end.
+- You execute the query by using `collect()` at the end.
 
     <mark style="background-color: lightblue">R</mark>
     ```{r}
