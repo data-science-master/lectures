@@ -338,9 +338,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Group Summaries
 
-- SQL has a few summary functions
+- SQL has a few summary functions (SQL calls these "[Aggregates](https://duckdb.org/docs/sql/aggregates)")
     - `COUNT()`: Count the number of rows.
     - `AVG()`: Calculate average.
+    - `MEDIAN()`: Median.
     - `SUM()`: Summation.
     - `MIN()`: Minimum.
     - `MAX()`: Maximum.
@@ -450,7 +451,94 @@ ggplot2::theme_set(ggplot2::theme_bw())
       mutate(qual_dist = if_else(air_time > 2500, "Long", "Short"))
     ```
 
+## Creating some Tables
+
+- Let's create a new, temporary, connection that we can put some example tables in.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    tmpcon <- dbConnect(duckdb())
+    ```
+
+- For the gathering, spreading, separating, and uniting sections, I will use the `tmpcon` connection.
+
+- Let's create the tables we will need. Note that I am putting a semicolon "`;`" after each SQL call in the same code chunk.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=tmpcon}
+    CREATE TABLE table4a (
+        country VARCHAR,
+        y1999   INTEGER,
+        y2000   INTEGER
+    );
+    
+    INSERT INTO table4a (country, y1999, y2000) 
+        VALUES
+            ('Afghanistan',    745,   2666),
+            ('Brazil'     ,  37737,  80488),
+            ('China'      , 212258, 213766);
+            
+    CREATE TABLE table2 (
+        country   VARCHAR,
+        year      INTEGER,
+        vtype     VARCHAR,
+        casecount INTEGER
+    );
+    
+    INSERT INTO table2 (country, year, vtype, casecount)
+        VALUES
+            ('Afghanistan',  1999, 'cases'     ,        745),
+            ('Afghanistan',  1999, 'population',   19987071),
+            ('Afghanistan',  2000, 'cases'     ,       2666),
+            ('Afghanistan',  2000, 'population',   20595360),
+            ('Brazil'     ,  1999, 'cases'     ,      37737),
+            ('Brazil'     ,  1999, 'population',  172006362),
+            ('Brazil'     ,  2000, 'cases'     ,      80488),
+            ('Brazil'     ,  2000, 'population',  174504898),
+            ('China'      ,  1999, 'cases'     ,     212258),
+            ('China'      ,  1999, 'population', 1272915272),
+            ('China'      ,  2000, 'cases'     ,     213766),
+            ('China'      ,  2000, 'population', 1280428583);
+    ```
+- Here they are:
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=tmpcon}
+    DESCRIBE
+    ```
+
+
 ## Gathering
+
+- SQL folk call "gathering" as "unpivoting", so that is what you need to Google.
+
+- `table4a` needs to be gathered:
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=tmpcon}
+    SELECT * FROM table4a
+    ```
+
+
+- R way:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    data(table4a, package = "tidyr")
+    table4a %>%
+      gather(`1999`, `2000`, key = "year", value = "count")
+    
+    ## or
+    table4a %>%
+      pivot_longer(cols = c("1999", "2000"), names_to = "year", values_to = "count")
+    ```
+
+- Let's disconnect: 
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    dbDisconnect(tmpcon, shutdown = TRUE)
+    ```
 
 ## Spreading
 

@@ -374,6 +374,7 @@ Rows</a></li>
 <li><a href="#group-summaries" id="toc-group-summaries">Group
 Summaries</a></li>
 <li><a href="#recoding" id="toc-recoding">Recoding</a></li>
+<li><a href="#creating-some-tables" id="toc-creating-some-tables">Creating some Tables</a></li>
 <li><a href="#gathering" id="toc-gathering">Gathering</a></li>
 <li><a href="#spreading" id="toc-spreading">Spreading</a></li>
 <li><a href="#separating" id="toc-separating">Separating</a></li>
@@ -1201,11 +1202,11 @@ missing values so we can see the ordering)</p>
 <td align="right">-26</td>
 </tr>
 <tr class="odd">
-<td align="right">4361</td>
+<td align="right">4573</td>
 <td align="right">-25</td>
 </tr>
 <tr class="even">
-<td align="right">4573</td>
+<td align="right">4361</td>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
@@ -1400,10 +1401,11 @@ variables.</p>
 <div id="group-summaries" class="section level2">
 <h2>Group Summaries</h2>
 <ul>
-<li><p>SQL has a few summary functions</p>
+<li><p>SQL has a few summary functions (SQL calls these “<a href="https://duckdb.org/docs/sql/aggregates">Aggregates</a>”)</p>
 <ul>
 <li><code>COUNT()</code>: Count the number of rows.</li>
 <li><code>AVG()</code>: Calculate average.</li>
+<li><code>MEDIAN()</code>: Median.</li>
 <li><code>SUM()</code>: Summation.</li>
 <li><code>MIN()</code>: Minimum.</li>
 <li><code>MAX()</code>: Maximum.</li>
@@ -1452,12 +1454,12 @@ summaries.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">LGA</td>
-<td align="right">10.35</td>
-</tr>
-<tr class="even">
 <td align="left">EWR</td>
 <td align="right">15.11</td>
+</tr>
+<tr class="even">
+<td align="left">LGA</td>
+<td align="right">10.35</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>
@@ -1656,8 +1658,140 @@ flights %&gt;%
   mutate(qual_dist = if_else(air_time &gt; 2500, &quot;Long&quot;, &quot;Short&quot;))</code></pre></li>
 </ul>
 </div>
+<div id="creating-some-tables" class="section level2">
+<h2>Creating some Tables</h2>
+<ul>
+<li><p>Let’s create a new, temporary, connection that we can put some
+example tables in.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>tmpcon &lt;- dbConnect(duckdb())</code></pre></li>
+<li><p>For the gathering, spreading, separating, and uniting sections, I
+will use the <code>tmpcon</code> connection.</p></li>
+<li><p>Let’s create the tables we will need. Note that I am putting a
+semicolon “<code>;</code>” after each SQL call in the same code
+chunk.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>CREATE TABLE table4a (
+    country VARCHAR,
+    y1999   INTEGER,
+    y2000   INTEGER
+);
+
+INSERT INTO table4a (country, y1999, y2000) 
+    VALUES
+        (&#39;Afghanistan&#39;,    745,   2666),
+        (&#39;Brazil&#39;     ,  37737,  80488),
+        (&#39;China&#39;      , 212258, 213766);
+
+CREATE TABLE table2 (
+    country   VARCHAR,
+    year      INTEGER,
+    vtype     VARCHAR,
+    casecount INTEGER
+);
+
+INSERT INTO table2 (country, year, vtype, casecount)
+    VALUES
+        (&#39;Afghanistan&#39;,  1999, &#39;cases&#39;     ,        745),
+        (&#39;Afghanistan&#39;,  1999, &#39;population&#39;,   19987071),
+        (&#39;Afghanistan&#39;,  2000, &#39;cases&#39;     ,       2666),
+        (&#39;Afghanistan&#39;,  2000, &#39;population&#39;,   20595360),
+        (&#39;Brazil&#39;     ,  1999, &#39;cases&#39;     ,      37737),
+        (&#39;Brazil&#39;     ,  1999, &#39;population&#39;,  172006362),
+        (&#39;Brazil&#39;     ,  2000, &#39;cases&#39;     ,      80488),
+        (&#39;Brazil&#39;     ,  2000, &#39;population&#39;,  174504898),
+        (&#39;China&#39;      ,  1999, &#39;cases&#39;     ,     212258),
+        (&#39;China&#39;      ,  1999, &#39;population&#39;, 1272915272),
+        (&#39;China&#39;      ,  2000, &#39;cases&#39;     ,     213766),
+        (&#39;China&#39;      ,  2000, &#39;population&#39;, 1280428583);</code></pre></li>
+<li><p>Here they are:</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>DESCRIBE</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>2 records</caption>
+<colgroup>
+<col width="11%" />
+<col width="40%" />
+<col width="37%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">table_name</th>
+<th align="left">column_names</th>
+<th align="left">column_types</th>
+<th align="left">temporary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">table2</td>
+<td align="left">casecount, country , vtype , year</td>
+<td align="left">INTEGER, VARCHAR, VARCHAR, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">table4a</td>
+<td align="left">country, y1999 , y2000</td>
+<td align="left">VARCHAR, INTEGER, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+</ul>
+</div>
 <div id="gathering" class="section level2">
 <h2>Gathering</h2>
+<ul>
+<li><p>SQL folk call “gathering” as “unpivoting”, so that is what you
+need to Google.</p></li>
+<li><p><code>table4a</code> needs to be gathered:</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT * FROM table4a</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="right">y1999</th>
+<th align="right">y2000</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="right">745</td>
+<td align="right">2666</td>
+</tr>
+<tr class="even">
+<td align="left">Brazil</td>
+<td align="right">37737</td>
+<td align="right">80488</td>
+</tr>
+<tr class="odd">
+<td align="left">China</td>
+<td align="right">212258</td>
+<td align="right">213766</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R way:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>data(table4a, package = &quot;tidyr&quot;)
+table4a %&gt;%
+  gather(`1999`, `2000`, key = &quot;year&quot;, value = &quot;count&quot;)
+
+## or
+table4a %&gt;%
+  pivot_longer(cols = c(&quot;1999&quot;, &quot;2000&quot;), names_to = &quot;year&quot;, values_to = &quot;count&quot;)</code></pre></li>
+<li><p>Let’s disconnect:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>dbDisconnect(tmpcon, shutdown = TRUE)</code></pre></li>
+</ul>
 </div>
 <div id="spreading" class="section level2">
 <h2>Spreading</h2>
