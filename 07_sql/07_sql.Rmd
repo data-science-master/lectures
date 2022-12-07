@@ -10,6 +10,7 @@ urlcolor: "blue"
 ---
 
 ```{r createData, eval = FALSE, echo = FALSE}
+## Code to write flights.duckdb
 library(DBI)
 library(duckdb)
 library(nycflights13)
@@ -52,6 +53,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - In this lecture, we will only consider [DuckDB](https://duckdb.org/) since it has no external dependencies and is pretty easy to install. Just do this in R:
 
+    <mark style="background-color: lightblue">R</mark>
     ``` r
     install.packages("duckdb")
     ```
@@ -60,16 +62,25 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # DuckDB
 
-- Load the `{duckdb}` package
+- DuckDB is a specific SQL backend. The R package that is used to connect to any SQL backend is `{DBI}`, and so we will load that one too.
 
+    <mark style="background-color: lightblue">R</mark>
     ```{r, message = FALSE}
+    library(DBI)
     library(duckdb)
     ```
     
+- We will compare to the tidyverse:
+    ```{r, message = FALSE}
+    library(nycflights13)
+    library(tidyverse)
+    ```
+
 - Let's download a duck database that I created. Put this in a location you can get to: <https://data-science-master.github.io/lectures/data/flights.duckdb>
 
-- Use `duckdb()` and `dbConnect()` to create a connection to "flights.duckdb".
+- Use `duckdb()` and `DBI::dbConnect()` to create a connection to "flights.duckdb".
 
+    <mark style="background-color: lightblue">R</mark>
     ```{r}
     con <- dbConnect(duckdb(dbdir = "../data/flights.duckdb", read_only = TRUE))
     ```
@@ -77,7 +88,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - A basic SQL code chunk looks like this (put SQL code between the chunks):
 
     ```{r, echo = FALSE, comment = ""}
-    codechunk <- "```{sql connection=con}\n\n```"
+    codechunk <- "```{sql, connection=con}\n\n```"
     writeLines(codechunk)
     ```
 
@@ -86,25 +97,430 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ## Showing Tables
 
 - The `SHOW TABLES` command can be used to get a list of all of the tables
-    ```{sql connection=con}
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
     SHOW TABLES
     ```
 
 - The `DESCRIBE` command can be used to show tables and the variables.
 
-    ```{sql connection=con}
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
     DESCRIBE
     ```
 
+## Select Specific Columns
 
-## Querying a Table
+- To get the columns from a data frame, use the `SELECT` command.
 
-- E.g., this will get the entire `airlines` data frame.
-    ```{sql connection=con}
-    SELECT * from airlines
+- The syntax is like this
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    
+    ``` sql
+    SELECT <column1>, <column2>, <column3> FROM <mytable>
+    ```
+    
+- Let's use this to get the `tailnum`, `year`, and `model` variables from the `planes` table.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT tailnum, year, model FROM planes
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    planes %>%
+      select(tailnum, year, model)
+    ```
+
+- You select every column by using `*`:
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT * FROM planes
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    planes
+    ```
+
+- There is no equivalent for excluding columns (like `dplyr::select(-year)`). You just select the ones you want.
+
+## Filter rows
+
+- You use the `WHERE` command in SQL to filter by rows.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, distance, origin, dest FROM flights
+        WHERE distance < 50
+    ```
+    
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, distance, origin, dest) %>%
+      filter(distance < 50)
+    ```
+
+    
+- To test for equality, you just use one equals sign.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, month FROM flights
+        WHERE month = 12
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, month) %>%
+      filter(month == 12)
     ```
 
 
+- For characters you **must use single quotes**, not double.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, origin FROM flights
+        WHERE origin = 'JFK'
+    ```
+    
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, origin) %>%
+      filter(origin == "JFK")
+    ```
+
+
+- You can select multiple criteria using the `AND` command
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, origin, dest FROM flights
+        WHERE origin = 'JFK' AND dest = 'CMH'
+    ```
+
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, origin, dest) %>%
+      filter(origin == "JFK", dest == "CMH")
+    ```
+
+
+- You can use the `OR` logical operator too. Just put parentheses around your desired order of operations.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, origin, dest FROM flights
+        WHERE (origin = 'JFK' OR origin = 'LGA') AND dest = 'CMH'
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, origin, dest) %>%
+      filter(origin == "JFK" | origin == "LGA", dest == "CMH")
+    ```
+
+- Remove missing data by 
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, dep_delay FROM flights
+        WHERE NOT(dep_delay IS NULL)
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, dep_delay) %>%
+      filter(!is.na(dep_delay))
+    ```
+
+## Arranging Rows
+
+- Use `ORDER BY` to rearrange the rows (let's remove missing values so we can see the ordering)
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    select flight, dep_delay FROM flights
+        WHERE NOT(dep_delay IS NULL)
+        ORDER BY dep_delay
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, dep_delay) %>%
+      filter(!is.na(dep_delay)) %>%
+      arrange(dep_delay)
+    ```
+    
+- Use `DESC` after the variable to arrange in descending order
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    select flight, dep_delay FROM flights
+        WHERE NOT(dep_delay IS NULL)
+        ORDER BY dep_delay DESC
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, dep_delay) %>%
+      filter(!is.na(dep_delay)) %>%
+      arrange(desc(dep_delay))
+    ```
+
+
+## Mutate
+
+- In SQL, you mutate variables while you SELECT. You use `AS` to specify what the new variable is called.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    
+    ``` sql
+    SELECT <expression> AS <myvariable> FROM <mytable>
+    ```
+
+- Let's calculate average speed from the `flights` table. We'll also keep the flight number, distance, and air time variables.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, distance / air_time AS speed, distance, air_time FROM flights
+    ```
+
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, distance, air_time) %>%
+      mutate(speed = distance / air_time)
+    ```
+    
+- Various transformation functions also exist:
+    - `LN()`: Natural log transformation.
+    - `EXP()`: Exponentiation.
+    - `SQRT()`: Square root.
+    - `POW()`: Power transformation. 
+        - `POW(2.0, x)` would be $2^x$
+        - `POW(x, 2.0)` would be $x^2$.
+
+## Group Summaries
+
+- SQL has a few summary functions
+    - `COUNT()`: Count the number of rows.
+    - `AVG()`: Calculate average.
+    - `SUM()`: Summation.
+    - `MIN()`: Minimum.
+    - `MAX()`: Maximum.
+    - `STDDEV()`: Standard deviation.
+    - `VARIANCE()`: Variance
+    
+- By default, all missing data are ignored (like setting `na.rm = TRUE`).
+    
+- These are calculated in a `SELECT` command
+
+- Let's calculate the average departue delay
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT AVG(dep_delay) AS dep_delay FROM flights
+    ```
+
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
+    ```
+    
+- Use the `GROUP BY` command to calculate group summaries.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT origin, AVG(dep_delay)
+        FROM flights
+        GROUP BY origin
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(origin, dep_delay) %>%
+      group_by(origin) %>%
+      summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
+    ```
+
+## Recoding
+
+- Use the following `CASE`-`WHEN` syntax to recode values
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, origin, CASE
+              WHEN (origin = 'JFK') THEN 'John F. Kennedy'
+              WHEN (origin = 'LGA') THEN 'LaGaurdia'
+              WHEN (origin = 'EWR') THEN 'Newark Liberty'
+              END AS olong
+        FROM flights
+    ```
+
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, origin) %>%
+      mutate(olong = case_when(
+        origin == "JFK" ~ "John F. Kennedy",
+        origin == "LGA" ~ "LaGuardia",
+        origin == "EWR" ~ "Newark Liberty")
+      )
+    
+    ## or
+    flights %>%
+      select(flight, origin) %>%
+      mutate(olong = recode(
+        origin,
+        "JFK" = "John F. Kennedy",
+        "LGA" = "LaGuardia",
+        "EWR" = "Newark Liberty")
+      )
+    ```
+    
+- You can also use `CASE`-`WHEN` to recode based on other logical operations
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, air_time, CASE
+              WHEN (air_time > 2500) THEN 'Long'
+              WHEN (air_time <= 2500) THEN 'Short'
+              END AS qual_dist
+        FROM flights
+    ```
+    
+- R equivalent:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, air_time) %>%
+      mutate(qual_dist = case_when(
+        air_time > 2500 ~ "Long",
+        air_time <= 2500 ~ "Short")
+      )
+    
+    ## or
+    flights %>%
+      select(flight, air_time) %>%
+      mutate(qual_dist = if_else(air_time > 2500, "Long", "Short"))
+    ```
+
+## Gathering
+
+## Spreading
+
+## Separating
+
+## Uniting
+
+## Joining
+
+# Use R to generate SQL with `{dbplyr}`
+
+- `{dbplyr}` allows you to use `{dplyr}` code on a SQL backend.
+
+- It will even generate SQL code for you, so you can use it as a way to learn SQL.
+
+- Let's load it in:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, message=FALSE}
+    library(dbplyr)
+    ```
+
+- You retrieve a table from a SQL database using `tbl()`
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    flights2 <- tbl(src = con, "flights")
+    ```
+
+- Now you can use your tidyverse code on the flights table
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    flights2 %>%
+      select(flight, origin, dest, dep_delay) %>%
+      filter(origin == "JFK", dest == "CMH") %>%
+      summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
+    ```
+    
+- You typically should be explicit about executing the query by using `collect()` at the end.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    flights2 %>%
+      select(flight, origin, dest, dep_delay) %>%
+      filter(origin == "JFK", dest == "CMH") %>%
+      summarize(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+      collect()
+    ```
+
+- To see the SQL code that was generated, use `show_query()` at the end (this is a good way to learn SQL).
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    flights2 %>%
+      select(flight, origin, dest, dep_delay) %>%
+      filter(origin == "JFK", dest == "CMH") %>%
+      summarize(dep_delay = mean(dep_delay, na.rm = TRUE)) %>%
+      show_query()
+    ```
+
+# Closing the Connection
+
+- After you are donw with SQL, you should close down your connection:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    DBI::dbDisconnect(con, shutdown = TRUE)
+    ```
+    
 <!-- # Use SQL in R with `{DBI}` -->
 
 <!-- - It's best to have SQL written in a separate file (that ends in ".sql"). -->
@@ -113,5 +529,3 @@ ggplot2::theme_set(ggplot2::theme_bw())
 <!--     ```{r, eval = FALSE} -->
 <!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
 <!--     ``` -->
-
-# Use R to generate SQL with `{dbplyr}`

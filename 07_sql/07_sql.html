@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-06" />
+<meta name="date" content="2022-12-07" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-06</h4>
+<h4 class="date">2022-12-07</h4>
 
 </div>
 
@@ -366,11 +366,23 @@ Objectives</a></li>
 <ul>
 <li><a href="#showing-tables" id="toc-showing-tables">Showing
 Tables</a></li>
-<li><a href="#querying-a-table" id="toc-querying-a-table">Querying a
-Table</a></li>
+<li><a href="#select-specific-columns" id="toc-select-specific-columns">Select Specific Columns</a></li>
+<li><a href="#filter-rows" id="toc-filter-rows">Filter rows</a></li>
+<li><a href="#arranging-rows" id="toc-arranging-rows">Arranging
+Rows</a></li>
+<li><a href="#mutate" id="toc-mutate">Mutate</a></li>
+<li><a href="#group-summaries" id="toc-group-summaries">Group
+Summaries</a></li>
+<li><a href="#recoding" id="toc-recoding">Recoding</a></li>
+<li><a href="#gathering" id="toc-gathering">Gathering</a></li>
+<li><a href="#spreading" id="toc-spreading">Spreading</a></li>
+<li><a href="#separating" id="toc-separating">Separating</a></li>
+<li><a href="#uniting" id="toc-uniting">Uniting</a></li>
+<li><a href="#joining" id="toc-joining">Joining</a></li>
 </ul></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
 <code>{dbplyr}</code></a></li>
+<li><a href="#closing-the-connection" id="toc-closing-the-connection">Closing the Connection</a></li>
 </ul>
 </div>
 
@@ -405,7 +417,8 @@ management systems</a> (DBMS) that use SQL to connect to their
 databases.</p></li>
 <li><p>In this lecture, we will only consider <a href="https://duckdb.org/">DuckDB</a> since it has no external
 dependencies and is pretty easy to install. Just do this in R:</p>
-<pre class="r"><code>install.packages(&quot;duckdb&quot;)</code></pre></li>
+<p><mark style="background-color: lightblue">R</mark>
+<code>r   install.packages(&quot;duckdb&quot;)</code></p></li>
 <li><p>The most popular DBMS is probably <a href="https://www.sqlite.org/index.html">SQLite</a>. Another popular one
 is <a href="https://www.mysql.com/">MySQL</a>.</p></li>
 </ul>
@@ -413,16 +426,24 @@ is <a href="https://www.mysql.com/">MySQL</a>.</p></li>
 <div id="duckdb" class="section level1">
 <h1>DuckDB</h1>
 <ul>
-<li><p>Load the <code>{duckdb}</code> package</p>
-<pre class="r"><code>library(duckdb)</code></pre></li>
+<li><p>DuckDB is a specific SQL backend. The R package that is used to
+connect to any SQL backend is <code>{DBI}</code>, and so we will load
+that one too.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>library(DBI)
+library(duckdb)</code></pre></li>
+<li><p>We will compare to the tidyverse:</p>
+<pre class="r"><code>library(nycflights13)
+library(tidyverse)</code></pre></li>
 <li><p>Let’s download a duck database that I created. Put this in a
 location you can get to: <a href="https://data-science-master.github.io/lectures/data/flights.duckdb" class="uri">https://data-science-master.github.io/lectures/data/flights.duckdb</a></p></li>
-<li><p>Use <code>duckdb()</code> and <code>dbConnect()</code> to create
-a connection to “flights.duckdb”.</p>
+<li><p>Use <code>duckdb()</code> and <code>DBI::dbConnect()</code> to
+create a connection to “flights.duckdb”.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>con &lt;- dbConnect(duckdb(dbdir = &quot;../data/flights.duckdb&quot;, read_only = TRUE))</code></pre></li>
 <li><p>A basic SQL code chunk looks like this (put SQL code between the
 chunks):</p>
-<pre><code>```{sql connection=con}
+<pre><code>```{sql, connection=con}
 
 ```</code></pre></li>
 </ul>
@@ -434,6 +455,7 @@ chunks):</p>
 <ul>
 <li><p>The <code>SHOW TABLES</code> command can be used to get a list of
 all of the tables</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SHOW TABLES</code></pre>
 <div class="knitsql-table">
 <table>
@@ -464,6 +486,7 @@ all of the tables</p>
 </div></li>
 <li><p>The <code>DESCRIBE</code> command can be used to show tables and
 the variables.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>DESCRIBE</code></pre>
 <div class="knitsql-table">
 <table>
@@ -530,65 +553,1187 @@ DOUBLE , INTEGER</td>
 </div></li>
 </ul>
 </div>
-<div id="querying-a-table" class="section level2">
-<h2>Querying a Table</h2>
+<div id="select-specific-columns" class="section level2">
+<h2>Select Specific Columns</h2>
 <ul>
-<li><p>E.g., this will get the entire <code>airlines</code> data
-frame.</p>
-<pre class="sql"><code>SELECT * from airlines</code></pre>
+<li><p>To get the columns from a data frame, use the <code>SELECT</code>
+command.</p></li>
+<li><p>The syntax is like this</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT &lt;column1&gt;, &lt;column2&gt;, &lt;column3&gt; FROM &lt;mytable&gt;</code></pre></li>
+<li><p>Let’s use this to get the <code>tailnum</code>,
+<code>year</code>, and <code>model</code> variables from the
+<code>planes</code> table.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT tailnum, year, model FROM planes</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
 <thead>
 <tr class="header">
-<th align="left">carrier</th>
-<th align="left">name</th>
+<th align="left">tailnum</th>
+<th align="right">year</th>
+<th align="left">model</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">9E</td>
-<td align="left">Endeavor Air Inc.</td>
+<td align="left">N10156</td>
+<td align="right">2004</td>
+<td align="left">EMB-145XR</td>
 </tr>
 <tr class="even">
-<td align="left">AA</td>
-<td align="left">American Airlines Inc.</td>
+<td align="left">N102UW</td>
+<td align="right">1998</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="odd">
-<td align="left">AS</td>
-<td align="left">Alaska Airlines Inc.</td>
+<td align="left">N103US</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="even">
-<td align="left">B6</td>
-<td align="left">JetBlue Airways</td>
+<td align="left">N104UW</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="odd">
-<td align="left">DL</td>
-<td align="left">Delta Air Lines Inc.</td>
+<td align="left">N10575</td>
+<td align="right">2002</td>
+<td align="left">EMB-145LR</td>
 </tr>
 <tr class="even">
-<td align="left">EV</td>
-<td align="left">ExpressJet Airlines Inc.</td>
+<td align="left">N105UW</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="odd">
-<td align="left">F9</td>
-<td align="left">Frontier Airlines Inc.</td>
+<td align="left">N107US</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="even">
-<td align="left">FL</td>
-<td align="left">AirTran Airways Corporation</td>
+<td align="left">N108UW</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="odd">
-<td align="left">HA</td>
-<td align="left">Hawaiian Airlines Inc.</td>
+<td align="left">N109UW</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 <tr class="even">
-<td align="left">MQ</td>
-<td align="left">Envoy Air</td>
+<td align="left">N110UW</td>
+<td align="right">1999</td>
+<td align="left">A320-214</td>
 </tr>
 </tbody>
 </table>
 </div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>planes %&gt;%
+  select(tailnum, year, model)</code></pre></li>
+<li><p>You select every column by using <code>*</code>:</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT * FROM planes</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<colgroup>
+<col width="8%" />
+<col width="5%" />
+<col width="25%" />
+<col width="18%" />
+<col width="10%" />
+<col width="8%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">tailnum</th>
+<th align="right">year</th>
+<th align="left">type</th>
+<th align="left">manufacturer</th>
+<th align="left">model</th>
+<th align="right">engines</th>
+<th align="right">seats</th>
+<th align="right">speed</th>
+<th align="left">engine</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">N10156</td>
+<td align="right">2004</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">EMBRAER</td>
+<td align="left">EMB-145XR</td>
+<td align="right">2</td>
+<td align="right">55</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="left">N102UW</td>
+<td align="right">1998</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="left">N103US</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="left">N104UW</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="left">N10575</td>
+<td align="right">2002</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">EMBRAER</td>
+<td align="left">EMB-145LR</td>
+<td align="right">2</td>
+<td align="right">55</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="left">N105UW</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="left">N107US</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="left">N108UW</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="left">N109UW</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="left">N110UW</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-214</td>
+<td align="right">2</td>
+<td align="right">182</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>planes</code></pre></li>
+<li><p>There is no equivalent for excluding columns (like
+<code>dplyr::select(-year)</code>). You just select the ones you
+want.</p></li>
+</ul>
+</div>
+<div id="filter-rows" class="section level2">
+<h2>Filter rows</h2>
+<ul>
+<li><p>You use the <code>WHERE</code> command in SQL to filter by
+rows.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, distance, origin, dest FROM flights
+    WHERE distance &lt; 50</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">distance</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1632</td>
+<td align="right">17</td>
+<td align="left">EWR</td>
+<td align="left">LGA</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, distance, origin, dest) %&gt;%
+  filter(distance &lt; 50)</code></pre></li>
+<li><p>To test for equality, you just use one equals sign.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, month FROM flights
+    WHERE month = 12</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">month</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">745</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">839</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="right">1895</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">1487</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="right">2243</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">939</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="right">3819</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">1441</td>
+<td align="right">12</td>
+</tr>
+<tr class="odd">
+<td align="right">2167</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">605</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, month) %&gt;%
+  filter(month == 12)</code></pre></li>
+<li><p>For characters you <strong>must use single quotes</strong>, not
+double.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, origin FROM flights
+    WHERE origin = &#39;JFK&#39;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="even">
+<td align="right">49</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="odd">
+<td align="right">71</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="even">
+<td align="right">194</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="odd">
+<td align="right">1806</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="even">
+<td align="right">1743</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="odd">
+<td align="right">303</td>
+<td align="left">JFK</td>
+</tr>
+<tr class="even">
+<td align="right">135</td>
+<td align="left">JFK</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, origin) %&gt;%
+  filter(origin == &quot;JFK&quot;)</code></pre></li>
+<li><p>You can select multiple criteria using the <code>AND</code>
+command</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, origin, dest FROM flights
+    WHERE origin = &#39;JFK&#39; AND dest = &#39;CMH&#39;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3650</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, origin, dest) %&gt;%
+  filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;)</code></pre></li>
+<li><p>You can use the <code>OR</code> logical operator too. Just put
+parentheses around your desired order of operations.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, origin, dest FROM flights
+    WHERE (origin = &#39;JFK&#39; OR origin = &#39;LGA&#39;) AND dest = &#39;CMH&#39;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4146</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">3783</td>
+<td align="left">JFK</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4490</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">4485</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4426</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">4429</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="odd">
+<td align="right">4626</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+<tr class="even">
+<td align="right">4555</td>
+<td align="left">LGA</td>
+<td align="left">CMH</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, origin, dest) %&gt;%
+  filter(origin == &quot;JFK&quot; | origin == &quot;LGA&quot;, dest == &quot;CMH&quot;)</code></pre></li>
+<li><p>Remove missing data by</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, dep_delay FROM flights
+    WHERE NOT(dep_delay IS NULL)</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1545</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">1714</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="right">-1</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="right">-6</td>
+</tr>
+<tr class="even">
+<td align="right">1696</td>
+<td align="right">-4</td>
+</tr>
+<tr class="odd">
+<td align="right">507</td>
+<td align="right">-5</td>
+</tr>
+<tr class="even">
+<td align="right">5708</td>
+<td align="right">-3</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="right">-3</td>
+</tr>
+<tr class="even">
+<td align="right">301</td>
+<td align="right">-2</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, dep_delay) %&gt;%
+  filter(!is.na(dep_delay))</code></pre></li>
+</ul>
+</div>
+<div id="arranging-rows" class="section level2">
+<h2>Arranging Rows</h2>
+<ul>
+<li><p>Use <code>ORDER BY</code> to rearrange the rows (let’s remove
+missing values so we can see the ordering)</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>select flight, dep_delay FROM flights
+    WHERE NOT(dep_delay IS NULL)
+    ORDER BY dep_delay</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">97</td>
+<td align="right">-43</td>
+</tr>
+<tr class="even">
+<td align="right">1715</td>
+<td align="right">-33</td>
+</tr>
+<tr class="odd">
+<td align="right">5713</td>
+<td align="right">-32</td>
+</tr>
+<tr class="even">
+<td align="right">1435</td>
+<td align="right">-30</td>
+</tr>
+<tr class="odd">
+<td align="right">837</td>
+<td align="right">-27</td>
+</tr>
+<tr class="even">
+<td align="right">3478</td>
+<td align="right">-26</td>
+</tr>
+<tr class="odd">
+<td align="right">4361</td>
+<td align="right">-25</td>
+</tr>
+<tr class="even">
+<td align="right">4573</td>
+<td align="right">-25</td>
+</tr>
+<tr class="odd">
+<td align="right">3318</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">375</td>
+<td align="right">-24</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, dep_delay) %&gt;%
+  filter(!is.na(dep_delay)) %&gt;%
+  arrange(dep_delay)</code></pre></li>
+<li><p>Use <code>DESC</code> after the variable to arrange in descending
+order</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>select flight, dep_delay FROM flights
+    WHERE NOT(dep_delay IS NULL)
+    ORDER BY dep_delay DESC</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">51</td>
+<td align="right">1301</td>
+</tr>
+<tr class="even">
+<td align="right">3535</td>
+<td align="right">1137</td>
+</tr>
+<tr class="odd">
+<td align="right">3695</td>
+<td align="right">1126</td>
+</tr>
+<tr class="even">
+<td align="right">177</td>
+<td align="right">1014</td>
+</tr>
+<tr class="odd">
+<td align="right">3075</td>
+<td align="right">1005</td>
+</tr>
+<tr class="even">
+<td align="right">2391</td>
+<td align="right">960</td>
+</tr>
+<tr class="odd">
+<td align="right">2119</td>
+<td align="right">911</td>
+</tr>
+<tr class="even">
+<td align="right">2007</td>
+<td align="right">899</td>
+</tr>
+<tr class="odd">
+<td align="right">2047</td>
+<td align="right">898</td>
+</tr>
+<tr class="even">
+<td align="right">172</td>
+<td align="right">896</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, dep_delay) %&gt;%
+  filter(!is.na(dep_delay)) %&gt;%
+  arrange(desc(dep_delay))</code></pre></li>
+</ul>
+</div>
+<div id="mutate" class="section level2">
+<h2>Mutate</h2>
+<ul>
+<li><p>In SQL, you mutate variables while you SELECT. You use
+<code>AS</code> to specify what the new variable is called.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT &lt;expression&gt; AS &lt;myvariable&gt; FROM &lt;mytable&gt;</code></pre></li>
+<li><p>Let’s calculate average speed from the <code>flights</code>
+table. We’ll also keep the flight number, distance, and air time
+variables.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, distance / air_time AS speed, distance, air_time FROM flights</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">speed</th>
+<th align="right">distance</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1545</td>
+<td align="right">6.167</td>
+<td align="right">1400</td>
+<td align="right">227</td>
+</tr>
+<tr class="even">
+<td align="right">1714</td>
+<td align="right">6.238</td>
+<td align="right">1416</td>
+<td align="right">227</td>
+</tr>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="right">6.806</td>
+<td align="right">1089</td>
+<td align="right">160</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="right">8.612</td>
+<td align="right">1576</td>
+<td align="right">183</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="right">6.569</td>
+<td align="right">762</td>
+<td align="right">116</td>
+</tr>
+<tr class="even">
+<td align="right">1696</td>
+<td align="right">4.793</td>
+<td align="right">719</td>
+<td align="right">150</td>
+</tr>
+<tr class="odd">
+<td align="right">507</td>
+<td align="right">6.740</td>
+<td align="right">1065</td>
+<td align="right">158</td>
+</tr>
+<tr class="even">
+<td align="right">5708</td>
+<td align="right">4.321</td>
+<td align="right">229</td>
+<td align="right">53</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="right">6.743</td>
+<td align="right">944</td>
+<td align="right">140</td>
+</tr>
+<tr class="even">
+<td align="right">301</td>
+<td align="right">5.312</td>
+<td align="right">733</td>
+<td align="right">138</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, distance, air_time) %&gt;%
+  mutate(speed = distance / air_time)</code></pre></li>
+<li><p>Various transformation functions also exist:</p>
+<ul>
+<li><code>LN()</code>: Natural log transformation.</li>
+<li><code>EXP()</code>: Exponentiation.</li>
+<li><code>SQRT()</code>: Square root.</li>
+<li><code>POW()</code>: Power transformation.
+<ul>
+<li><code>POW(2.0, x)</code> would be <span class="math inline">\(2^x\)</span></li>
+<li><code>POW(x, 2.0)</code> would be <span class="math inline">\(x^2\)</span>.</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+<div id="group-summaries" class="section level2">
+<h2>Group Summaries</h2>
+<ul>
+<li><p>SQL has a few summary functions</p>
+<ul>
+<li><code>COUNT()</code>: Count the number of rows.</li>
+<li><code>AVG()</code>: Calculate average.</li>
+<li><code>SUM()</code>: Summation.</li>
+<li><code>MIN()</code>: Minimum.</li>
+<li><code>MAX()</code>: Maximum.</li>
+<li><code>STDDEV()</code>: Standard deviation.</li>
+<li><code>VARIANCE()</code>: Variance</li>
+</ul></li>
+<li><p>By default, all missing data are ignored (like setting
+<code>na.rm = TRUE</code>).</p></li>
+<li><p>These are calculated in a <code>SELECT</code> command</p></li>
+<li><p>Let’s calculate the average departue delay</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT AVG(dep_delay) AS dep_delay FROM flights</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">12.64</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre></li>
+<li><p>Use the <code>GROUP BY</code> command to calculate group
+summaries.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT origin, AVG(dep_delay)
+    FROM flights
+    GROUP BY origin</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">origin</th>
+<th align="right">avg(dep_delay)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">LGA</td>
+<td align="right">10.35</td>
+</tr>
+<tr class="even">
+<td align="left">EWR</td>
+<td align="right">15.11</td>
+</tr>
+<tr class="odd">
+<td align="left">JFK</td>
+<td align="right">12.11</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(origin, dep_delay) %&gt;%
+  group_by(origin) %&gt;%
+  summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre></li>
+</ul>
+</div>
+<div id="recoding" class="section level2">
+<h2>Recoding</h2>
+<ul>
+<li><p>Use the following <code>CASE</code>-<code>WHEN</code> syntax to
+recode values</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, origin, CASE
+          WHEN (origin = &#39;JFK&#39;) THEN &#39;John F. Kennedy&#39;
+          WHEN (origin = &#39;LGA&#39;) THEN &#39;LaGaurdia&#39;
+          WHEN (origin = &#39;EWR&#39;) THEN &#39;Newark Liberty&#39;
+          END AS olong
+    FROM flights</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">olong</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1545</td>
+<td align="left">EWR</td>
+<td align="left">Newark Liberty</td>
+</tr>
+<tr class="even">
+<td align="right">1714</td>
+<td align="left">LGA</td>
+<td align="left">LaGaurdia</td>
+</tr>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="left">JFK</td>
+<td align="left">John F. Kennedy</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="left">JFK</td>
+<td align="left">John F. Kennedy</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="left">LGA</td>
+<td align="left">LaGaurdia</td>
+</tr>
+<tr class="even">
+<td align="right">1696</td>
+<td align="left">EWR</td>
+<td align="left">Newark Liberty</td>
+</tr>
+<tr class="odd">
+<td align="right">507</td>
+<td align="left">EWR</td>
+<td align="left">Newark Liberty</td>
+</tr>
+<tr class="even">
+<td align="right">5708</td>
+<td align="left">LGA</td>
+<td align="left">LaGaurdia</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="left">JFK</td>
+<td align="left">John F. Kennedy</td>
+</tr>
+<tr class="even">
+<td align="right">301</td>
+<td align="left">LGA</td>
+<td align="left">LaGaurdia</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, origin) %&gt;%
+  mutate(olong = case_when(
+    origin == &quot;JFK&quot; ~ &quot;John F. Kennedy&quot;,
+    origin == &quot;LGA&quot; ~ &quot;LaGuardia&quot;,
+    origin == &quot;EWR&quot; ~ &quot;Newark Liberty&quot;)
+  )
+
+## or
+flights %&gt;%
+  select(flight, origin) %&gt;%
+  mutate(olong = recode(
+    origin,
+    &quot;JFK&quot; = &quot;John F. Kennedy&quot;,
+    &quot;LGA&quot; = &quot;LaGuardia&quot;,
+    &quot;EWR&quot; = &quot;Newark Liberty&quot;)
+  )</code></pre></li>
+<li><p>You can also use <code>CASE</code>-<code>WHEN</code> to recode
+based on other logical operations</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT flight, air_time, CASE
+          WHEN (air_time &gt; 2500) THEN &#39;Long&#39;
+          WHEN (air_time &lt;= 2500) THEN &#39;Short&#39;
+          END AS qual_dist
+    FROM flights</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="right">air_time</th>
+<th align="left">qual_dist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1545</td>
+<td align="right">227</td>
+<td align="left">Short</td>
+</tr>
+<tr class="even">
+<td align="right">1714</td>
+<td align="right">227</td>
+<td align="left">Short</td>
+</tr>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="right">160</td>
+<td align="left">Short</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="right">183</td>
+<td align="left">Short</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="right">116</td>
+<td align="left">Short</td>
+</tr>
+<tr class="even">
+<td align="right">1696</td>
+<td align="right">150</td>
+<td align="left">Short</td>
+</tr>
+<tr class="odd">
+<td align="right">507</td>
+<td align="right">158</td>
+<td align="left">Short</td>
+</tr>
+<tr class="even">
+<td align="right">5708</td>
+<td align="right">53</td>
+<td align="left">Short</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="right">140</td>
+<td align="left">Short</td>
+</tr>
+<tr class="even">
+<td align="right">301</td>
+<td align="right">138</td>
+<td align="left">Short</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  select(flight, air_time) %&gt;%
+  mutate(qual_dist = case_when(
+    air_time &gt; 2500 ~ &quot;Long&quot;,
+    air_time &lt;= 2500 ~ &quot;Short&quot;)
+  )
+
+## or
+flights %&gt;%
+  select(flight, air_time) %&gt;%
+  mutate(qual_dist = if_else(air_time &gt; 2500, &quot;Long&quot;, &quot;Short&quot;))</code></pre></li>
+</ul>
+</div>
+<div id="gathering" class="section level2">
+<h2>Gathering</h2>
+</div>
+<div id="spreading" class="section level2">
+<h2>Spreading</h2>
+</div>
+<div id="separating" class="section level2">
+<h2>Separating</h2>
+</div>
+<div id="uniting" class="section level2">
+<h2>Uniting</h2>
+</div>
+<div id="joining" class="section level2">
+<h2>Joining</h2>
+</div>
+</div>
+<div id="use-r-to-generate-sql-with-dbplyr" class="section level1">
+<h1>Use R to generate SQL with <code>{dbplyr}</code></h1>
+<ul>
+<li><p><code>{dbplyr}</code> allows you to use <code>{dplyr}</code> code
+on a SQL backend.</p></li>
+<li><p>It will even generate SQL code for you, so you can use it as a
+way to learn SQL.</p></li>
+<li><p>Let’s load it in:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>library(dbplyr)</code></pre></li>
+<li><p>You retrieve a table from a SQL database using
+<code>tbl()</code></p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights2 &lt;- tbl(src = con, &quot;flights&quot;)</code></pre></li>
+<li><p>Now you can use your tidyverse code on the flights table</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights2 %&gt;%
+  select(flight, origin, dest, dep_delay) %&gt;%
+  filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
+  summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre>
+<pre><code>## # Source:   SQL [1 x 1]
+## # Database: DuckDB 0.6.0 [dgerard@Linux 5.14.0-1054-oem:R 4.2.2/../data/flights.duckdb]
+##   dep_delay
+##       &lt;dbl&gt;
+## 1      22.0</code></pre></li>
+<li><p>You typically should be explicit about executing the query by
+using <code>collect()</code> at the end.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights2 %&gt;%
+  select(flight, origin, dest, dep_delay) %&gt;%
+  filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
+  summarize(dep_delay = mean(dep_delay, na.rm = TRUE)) %&gt;%
+  collect()</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   dep_delay
+##       &lt;dbl&gt;
+## 1      22.0</code></pre></li>
+<li><p>To see the SQL code that was generated, use
+<code>show_query()</code> at the end (this is a good way to learn
+SQL).</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights2 %&gt;%
+  select(flight, origin, dest, dep_delay) %&gt;%
+  filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
+  summarize(dep_delay = mean(dep_delay, na.rm = TRUE)) %&gt;%
+  show_query()</code></pre>
+<pre><code>## &lt;SQL&gt;
+## SELECT AVG(dep_delay) AS dep_delay
+## FROM (
+##   SELECT flight, origin, dest, dep_delay
+##   FROM flights
+## ) q01
+## WHERE (origin = &#39;JFK&#39;) AND (dest = &#39;CMH&#39;)</code></pre></li>
+</ul>
+</div>
+<div id="closing-the-connection" class="section level1">
+<h1>Closing the Connection</h1>
+<ul>
+<li><p>After you are donw with SQL, you should close down your
+connection:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>DBI::dbDisconnect(con, shutdown = TRUE)</code></pre></li>
 </ul>
 <!-- # Use SQL in R with `{DBI}` -->
 <!-- - It's best to have SQL written in a separate file (that ends in ".sql"). -->
@@ -596,10 +1741,6 @@ frame.</p>
 <!--     ```{r, eval = FALSE} -->
 <!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
 <!--     ``` -->
-</div>
-</div>
-<div id="use-r-to-generate-sql-with-dbplyr" class="section level1">
-<h1>Use R to generate SQL with <code>{dbplyr}</code></h1>
 </div>
 
 

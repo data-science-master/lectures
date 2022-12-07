@@ -199,7 +199,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 1. You first need to "register an application" with the API provider before you can access the API. 
     - You won't actually have an app, but they will think you will!
-    - This typically involves providing a name and a callback URL for your "application". 
+    - This typically involves providing a name and a callback URL (typically <http://localhost:1410>) for your "application". 
     - The provider will then give you a `client_id` and a `client_secret` that you will need to use.
     - Neither of these need to be protected like a password since the user will provide their own password/username for authentication.
     - You put these in `httr::oauth_app()`
@@ -237,9 +237,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     - In the case of the GitHub API, they list their endpoints as
     
-        > authorize: <https://github.com/login/oauth/authorize>
+        - authorize: <https://github.com/login/oauth/authorize>
         
-        > access: <https://github.com/login/oauth/access_token>
+        - access: <https://github.com/login/oauth/access_token>
         
     ```{r, eval = FALSE}
     git_endpts <- httr::oauth_endpoint(

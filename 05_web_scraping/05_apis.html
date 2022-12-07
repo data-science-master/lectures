@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-02" />
+<meta name="date" content="2022-12-07" />
 
 <title>Getting Data Through APIs</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Getting Data Through APIs</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-02</h4>
+<h4 class="date">2022-12-07</h4>
 
 </div>
 
@@ -559,8 +559,8 @@ Google, Twitter, or Facebook.</p></li>
 before you can access the API.</p>
 <ul>
 <li>You won’t actually have an app, but they will think you will!</li>
-<li>This typically involves providing a name and a callback URL for your
-“application”.</li>
+<li>This typically involves providing a name and a callback URL
+(typically <a href="http://localhost:1410" class="uri">http://localhost:1410</a>) for your “application”.</li>
 <li>The provider will then give you a <code>client_id</code> and a
 <code>client_secret</code> that you will need to use.</li>
 <li>Neither of these need to be protected like a password since the user
@@ -596,12 +596,10 @@ used for authentications. The API docs should tell you what the
 )</code></pre>
 <ul>
 <li><p>In the case of the GitHub API, they list their endpoints as</p>
-<blockquote>
-<p>authorize: <a href="https://github.com/login/oauth/authorize" class="uri">https://github.com/login/oauth/authorize</a></p>
-</blockquote>
-<blockquote>
-<p>access: <a href="https://github.com/login/oauth/access_token" class="uri">https://github.com/login/oauth/access_token</a></p>
-</blockquote></li>
+<ul>
+<li><p>authorize: <a href="https://github.com/login/oauth/authorize" class="uri">https://github.com/login/oauth/authorize</a></p></li>
+<li><p>access: <a href="https://github.com/login/oauth/access_token" class="uri">https://github.com/login/oauth/access_token</a></p></li>
+</ul></li>
 </ul>
 <pre class="r"><code>git_endpts &lt;- httr::oauth_endpoint(
   authorize = &quot;https://github.com/login/oauth/authorize&quot;,
@@ -679,7 +677,7 @@ simple <code>paste0()</code> call.</p>
 <pre class="r"><code>eout &lt;- GET(url = eurl)
 eout</code></pre>
 <pre><code>## Response [https://wizard-world-api.herokuapp.com/Elixirs]
-##   Date: 2022-12-02 22:16
+##   Date: 2022-12-07 14:40
 ##   Status: 200
 ##   Content-Type: application/json; charset=utf-8
 ##   Size: 62.3 kB</code></pre></li>
@@ -741,7 +739,7 @@ modify_url(url = baseurl,
 mout &lt;- GET(url = omdburl)
 mout</code></pre>
 <pre><code>## Response [http://www.omdbapi.com/?t=The%20Lighthouse&amp;plot=short&amp;r=json&amp;apikey=18375155]
-##   Date: 2022-12-02 22:16
+##   Date: 2022-12-07 14:40
 ##   Status: 200
 ##   Content-Type: application/json; charset=utf-8
 ##   Size: 1 kB</code></pre></li>
@@ -802,7 +800,7 @@ returns.</p>
               add_headers(Accept = &quot;text/plain&quot;))
 dadout</code></pre>
 <pre><code>## Response [https://icanhazdadjoke.com/search]
-##   Date: 2022-12-02 22:16
+##   Date: 2022-12-07 14:40
 ##   Status: 200
 ##   Content-Type: text/plain
 ##   Size: 1.41 kB
@@ -820,7 +818,7 @@ dadout</code></pre>
 <li><p>This is different than a JSON output</p>
 <pre class="r"><code>GET(url = &quot;https://icanhazdadjoke.com/search&quot;)</code></pre>
 <pre><code>## Response [https://icanhazdadjoke.com/search]
-##   Date: 2022-12-02 22:16
+##   Date: 2022-12-07 14:40
 ##   Status: 200
 ##   Content-Type: text/html; charset=utf-8
 ##   Size: 16.4 kB
@@ -1052,7 +1050,7 @@ your R environment file.</p></li>
 <li><p>Read about the APOD API and obtain all images from January of
 2022. Your response should look like this:</p>
 <pre><code>## Response [https://api.nasa.gov/planetary/apod?start_date=2022-01-01&amp;end_date=2022-01-31&amp;api_key=VVo4PTeS8tyl2pO7QmgNRcUZF2tOljtDQSAzekGZ]
-##   Date: 2022-12-02 22:16
+##   Date: 2022-12-07 14:40
 ##   Status: 200
 ##   Content-Type: application/json
 ##   Size: 37.7 kB
