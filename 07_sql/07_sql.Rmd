@@ -613,7 +613,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Closing the Connection
 
-- After you are donw with SQL, you should close down your connection:
+- After you are done with SQL, you should close down your connection:
 
     <mark style="background-color: lightblue">R</mark>
     ```{r}

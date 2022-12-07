@@ -24,8 +24,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Basics of Web Scraping
 - [Overview of rvest](https://rvest.tidyverse.org/).
 - [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
-- [rvest tutorial](http://bradleyboehmke.github.io//2015/12/scraping-html-text.html)
-- [HTML tables](http://bradleyboehmke.github.io/2015/12/scraping-html-tables.html).
+- [Web Scraping](https://r4ds.hadley.nz/webscraping.html)
 
 # Data on the Web
 

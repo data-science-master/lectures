@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-16" />
+<meta name="date" content="2022-12-07" />
 
 <title>Web Scraping with rvest</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Web Scraping with rvest</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-16</h4>
+<h4 class="date">2022-12-07</h4>
 
 </div>
 
@@ -377,10 +377,8 @@ Web</a></li>
 <li>Basics of Web Scraping</li>
 <li><a href="https://rvest.tidyverse.org/">Overview of rvest</a>.</li>
 <li><a href="https://rvest.tidyverse.org/articles/selectorgadget.html">SelectorGadget</a>.</li>
-<li><a href="http://bradleyboehmke.github.io//2015/12/scraping-html-text.html">rvest
-tutorial</a></li>
-<li><a href="http://bradleyboehmke.github.io/2015/12/scraping-html-tables.html">HTML
-tables</a>.</li>
+<li><a href="https://r4ds.hadley.nz/webscraping.html">Web
+Scraping</a></li>
 </ul>
 </div>
 <div id="data-on-the-web" class="section level1">
@@ -569,19 +567,19 @@ datatext &lt;- html_text(dataobj)</code></pre></li>
 <li><p>We now have a <em>lot</em> of cleaning to do. Note that the first
 132 elements we didn’t even want:</p>
 <pre class="r"><code>head(datatext)</code></pre>
-<pre><code>## [1] &quot;\n        Prime Video\n            (6)\n    &quot;               
-## [2] &quot;\n        Freevee\n            (1)\n    &quot;                   
+<pre><code>## [1] &quot;\n        Prime Video\n            (7)\n    &quot;               
+## [2] &quot;\n        Freevee\n            (2)\n    &quot;                   
 ## [3] &quot;\n        Prime Video (Rent or Buy)\n            (97)\n    &quot;
 ## [4] &quot;\n        Drama\n            (77)\n    &quot;                    
 ## [5] &quot;\n        Romance\n            (27)\n    &quot;                  
 ## [6] &quot;\n        Adventure\n            (20)\n    &quot;</code></pre>
 <pre class="r"><code>datatext[130:136]</code></pre>
-<pre><code>## [1] &quot;\n        Adultery\n            (18)\n    &quot;
-## [2] &quot;1.&quot;                                        
-## [3] &quot;The Godfather&quot;                             
-## [4] &quot;(1972)&quot;                                    
-## [5] &quot;\nCrime, Drama            &quot;                
-## [6] &quot;100        &quot;                               
+<pre><code>## [1] &quot;\n        1930s\n            (18)\n    &quot;
+## [2] &quot;1.&quot;                                     
+## [3] &quot;The Godfather&quot;                          
+## [4] &quot;(1972)&quot;                                 
+## [5] &quot;\nCrime, Drama            &quot;             
+## [6] &quot;100        &quot;                            
 ## [7] &quot;2.&quot;</code></pre></li>
 <li><p>The rankings are always of the form <code>&quot;\\d+\\.&quot;</code>. We’ll
 use this and a cumulative sum to indicate which movies the variables
