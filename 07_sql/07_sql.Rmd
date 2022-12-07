@@ -563,6 +563,37 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 
+- The way to do this is to do an row-bind from two constructed tables.
+
+- Here is the first table
+    ```{sql, connection=tmpcon}
+    SELECT country, '1999' AS year, "1999" AS count
+    FROM table4a
+    ```
+    
+    - Notice that `'1999' AS year` creates a new column called `year` that has just the value `1999`.
+
+    - Notice that `"1999" AS count` just renames the `"1999"` column to be the `"count"` column
+
+- Here is the second table
+    ```{sql, connection=tmpcon}
+    SELECT country, '2000' AS year, "2000" AS count
+    FROM table4a
+    ```
+    
+- Use `UNION ALL` to bind the rows
+    ```{sql, connection=tmpcon}
+    (
+      SELECT country, '1999' AS year, "1999" AS count
+      FROM table4a
+    )
+    UNION ALL
+    (
+      SELECT country, '2000' AS year, "2000" AS count
+      FROM table4a
+    )
+    ```
+
 - R way:
 
     <mark style="background-color: lightblue">R</mark>

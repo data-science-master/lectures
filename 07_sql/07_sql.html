@@ -1935,6 +1935,134 @@ need to Google.</p></li>
 </tbody>
 </table>
 </div></li>
+<li><p>The way to do this is to do an row-bind from two constructed
+tables.</p></li>
+<li><p>Here is the first table</p>
+<pre class="sql"><code>SELECT country, &#39;1999&#39; AS year, &quot;1999&quot; AS count
+FROM table4a</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="left">year</th>
+<th align="right">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">1999</td>
+<td align="right">745</td>
+</tr>
+<tr class="even">
+<td align="left">Brazil</td>
+<td align="left">1999</td>
+<td align="right">37737</td>
+</tr>
+<tr class="odd">
+<td align="left">China</td>
+<td align="left">1999</td>
+<td align="right">212258</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p>Notice that <code>&#39;1999&#39; AS year</code> creates a new column
+called <code>year</code> that has just the value
+<code>1999</code>.</p></li>
+<li><p>Notice that <code>&quot;1999&quot; AS count</code> just renames the
+<code>&quot;1999&quot;</code> column to be the <code>&quot;count&quot;</code>
+column</p></li>
+</ul></li>
+<li><p>Here is the second table</p>
+<pre class="sql"><code>SELECT country, &#39;2000&#39; AS year, &quot;2000&quot; AS count
+FROM table4a</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="left">year</th>
+<th align="right">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">2000</td>
+<td align="right">2666</td>
+</tr>
+<tr class="even">
+<td align="left">Brazil</td>
+<td align="left">2000</td>
+<td align="right">80488</td>
+</tr>
+<tr class="odd">
+<td align="left">China</td>
+<td align="left">2000</td>
+<td align="right">213766</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>Use <code>UNION ALL</code> to bind the rows</p>
+<pre class="sql"><code>(
+  SELECT country, &#39;1999&#39; AS year, &quot;1999&quot; AS count
+  FROM table4a
+)
+UNION ALL
+(
+  SELECT country, &#39;2000&#39; AS year, &quot;2000&quot; AS count
+  FROM table4a
+)</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>6 records</caption>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="left">year</th>
+<th align="right">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Afghanistan</td>
+<td align="left">1999</td>
+<td align="right">745</td>
+</tr>
+<tr class="even">
+<td align="left">Brazil</td>
+<td align="left">1999</td>
+<td align="right">37737</td>
+</tr>
+<tr class="odd">
+<td align="left">China</td>
+<td align="left">1999</td>
+<td align="right">212258</td>
+</tr>
+<tr class="even">
+<td align="left">Afghanistan</td>
+<td align="left">2000</td>
+<td align="right">2666</td>
+</tr>
+<tr class="odd">
+<td align="left">Brazil</td>
+<td align="left">2000</td>
+<td align="right">80488</td>
+</tr>
+<tr class="even">
+<td align="left">China</td>
+<td align="left">2000</td>
+<td align="right">213766</td>
+</tr>
+</tbody>
+</table>
+</div></li>
 <li><p>R way:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>data(&quot;table4a&quot;, package = &quot;tidyr&quot;)
