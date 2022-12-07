@@ -98,6 +98,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Basic SQL
 
+## General
+
+- Case does not matter (i.e. `select` is the same as `SELECT` is the same as `SeLeCt`), but it is standard to have all statements be in fuller UPPERCASE (i.e. `SELECT`).
+
+- The statements below **must** be in the following order: `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `ORDER BY`.
+
+- Character values must be in single quotes.
+
+- You can use invalid variable names by putting them in double quotes.
+
 ## Showing Tables
 
 - The `SHOW TABLES` command can be used to get a list of all of the tables
@@ -265,6 +275,14 @@ ggplot2::theme_set(ggplot2::theme_bw())
       filter(!is.na(dep_delay))
     ```
 
+- Just use `IS` if you want the missing data observations
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, dep_delay FROM flights
+        WHERE dep_delay IS NULL
+    ```
+
 ## Arranging Rows
 
 - Use `ORDER BY` to rearrange the rows (let's remove missing values so we can see the ordering)
@@ -272,7 +290,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
     select flight, dep_delay FROM flights
-        WHERE NOT(dep_delay IS NULL)
+        WHERE dep_delay IS NOT NULL
         ORDER BY dep_delay
     ```
 
@@ -290,8 +308,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    select flight, dep_delay FROM flights
-        WHERE NOT(dep_delay IS NULL)
+    SELECT flight, dep_delay FROM flights
+        WHERE dep_delay IS NOT NULL
         ORDER BY dep_delay DESC
     ```
 
@@ -305,6 +323,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
       arrange(desc(dep_delay))
     ```
 
+- You break ties by adding more variables in the `ORDER BY` statement
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT flight, origin, dep_delay FROM flights
+        WHERE dep_delay IS NOT NULL
+        ORDER BY origin desc, dep_delay
+    ```
+
+- R equivalent
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    flights %>%
+      select(flight, origin, dep_delay) %>%
+      filter(!is.na(dep_delay)) %>%
+      arrange(desc(origin), dep_delay)
+    ```
 
 ## Mutate
 
@@ -389,10 +425,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
       group_by(origin) %>%
       summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
     ```
-
-## Statement Orders
-
-- You must write SQL commands in the order of `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `ORDER BY`.
 
 ## Recoding
 
@@ -535,7 +567,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
-    data(table4a, package = "tidyr")
+    data("table4a", package = "tidyr")
     table4a %>%
       gather(`1999`, `2000`, key = "year", value = "count")
     
@@ -544,14 +576,50 @@ ggplot2::theme_set(ggplot2::theme_bw())
       pivot_longer(cols = c("1999", "2000"), names_to = "year", values_to = "count")
     ```
 
+## Spreading
+
+- "country" and "year" are the ID columns, "type" is the name column, and "count" is the values column.
+    
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=tmpcon}
+    SELECT * FROM table2
+    ```
+
+- Spreading (or "pivoting") is a pain in SQL:
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=tmpcon}
+    SELECT "country", "year",
+           MAX("count") FILTER (WHERE "type" = 'cases') AS cases,
+           MAX("count") FILTER (WHERE "type" = 'population') AS population
+        FROM table2
+        GROUP BY "country", "year"
+    ```
+
+- The idea is that we calculate separate summary statistics for each combination of "country" and "year". 
+    - One where the observations are 'cases' and one where the observations are 'population'.
+    - This summary statistic is of a single value --- itself.
+    - I chose `MAX`, but it could have been `MIN` or even `SUM` or `AVG`. This is because they all return the same value if you give it only one observation.
+
+- R way:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    data("table2", package = "tidyr")
+    table2 %>%
+      spread(key = type, value = count)
+    
+    ## Or
+    table2 %>%
+      pivot_wider(names_from = "type", values_from = "count", id_cols = c("country", "year"))
+    ```
+
 - Let's disconnect: 
 
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
     dbDisconnect(tmpcon, shutdown = TRUE)
     ```
-
-## Spreading
 
 ## Separating
 
