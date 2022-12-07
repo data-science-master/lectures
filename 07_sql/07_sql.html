@@ -466,7 +466,11 @@ order: <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>,
 <code>GROUP BY</code>, <code>ORDER BY</code>.</p></li>
 <li><p>Character values must be in single quotes.</p></li>
 <li><p>You can use invalid variable names by putting them in double
-quotes.</p></li>
+quotes.</p>
+<ul>
+<li>Some folks always use double quotes because it is not always clear
+what is a invalid variable name in the database management system.</li>
+</ul></li>
 </ul>
 </div>
 <div id="showing-tables" class="section level2">
@@ -584,7 +588,7 @@ command.</p></li>
 <code>year</code>, and <code>model</code> variables from the
 <code>planes</code> table.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT tailnum, year, model FROM planes</code></pre>
+<pre class="sql"><code>SELECT &quot;tailnum&quot;, &quot;year&quot;, &quot;model&quot; FROM planes</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -811,8 +815,8 @@ want.</p></li>
 <li><p>You use the <code>WHERE</code> command in SQL to filter by
 rows.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, distance, origin, dest FROM flights
-    WHERE distance &lt; 50</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
+    WHERE &quot;distance&quot; &lt; 50</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -841,8 +845,8 @@ rows.</p>
   filter(distance &lt; 50)</code></pre></li>
 <li><p>To test for equality, you just use one equals sign.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, month FROM flights
-    WHERE month = 12</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;month&quot; FROM flights
+    WHERE &quot;month&quot; = 12</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -904,8 +908,8 @@ rows.</p>
 <li><p>For characters you <strong>must use single quotes</strong>, not
 double.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, origin FROM flights
-    WHERE origin = &#39;JFK&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot; FROM flights
+    WHERE &quot;origin&quot; = &#39;JFK&#39;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -967,8 +971,8 @@ double.</p>
 <li><p>You can select multiple criteria using the <code>AND</code>
 command</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, origin, dest FROM flights
-    WHERE origin = &#39;JFK&#39; AND dest = &#39;CMH&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
+    WHERE &quot;origin&quot; = &#39;JFK&#39; AND &quot;dest&quot; = &#39;CMH&#39;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1041,8 +1045,8 @@ command</p>
 <li><p>You can use the <code>OR</code> logical operator too. Just put
 parentheses around your desired order of operations.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, origin, dest FROM flights
-    WHERE (origin = &#39;JFK&#39; OR origin = &#39;LGA&#39;) AND dest = &#39;CMH&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
+    WHERE (&quot;origin&quot; = &#39;JFK&#39; OR &quot;origin&quot; = &#39;LGA&#39;) AND dest = &#39;CMH&#39;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1115,8 +1119,8 @@ parentheses around your desired order of operations.</p>
 <li><p>Missing data is <code>NULL</code> in SQL (instead of
 <code>NA</code>). We can remove them by the special command:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, dep_delay FROM flights
-    WHERE dep_delay IS NOT NULL</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
+    WHERE &quot;dep_delay&quot; IS NOT NULL</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1178,8 +1182,8 @@ parentheses around your desired order of operations.</p>
 <li><p>Just use <code>IS</code> if you want the missing data
 observations</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, dep_delay FROM flights
-    WHERE dep_delay IS NULL</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
+    WHERE &quot;dep_delay&quot; IS NULL</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1241,9 +1245,9 @@ observations</p>
 <li><p>Use <code>ORDER BY</code> to rearrange the rows (let’s remove
 missing values so we can see the ordering)</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>select flight, dep_delay FROM flights
-    WHERE dep_delay IS NOT NULL
-    ORDER BY dep_delay</code></pre>
+<pre class="sql"><code>select &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
+    WHERE &quot;dep_delay&quot; IS NOT NULL
+    ORDER BY &quot;dep_delay&quot;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1279,19 +1283,19 @@ missing values so we can see the ordering)</p>
 <td align="right">-26</td>
 </tr>
 <tr class="odd">
-<td align="right">4573</td>
-<td align="right">-25</td>
-</tr>
-<tr class="even">
 <td align="right">4361</td>
 <td align="right">-25</td>
 </tr>
+<tr class="even">
+<td align="right">4573</td>
+<td align="right">-25</td>
+</tr>
 <tr class="odd">
-<td align="right">2223</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">3318</td>
+<td align="right">375</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1306,9 +1310,9 @@ missing values so we can see the ordering)</p>
 <li><p>Use <code>DESC</code> after the variable to arrange in descending
 order</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, dep_delay FROM flights
-    WHERE dep_delay IS NOT NULL
-    ORDER BY dep_delay DESC</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
+    WHERE &quot;dep_delay&quot; IS NOT NULL
+    ORDER BY &quot;dep_delay&quot; DESC</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1371,9 +1375,9 @@ order</p>
 <li><p>You break ties by adding more variables in the
 <code>ORDER BY</code> statement</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, origin, dep_delay FROM flights
-    WHERE dep_delay IS NOT NULL
-    ORDER BY origin desc, dep_delay</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dep_delay&quot; FROM flights
+    WHERE &quot;dep_delay&quot; IS NOT NULL
+    ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1458,7 +1462,7 @@ variable name is called “aliasing” in SQL).</p>
 table. We’ll also keep the flight number, distance, and air time
 variables.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, distance / air_time AS speed, distance, air_time FROM flights</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot; / &quot;air_time&quot; AS &quot;speed&quot;, &quot;distance&quot;, &quot;air_time&quot; FROM flights</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1571,7 +1575,7 @@ variables.</p>
 <li><p>These are calculated in a <code>SELECT</code> command</p></li>
 <li><p>Let’s calculate the average departue delay</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT AVG(dep_delay) AS dep_delay FROM flights</code></pre>
+<pre class="sql"><code>SELECT AVG(&quot;dep_delay&quot;) AS &quot;dep_delay&quot; FROM flights</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -1594,9 +1598,9 @@ variables.</p>
 <li><p>Use the <code>GROUP BY</code> command to calculate group
 summaries.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT origin, AVG(dep_delay)
+<pre class="sql"><code>SELECT &quot;origin&quot;, AVG(&quot;dep_delay&quot;)
     FROM flights
-    GROUP BY origin</code></pre>
+    GROUP BY &quot;origin&quot;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>3 records</caption>
@@ -1636,11 +1640,11 @@ summaries.</p>
 <li><p>Use the following <code>CASE</code>-<code>WHEN</code> syntax to
 recode values</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, origin, CASE
-          WHEN (origin = &#39;JFK&#39;) THEN &#39;John F. Kennedy&#39;
-          WHEN (origin = &#39;LGA&#39;) THEN &#39;LaGaurdia&#39;
-          WHEN (origin = &#39;EWR&#39;) THEN &#39;Newark Liberty&#39;
-          END AS olong
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, CASE
+          WHEN (&quot;origin&quot; = &#39;JFK&#39;) THEN &#39;John F. Kennedy&#39;
+          WHEN (&quot;origin&quot; = &#39;LGA&#39;) THEN &#39;LaGaurdia&#39;
+          WHEN (&quot;origin&quot; = &#39;EWR&#39;) THEN &#39;Newark Liberty&#39;
+          END AS &quot;olong&quot;
     FROM flights</code></pre>
 <div class="knitsql-table">
 <table>
@@ -1728,10 +1732,10 @@ flights %&gt;%
 <li><p>You can also use <code>CASE</code>-<code>WHEN</code> to recode
 based on other logical operations</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT flight, air_time, CASE
-          WHEN (air_time &gt; 2500) THEN &#39;Long&#39;
-          WHEN (air_time &lt;= 2500) THEN &#39;Short&#39;
-          END AS qual_dist
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;air_time&quot;, CASE
+          WHEN (&quot;air_time&quot; &gt; 2500) THEN &#39;Long&#39;
+          WHEN (&quot;air_time&quot; &lt;= 2500) THEN &#39;Short&#39;
+          END AS &quot;qual_dist&quot;
     FROM flights</code></pre>
 <div class="knitsql-table">
 <table>
@@ -1826,25 +1830,25 @@ semicolon “<code>;</code>” after each SQL call in the same code
 chunk.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>CREATE TABLE table4a (
-    country VARCHAR,
+    &quot;country&quot; VARCHAR,
     &quot;1999&quot;   INTEGER,
     &quot;2000&quot;   INTEGER
 );
 
-INSERT INTO table4a (country, &quot;1999&quot;, &quot;2000&quot;) 
+INSERT INTO table4a (&quot;country&quot;, &quot;1999&quot;, &quot;2000&quot;) 
     VALUES
         (&#39;Afghanistan&#39;,    745,   2666),
         (&#39;Brazil&#39;     ,  37737,  80488),
         (&#39;China&#39;      , 212258, 213766);
 
 CREATE TABLE table2 (
-    country VARCHAR,
-    year    INTEGER,
+    &quot;country&quot; VARCHAR,
+    &quot;year&quot;    INTEGER,
     &quot;type&quot;  VARCHAR,
     &quot;count&quot; INTEGER
 );
 
-INSERT INTO table2 (country, year, &quot;type&quot;, &quot;count&quot;)
+INSERT INTO table2 (&quot;country&quot;, &quot;year&quot;, &quot;type&quot;, &quot;count&quot;)
     VALUES
         (&#39;Afghanistan&#39;,  1999, &#39;cases&#39;     ,        745),
         (&#39;Afghanistan&#39;,  1999, &#39;population&#39;,   19987071),
@@ -1938,7 +1942,7 @@ need to Google.</p></li>
 <li><p>The way to do this is to do an row-bind from two constructed
 tables.</p></li>
 <li><p>Here is the first table</p>
-<pre class="sql"><code>SELECT country, &#39;1999&#39; AS year, &quot;1999&quot; AS count
+<pre class="sql"><code>SELECT &quot;country&quot;, &#39;1999&#39; AS &quot;year&quot;, &quot;1999&quot; AS count
 FROM table4a</code></pre>
 <div class="knitsql-table">
 <table>
@@ -1978,7 +1982,7 @@ called <code>year</code> that has just the value
 column</p></li>
 </ul></li>
 <li><p>Here is the second table</p>
-<pre class="sql"><code>SELECT country, &#39;2000&#39; AS year, &quot;2000&quot; AS count
+<pre class="sql"><code>SELECT &quot;country&quot;, &#39;2000&#39; AS &quot;year&quot;, &quot;2000&quot; AS count
 FROM table4a</code></pre>
 <div class="knitsql-table">
 <table>
@@ -2011,12 +2015,12 @@ FROM table4a</code></pre>
 </div></li>
 <li><p>Use <code>UNION ALL</code> to bind the rows</p>
 <pre class="sql"><code>(
-  SELECT country, &#39;1999&#39; AS year, &quot;1999&quot; AS count
+  SELECT &quot;country&quot;, &#39;1999&#39; AS &quot;year&quot;, &quot;1999&quot; AS count
   FROM table4a
 )
 UNION ALL
 (
-  SELECT country, &#39;2000&#39; AS year, &quot;2000&quot; AS count
+  SELECT &quot;country&quot;, &#39;2000&#39; AS &quot;year&quot;, &quot;2000&quot; AS count
   FROM table4a
 )</code></pre>
 <div class="knitsql-table">
@@ -2159,8 +2163,8 @@ column, and “count” is the values column.</p>
 <li><p>Spreading (or “pivoting”) is a pain in SQL:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &quot;country&quot;, &quot;year&quot;,
-       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;cases&#39;) AS cases,
-       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;population&#39;) AS population
+       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;cases&#39;) AS &quot;cases&quot;,
+       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;population&#39;) AS &quot;population&quot;
     FROM table2
     GROUP BY &quot;country&quot;, &quot;year&quot;</code></pre>
 <div class="knitsql-table">

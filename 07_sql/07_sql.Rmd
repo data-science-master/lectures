@@ -107,6 +107,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Character values must be in single quotes.
 
 - You can use invalid variable names by putting them in double quotes.
+    - Some folks always use double quotes because it is not always clear what is a invalid variable name in the database management system.
 
 ## Showing Tables
 
@@ -140,7 +141,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT tailnum, year, model FROM planes
+    SELECT "tailnum", "year", "model" FROM planes
     ```
 
 - R equivalent
@@ -173,8 +174,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, distance, origin, dest FROM flights
-        WHERE distance < 50
+    SELECT "flight", "distance", "origin", "dest" FROM flights
+        WHERE "distance" < 50
     ```
     
 - R equivalent:
@@ -191,8 +192,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, month FROM flights
-        WHERE month = 12
+    SELECT "flight", "month" FROM flights
+        WHERE "month" = 12
     ```
 
 - R equivalent
@@ -209,8 +210,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, origin FROM flights
-        WHERE origin = 'JFK'
+    SELECT "flight", "origin" FROM flights
+        WHERE "origin" = 'JFK'
     ```
     
 - R equivalent
@@ -227,8 +228,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, origin, dest FROM flights
-        WHERE origin = 'JFK' AND dest = 'CMH'
+    SELECT "flight", "origin", "dest" FROM flights
+        WHERE "origin" = 'JFK' AND "dest" = 'CMH'
     ```
 
 - R equivalent:
@@ -245,8 +246,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, origin, dest FROM flights
-        WHERE (origin = 'JFK' OR origin = 'LGA') AND dest = 'CMH'
+    SELECT "flight", "origin", "dest" FROM flights
+        WHERE ("origin" = 'JFK' OR "origin" = 'LGA') AND dest = 'CMH'
     ```
 
 - R equivalent
@@ -262,8 +263,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, dep_delay FROM flights
-        WHERE dep_delay IS NOT NULL
+    SELECT "flight", "dep_delay" FROM flights
+        WHERE "dep_delay" IS NOT NULL
     ```
 
 - R equivalent
@@ -279,8 +280,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, dep_delay FROM flights
-        WHERE dep_delay IS NULL
+    SELECT "flight", "dep_delay" FROM flights
+        WHERE "dep_delay" IS NULL
     ```
 
 ## Arranging Rows
@@ -289,9 +290,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    select flight, dep_delay FROM flights
-        WHERE dep_delay IS NOT NULL
-        ORDER BY dep_delay
+    select "flight", "dep_delay" FROM flights
+        WHERE "dep_delay" IS NOT NULL
+        ORDER BY "dep_delay"
     ```
 
 - R equivalent
@@ -308,9 +309,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, dep_delay FROM flights
-        WHERE dep_delay IS NOT NULL
-        ORDER BY dep_delay DESC
+    SELECT "flight", "dep_delay" FROM flights
+        WHERE "dep_delay" IS NOT NULL
+        ORDER BY "dep_delay" DESC
     ```
 
 - R equivalent
@@ -327,9 +328,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, origin, dep_delay FROM flights
-        WHERE dep_delay IS NOT NULL
-        ORDER BY origin desc, dep_delay
+    SELECT "flight", "origin", "dep_delay" FROM flights
+        WHERE "dep_delay" IS NOT NULL
+        ORDER BY "origin" desc, "dep_delay"
     ```
 
 - R equivalent
@@ -356,7 +357,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, distance / air_time AS speed, distance, air_time FROM flights
+    SELECT "flight", "distance" / "air_time" AS "speed", "distance", "air_time" FROM flights
     ```
 
 - R equivalent:
@@ -396,7 +397,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT AVG(dep_delay) AS dep_delay FROM flights
+    SELECT AVG("dep_delay") AS "dep_delay" FROM flights
     ```
 
 - R equivalent:
@@ -411,9 +412,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT origin, AVG(dep_delay)
+    SELECT "origin", AVG("dep_delay")
         FROM flights
-        GROUP BY origin
+        GROUP BY "origin"
     ```
 
 - R equivalent
@@ -432,11 +433,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, origin, CASE
-              WHEN (origin = 'JFK') THEN 'John F. Kennedy'
-              WHEN (origin = 'LGA') THEN 'LaGaurdia'
-              WHEN (origin = 'EWR') THEN 'Newark Liberty'
-              END AS olong
+    SELECT "flight", "origin", CASE
+              WHEN ("origin" = 'JFK') THEN 'John F. Kennedy'
+              WHEN ("origin" = 'LGA') THEN 'LaGaurdia'
+              WHEN ("origin" = 'EWR') THEN 'Newark Liberty'
+              END AS "olong"
         FROM flights
     ```
 
@@ -467,10 +468,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT flight, air_time, CASE
-              WHEN (air_time > 2500) THEN 'Long'
-              WHEN (air_time <= 2500) THEN 'Short'
-              END AS qual_dist
+    SELECT "flight", "air_time", CASE
+              WHEN ("air_time" > 2500) THEN 'Long'
+              WHEN ("air_time" <= 2500) THEN 'Short'
+              END AS "qual_dist"
         FROM flights
     ```
     
@@ -507,25 +508,25 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=tmpcon}
     CREATE TABLE table4a (
-        country VARCHAR,
+        "country" VARCHAR,
         "1999"   INTEGER,
         "2000"   INTEGER
     );
     
-    INSERT INTO table4a (country, "1999", "2000") 
+    INSERT INTO table4a ("country", "1999", "2000") 
         VALUES
             ('Afghanistan',    745,   2666),
             ('Brazil'     ,  37737,  80488),
             ('China'      , 212258, 213766);
             
     CREATE TABLE table2 (
-        country VARCHAR,
-        year    INTEGER,
+        "country" VARCHAR,
+        "year"    INTEGER,
         "type"  VARCHAR,
         "count" INTEGER
     );
     
-    INSERT INTO table2 (country, year, "type", "count")
+    INSERT INTO table2 ("country", "year", "type", "count")
         VALUES
             ('Afghanistan',  1999, 'cases'     ,        745),
             ('Afghanistan',  1999, 'population',   19987071),
@@ -567,7 +568,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Here is the first table
     ```{sql, connection=tmpcon}
-    SELECT country, '1999' AS year, "1999" AS count
+    SELECT "country", '1999' AS "year", "1999" AS count
     FROM table4a
     ```
     
@@ -577,19 +578,19 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Here is the second table
     ```{sql, connection=tmpcon}
-    SELECT country, '2000' AS year, "2000" AS count
+    SELECT "country", '2000' AS "year", "2000" AS count
     FROM table4a
     ```
     
 - Use `UNION ALL` to bind the rows
     ```{sql, connection=tmpcon}
     (
-      SELECT country, '1999' AS year, "1999" AS count
+      SELECT "country", '1999' AS "year", "1999" AS count
       FROM table4a
     )
     UNION ALL
     (
-      SELECT country, '2000' AS year, "2000" AS count
+      SELECT "country", '2000' AS "year", "2000" AS count
       FROM table4a
     )
     ```
@@ -621,8 +622,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=tmpcon}
     SELECT "country", "year",
-           MAX("count") FILTER (WHERE "type" = 'cases') AS cases,
-           MAX("count") FILTER (WHERE "type" = 'population') AS population
+           MAX("count") FILTER (WHERE "type" = 'cases') AS "cases",
+           MAX("count") FILTER (WHERE "type" = 'population') AS "population"
         FROM table2
         GROUP BY "country", "year"
     ```
