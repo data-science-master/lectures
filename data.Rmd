@@ -190,6 +190,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - `smoke`: Whether the individual smoked (`smoker`) or did not (`nonsmoker`).
     - `cancer`: Whether the individual had cancer (`cancer`) or was a control
       (`control`).
+<!-- - [soccer.duckdb](./data/soccer.duckdb): DuckDB database from <https://www.kaggle.com/hugomathien/soccer> -->
 - Tidying exercise datasets:
     - [flowers1.csv](./data/tidy_exercise/flowers1.csv)
     - [flowers2.csv](./data/tidy_exercise/flowers2.csv)
