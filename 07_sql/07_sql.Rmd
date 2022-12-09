@@ -496,23 +496,40 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 ## Joining
 
+- For joining, in the `SELECT` call, you write out all of the columns in **both** tables that you are joining.
+
+- If there are shared column names, you need to distinguish between the two via `table1."var"` or `table2."var"` etc...
+
 - Use `LEFT JOIN` to declare a left join, and `ON` to declare the keys.
 
+    <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT *
+    -- flight is from the flights table
+    -- type is from the planes table
+    -- both tables have a tailnum column, so we need to tell them apart
+    -- if you list both tailnums in SELECT, you'll get two tailnum columns
+    SELECT "flight", flights."tailnum", "type" 
     FROM flights
-    LEFT JOIN planes
-    ON flights.tailnum = planes.tailnum
+    JOIN planes
+    ON flights."tailnum" = planes."tailnum"
     ```
 
 - R equivalent:
 
     <mark style="background-color: lightblue">R</mark>
     ```{r}
+    planes %>%
+      select(tailnum, type) ->
+      planes2
     flights %>%
-      left_join(planes, by = "tailnum")
+      select(flight, tailnum) %>%
+      left_join(planes2, by = "tailnum")
     ```
 
+- The other joins are:
+    - `RIGHT JOIN`
+    - `INNER JOIN`
+    - `FULL OUTER JOIN`
 
 ## Creating some Tables
 
@@ -764,3 +781,4 @@ ggplot2::theme_set(ggplot2::theme_bw())
     DBI::dbDisconnect(tmpcon, shutdown = TRUE)
     ```
 
+# Exercises

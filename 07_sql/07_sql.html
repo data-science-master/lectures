@@ -390,6 +390,7 @@ SQL from R</a></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
 <code>{dbplyr}</code></a></li>
 <li><a href="#closing-the-connection" id="toc-closing-the-connection">Closing the Connection</a></li>
+<li><a href="#exercises" id="toc-exercises">Exercises</a></li>
 </ul>
 </div>
 
@@ -1290,19 +1291,19 @@ missing values so we can see the ordering)</p>
 <td align="right">-26</td>
 </tr>
 <tr class="odd">
-<td align="right">4361</td>
-<td align="right">-25</td>
-</tr>
-<tr class="even">
 <td align="right">4573</td>
 <td align="right">-25</td>
 </tr>
+<tr class="even">
+<td align="right">4361</td>
+<td align="right">-25</td>
+</tr>
 <tr class="odd">
-<td align="right">3318</td>
+<td align="right">2223</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1427,22 +1428,22 @@ order</p>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
+<td align="right">375</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">4065</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="odd">
 <td align="right">2223</td>
 <td align="left">LGA</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="odd">
-<td align="right">4065</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="even">
-<td align="right">1371</td>
+<td align="right">3473</td>
 <td align="left">LGA</td>
 <td align="right">-23</td>
 </tr>
@@ -1619,12 +1620,12 @@ summaries.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">LGA</td>
-<td align="right">10.35</td>
-</tr>
-<tr class="even">
 <td align="left">EWR</td>
 <td align="right">15.11</td>
+</tr>
+<tr class="even">
+<td align="left">LGA</td>
+<td align="right">10.35</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>
@@ -1826,404 +1827,115 @@ flights %&gt;%
 <div id="joining" class="section level2">
 <h2>Joining</h2>
 <ul>
+<li><p>For joining, in the <code>SELECT</code> call, you write out all
+of the columns in <strong>both</strong> tables that you are
+joining.</p></li>
+<li><p>If there are shared column names, you need to distinguish between
+the two via <code>table1.&quot;var&quot;</code> or <code>table2.&quot;var&quot;</code>
+etc…</p></li>
 <li><p>Use <code>LEFT JOIN</code> to declare a left join, and
 <code>ON</code> to declare the keys.</p>
-<pre class="sql"><code>SELECT *
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>-- flight is from the flights table
+-- type is from the planes table
+-- both tables have a tailnum column, so we need to tell them apart
+-- if you list both tailnums in SELECT, you&#39;ll get two tailnum columns
+SELECT &quot;flight&quot;, flights.&quot;tailnum&quot;, &quot;type&quot; 
 FROM flights
-LEFT JOIN planes
-ON flights.tailnum = planes.tailnum</code></pre>
+JOIN planes
+ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;</code></pre>
 <div class="knitsql-table">
-<table style="width:100%;">
+<table>
 <caption>Displaying records 1 - 10</caption>
-<colgroup>
-<col width="1%" />
-<col width="2%" />
-<col width="1%" />
-<col width="3%" />
-<col width="5%" />
-<col width="3%" />
-<col width="3%" />
-<col width="5%" />
-<col width="3%" />
-<col width="3%" />
-<col width="2%" />
-<col width="3%" />
-<col width="2%" />
-<col width="1%" />
-<col width="3%" />
-<col width="3%" />
-<col width="1%" />
-<col width="2%" />
-<col width="7%" />
-<col width="3%" />
-<col width="1%" />
-<col width="9%" />
-<col width="6%" />
-<col width="4%" />
-<col width="3%" />
-<col width="2%" />
-<col width="2%" />
-<col width="3%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th align="right">year</th>
-<th align="right">month</th>
-<th align="right">day</th>
-<th align="right">dep_time</th>
-<th align="right">sched_dep_time</th>
-<th align="right">dep_delay</th>
-<th align="right">arr_time</th>
-<th align="right">sched_arr_time</th>
-<th align="right">arr_delay</th>
-<th align="left">carrier</th>
 <th align="right">flight</th>
 <th align="left">tailnum</th>
-<th align="left">origin</th>
-<th align="left">dest</th>
-<th align="right">air_time</th>
-<th align="right">distance</th>
-<th align="right">hour</th>
-<th align="right">minute</th>
-<th align="left">time_hour</th>
-<th align="left">tailnum</th>
-<th align="right">year</th>
 <th align="left">type</th>
-<th align="left">manufacturer</th>
-<th align="left">model</th>
-<th align="right">engines</th>
-<th align="right">seats</th>
-<th align="right">speed</th>
-<th align="left">engine</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">517</td>
-<td align="right">515</td>
-<td align="right">2</td>
-<td align="right">830</td>
-<td align="right">819</td>
-<td align="right">11</td>
-<td align="left">UA</td>
-<td align="right">1545</td>
-<td align="left">N14228</td>
-<td align="left">EWR</td>
-<td align="left">IAH</td>
-<td align="right">227</td>
-<td align="right">1400</td>
-<td align="right">5</td>
-<td align="right">15</td>
-<td align="left">2013-01-01 10:00:00</td>
-<td align="left">N14228</td>
-<td align="right">1999</td>
-<td align="left">Fixed wing multi engine</td>
-<td align="left">BOEING</td>
-<td align="left">737-824</td>
-<td align="right">2</td>
-<td align="right">149</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
-</tr>
-<tr class="even">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">533</td>
-<td align="right">529</td>
-<td align="right">4</td>
-<td align="right">850</td>
-<td align="right">830</td>
-<td align="right">20</td>
-<td align="left">UA</td>
-<td align="right">1714</td>
-<td align="left">N24211</td>
-<td align="left">LGA</td>
-<td align="left">IAH</td>
-<td align="right">227</td>
-<td align="right">1416</td>
-<td align="right">5</td>
-<td align="right">29</td>
-<td align="left">2013-01-01 10:00:00</td>
-<td align="left">N24211</td>
-<td align="right">1998</td>
-<td align="left">Fixed wing multi engine</td>
-<td align="left">BOEING</td>
-<td align="left">737-824</td>
-<td align="right">2</td>
-<td align="right">149</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
-</tr>
-<tr class="odd">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">542</td>
-<td align="right">540</td>
-<td align="right">2</td>
-<td align="right">923</td>
-<td align="right">850</td>
-<td align="right">33</td>
-<td align="left">AA</td>
-<td align="right">1141</td>
-<td align="left">N619AA</td>
-<td align="left">JFK</td>
-<td align="left">MIA</td>
-<td align="right">160</td>
-<td align="right">1089</td>
-<td align="right">5</td>
-<td align="right">40</td>
-<td align="left">2013-01-01 10:00:00</td>
-<td align="left">N619AA</td>
-<td align="right">1990</td>
-<td align="left">Fixed wing multi engine</td>
-<td align="left">BOEING</td>
-<td align="left">757-223</td>
-<td align="right">2</td>
-<td align="right">178</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
-</tr>
-<tr class="even">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">544</td>
-<td align="right">545</td>
-<td align="right">-1</td>
-<td align="right">1004</td>
-<td align="right">1022</td>
-<td align="right">-18</td>
-<td align="left">B6</td>
-<td align="right">725</td>
-<td align="left">N804JB</td>
-<td align="left">JFK</td>
-<td align="left">BQN</td>
-<td align="right">183</td>
-<td align="right">1576</td>
-<td align="right">5</td>
-<td align="right">45</td>
-<td align="left">2013-01-01 10:00:00</td>
-<td align="left">N804JB</td>
-<td align="right">2012</td>
-<td align="left">Fixed wing multi engine</td>
-<td align="left">AIRBUS</td>
-<td align="left">A320-232</td>
-<td align="right">2</td>
-<td align="right">200</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
-</tr>
-<tr class="odd">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">554</td>
-<td align="right">600</td>
-<td align="right">-6</td>
-<td align="right">812</td>
-<td align="right">837</td>
-<td align="right">-25</td>
-<td align="left">DL</td>
 <td align="right">461</td>
-<td align="left">N668DN</td>
-<td align="left">LGA</td>
-<td align="left">ATL</td>
-<td align="right">116</td>
-<td align="right">762</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="left">2013-01-01 11:00:00</td>
-<td align="left">N668DN</td>
-<td align="right">1991</td>
+<td align="left">N693DL</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">BOEING</td>
-<td align="left">757-232</td>
-<td align="right">2</td>
-<td align="right">178</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
 </tr>
 <tr class="even">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">554</td>
-<td align="right">558</td>
-<td align="right">-4</td>
-<td align="right">740</td>
-<td align="right">728</td>
-<td align="right">12</td>
-<td align="left">UA</td>
-<td align="right">1696</td>
-<td align="left">N39463</td>
-<td align="left">EWR</td>
-<td align="left">ORD</td>
-<td align="right">150</td>
-<td align="right">719</td>
-<td align="right">5</td>
-<td align="right">58</td>
-<td align="left">2013-01-01 10:00:00</td>
-<td align="left">N39463</td>
-<td align="right">2012</td>
+<td align="right">569</td>
+<td align="left">N846UA</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">BOEING</td>
-<td align="left">737-924ER</td>
-<td align="right">2</td>
-<td align="right">191</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
 </tr>
 <tr class="odd">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">555</td>
-<td align="right">600</td>
-<td align="right">-5</td>
-<td align="right">913</td>
-<td align="right">854</td>
-<td align="right">19</td>
-<td align="left">B6</td>
-<td align="right">507</td>
-<td align="left">N516JB</td>
-<td align="left">EWR</td>
-<td align="left">FLL</td>
-<td align="right">158</td>
-<td align="right">1065</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="left">2013-01-01 11:00:00</td>
-<td align="left">N516JB</td>
-<td align="right">2000</td>
+<td align="right">4424</td>
+<td align="left">N19966</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">AIRBUS INDUSTRIE</td>
-<td align="left">A320-232</td>
-<td align="right">2</td>
-<td align="right">200</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
 </tr>
 <tr class="even">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">557</td>
-<td align="right">600</td>
-<td align="right">-3</td>
-<td align="right">709</td>
-<td align="right">723</td>
-<td align="right">-14</td>
-<td align="left">EV</td>
-<td align="right">5708</td>
-<td align="left">N829AS</td>
-<td align="left">LGA</td>
-<td align="left">IAD</td>
-<td align="right">53</td>
-<td align="right">229</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="left">2013-01-01 11:00:00</td>
-<td align="left">N829AS</td>
-<td align="right">1998</td>
+<td align="right">731</td>
+<td align="left">N319NB</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">CANADAIR</td>
-<td align="left">CL-600-2B19</td>
-<td align="right">2</td>
-<td align="right">55</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
 </tr>
 <tr class="odd">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">557</td>
-<td align="right">600</td>
-<td align="right">-3</td>
-<td align="right">838</td>
-<td align="right">846</td>
-<td align="right">-8</td>
-<td align="left">B6</td>
-<td align="right">79</td>
-<td align="left">N593JB</td>
-<td align="left">JFK</td>
-<td align="left">MCO</td>
-<td align="right">140</td>
-<td align="right">944</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="left">2013-01-01 11:00:00</td>
-<td align="left">N593JB</td>
-<td align="right">2004</td>
+<td align="right">684</td>
+<td align="left">N809UA</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">AIRBUS</td>
-<td align="left">A320-232</td>
-<td align="right">2</td>
-<td align="right">200</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
 </tr>
 <tr class="even">
-<td align="right">2013</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">558</td>
-<td align="right">600</td>
-<td align="right">-2</td>
-<td align="right">849</td>
-<td align="right">851</td>
-<td align="right">-2</td>
-<td align="left">B6</td>
-<td align="right">49</td>
-<td align="left">N793JB</td>
-<td align="left">JFK</td>
-<td align="left">PBI</td>
-<td align="right">149</td>
-<td align="right">1028</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="left">2013-01-01 11:00:00</td>
-<td align="left">N793JB</td>
-<td align="right">2011</td>
+<td align="right">1279</td>
+<td align="left">N328NB</td>
 <td align="left">Fixed wing multi engine</td>
-<td align="left">AIRBUS</td>
-<td align="left">A320-232</td>
-<td align="right">2</td>
-<td align="right">200</td>
-<td align="right">NA</td>
-<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="right">1691</td>
+<td align="left">N34137</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="even">
+<td align="right">1447</td>
+<td align="left">N117UW</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="odd">
+<td align="right">583</td>
+<td align="left">N632JB</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="even">
+<td align="right">3574</td>
+<td align="left">N790SW</td>
+<td align="left">Fixed wing multi engine</td>
 </tr>
 </tbody>
 </table>
 </div></li>
 <li><p>R equivalent:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>flights %&gt;%
-  left_join(planes, by = &quot;tailnum&quot;)</code></pre>
-<pre><code>## # A tibble: 336,776 × 27
-##    year.x month   day dep_time sched_d…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
-##     &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
-##  1   2013     1     1      517       515       2     830     819      11 UA     
-##  2   2013     1     1      533       529       4     850     830      20 UA     
-##  3   2013     1     1      542       540       2     923     850      33 AA     
-##  4   2013     1     1      544       545      -1    1004    1022     -18 B6     
-##  5   2013     1     1      554       600      -6     812     837     -25 DL     
-##  6   2013     1     1      554       558      -4     740     728      12 UA     
-##  7   2013     1     1      555       600      -5     913     854      19 B6     
-##  8   2013     1     1      557       600      -3     709     723     -14 EV     
-##  9   2013     1     1      557       600      -3     838     846      -8 B6     
-## 10   2013     1     1      558       600      -2     753     745       8 AA     
-## # … with 336,766 more rows, 17 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
-## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
-## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, year.y &lt;int&gt;, type &lt;chr&gt;,
-## #   manufacturer &lt;chr&gt;, model &lt;chr&gt;, engines &lt;int&gt;, seats &lt;int&gt;, speed &lt;int&gt;,
-## #   engine &lt;chr&gt;, and abbreviated variable names ¹​sched_dep_time, ²​dep_delay,
-## #   ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre></li>
+<pre class="r"><code>planes %&gt;%
+  select(tailnum, type) -&gt;
+  planes2
+flights %&gt;%
+  select(flight, tailnum) %&gt;%
+  left_join(planes2, by = &quot;tailnum&quot;)</code></pre>
+<pre><code>## # A tibble: 336,776 × 3
+##    flight tailnum type                   
+##     &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                  
+##  1   1545 N14228  Fixed wing multi engine
+##  2   1714 N24211  Fixed wing multi engine
+##  3   1141 N619AA  Fixed wing multi engine
+##  4    725 N804JB  Fixed wing multi engine
+##  5    461 N668DN  Fixed wing multi engine
+##  6   1696 N39463  Fixed wing multi engine
+##  7    507 N516JB  Fixed wing multi engine
+##  8   5708 N829AS  Fixed wing multi engine
+##  9     79 N593JB  Fixed wing multi engine
+## 10    301 N3ALAA  &lt;NA&gt;                   
+## # … with 336,766 more rows</code></pre></li>
+<li><p>The other joins are:</p>
+<ul>
+<li><code>RIGHT JOIN</code></li>
+<li><code>INNER JOIN</code></li>
+<li><code>FULL OUTER JOIN</code></li>
+</ul></li>
 </ul>
 </div>
 <div id="creating-some-tables" class="section level2">
@@ -2795,6 +2507,9 @@ connection:</p>
 <pre class="r"><code>DBI::dbDisconnect(con, shutdown = TRUE)
 DBI::dbDisconnect(tmpcon, shutdown = TRUE)</code></pre></li>
 </ul>
+</div>
+<div id="exercises" class="section level1">
+<h1>Exercises</h1>
 </div>
 
 
