@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-07" />
+<meta name="date" content="2022-12-09" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-07</h4>
+<h4 class="date">2022-12-09</h4>
 
 </div>
 
@@ -375,13 +375,18 @@ Rows</a></li>
 <li><a href="#group-summaries" id="toc-group-summaries">Group
 Summaries</a></li>
 <li><a href="#recoding" id="toc-recoding">Recoding</a></li>
+<li><a href="#joining" id="toc-joining">Joining</a></li>
 <li><a href="#creating-some-tables" id="toc-creating-some-tables">Creating some Tables</a></li>
+<li><a href="#tidyr-stuff" id="toc-tidyr-stuff">Tidyr stuff</a>
+<ul>
 <li><a href="#gathering" id="toc-gathering">Gathering</a></li>
 <li><a href="#spreading" id="toc-spreading">Spreading</a></li>
 <li><a href="#separating" id="toc-separating">Separating</a></li>
 <li><a href="#uniting" id="toc-uniting">Uniting</a></li>
-<li><a href="#joining" id="toc-joining">Joining</a></li>
 </ul></li>
+</ul></li>
+<li><a href="#calling-sql-from-r" id="toc-calling-sql-from-r">Calling
+SQL from R</a></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
 <code>{dbplyr}</code></a></li>
 <li><a href="#closing-the-connection" id="toc-closing-the-connection">Closing the Connection</a></li>
@@ -412,9 +417,9 @@ package.
 <ul>
 <li><p>SQL is pronounced either “ess-kew-ell” or “sequel” (either is
 fine).</p></li>
-<li><p>SQL is a programming language which basically allows you to do
-everything that dplyr does (filters, selects, joins, etc…). It is the
-industry standard for interacting with a relational database.</p></li>
+<li><p>SQL is a programming language which basically allows you to do a
+lot that dplyr does (filters, selects, joins, etc…). It is the industry
+standard for interacting with a relational database.</p></li>
 <li><p>There are a lots of <a href="https://en.wikipedia.org/wiki/Database#Database_management_system">database
 management systems</a> (DBMS) that use SQL to connect to their
 databases.</p></li>
@@ -459,18 +464,20 @@ chunks):</p>
 <ul>
 <li><p>Case does not matter (i.e. <code>select</code> is the same as
 <code>SELECT</code> is the same as <code>SeLeCt</code>), but it is
-standard to have all statements be in fuller UPPERCASE
+standard to have all statements be in UPPERCASE
 (i.e. <code>SELECT</code>).</p></li>
 <li><p>The statements below <strong>must</strong> be in the following
 order: <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>,
 <code>GROUP BY</code>, <code>ORDER BY</code>.</p></li>
 <li><p>Character values must be in single quotes.</p></li>
 <li><p>You can use invalid variable names by putting them in double
-quotes.</p>
+quotes (same as using backticks in R).</p>
 <ul>
 <li>Some folks always use double quotes because it is not always clear
-what is a invalid variable name in the database management system.</li>
+what is an invalid variable name in the database management system. This
+is what I do below.</li>
 </ul></li>
+<li><p>Comments in SQL have two hyphens <code>--</code>.</p></li>
 </ul>
 </div>
 <div id="showing-tables" class="section level2">
@@ -1179,7 +1186,7 @@ parentheses around your desired order of operations.</p>
 <pre class="r"><code>flights %&gt;%
   select(flight, dep_delay) %&gt;%
   filter(!is.na(dep_delay))</code></pre></li>
-<li><p>Just use <code>IS</code> if you want the missing data
+<li><p>Just use <code>IS</code> if you want only the missing data
 observations</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
@@ -1563,7 +1570,7 @@ variables.</p>
 <ul>
 <li><code>COUNT()</code>: Count the number of rows.</li>
 <li><code>AVG()</code>: Calculate average.</li>
-<li><code>MEDIAN()</code>: Median.</li>
+<li><code>MEDIAN()</code>: Median (not standard across all DBMS’s).</li>
 <li><code>SUM()</code>: Summation.</li>
 <li><code>MIN()</code>: Minimum.</li>
 <li><code>MAX()</code>: Maximum.</li>
@@ -1612,12 +1619,12 @@ summaries.</p>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">EWR</td>
-<td align="right">15.11</td>
-</tr>
-<tr class="even">
 <td align="left">LGA</td>
 <td align="right">10.35</td>
+</tr>
+<tr class="even">
+<td align="left">EWR</td>
+<td align="right">15.11</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>
@@ -1816,6 +1823,409 @@ flights %&gt;%
   mutate(qual_dist = if_else(air_time &gt; 2500, &quot;Long&quot;, &quot;Short&quot;))</code></pre></li>
 </ul>
 </div>
+<div id="joining" class="section level2">
+<h2>Joining</h2>
+<ul>
+<li><p>Use <code>LEFT JOIN</code> to declare a left join, and
+<code>ON</code> to declare the keys.</p>
+<pre class="sql"><code>SELECT *
+FROM flights
+LEFT JOIN planes
+ON flights.tailnum = planes.tailnum</code></pre>
+<div class="knitsql-table">
+<table style="width:100%;">
+<caption>Displaying records 1 - 10</caption>
+<colgroup>
+<col width="1%" />
+<col width="2%" />
+<col width="1%" />
+<col width="3%" />
+<col width="5%" />
+<col width="3%" />
+<col width="3%" />
+<col width="5%" />
+<col width="3%" />
+<col width="3%" />
+<col width="2%" />
+<col width="3%" />
+<col width="2%" />
+<col width="1%" />
+<col width="3%" />
+<col width="3%" />
+<col width="1%" />
+<col width="2%" />
+<col width="7%" />
+<col width="3%" />
+<col width="1%" />
+<col width="9%" />
+<col width="6%" />
+<col width="4%" />
+<col width="3%" />
+<col width="2%" />
+<col width="2%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="right">month</th>
+<th align="right">day</th>
+<th align="right">dep_time</th>
+<th align="right">sched_dep_time</th>
+<th align="right">dep_delay</th>
+<th align="right">arr_time</th>
+<th align="right">sched_arr_time</th>
+<th align="right">arr_delay</th>
+<th align="left">carrier</th>
+<th align="right">flight</th>
+<th align="left">tailnum</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">air_time</th>
+<th align="right">distance</th>
+<th align="right">hour</th>
+<th align="right">minute</th>
+<th align="left">time_hour</th>
+<th align="left">tailnum</th>
+<th align="right">year</th>
+<th align="left">type</th>
+<th align="left">manufacturer</th>
+<th align="left">model</th>
+<th align="right">engines</th>
+<th align="right">seats</th>
+<th align="right">speed</th>
+<th align="left">engine</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">517</td>
+<td align="right">515</td>
+<td align="right">2</td>
+<td align="right">830</td>
+<td align="right">819</td>
+<td align="right">11</td>
+<td align="left">UA</td>
+<td align="right">1545</td>
+<td align="left">N14228</td>
+<td align="left">EWR</td>
+<td align="left">IAH</td>
+<td align="right">227</td>
+<td align="right">1400</td>
+<td align="right">5</td>
+<td align="right">15</td>
+<td align="left">2013-01-01 10:00:00</td>
+<td align="left">N14228</td>
+<td align="right">1999</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">BOEING</td>
+<td align="left">737-824</td>
+<td align="right">2</td>
+<td align="right">149</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">533</td>
+<td align="right">529</td>
+<td align="right">4</td>
+<td align="right">850</td>
+<td align="right">830</td>
+<td align="right">20</td>
+<td align="left">UA</td>
+<td align="right">1714</td>
+<td align="left">N24211</td>
+<td align="left">LGA</td>
+<td align="left">IAH</td>
+<td align="right">227</td>
+<td align="right">1416</td>
+<td align="right">5</td>
+<td align="right">29</td>
+<td align="left">2013-01-01 10:00:00</td>
+<td align="left">N24211</td>
+<td align="right">1998</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">BOEING</td>
+<td align="left">737-824</td>
+<td align="right">2</td>
+<td align="right">149</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">542</td>
+<td align="right">540</td>
+<td align="right">2</td>
+<td align="right">923</td>
+<td align="right">850</td>
+<td align="right">33</td>
+<td align="left">AA</td>
+<td align="right">1141</td>
+<td align="left">N619AA</td>
+<td align="left">JFK</td>
+<td align="left">MIA</td>
+<td align="right">160</td>
+<td align="right">1089</td>
+<td align="right">5</td>
+<td align="right">40</td>
+<td align="left">2013-01-01 10:00:00</td>
+<td align="left">N619AA</td>
+<td align="right">1990</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">BOEING</td>
+<td align="left">757-223</td>
+<td align="right">2</td>
+<td align="right">178</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">544</td>
+<td align="right">545</td>
+<td align="right">-1</td>
+<td align="right">1004</td>
+<td align="right">1022</td>
+<td align="right">-18</td>
+<td align="left">B6</td>
+<td align="right">725</td>
+<td align="left">N804JB</td>
+<td align="left">JFK</td>
+<td align="left">BQN</td>
+<td align="right">183</td>
+<td align="right">1576</td>
+<td align="right">5</td>
+<td align="right">45</td>
+<td align="left">2013-01-01 10:00:00</td>
+<td align="left">N804JB</td>
+<td align="right">2012</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS</td>
+<td align="left">A320-232</td>
+<td align="right">2</td>
+<td align="right">200</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">554</td>
+<td align="right">600</td>
+<td align="right">-6</td>
+<td align="right">812</td>
+<td align="right">837</td>
+<td align="right">-25</td>
+<td align="left">DL</td>
+<td align="right">461</td>
+<td align="left">N668DN</td>
+<td align="left">LGA</td>
+<td align="left">ATL</td>
+<td align="right">116</td>
+<td align="right">762</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="left">2013-01-01 11:00:00</td>
+<td align="left">N668DN</td>
+<td align="right">1991</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">BOEING</td>
+<td align="left">757-232</td>
+<td align="right">2</td>
+<td align="right">178</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">554</td>
+<td align="right">558</td>
+<td align="right">-4</td>
+<td align="right">740</td>
+<td align="right">728</td>
+<td align="right">12</td>
+<td align="left">UA</td>
+<td align="right">1696</td>
+<td align="left">N39463</td>
+<td align="left">EWR</td>
+<td align="left">ORD</td>
+<td align="right">150</td>
+<td align="right">719</td>
+<td align="right">5</td>
+<td align="right">58</td>
+<td align="left">2013-01-01 10:00:00</td>
+<td align="left">N39463</td>
+<td align="right">2012</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">BOEING</td>
+<td align="left">737-924ER</td>
+<td align="right">2</td>
+<td align="right">191</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">555</td>
+<td align="right">600</td>
+<td align="right">-5</td>
+<td align="right">913</td>
+<td align="right">854</td>
+<td align="right">19</td>
+<td align="left">B6</td>
+<td align="right">507</td>
+<td align="left">N516JB</td>
+<td align="left">EWR</td>
+<td align="left">FLL</td>
+<td align="right">158</td>
+<td align="right">1065</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="left">2013-01-01 11:00:00</td>
+<td align="left">N516JB</td>
+<td align="right">2000</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS INDUSTRIE</td>
+<td align="left">A320-232</td>
+<td align="right">2</td>
+<td align="right">200</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">557</td>
+<td align="right">600</td>
+<td align="right">-3</td>
+<td align="right">709</td>
+<td align="right">723</td>
+<td align="right">-14</td>
+<td align="left">EV</td>
+<td align="right">5708</td>
+<td align="left">N829AS</td>
+<td align="left">LGA</td>
+<td align="left">IAD</td>
+<td align="right">53</td>
+<td align="right">229</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="left">2013-01-01 11:00:00</td>
+<td align="left">N829AS</td>
+<td align="right">1998</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">CANADAIR</td>
+<td align="left">CL-600-2B19</td>
+<td align="right">2</td>
+<td align="right">55</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="odd">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">557</td>
+<td align="right">600</td>
+<td align="right">-3</td>
+<td align="right">838</td>
+<td align="right">846</td>
+<td align="right">-8</td>
+<td align="left">B6</td>
+<td align="right">79</td>
+<td align="left">N593JB</td>
+<td align="left">JFK</td>
+<td align="left">MCO</td>
+<td align="right">140</td>
+<td align="right">944</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="left">2013-01-01 11:00:00</td>
+<td align="left">N593JB</td>
+<td align="right">2004</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS</td>
+<td align="left">A320-232</td>
+<td align="right">2</td>
+<td align="right">200</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+<tr class="even">
+<td align="right">2013</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">558</td>
+<td align="right">600</td>
+<td align="right">-2</td>
+<td align="right">849</td>
+<td align="right">851</td>
+<td align="right">-2</td>
+<td align="left">B6</td>
+<td align="right">49</td>
+<td align="left">N793JB</td>
+<td align="left">JFK</td>
+<td align="left">PBI</td>
+<td align="right">149</td>
+<td align="right">1028</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="left">2013-01-01 11:00:00</td>
+<td align="left">N793JB</td>
+<td align="right">2011</td>
+<td align="left">Fixed wing multi engine</td>
+<td align="left">AIRBUS</td>
+<td align="left">A320-232</td>
+<td align="right">2</td>
+<td align="right">200</td>
+<td align="right">NA</td>
+<td align="left">Turbo-fan</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>R equivalent:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>flights %&gt;%
+  left_join(planes, by = &quot;tailnum&quot;)</code></pre>
+<pre><code>## # A tibble: 336,776 × 27
+##    year.x month   day dep_time sched_d…¹ dep_d…² arr_t…³ sched…⁴ arr_d…⁵ carrier
+##     &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;  
+##  1   2013     1     1      517       515       2     830     819      11 UA     
+##  2   2013     1     1      533       529       4     850     830      20 UA     
+##  3   2013     1     1      542       540       2     923     850      33 AA     
+##  4   2013     1     1      544       545      -1    1004    1022     -18 B6     
+##  5   2013     1     1      554       600      -6     812     837     -25 DL     
+##  6   2013     1     1      554       558      -4     740     728      12 UA     
+##  7   2013     1     1      555       600      -5     913     854      19 B6     
+##  8   2013     1     1      557       600      -3     709     723     -14 EV     
+##  9   2013     1     1      557       600      -3     838     846      -8 B6     
+## 10   2013     1     1      558       600      -2     753     745       8 AA     
+## # … with 336,766 more rows, 17 more variables: flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, year.y &lt;int&gt;, type &lt;chr&gt;,
+## #   manufacturer &lt;chr&gt;, model &lt;chr&gt;, engines &lt;int&gt;, seats &lt;int&gt;, speed &lt;int&gt;,
+## #   engine &lt;chr&gt;, and abbreviated variable names ¹​sched_dep_time, ²​dep_delay,
+## #   ³​arr_time, ⁴​sched_arr_time, ⁵​arr_delay</code></pre></li>
+</ul>
+</div>
 <div id="creating-some-tables" class="section level2">
 <h2>Creating some Tables</h2>
 <ul>
@@ -1825,9 +2235,12 @@ example tables in.</p>
 <pre class="r"><code>tmpcon &lt;- dbConnect(duckdb())</code></pre></li>
 <li><p>For the gathering, spreading, separating, and uniting sections, I
 will use the <code>tmpcon</code> connection.</p></li>
-<li><p>Let’s create the tables we will need. Note that I am putting a
-semicolon “<code>;</code>” after each SQL call in the same code
-chunk.</p>
+<li><p>You can use <code>CREATE TABLE</code> to declare new tables and
+<code>INSERT INTO</code> to insert new rows into that table.</p>
+<ul>
+<li>Note that I am putting a semicolon “<code>;</code>” after each SQL
+call in the same code chunk.</li>
+</ul>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>CREATE TABLE table4a (
     &quot;country&quot; VARCHAR,
@@ -1839,42 +2252,31 @@ INSERT INTO table4a (&quot;country&quot;, &quot;1999&quot;, &quot;2000&quot;)
     VALUES
         (&#39;Afghanistan&#39;,    745,   2666),
         (&#39;Brazil&#39;     ,  37737,  80488),
-        (&#39;China&#39;      , 212258, 213766);
-
-CREATE TABLE table2 (
-    &quot;country&quot; VARCHAR,
-    &quot;year&quot;    INTEGER,
-    &quot;type&quot;  VARCHAR,
-    &quot;count&quot; INTEGER
-);
-
-INSERT INTO table2 (&quot;country&quot;, &quot;year&quot;, &quot;type&quot;, &quot;count&quot;)
-    VALUES
-        (&#39;Afghanistan&#39;,  1999, &#39;cases&#39;     ,        745),
-        (&#39;Afghanistan&#39;,  1999, &#39;population&#39;,   19987071),
-        (&#39;Afghanistan&#39;,  2000, &#39;cases&#39;     ,       2666),
-        (&#39;Afghanistan&#39;,  2000, &#39;population&#39;,   20595360),
-        (&#39;Brazil&#39;     ,  1999, &#39;cases&#39;     ,      37737),
-        (&#39;Brazil&#39;     ,  1999, &#39;population&#39;,  172006362),
-        (&#39;Brazil&#39;     ,  2000, &#39;cases&#39;     ,      80488),
-        (&#39;Brazil&#39;     ,  2000, &#39;population&#39;,  174504898),
-        (&#39;China&#39;      ,  1999, &#39;cases&#39;     ,     212258),
-        (&#39;China&#39;      ,  1999, &#39;population&#39;, 1272915272),
-        (&#39;China&#39;      ,  2000, &#39;cases&#39;     ,     213766),
-        (&#39;China&#39;      ,  2000, &#39;population&#39;, 1280428583);</code></pre></li>
-<li><p>Note that I used double quotes to create variables with reserved
-words.</p></li>
+        (&#39;China&#39;      , 212258, 213766);</code></pre></li>
+<li><p>But <code>DBI::dbWriteTable()</code> will add a table to a
+connection from R.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>data(&quot;table1&quot;, package = &quot;tidyr&quot;)
+dbWriteTable(conn = tmpcon, name = &quot;table1&quot;, value = table1)
+data(&quot;table2&quot;, package = &quot;tidyr&quot;)
+dbWriteTable(conn = tmpcon, name = &quot;table2&quot;, value = table2)
+data(&quot;table3&quot;, package = &quot;tidyr&quot;)
+dbWriteTable(conn = tmpcon, name = &quot;table3&quot;, value = table3)
+data(&quot;table4b&quot;, package = &quot;tidyr&quot;)
+dbWriteTable(conn = tmpcon, name = &quot;table4b&quot;, value = table4b)
+data(&quot;table5&quot;, package = &quot;tidyr&quot;)
+dbWriteTable(conn = tmpcon, name = &quot;table5&quot;, value = table5)</code></pre></li>
 <li><p>Here they are:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>DESCRIBE</code></pre>
 <div class="knitsql-table">
-<table>
-<caption>2 records</caption>
+<table style="width:100%;">
+<caption>6 records</caption>
 <colgroup>
-<col width="12%" />
-<col width="36%" />
-<col width="39%" />
 <col width="11%" />
+<col width="42%" />
+<col width="36%" />
+<col width="10%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1886,9 +2288,21 @@ words.</p></li>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="left">table1</td>
+<td align="left">cases , country , population, year</td>
+<td align="left">INTEGER, VARCHAR, INTEGER, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
 <td align="left">table2</td>
 <td align="left">count , country, type , year</td>
 <td align="left">INTEGER, VARCHAR, VARCHAR, INTEGER</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="odd">
+<td align="left">table3</td>
+<td align="left">country, rate , year</td>
+<td align="left">VARCHAR, VARCHAR, INTEGER</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
@@ -1897,13 +2311,37 @@ words.</p></li>
 <td align="left">INTEGER, INTEGER, VARCHAR</td>
 <td align="left">FALSE</td>
 </tr>
+<tr class="odd">
+<td align="left">table4b</td>
+<td align="left">1999 , 2000 , country</td>
+<td align="left">INTEGER, INTEGER, VARCHAR</td>
+<td align="left">FALSE</td>
+</tr>
+<tr class="even">
+<td align="left">table5</td>
+<td align="left">century, country, rate , year</td>
+<td align="left">VARCHAR, VARCHAR, VARCHAR, VARCHAR</td>
+<td align="left">FALSE</td>
+</tr>
 </tbody>
 </table>
 </div></li>
 </ul>
 </div>
-<div id="gathering" class="section level2">
-<h2>Gathering</h2>
+<div id="tidyr-stuff" class="section level2">
+<h2>Tidyr stuff</h2>
+<ul>
+<li><p>Recall the four main verbs of tidying: gathering, spreading,
+separating, and uniting.</p></li>
+<li><p>These are very rarely used in SQL.</p></li>
+<li><p>SQL is used mostly to query a subset of data. You would then load
+in that data using more advanced methods (R, Python, Excel,
+etc).</p></li>
+<li><p>It’s still possible to spread and gather (but not separate and
+unite), but a huge pain and folks don’t typically do it.</p></li>
+</ul>
+<div id="gathering" class="section level3">
+<h3>Gathering</h3>
 <ul>
 <li><p>SQL folk call “gathering” as “unpivoting”, so that is what you
 need to Google.</p></li>
@@ -2069,8 +2507,7 @@ UNION ALL
 </div></li>
 <li><p>R way:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>data(&quot;table4a&quot;, package = &quot;tidyr&quot;)
-table4a %&gt;%
+<pre class="r"><code>table4a %&gt;%
   gather(`1999`, `2000`, key = &quot;year&quot;, value = &quot;count&quot;)
 
 ## or
@@ -2078,8 +2515,8 @@ table4a %&gt;%
   pivot_longer(cols = c(&quot;1999&quot;, &quot;2000&quot;), names_to = &quot;year&quot;, values_to = &quot;count&quot;)</code></pre></li>
 </ul>
 </div>
-<div id="spreading" class="section level2">
-<h2>Spreading</h2>
+<div id="spreading" class="section level3">
+<h3>Spreading</h3>
 <ul>
 <li><p>“country” and “year” are the ID columns, “type” is the name
 column, and “count” is the values column.</p>
@@ -2230,27 +2667,69 @@ return the same value if you give it only one observation.</li>
 </ul></li>
 <li><p>R way:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>data(&quot;table2&quot;, package = &quot;tidyr&quot;)
-table2 %&gt;%
+<pre class="r"><code>table2 %&gt;%
   spread(key = type, value = count)
 
 ## Or
 table2 %&gt;%
   pivot_wider(names_from = &quot;type&quot;, values_from = &quot;count&quot;, id_cols = c(&quot;country&quot;, &quot;year&quot;))</code></pre></li>
-<li><p>Let’s disconnect:</p>
-<p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>dbDisconnect(tmpcon, shutdown = TRUE)</code></pre></li>
 </ul>
 </div>
-<div id="separating" class="section level2">
-<h2>Separating</h2>
+<div id="separating" class="section level3">
+<h3>Separating</h3>
+<ul>
+<li>No simple SQL way that I am aware of for separating.</li>
+</ul>
 </div>
-<div id="uniting" class="section level2">
-<h2>Uniting</h2>
+<div id="uniting" class="section level3">
+<h3>Uniting</h3>
+<ul>
+<li>No simple SQL way that I am aware of for uniting.</li>
+</ul>
 </div>
-<div id="joining" class="section level2">
-<h2>Joining</h2>
 </div>
+</div>
+<div id="calling-sql-from-r" class="section level1">
+<h1>Calling SQL from R</h1>
+<ul>
+<li><p>Use <code>DBI::dbGetQuery()</code> to run SQL code in R and
+obtain the result as a data frame.</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>planes2 &lt;- DBI::dbGetQuery(conn = con, statement = &quot;SELECT * FROM planes&quot;)
+glimpse(planes2)</code></pre>
+<pre><code>## Rows: 3,322
+## Columns: 9
+## $ tailnum      &lt;chr&gt; &quot;N10156&quot;, &quot;N102UW&quot;, &quot;N103US&quot;, &quot;N104UW&quot;, &quot;N10575&quot;, &quot;N105UW…
+## $ year         &lt;int&gt; 2004, 1998, 1999, 1999, 2002, 1999, 1999, 1999, 1999, 199…
+## $ type         &lt;chr&gt; &quot;Fixed wing multi engine&quot;, &quot;Fixed wing multi engine&quot;, &quot;Fi…
+## $ manufacturer &lt;chr&gt; &quot;EMBRAER&quot;, &quot;AIRBUS INDUSTRIE&quot;, &quot;AIRBUS INDUSTRIE&quot;, &quot;AIRBU…
+## $ model        &lt;chr&gt; &quot;EMB-145XR&quot;, &quot;A320-214&quot;, &quot;A320-214&quot;, &quot;A320-214&quot;, &quot;EMB-145…
+## $ engines      &lt;int&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
+## $ seats        &lt;int&gt; 55, 182, 182, 182, 55, 182, 182, 182, 182, 182, 55, 55, 5…
+## $ speed        &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ engine       &lt;chr&gt; &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turb…</code></pre></li>
+<li><p>Often, folks have SQL written in a separate file (that ends in
+“.sql”).</p></li>
+<li><p>E.g., here is what is in “query.sql”:</p>
+<pre><code>-- Just gets some planes
+SELECT * FROM planes</code></pre></li>
+<li><p>If you want to load the results of a SQL query in R, saved in
+“query.sql”, do</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>mydf &lt;- DBI::dbGetQuery(conn = con, statement = read_file(&quot;query.sql&quot;))
+glimpse(mydf)</code></pre>
+<pre><code>## Rows: 3,322
+## Columns: 9
+## $ tailnum      &lt;chr&gt; &quot;N10156&quot;, &quot;N102UW&quot;, &quot;N103US&quot;, &quot;N104UW&quot;, &quot;N10575&quot;, &quot;N105UW…
+## $ year         &lt;int&gt; 2004, 1998, 1999, 1999, 2002, 1999, 1999, 1999, 1999, 199…
+## $ type         &lt;chr&gt; &quot;Fixed wing multi engine&quot;, &quot;Fixed wing multi engine&quot;, &quot;Fi…
+## $ manufacturer &lt;chr&gt; &quot;EMBRAER&quot;, &quot;AIRBUS INDUSTRIE&quot;, &quot;AIRBUS INDUSTRIE&quot;, &quot;AIRBU…
+## $ model        &lt;chr&gt; &quot;EMB-145XR&quot;, &quot;A320-214&quot;, &quot;A320-214&quot;, &quot;A320-214&quot;, &quot;EMB-145…
+## $ engines      &lt;int&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, …
+## $ seats        &lt;int&gt; 55, 182, 182, 182, 55, 182, 182, 182, 182, 182, 55, 55, 5…
+## $ speed        &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ engine       &lt;chr&gt; &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turbo-fan&quot;, &quot;Turb…</code></pre></li>
+</ul>
 </div>
 <div id="use-r-to-generate-sql-with-dbplyr" class="section level1">
 <h1>Use R to generate SQL with <code>{dbplyr}</code></h1>
@@ -2273,7 +2752,7 @@ way to learn SQL.</p></li>
   filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre>
 <pre><code>## # Source:   SQL [1 x 1]
-## # Database: DuckDB 0.6.0 [dgerard@Linux 5.14.0-1054-oem:R 4.2.2/../data/flights.duckdb]
+## # Database: DuckDB 0.6.1 [dgerard@Linux 5.15.0-56-generic:R 4.2.1/../data/flights.duckdb]
 ##   dep_delay
 ##       &lt;dbl&gt;
 ## 1      22.0</code></pre></li>
@@ -2313,14 +2792,9 @@ SQL).</p>
 <li><p>After you are done with SQL, you should close down your
 connection:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>DBI::dbDisconnect(con, shutdown = TRUE)</code></pre></li>
+<pre class="r"><code>DBI::dbDisconnect(con, shutdown = TRUE)
+DBI::dbDisconnect(tmpcon, shutdown = TRUE)</code></pre></li>
 </ul>
-<!-- # Use SQL in R with `{DBI}` -->
-<!-- - It's best to have SQL written in a separate file (that ends in ".sql"). -->
-<!-- - If you want to load the results of a SQL query in R, saved in "query.sql", do -->
-<!--     ```{r, eval = FALSE} -->
-<!--     mydf <- DBI::dbGetQuery(conn, statement = read_file(here("query.sql"))) -->
-<!--     ``` -->
 </div>
 
 
