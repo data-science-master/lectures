@@ -60,7 +60,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     install.packages("duckdb")
     ```
 
-- The most popular DBMS is probably [SQLite](https://www.sqlite.org/index.html). Another popular one is [MySQL](https://www.mysql.com/).
+- The most popular DBMS is probably [SQLite](https://www.sqlite.org/index.html). Other popular ones are [MySQL](https://www.mysql.com/) and [PostgreSQL](https://www.postgresql.org/).
 
 # DuckDB
 
