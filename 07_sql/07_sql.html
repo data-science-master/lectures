@@ -1271,6 +1271,98 @@ WHERE &quot;dep_delay&quot; IS NULL;</code></pre>
 </tbody>
 </table>
 </div></li>
+<li><p>When you are building a query, you often want to subset the rows
+while you are finishing it (you don’t want to return the whole table
+each time you are trouble shooting a query). Use <code>LIMIT</code> to
+show only the top subset.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; 
+FROM flights
+LIMIT 5;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1545</td>
+<td align="left">EWR</td>
+<td align="left">IAH</td>
+</tr>
+<tr class="even">
+<td align="right">1714</td>
+<td align="left">LGA</td>
+<td align="left">IAH</td>
+</tr>
+<tr class="odd">
+<td align="right">1141</td>
+<td align="left">JFK</td>
+<td align="left">MIA</td>
+</tr>
+<tr class="even">
+<td align="right">725</td>
+<td align="left">JFK</td>
+<td align="left">BQN</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="left">LGA</td>
+<td align="left">ATL</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>You can also randomly sample rows via
+<code>USING SAMPLE</code>:</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; 
+FROM flights
+USING SAMPLE 5 ROWS;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>5 records</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1700</td>
+<td align="left">EWR</td>
+<td align="left">SFO</td>
+</tr>
+<tr class="even">
+<td align="right">35</td>
+<td align="left">JFK</td>
+<td align="left">PHX</td>
+</tr>
+<tr class="odd">
+<td align="right">1064</td>
+<td align="left">EWR</td>
+<td align="left">BOS</td>
+</tr>
+<tr class="even">
+<td align="right">4191</td>
+<td align="left">EWR</td>
+<td align="left">BNA</td>
+</tr>
+<tr class="odd">
+<td align="right">3230</td>
+<td align="left">JFK</td>
+<td align="left">DCA</td>
+</tr>
+</tbody>
+</table>
+</div></li>
 </ul>
 </div>
 <div id="arranging-rows" class="section level2">
@@ -2133,8 +2225,8 @@ GROUP BY &quot;origin&quot;
 TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
 <li><p>This is what the resulting file looks like:</p>
 <pre><code>## origin,avg(dep_delay)
-## LGA,10.3468756464944
 ## EWR,15.10795435218885
+## LGA,10.3468756464944
 ## JFK,12.112159099217665</code></pre></li>
 </ul>
 </div>

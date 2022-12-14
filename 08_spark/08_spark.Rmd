@@ -24,4 +24,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Learn some Spark
 - [Mastering Spark in R](https://therinspark.com/index.html)
 
+# Motivation
 
+- Apache Spark is a program that allows for computing on databases distributed across multiple computers.
+
+- With Spark:
+    - You can do data munging (dplyr/SQL stuff) on a dataset that is distributed across many computers,
+    - You can fit statistical (or train machine learning) models (like logistic regression) on a dataset that is distributed across many computers.
+    - More general computing operations, distributed across multiple computers.
+    
+- You can do arbitrarily complicated things with Spark, but for you the point of Spark is to do simple things on Big Data which won't fit on one computer.
