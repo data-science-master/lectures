@@ -796,14 +796,14 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     FROM people;
     ```
 
-3. Select just the `name`, `height`, `mass`, and `species` variables from the `people` table.
+4. Select just the `name`, `height`, `mass`, and `species` variables from the `people` table.
 
     ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
     SELECT "name", "height", "mass", "species"
     FROM people;
     ```
 
-4. Add to the above query by selecting only the humans and droids.
+5. Add to the above query by selecting only the humans and droids.
 
     ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
     SELECT "name", "height", "mass", "species"
@@ -811,7 +811,7 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     WHERE "species" = 'Human' OR "species" = 'Droid';
     ```
 
-5. Remove the individuals with missing `mass` data from the above query.
+6. Remove the individuals with missing `mass` data from the above query.
 
     ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
     SELECT "name", "height", "mass", "species"
@@ -819,7 +819,7 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     WHERE ("species" = 'Human' OR "species" = 'Droid') AND "mass" IS NOT NULL;
     ```
 
-6. Modify the above query to calculate the average height and mass for humans and droids.
+7. Modify the above query to calculate the average height and mass for humans and droids.
 
     ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
     SELECT "species", AVG("height") AS "height", AVG("mass") AS "mass"
@@ -828,7 +828,7 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     GROUP BY "species";
     ```
 
-7. Make sure that Droids are in the first row and Humans are in the second row in the above summary output.
+8. Make sure that Droids are in the first row and Humans are in the second row in the above summary output.
 
     ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
     SELECT "species", AVG("height") AS "height", AVG("mass") AS "mass"
@@ -838,7 +838,7 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     ORDER BY "species";
     ```
 
-8. Here is the summary of the keys for the database from the [`{starwarsdb}` GitHub page](https://github.com/gadenbuie/starwarsdb).
+9. Here is the summary of the keys for the database from the [`{starwarsdb}` GitHub page](https://github.com/gadenbuie/starwarsdb).
 
     ![](./README-starwars-data-model-1.svg)\ 
 
@@ -852,10 +852,23 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
     GROUP BY "title"
     ) LHS
     INNER JOIN films
-    ON LHS."title" = films."title"
+    ON LHS."title" = films."title";
     ```
 
+10. Filter the `people` table to only contain humans from Tatooine and export the result to a CSV file called "folks.csv".
 
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    COPY
+    (
+    SELECT *
+    FROM people
+    WHERE "homeworld" = 'Tatooine' AND "species" = 'Human'
+    )
+    TO 'folks.csv' (HEADER, DELIMITER ',');
+    ```
 
+11. Close the SQL connection.
 
-
+    ```{r, echo=FALSE, eval=TRUE}
+    dbDisconnect(conn = starcon, shutdown = TRUE)
+    ```
