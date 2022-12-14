@@ -56,6 +56,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [06 Seaborn.objects](./06_python/06_seaborn_objects.html).
 - 07 Introduction to SQL
     - [07 SQL](./07_sql/07_sql.html).
+    - [07 DBeaver](./07_sql/07_dbeaver.html).
 - 08 Introduction to Spark
     - [08 Spark](./08_spark/08_spark.html).
 - 09 GNU Make
