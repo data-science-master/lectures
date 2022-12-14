@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-09" />
+<meta name="date" content="2022-12-14" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-09</h4>
+<h4 class="date">2022-12-14</h4>
 
 </div>
 
@@ -360,7 +360,8 @@ display: none;
 <ul>
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning
 Objectives</a></li>
-<li><a href="#sql-introduction-and-setup" id="toc-sql-introduction-and-setup">SQL Introduction and SetUp</a></li>
+<li><a href="#sql-introduction-and-motivation" id="toc-sql-introduction-and-motivation">SQL Introduction and
+Motivation</a></li>
 <li><a href="#duckdb" id="toc-duckdb">DuckDB</a></li>
 <li><a href="#basic-sql" id="toc-basic-sql">Basic SQL</a>
 <ul>
@@ -377,13 +378,9 @@ Summaries</a></li>
 <li><a href="#recoding" id="toc-recoding">Recoding</a></li>
 <li><a href="#joining" id="toc-joining">Joining</a></li>
 <li><a href="#creating-some-tables" id="toc-creating-some-tables">Creating some Tables</a></li>
-<li><a href="#tidyr-stuff" id="toc-tidyr-stuff">Tidyr stuff</a>
-<ul>
-<li><a href="#gathering" id="toc-gathering">Gathering</a></li>
-<li><a href="#spreading" id="toc-spreading">Spreading</a></li>
-<li><a href="#separating" id="toc-separating">Separating</a></li>
-<li><a href="#uniting" id="toc-uniting">Uniting</a></li>
-</ul></li>
+<li><a href="#tidyr-stuff" id="toc-tidyr-stuff">Tidyr stuff</a></li>
+<li><a href="#writing-tables-to-a-csv-file" id="toc-writing-tables-to-a-csv-file">Writing Tables to a CSV
+File</a></li>
 </ul></li>
 <li><a href="#calling-sql-from-r" id="toc-calling-sql-from-r">Calling
 SQL from R</a></li>
@@ -413,14 +410,33 @@ package.
 </ul></li>
 </ul>
 </div>
-<div id="sql-introduction-and-setup" class="section level1">
-<h1>SQL Introduction and SetUp</h1>
+<div id="sql-introduction-and-motivation" class="section level1">
+<h1>SQL Introduction and Motivation</h1>
 <ul>
 <li><p>SQL is pronounced either “ess-kew-ell” or “sequel” (either is
 fine).</p></li>
 <li><p>SQL is a programming language which basically allows you to do a
 lot that dplyr does (filters, selects, joins, etc…). It is the industry
 standard for interacting with a relational database.</p></li>
+<li><p>You all are experts in data munging once a dataset has been
+downloaded.</p></li>
+<li><p>But, many datasets live in a relational database which is too
+huge to download onto your computer.</p></li>
+<li><p>A common task for a data scientist is to download a subset of
+this huge database so that they can explore it on their
+computer.</p></li>
+<li><p>SQL is how you download this subset. You choose which data frames
+(“tables” in SQL) to download, what subsets of these tables to download
+(by filtering rows), and whether to join tables together in this
+process.</p></li>
+<li><p>We will use R Studio in this lesson. But if you get really into
+SQL, a popular IDE is <a href="https://dbeaver.io/">DBeaver</a>, with a
+tutorial from DuckDB <a href="https://duckdb.org/docs/guides/sql_editors/dbeaver">here</a>.</p></li>
+</ul>
+</div>
+<div id="duckdb" class="section level1">
+<h1>DuckDB</h1>
+<ul>
 <li><p>There are a lots of <a href="https://en.wikipedia.org/wiki/Database#Database_management_system">database
 management systems</a> (DBMS) that use SQL to connect to their
 databases.</p></li>
@@ -430,11 +446,6 @@ dependencies and is pretty easy to install. Just do this in R:</p>
 <pre class="r"><code>install.packages(&quot;duckdb&quot;)</code></pre></li>
 <li><p>The most popular DBMS is probably <a href="https://www.sqlite.org/index.html">SQLite</a>. Other popular ones
 are <a href="https://www.mysql.com/">MySQL</a> and <a href="https://www.postgresql.org/">PostgreSQL</a>.</p></li>
-</ul>
-</div>
-<div id="duckdb" class="section level1">
-<h1>DuckDB</h1>
-<ul>
 <li><p>DuckDB is a specific SQL backend. The R package that is used to
 connect to any SQL backend is <code>{DBI}</code>, and so we will load
 that one too.</p>
@@ -470,6 +481,8 @@ standard to have all statements be in UPPERCASE
 <li><p>The statements below <strong>must</strong> be in the following
 order: <code>SELECT</code>, <code>FROM</code>, <code>WHERE</code>,
 <code>GROUP BY</code>, <code>ORDER BY</code>.</p></li>
+<li><p>New lines and white space don’t matter. But it is common to put
+those five commands above on new lines.</p></li>
 <li><p>Character values must be in single quotes.</p></li>
 <li><p>You can use invalid variable names by putting them in double
 quotes (same as using backticks in R).</p>
@@ -479,6 +492,9 @@ what is an invalid variable name in the database management system. This
 is what I do below.</li>
 </ul></li>
 <li><p>Comments in SQL have two hyphens <code>--</code>.</p></li>
+<li><p>Make sure to put a semicolon <code>;</code> at the end of a SQL
+statement. This will allow you to have multiple SQL queries in one
+chunk.</p></li>
 </ul>
 </div>
 <div id="showing-tables" class="section level2">
@@ -487,7 +503,7 @@ is what I do below.</li>
 <li><p>The <code>SHOW TABLES</code> command can be used to get a list of
 all of the tables</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SHOW TABLES</code></pre>
+<pre class="sql"><code>SHOW TABLES;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>5 records</caption>
@@ -518,7 +534,7 @@ all of the tables</p>
 <li><p>The <code>DESCRIBE</code> command can be used to show tables and
 the variables.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>DESCRIBE</code></pre>
+<pre class="sql"><code>DESCRIBE;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>5 records</caption>
@@ -591,12 +607,14 @@ DOUBLE , INTEGER</td>
 command.</p></li>
 <li><p>The syntax is like this</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &lt;column1&gt;, &lt;column2&gt;, &lt;column3&gt; FROM &lt;mytable&gt;</code></pre></li>
+<pre class="sql"><code>SELECT &lt;column1&gt;, &lt;column2&gt;, &lt;column3&gt; 
+FROM &lt;mytable&gt;;</code></pre></li>
 <li><p>Let’s use this to get the <code>tailnum</code>,
 <code>year</code>, and <code>model</code> variables from the
 <code>planes</code> table.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;tailnum&quot;, &quot;year&quot;, &quot;model&quot; FROM planes</code></pre>
+<pre class="sql"><code>SELECT &quot;tailnum&quot;, &quot;year&quot;, &quot;model&quot; 
+FROM planes;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -667,7 +685,8 @@ command.</p></li>
   select(tailnum, year, model)</code></pre></li>
 <li><p>You select every column by using <code>*</code>:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT * FROM planes</code></pre>
+<pre class="sql"><code>SELECT * 
+FROM planes;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -823,8 +842,9 @@ want.</p></li>
 <li><p>You use the <code>WHERE</code> command in SQL to filter by
 rows.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
-    WHERE &quot;distance&quot; &lt; 50</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot;, &quot;origin&quot;, &quot;dest&quot; 
+FROM flights
+WHERE &quot;distance&quot; &lt; 50;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -853,8 +873,9 @@ rows.</p>
   filter(distance &lt; 50)</code></pre></li>
 <li><p>To test for equality, you just use one equals sign.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;month&quot; FROM flights
-    WHERE &quot;month&quot; = 12</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;month&quot; 
+FROM flights
+WHERE &quot;month&quot; = 12;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -916,8 +937,9 @@ rows.</p>
 <li><p>For characters you <strong>must use single quotes</strong>, not
 double.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot; FROM flights
-    WHERE &quot;origin&quot; = &#39;JFK&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot; 
+FROM flights
+WHERE &quot;origin&quot; = &#39;JFK&#39;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -979,8 +1001,9 @@ double.</p>
 <li><p>You can select multiple criteria using the <code>AND</code>
 command</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
-    WHERE &quot;origin&quot; = &#39;JFK&#39; AND &quot;dest&quot; = &#39;CMH&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; 
+FROM flights
+WHERE &quot;origin&quot; = &#39;JFK&#39; AND &quot;dest&quot; = &#39;CMH&#39;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1053,8 +1076,9 @@ command</p>
 <li><p>You can use the <code>OR</code> logical operator too. Just put
 parentheses around your desired order of operations.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; FROM flights
-    WHERE (&quot;origin&quot; = &#39;JFK&#39; OR &quot;origin&quot; = &#39;LGA&#39;) AND dest = &#39;CMH&#39;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dest&quot; 
+FROM flights
+WHERE (&quot;origin&quot; = &#39;JFK&#39; OR &quot;origin&quot; = &#39;LGA&#39;) AND dest = &#39;CMH&#39;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1127,8 +1151,9 @@ parentheses around your desired order of operations.</p>
 <li><p>Missing data is <code>NULL</code> in SQL (instead of
 <code>NA</code>). We can remove them by the special command:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
-    WHERE &quot;dep_delay&quot; IS NOT NULL</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; 
+FROM flights
+WHERE &quot;dep_delay&quot; IS NOT NULL;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1190,8 +1215,9 @@ parentheses around your desired order of operations.</p>
 <li><p>Just use <code>IS</code> if you want only the missing data
 observations</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
-    WHERE &quot;dep_delay&quot; IS NULL</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; 
+FROM flights
+WHERE &quot;dep_delay&quot; IS NULL;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1253,9 +1279,10 @@ observations</p>
 <li><p>Use <code>ORDER BY</code> to rearrange the rows (let’s remove
 missing values so we can see the ordering)</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>select &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
-    WHERE &quot;dep_delay&quot; IS NOT NULL
-    ORDER BY &quot;dep_delay&quot;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; 
+FROM flights
+WHERE &quot;dep_delay&quot; IS NOT NULL
+ORDER BY &quot;dep_delay&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1318,9 +1345,10 @@ missing values so we can see the ordering)</p>
 <li><p>Use <code>DESC</code> after the variable to arrange in descending
 order</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; FROM flights
-    WHERE &quot;dep_delay&quot; IS NOT NULL
-    ORDER BY &quot;dep_delay&quot; DESC</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;dep_delay&quot; 
+FROM flights
+WHERE &quot;dep_delay&quot; IS NOT NULL
+ORDER BY &quot;dep_delay&quot; DESC;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1383,9 +1411,10 @@ order</p>
 <li><p>You break ties by adding more variables in the
 <code>ORDER BY</code> statement</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dep_delay&quot; FROM flights
-    WHERE &quot;dep_delay&quot; IS NOT NULL
-    ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dep_delay&quot; 
+FROM flights
+WHERE &quot;dep_delay&quot; IS NOT NULL
+ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1428,22 +1457,22 @@ order</p>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">375</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="even">
-<td align="right">4065</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="odd">
 <td align="right">2223</td>
 <td align="left">LGA</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">3473</td>
+<td align="right">375</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="odd">
+<td align="right">4065</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">1371</td>
 <td align="left">LGA</td>
 <td align="right">-23</td>
 </tr>
@@ -1465,12 +1494,14 @@ order</p>
 <code>AS</code> to specify what the new variable is called (choosing a
 variable name is called “aliasing” in SQL).</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &lt;expression&gt; AS &lt;myvariable&gt; FROM &lt;mytable&gt;</code></pre></li>
+<pre class="sql"><code>SELECT &lt;expression&gt; AS &lt;myvariable&gt; 
+FROM &lt;mytable&gt;;</code></pre></li>
 <li><p>Let’s calculate average speed from the <code>flights</code>
 table. We’ll also keep the flight number, distance, and air time
 variables.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot; / &quot;air_time&quot; AS &quot;speed&quot;, &quot;distance&quot;, &quot;air_time&quot; FROM flights</code></pre>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;distance&quot; / &quot;air_time&quot; AS &quot;speed&quot;, &quot;distance&quot;, &quot;air_time&quot; 
+FROM flights;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1583,7 +1614,8 @@ variables.</p>
 <li><p>These are calculated in a <code>SELECT</code> command</p></li>
 <li><p>Let’s calculate the average departue delay</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT AVG(&quot;dep_delay&quot;) AS &quot;dep_delay&quot; FROM flights</code></pre>
+<pre class="sql"><code>SELECT AVG(&quot;dep_delay&quot;) AS &quot;dep_delay&quot; 
+FROM flights;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>1 records</caption>
@@ -1607,8 +1639,8 @@ variables.</p>
 summaries.</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &quot;origin&quot;, AVG(&quot;dep_delay&quot;)
-    FROM flights
-    GROUP BY &quot;origin&quot;</code></pre>
+FROM flights
+GROUP BY &quot;origin&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>3 records</caption>
@@ -1649,11 +1681,11 @@ summaries.</p>
 recode values</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, CASE
-          WHEN (&quot;origin&quot; = &#39;JFK&#39;) THEN &#39;John F. Kennedy&#39;
-          WHEN (&quot;origin&quot; = &#39;LGA&#39;) THEN &#39;LaGaurdia&#39;
-          WHEN (&quot;origin&quot; = &#39;EWR&#39;) THEN &#39;Newark Liberty&#39;
-          END AS &quot;olong&quot;
-    FROM flights</code></pre>
+    WHEN (&quot;origin&quot; = &#39;JFK&#39;) THEN &#39;John F. Kennedy&#39;
+    WHEN (&quot;origin&quot; = &#39;LGA&#39;) THEN &#39;LaGaurdia&#39;
+    WHEN (&quot;origin&quot; = &#39;EWR&#39;) THEN &#39;Newark Liberty&#39;
+    END AS &quot;olong&quot;
+FROM flights;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1741,10 +1773,10 @@ flights %&gt;%
 based on other logical operations</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
 <pre class="sql"><code>SELECT &quot;flight&quot;, &quot;air_time&quot;, CASE
-          WHEN (&quot;air_time&quot; &gt; 2500) THEN &#39;Long&#39;
-          WHEN (&quot;air_time&quot; &lt;= 2500) THEN &#39;Short&#39;
-          END AS &quot;qual_dist&quot;
-    FROM flights</code></pre>
+    WHEN (&quot;air_time&quot; &gt; 2500) THEN &#39;Long&#39;
+    WHEN (&quot;air_time&quot; &lt;= 2500) THEN &#39;Short&#39;
+    END AS &quot;qual_dist&quot;
+FROM flights;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1843,7 +1875,7 @@ etc…</p></li>
 SELECT &quot;flight&quot;, flights.&quot;tailnum&quot;, &quot;type&quot; 
 FROM flights
 JOIN planes
-ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;</code></pre>
+ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1856,53 +1888,53 @@ ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">461</td>
-<td align="left">N693DL</td>
+<td align="right">67</td>
+<td align="left">N16713</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">569</td>
-<td align="left">N846UA</td>
+<td align="right">373</td>
+<td align="left">N659JB</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">4424</td>
-<td align="left">N19966</td>
+<td align="right">764</td>
+<td align="left">N665UA</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">731</td>
-<td align="left">N319NB</td>
+<td align="right">2171</td>
+<td align="left">N747UW</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">684</td>
-<td align="left">N809UA</td>
+<td align="right">366</td>
+<td align="left">N414WN</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">1279</td>
-<td align="left">N328NB</td>
+<td align="right">1550</td>
+<td align="left">N14228</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">1691</td>
-<td align="left">N34137</td>
+<td align="right">4694</td>
+<td align="left">N14993</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">1447</td>
-<td align="left">N117UW</td>
+<td align="right">1647</td>
+<td align="left">N689DL</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">583</td>
-<td align="left">N632JB</td>
+<td align="right">1183</td>
+<td align="left">N87512</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">3574</td>
-<td align="left">N790SW</td>
+<td align="right">24</td>
+<td align="left">N197JB</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 </tbody>
@@ -1941,12 +1973,11 @@ flights %&gt;%
 <div id="creating-some-tables" class="section level2">
 <h2>Creating some Tables</h2>
 <ul>
+<li><p>You can create tables using SQL.</p></li>
 <li><p>Let’s create a new, temporary, connection that we can put some
 example tables in.</p>
 <p><mark style="background-color: lightblue">R</mark></p>
 <pre class="r"><code>tmpcon &lt;- dbConnect(duckdb())</code></pre></li>
-<li><p>For the gathering, spreading, separating, and uniting sections, I
-will use the <code>tmpcon</code> connection.</p></li>
 <li><p>You can use <code>CREATE TABLE</code> to declare new tables and
 <code>INSERT INTO</code> to insert new rows into that table.</p>
 <ul>
@@ -1980,7 +2011,7 @@ data(&quot;table5&quot;, package = &quot;tidyr&quot;)
 dbWriteTable(conn = tmpcon, name = &quot;table5&quot;, value = table5)</code></pre></li>
 <li><p>Here they are:</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>DESCRIBE</code></pre>
+<pre class="sql"><code>DESCRIBE;</code></pre>
 <div class="knitsql-table">
 <table style="width:100%;">
 <caption>6 records</caption>
@@ -2052,353 +2083,34 @@ etc).</p></li>
 <li><p>It’s still possible to spread and gather (but not separate and
 unite), but a huge pain and folks don’t typically do it.</p></li>
 </ul>
-<div id="gathering" class="section level3">
-<h3>Gathering</h3>
-<ul>
-<li><p>SQL folk call “gathering” as “unpivoting”, so that is what you
-need to Google.</p></li>
-<li><p><code>table4a</code> needs to be gathered:</p>
-<p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT * FROM table4a</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>3 records</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="right">1999</th>
-<th align="right">2000</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="right">745</td>
-<td align="right">2666</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="right">37737</td>
-<td align="right">80488</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="right">212258</td>
-<td align="right">213766</td>
-</tr>
-</tbody>
-</table>
-</div></li>
-<li><p>The way to do this is to do an row-bind from two constructed
-tables.</p></li>
-<li><p>Here is the first table</p>
-<pre class="sql"><code>SELECT &quot;country&quot;, &#39;1999&#39; AS &quot;year&quot;, &quot;1999&quot; AS count
-FROM table4a</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>3 records</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="left">year</th>
-<th align="right">count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">1999</td>
-<td align="right">745</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="left">1999</td>
-<td align="right">37737</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="left">1999</td>
-<td align="right">212258</td>
-</tr>
-</tbody>
-</table>
 </div>
+<div id="writing-tables-to-a-csv-file" class="section level2">
+<h2>Writing Tables to a CSV File</h2>
 <ul>
-<li><p>Notice that <code>&#39;1999&#39; AS year</code> creates a new column
-called <code>year</code> that has just the value
-<code>1999</code>.</p></li>
-<li><p>Notice that <code>&quot;1999&quot; AS count</code> just renames the
-<code>&quot;1999&quot;</code> column to be the <code>&quot;count&quot;</code>
-column</p></li>
-</ul></li>
-<li><p>Here is the second table</p>
-<pre class="sql"><code>SELECT &quot;country&quot;, &#39;2000&#39; AS &quot;year&quot;, &quot;2000&quot; AS count
-FROM table4a</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>3 records</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="left">year</th>
-<th align="right">count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">2000</td>
-<td align="right">2666</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="left">2000</td>
-<td align="right">80488</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="left">2000</td>
-<td align="right">213766</td>
-</tr>
-</tbody>
-</table>
-</div></li>
-<li><p>Use <code>UNION ALL</code> to bind the rows</p>
-<pre class="sql"><code>(
-  SELECT &quot;country&quot;, &#39;1999&#39; AS &quot;year&quot;, &quot;1999&quot; AS count
-  FROM table4a
-)
-UNION ALL
+<li><p>You can use <code>COPY</code> <code>TO</code> to write the
+outputs of a SQL query to a CSV file.</p></li>
+<li><p>The syntax for this is</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>COPY
 (
-  SELECT &quot;country&quot;, &#39;2000&#39; AS &quot;year&quot;, &quot;2000&quot; AS count
-  FROM table4a
-)</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>6 records</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="left">year</th>
-<th align="right">count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="left">1999</td>
-<td align="right">745</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="left">1999</td>
-<td align="right">37737</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="left">1999</td>
-<td align="right">212258</td>
-</tr>
-<tr class="even">
-<td align="left">Afghanistan</td>
-<td align="left">2000</td>
-<td align="right">2666</td>
-</tr>
-<tr class="odd">
-<td align="left">Brazil</td>
-<td align="left">2000</td>
-<td align="right">80488</td>
-</tr>
-<tr class="even">
-<td align="left">China</td>
-<td align="left">2000</td>
-<td align="right">213766</td>
-</tr>
-</tbody>
-</table>
-</div></li>
-<li><p>R way:</p>
-<p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>table4a %&gt;%
-  gather(`1999`, `2000`, key = &quot;year&quot;, value = &quot;count&quot;)
-
-## or
-table4a %&gt;%
-  pivot_longer(cols = c(&quot;1999&quot;, &quot;2000&quot;), names_to = &quot;year&quot;, values_to = &quot;count&quot;)</code></pre></li>
-</ul>
-</div>
-<div id="spreading" class="section level3">
-<h3>Spreading</h3>
-<ul>
-<li><p>“country” and “year” are the ID columns, “type” is the name
-column, and “count” is the values column.</p>
+Your SQL query goes here
+)
+TO &#39;myfile.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
+<li><p>Let’s write some group summaries to a CSV file</p>
 <p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT * FROM table2</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>Displaying records 1 - 10</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="right">year</th>
-<th align="left">type</th>
-<th align="right">count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="right">1999</td>
-<td align="left">cases</td>
-<td align="right">7.450e+02</td>
-</tr>
-<tr class="even">
-<td align="left">Afghanistan</td>
-<td align="right">1999</td>
-<td align="left">population</td>
-<td align="right">1.999e+07</td>
-</tr>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="right">2000</td>
-<td align="left">cases</td>
-<td align="right">2.666e+03</td>
-</tr>
-<tr class="even">
-<td align="left">Afghanistan</td>
-<td align="right">2000</td>
-<td align="left">population</td>
-<td align="right">2.060e+07</td>
-</tr>
-<tr class="odd">
-<td align="left">Brazil</td>
-<td align="right">1999</td>
-<td align="left">cases</td>
-<td align="right">3.774e+04</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="right">1999</td>
-<td align="left">population</td>
-<td align="right">1.720e+08</td>
-</tr>
-<tr class="odd">
-<td align="left">Brazil</td>
-<td align="right">2000</td>
-<td align="left">cases</td>
-<td align="right">8.049e+04</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="right">2000</td>
-<td align="left">population</td>
-<td align="right">1.745e+08</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="right">1999</td>
-<td align="left">cases</td>
-<td align="right">2.123e+05</td>
-</tr>
-<tr class="even">
-<td align="left">China</td>
-<td align="right">1999</td>
-<td align="left">population</td>
-<td align="right">1.273e+09</td>
-</tr>
-</tbody>
-</table>
-</div></li>
-<li><p>Spreading (or “pivoting”) is a pain in SQL:</p>
-<p><mark style="background-color: #e24e2f">SQL</mark></p>
-<pre class="sql"><code>SELECT &quot;country&quot;, &quot;year&quot;,
-       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;cases&#39;) AS &quot;cases&quot;,
-       MAX(&quot;count&quot;) FILTER (WHERE &quot;type&quot; = &#39;population&#39;) AS &quot;population&quot;
-    FROM table2
-    GROUP BY &quot;country&quot;, &quot;year&quot;</code></pre>
-<div class="knitsql-table">
-<table>
-<caption>6 records</caption>
-<thead>
-<tr class="header">
-<th align="left">country</th>
-<th align="right">year</th>
-<th align="right">cases</th>
-<th align="right">population</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Afghanistan</td>
-<td align="right">1999</td>
-<td align="right">745</td>
-<td align="right">1.999e+07</td>
-</tr>
-<tr class="even">
-<td align="left">Afghanistan</td>
-<td align="right">2000</td>
-<td align="right">2666</td>
-<td align="right">2.060e+07</td>
-</tr>
-<tr class="odd">
-<td align="left">Brazil</td>
-<td align="right">1999</td>
-<td align="right">37737</td>
-<td align="right">1.720e+08</td>
-</tr>
-<tr class="even">
-<td align="left">Brazil</td>
-<td align="right">2000</td>
-<td align="right">80488</td>
-<td align="right">1.745e+08</td>
-</tr>
-<tr class="odd">
-<td align="left">China</td>
-<td align="right">1999</td>
-<td align="right">212258</td>
-<td align="right">1.273e+09</td>
-</tr>
-<tr class="even">
-<td align="left">China</td>
-<td align="right">2000</td>
-<td align="right">213766</td>
-<td align="right">1.280e+09</td>
-</tr>
-</tbody>
-</table>
-</div></li>
-<li><p>The idea is that we calculate separate summary statistics for
-each combination of “country” and “year”.</p>
-<ul>
-<li>One where the observations are ‘cases’ and one where the
-observations are ‘population’.</li>
-<li>This summary statistic is of a single value — itself.</li>
-<li>I chose <code>MAX</code>, but it could have been <code>MIN</code> or
-even <code>SUM</code> or <code>AVG</code>. This is because they all
-return the same value if you give it only one observation.</li>
-</ul></li>
-<li><p>R way:</p>
-<p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>table2 %&gt;%
-  spread(key = type, value = count)
-
-## Or
-table2 %&gt;%
-  pivot_wider(names_from = &quot;type&quot;, values_from = &quot;count&quot;, id_cols = c(&quot;country&quot;, &quot;year&quot;))</code></pre></li>
+<pre class="sql"><code>COPY
+(
+SELECT &quot;origin&quot;, AVG(&quot;dep_delay&quot;)
+FROM flights
+GROUP BY &quot;origin&quot;
+)
+TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
+<li><p>This is what the resulting file looks like:</p>
+<pre><code>## origin,avg(dep_delay)
+## LGA,10.3468756464944
+## EWR,15.10795435218885
+## JFK,12.112159099217665</code></pre></li>
 </ul>
-</div>
-<div id="separating" class="section level3">
-<h3>Separating</h3>
-<ul>
-<li>No simple SQL way that I am aware of for separating.</li>
-</ul>
-</div>
-<div id="uniting" class="section level3">
-<h3>Uniting</h3>
-<ul>
-<li>No simple SQL way that I am aware of for uniting.</li>
-</ul>
-</div>
 </div>
 </div>
 <div id="calling-sql-from-r" class="section level1">
@@ -2424,7 +2136,7 @@ glimpse(planes2)</code></pre>
 “.sql”).</p></li>
 <li><p>E.g., here is what is in “query.sql”:</p>
 <pre><code>-- Just gets some planes
-SELECT * FROM planes</code></pre></li>
+SELECT * FROM planes;</code></pre></li>
 <li><p>If you want to load the results of a SQL query in R, saved in
 “query.sql”, do</p>
 <p><mark style="background-color: lightblue">R</mark></p>

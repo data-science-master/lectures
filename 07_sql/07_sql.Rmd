@@ -44,11 +44,23 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - `{dbplyr}` and SQL: <https://dbplyr.tidyverse.org/articles/sql.html>
     - R for Data Science Database Chapter: <https://r4ds.hadley.nz/databases.html>
 
-# SQL Introduction and SetUp
+# SQL Introduction and Motivation
 
 - SQL is pronounced either "ess-kew-ell" or "sequel" (either is fine).
 
 - SQL is a programming language which basically allows you to do a lot that dplyr does (filters, selects, joins, etc...). It is the industry standard for interacting with a relational database.
+
+- You all are experts in data munging once a dataset has been downloaded.
+
+- But, many datasets live in a relational database which is too huge to download onto your computer.
+
+- A common task for a data scientist is to download a subset of this huge database so that they can explore it on their computer.
+
+- SQL is how you download this subset. You choose which data frames ("tables" in SQL) to download, what subsets of these tables to download (by filtering rows), and whether to join tables together in this process.
+
+- We will use R Studio in this lesson. But if you get really into SQL, a popular IDE is [DBeaver](https://dbeaver.io/), with a tutorial from DuckDB [here](https://duckdb.org/docs/guides/sql_editors/dbeaver).
+
+# DuckDB
 
 - There are a lots of [database management systems](https://en.wikipedia.org/wiki/Database#Database_management_system) (DBMS) that use SQL to connect to their databases.
 
@@ -61,8 +73,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 - The most popular DBMS is probably [SQLite](https://www.sqlite.org/index.html). Other popular ones are [MySQL](https://www.mysql.com/) and [PostgreSQL](https://www.postgresql.org/).
-
-# DuckDB
 
 - DuckDB is a specific SQL backend. The R package that is used to connect to any SQL backend is `{DBI}`, and so we will load that one too.
 
@@ -104,6 +114,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - The statements below **must** be in the following order: `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `ORDER BY`.
 
+- New lines and white space don't matter. But it is common to put those five commands above on new lines.
+
 - Character values must be in single quotes.
 
 - You can use invalid variable names by putting them in double quotes (same as using backticks in R).
@@ -111,20 +123,22 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Comments in SQL have two hyphens `--`.
 
+- Make sure to put a semicolon `;` at the end of a SQL statement. This will allow you to have multiple SQL queries in one chunk.
+
 ## Showing Tables
 
 - The `SHOW TABLES` command can be used to get a list of all of the tables
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SHOW TABLES
+    SHOW TABLES;
     ```
 
 - The `DESCRIBE` command can be used to show tables and the variables.
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    DESCRIBE
+    DESCRIBE;
     ```
 
 ## Select Specific Columns
@@ -136,14 +150,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     
     ``` sql
-    SELECT <column1>, <column2>, <column3> FROM <mytable>
+    SELECT <column1>, <column2>, <column3> 
+    FROM <mytable>;
     ```
     
 - Let's use this to get the `tailnum`, `year`, and `model` variables from the `planes` table.
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "tailnum", "year", "model" FROM planes
+    SELECT "tailnum", "year", "model" 
+    FROM planes;
     ```
 
 - R equivalent
@@ -158,7 +174,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT * FROM planes
+    SELECT * 
+    FROM planes;
     ```
 
 - R equivalent
@@ -176,8 +193,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "distance", "origin", "dest" FROM flights
-        WHERE "distance" < 50
+    SELECT "flight", "distance", "origin", "dest" 
+    FROM flights
+    WHERE "distance" < 50;
     ```
     
 - R equivalent:
@@ -194,8 +212,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "month" FROM flights
-        WHERE "month" = 12
+    SELECT "flight", "month" 
+    FROM flights
+    WHERE "month" = 12;
     ```
 
 - R equivalent
@@ -212,8 +231,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "origin" FROM flights
-        WHERE "origin" = 'JFK'
+    SELECT "flight", "origin" 
+    FROM flights
+    WHERE "origin" = 'JFK';
     ```
     
 - R equivalent
@@ -230,8 +250,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "origin", "dest" FROM flights
-        WHERE "origin" = 'JFK' AND "dest" = 'CMH'
+    SELECT "flight", "origin", "dest" 
+    FROM flights
+    WHERE "origin" = 'JFK' AND "dest" = 'CMH';
     ```
 
 - R equivalent:
@@ -248,8 +269,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "origin", "dest" FROM flights
-        WHERE ("origin" = 'JFK' OR "origin" = 'LGA') AND dest = 'CMH'
+    SELECT "flight", "origin", "dest" 
+    FROM flights
+    WHERE ("origin" = 'JFK' OR "origin" = 'LGA') AND dest = 'CMH';
     ```
 
 - R equivalent
@@ -265,8 +287,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "dep_delay" FROM flights
-        WHERE "dep_delay" IS NOT NULL
+    SELECT "flight", "dep_delay" 
+    FROM flights
+    WHERE "dep_delay" IS NOT NULL;
     ```
 
 - R equivalent
@@ -282,8 +305,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "dep_delay" FROM flights
-        WHERE "dep_delay" IS NULL
+    SELECT "flight", "dep_delay" 
+    FROM flights
+    WHERE "dep_delay" IS NULL;
     ```
 
 ## Arranging Rows
@@ -292,9 +316,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    select "flight", "dep_delay" FROM flights
-        WHERE "dep_delay" IS NOT NULL
-        ORDER BY "dep_delay"
+    SELECT "flight", "dep_delay" 
+    FROM flights
+    WHERE "dep_delay" IS NOT NULL
+    ORDER BY "dep_delay";
     ```
 
 - R equivalent
@@ -311,9 +336,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "dep_delay" FROM flights
-        WHERE "dep_delay" IS NOT NULL
-        ORDER BY "dep_delay" DESC
+    SELECT "flight", "dep_delay" 
+    FROM flights
+    WHERE "dep_delay" IS NOT NULL
+    ORDER BY "dep_delay" DESC;
     ```
 
 - R equivalent
@@ -330,9 +356,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "origin", "dep_delay" FROM flights
-        WHERE "dep_delay" IS NOT NULL
-        ORDER BY "origin" desc, "dep_delay"
+    SELECT "flight", "origin", "dep_delay" 
+    FROM flights
+    WHERE "dep_delay" IS NOT NULL
+    ORDER BY "origin" desc, "dep_delay";
     ```
 
 - R equivalent
@@ -352,14 +379,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     
     ``` sql
-    SELECT <expression> AS <myvariable> FROM <mytable>
+    SELECT <expression> AS <myvariable> 
+    FROM <mytable>;
     ```
 
 - Let's calculate average speed from the `flights` table. We'll also keep the flight number, distance, and air time variables.
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT "flight", "distance" / "air_time" AS "speed", "distance", "air_time" FROM flights
+    SELECT "flight", "distance" / "air_time" AS "speed", "distance", "air_time" 
+    FROM flights;
     ```
 
 - R equivalent:
@@ -399,7 +428,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
-    SELECT AVG("dep_delay") AS "dep_delay" FROM flights
+    SELECT AVG("dep_delay") AS "dep_delay" 
+    FROM flights;
     ```
 
 - R equivalent:
@@ -415,8 +445,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
     SELECT "origin", AVG("dep_delay")
-        FROM flights
-        GROUP BY "origin"
+    FROM flights
+    GROUP BY "origin";
     ```
 
 - R equivalent
@@ -436,11 +466,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
     SELECT "flight", "origin", CASE
-              WHEN ("origin" = 'JFK') THEN 'John F. Kennedy'
-              WHEN ("origin" = 'LGA') THEN 'LaGaurdia'
-              WHEN ("origin" = 'EWR') THEN 'Newark Liberty'
-              END AS "olong"
-        FROM flights
+        WHEN ("origin" = 'JFK') THEN 'John F. Kennedy'
+        WHEN ("origin" = 'LGA') THEN 'LaGaurdia'
+        WHEN ("origin" = 'EWR') THEN 'Newark Liberty'
+        END AS "olong"
+    FROM flights;
     ```
 
 - R equivalent:
@@ -471,10 +501,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=con}
     SELECT "flight", "air_time", CASE
-              WHEN ("air_time" > 2500) THEN 'Long'
-              WHEN ("air_time" <= 2500) THEN 'Short'
-              END AS "qual_dist"
-        FROM flights
+        WHEN ("air_time" > 2500) THEN 'Long'
+        WHEN ("air_time" <= 2500) THEN 'Short'
+        END AS "qual_dist"
+    FROM flights;
     ```
     
 - R equivalent:
@@ -511,7 +541,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     SELECT "flight", flights."tailnum", "type" 
     FROM flights
     JOIN planes
-    ON flights."tailnum" = planes."tailnum"
+    ON flights."tailnum" = planes."tailnum";
     ```
 
 - R equivalent:
@@ -533,14 +563,14 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Creating some Tables
 
+- You can create tables using SQL.
+
 - Let's create a new, temporary, connection that we can put some example tables in.
 
     <mark style="background-color: lightblue">R</mark>
     ```{r}
     tmpcon <- dbConnect(duckdb())
     ```
-
-- For the gathering, spreading, separating, and uniting sections, I will use the `tmpcon` connection.
 
 - You can use `CREATE TABLE` to declare new tables and `INSERT INTO` to insert new rows into that table. 
     - Note that I am putting a semicolon "`;`" after each SQL call in the same code chunk.
@@ -580,7 +610,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: #e24e2f">SQL</mark>
     ```{sql, connection=tmpcon}
-    DESCRIBE
+    DESCRIBE;
     ```
 
 ## Tidyr stuff
@@ -593,105 +623,40 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - It's still possible to spread and gather (but not separate and unite), but a huge pain and folks don't typically do it.
 
-### Gathering
+## Writing Tables to a CSV File
 
-- SQL folk call "gathering" as "unpivoting", so that is what you need to Google.
+- You can use `COPY` `TO` to write the outputs of a SQL query to a CSV file.
 
-- `table4a` needs to be gathered:
+- The syntax for this is
 
     <mark style="background-color: #e24e2f">SQL</mark>
-    ```{sql, connection=tmpcon}
-    SELECT * FROM table4a
-    ```
-
-
-- The way to do this is to do an row-bind from two constructed tables.
-
-- Here is the first table
-    ```{sql, connection=tmpcon}
-    SELECT "country", '1999' AS "year", "1999" AS count
-    FROM table4a
-    ```
     
-    - Notice that `'1999' AS year` creates a new column called `year` that has just the value `1999`.
-
-    - Notice that `"1999" AS count` just renames the `"1999"` column to be the `"count"` column
-
-- Here is the second table
-    ```{sql, connection=tmpcon}
-    SELECT "country", '2000' AS "year", "2000" AS count
-    FROM table4a
-    ```
-    
-- Use `UNION ALL` to bind the rows
-    ```{sql, connection=tmpcon}
+    ``` sql
+    COPY
     (
-      SELECT "country", '1999' AS "year", "1999" AS count
-      FROM table4a
+    Your SQL query goes here
     )
-    UNION ALL
+    TO 'myfile.csv' (HEADER, DELIMITER ',');
+    ```
+
+- Let's write some group summaries to a CSV file
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    COPY
     (
-      SELECT "country", '2000' AS "year", "2000" AS count
-      FROM table4a
+    SELECT "origin", AVG("dep_delay")
+    FROM flights
+    GROUP BY "origin"
     )
+    TO 'summaries.csv' (HEADER, DELIMITER ',');
     ```
 
-- R way:
+- This is what the resulting file looks like:
 
-    <mark style="background-color: lightblue">R</mark>
-    ```{r, eval = FALSE}
-    table4a %>%
-      gather(`1999`, `2000`, key = "year", value = "count")
-    
-    ## or
-    table4a %>%
-      pivot_longer(cols = c("1999", "2000"), names_to = "year", values_to = "count")
+    ```{r, echo = FALSE}
+    writeLines(readLines("./summaries.csv"))
     ```
-
-### Spreading
-
-- "country" and "year" are the ID columns, "type" is the name column, and "count" is the values column.
-    
-    <mark style="background-color: #e24e2f">SQL</mark>
-    ```{sql, connection=tmpcon}
-    SELECT * FROM table2
-    ```
-
-- Spreading (or "pivoting") is a pain in SQL:
-
-    <mark style="background-color: #e24e2f">SQL</mark>
-    ```{sql, connection=tmpcon}
-    SELECT "country", "year",
-           MAX("count") FILTER (WHERE "type" = 'cases') AS "cases",
-           MAX("count") FILTER (WHERE "type" = 'population') AS "population"
-        FROM table2
-        GROUP BY "country", "year"
-    ```
-
-- The idea is that we calculate separate summary statistics for each combination of "country" and "year". 
-    - One where the observations are 'cases' and one where the observations are 'population'.
-    - This summary statistic is of a single value --- itself.
-    - I chose `MAX`, but it could have been `MIN` or even `SUM` or `AVG`. This is because they all return the same value if you give it only one observation.
-
-- R way:
-
-    <mark style="background-color: lightblue">R</mark>
-    ```{r, eval = FALSE}
-    table2 %>%
-      spread(key = type, value = count)
-    
-    ## Or
-    table2 %>%
-      pivot_wider(names_from = "type", values_from = "count", id_cols = c("country", "year"))
-    ```
-
-### Separating
-
-- No simple SQL way that I am aware of for separating.
-
-### Uniting
-
-- No simple SQL way that I am aware of for uniting.
 
 # Calling SQL from R
 
