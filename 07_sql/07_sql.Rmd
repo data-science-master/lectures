@@ -773,7 +773,7 @@ dbWriteTable(conn = con, name = "films_vehicles", value = films_vehicles)
 dbDisconnect(con, shutdown = TRUE)
 ```
 
-The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/starwars.duckdb) contains the Star Wars database from the [`{starwarsdb}`](https://cran.r-project.org/package=starwarsdb) R package.
+The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/starwars.duckdb) contains the Star Wars database from the [`{starwarsdb}`](https://cran.r-project.org/package=starwarsdb) R package. Only use SQL to answer the following questions.
 
 1. Download these data and open a connection to the database.
 
