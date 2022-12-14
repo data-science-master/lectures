@@ -459,6 +459,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
       summarize(dep_delay = mean(dep_delay, na.rm = TRUE))
     ```
 
+- You can get distinct rows by using the prefix `DISTINCT` in a `SELECT` statement. E.g. the following will pick up all unique origins
+
+    ```{sql, connection=con}
+    SELECT DISTINCT "origin" 
+    FROM flights;
+    ```
+
 ## Recoding
 
 - Use the following `CASE`-`WHEN` syntax to recode values
@@ -765,6 +772,90 @@ dbWriteTable(conn = con, name = "films_planets", value = films_planets)
 dbWriteTable(conn = con, name = "films_vehicles", value = films_vehicles)
 dbDisconnect(con, shutdown = TRUE)
 ```
+
+The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/starwars.duckdb) contains the Star Wars database from the [`{starwarsdb}`](https://cran.r-project.org/package=starwarsdb) R package.
+
+1. Download these data and open a connection to the database.
+
+    ```{r, echo = FALSE, eval=TRUE}
+    library(DBI)
+    library(duckdb)
+    starcon <- dbConnect(duckdb(dbdir = "../data/starwars.duckdb", read_only = TRUE))
+    ```
+
+2. Print out a summary of the tables in this database.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    DESCRIBE;
+    ```
+
+3. Select the entire `people` table.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT *
+    FROM people;
+    ```
+
+3. Select just the `name`, `height`, `mass`, and `species` variables from the `people` table.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT "name", "height", "mass", "species"
+    FROM people;
+    ```
+
+4. Add to the above query by selecting only the humans and droids.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT "name", "height", "mass", "species"
+    FROM people
+    WHERE "species" = 'Human' OR "species" = 'Droid';
+    ```
+
+5. Remove the individuals with missing `mass` data from the above query.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT "name", "height", "mass", "species"
+    FROM people
+    WHERE ("species" = 'Human' OR "species" = 'Droid') AND "mass" IS NOT NULL;
+    ```
+
+6. Modify the above query to calculate the average height and mass for humans and droids.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT "species", AVG("height") AS "height", AVG("mass") AS "mass"
+    FROM people
+    WHERE ("species" = 'Human' OR "species" = 'Droid') AND "mass" IS NOT NULL
+    GROUP BY "species";
+    ```
+
+7. Make sure that Droids are in the first row and Humans are in the second row in the above summary output.
+
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    SELECT "species", AVG("height") AS "height", AVG("mass") AS "mass"
+    FROM people
+    WHERE ("species" = 'Human' OR "species" = 'Droid') AND "mass" IS NOT NULL
+    GROUP BY "species"
+    ORDER BY "species";
+    ```
+
+8. Here is the summary of the keys for the database from the [`{starwarsdb}` GitHub page](https://github.com/gadenbuie/starwarsdb).
+
+    ![](./README-starwars-data-model-1.svg)\ 
+
+    Select all films with characters whose homeworld is Kamino.
+    
+    ```{sql, connection=starcon, echo=FALSE, eval=FALSE}
+    FROM (
+    SELECT DISTINCT title AS title
+    FROM people, films_people,
+    WHERE people."homeworld" = 'Kamino' AND people."name" = films_people."character"
+    GROUP BY "title"
+    ) LHS
+    INNER JOIN films
+    ON LHS."title" = films."title"
+    ```
+
+
 
 
 

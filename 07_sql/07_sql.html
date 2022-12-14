@@ -1326,11 +1326,11 @@ ORDER BY &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">3318</td>
+<td align="right">2223</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1672,6 +1672,32 @@ GROUP BY &quot;origin&quot;;</code></pre>
   select(origin, dep_delay) %&gt;%
   group_by(origin) %&gt;%
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre></li>
+<li><p>You can get distinct rows by using the prefix
+<code>DISTINCT</code> in a <code>SELECT</code> statement. E.g. the
+following will pick up all unique origins</p>
+<pre class="sql"><code>SELECT DISTINCT &quot;origin&quot; 
+FROM flights;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">origin</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">EWR</td>
+</tr>
+<tr class="even">
+<td align="left">LGA</td>
+</tr>
+<tr class="odd">
+<td align="left">JFK</td>
+</tr>
+</tbody>
+</table>
+</div></li>
 </ul>
 </div>
 <div id="recoding" class="section level2">
@@ -1888,53 +1914,53 @@ ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">67</td>
-<td align="left">N16713</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
-<tr class="even">
-<td align="right">373</td>
-<td align="left">N659JB</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
-<tr class="odd">
-<td align="right">764</td>
-<td align="left">N665UA</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
-<tr class="even">
-<td align="right">2171</td>
-<td align="left">N747UW</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
-<tr class="odd">
-<td align="right">366</td>
-<td align="left">N414WN</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
-<tr class="even">
-<td align="right">1550</td>
+<td align="right">1545</td>
 <td align="left">N14228</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
-<tr class="odd">
-<td align="right">4694</td>
-<td align="left">N14993</td>
-<td align="left">Fixed wing multi engine</td>
-</tr>
 <tr class="even">
-<td align="right">1647</td>
-<td align="left">N689DL</td>
+<td align="right">1714</td>
+<td align="left">N24211</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">1183</td>
-<td align="left">N87512</td>
+<td align="right">1141</td>
+<td align="left">N619AA</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">24</td>
-<td align="left">N197JB</td>
+<td align="right">725</td>
+<td align="left">N804JB</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="odd">
+<td align="right">461</td>
+<td align="left">N668DN</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="even">
+<td align="right">1696</td>
+<td align="left">N39463</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="odd">
+<td align="right">507</td>
+<td align="left">N516JB</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="even">
+<td align="right">5708</td>
+<td align="left">N829AS</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="odd">
+<td align="right">79</td>
+<td align="left">N593JB</td>
+<td align="left">Fixed wing multi engine</td>
+</tr>
+<tr class="even">
+<td align="right">49</td>
+<td align="left">N793JB</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 </tbody>
@@ -2107,8 +2133,8 @@ GROUP BY &quot;origin&quot;
 TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
 <li><p>This is what the resulting file looks like:</p>
 <pre><code>## origin,avg(dep_delay)
-## LGA,10.3468756464944
 ## EWR,15.10795435218885
+## LGA,10.3468756464944
 ## JFK,12.112159099217665</code></pre></li>
 </ul>
 </div>
@@ -2176,7 +2202,7 @@ way to learn SQL.</p></li>
   filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre>
 <pre><code>## # Source:   SQL [1 x 1]
-## # Database: DuckDB 0.6.1 [dgerard@Linux 5.15.0-56-generic:R 4.2.1/../data/flights.duckdb]
+## # Database: DuckDB 0.6.1 [dgerard@Linux 5.14.0-1054-oem:R 4.2.2/../data/flights.duckdb]
 ##   dep_delay
 ##       &lt;dbl&gt;
 ## 1      22.0</code></pre></li>
@@ -2222,6 +2248,30 @@ DBI::dbDisconnect(tmpcon, shutdown = TRUE)</code></pre></li>
 </div>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
+<p>The file <a href="https://data-science-master.github.io/lectures/data/starwars.duckdb">starwars.duckdb</a>
+contains the Star Wars database from the <a href="https://cran.r-project.org/package=starwarsdb"><code>{starwarsdb}</code></a>
+R package.</p>
+<ol style="list-style-type: decimal">
+<li><p>Download these data and open a connection to the
+database.</p></li>
+<li><p>Print out a summary of the tables in this database.</p></li>
+<li><p>Select the entire <code>people</code> table.</p></li>
+<li><p>Select just the <code>name</code>, <code>height</code>,
+<code>mass</code>, and <code>species</code> variables from the
+<code>people</code> table.</p></li>
+<li><p>Add to the above query by selecting only the humans and
+droids.</p></li>
+<li><p>Remove the individuals with missing <code>mass</code> data from
+the above query.</p></li>
+<li><p>Modify the above query to calculate the average height and mass
+for humans and droids.</p></li>
+<li><p>Make sure that Droids are in the first row and Humans are in the
+second row in the above summary output.</p></li>
+<li><p>Here is the summary of the keys for the database from the <a href="https://github.com/gadenbuie/starwarsdb"><code>{starwarsdb}</code>
+GitHub page</a>.</p>
+<p><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjwhLS0gR2VuZXJhdGVkIGJ5IGdyYXBodml6IHZlcnNpb24gMi40MC4xICgyMDE2MTIyNS4wMzA0KQogLS0+CjwhLS0gVGl0bGU6ICUwIFBhZ2VzOiAxIC0tPgo8c3ZnIHdpZHRoPSIzMDFwdCIgaGVpZ2h0PSIzMTBwdCIgdmlld0JveD0iMC4wMCAwLjAwIDMwMS4wMCAzMTAuMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgo8ZyBpZD0iZ3JhcGgwIiBjbGFzcz0iZ3JhcGgiIHRyYW5zZm9ybT0ic2NhbGUoMSAxKSByb3RhdGUoMCkgdHJhbnNsYXRlKDQgMzA2KSI+Cjx0aXRsZT4lMDwvdGl0bGU+CjxnIGlkPSJhX2dyYXBoMCI+PGEgeGxpbms6dGl0bGU9IkRhdGEgTW9kZWwiPgo8L2E+CjwvZz4KPCEtLSBmaWxtcyAtLT4KPGcgaWQ9ImZpbG1zIiBjbGFzcz0ibm9kZSI+Cjx0aXRsZT5maWxtczwvdGl0bGU+Cjxwb2x5Z29uIGZpbGw9IiNjMmM3YjUiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMTUwLC0yMDEgMTUwLC0yMjEgMTgyLC0yMjEgMTgyLC0yMDEgMTUwLC0yMDEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIxNTEuNjE3OCIgeT0iLTIwNi40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiMwMDAwMDAiPmZpbG1zPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjJmM2YwIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjE1MCwtMTgxIDE1MCwtMjAxIDE4MiwtMjAxIDE4MiwtMTgxIDE1MCwtMTgxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMTUyIiB5PSItMTg3LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgdGV4dC1kZWNvcmF0aW9uPSJ1bmRlcmxpbmUiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiM0NDQ0NDQiPnRpdGxlPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSJub25lIiBzdHJva2U9IiM4MTg0NzgiIHN0cm9rZS1vcGFjaXR5PSIwLjY2NjY2NyIgcG9pbnRzPSIxNDksLTE4MCAxNDksLTIyMiAxODMsLTIyMiAxODMsLTE4MCAxNDksLTE4MCIvPgo8L2c+CjwhLS0gZmlsbXNfcGVvcGxlIC0tPgo8ZyBpZD0iZmlsbXNfcGVvcGxlIiBjbGFzcz0ibm9kZSI+Cjx0aXRsZT5maWxtc19wZW9wbGU8L3RpdGxlPgo8cG9seWdvbiBmaWxsPSIjYzJjN2I1IiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjUuNSwtMjAxIDUuNSwtMjIxIDg3LjUsLTIyMSA4Ny41LC0yMDEgNS41LC0yMDEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI3LjIxNjciIHk9Ii0yMDYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjMDAwMDAwIj5maWxtc19wZW9wbGU8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9IiNmMmYzZjAiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iNS41LC0xODEgNS41LC0yMDEgODcuNSwtMjAxIDg3LjUsLTE4MSA1LjUsLTE4MSIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ic3RhcnQiIHg9IjcuNSIgeT0iLTE4Ni40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiM0NDQ0NDQiPnRpdGxlPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjJmM2YwIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjUuNSwtMTYxIDUuNSwtMTgxIDg3LjUsLTE4MSA4Ny41LC0xNjEgNS41LC0xNjEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI3LjUiIHk9Ii0xNjYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij5jaGFyYWN0ZXI8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzgxODQ3OCIgc3Ryb2tlLW9wYWNpdHk9IjAuNjY2NjY3IiBwb2ludHM9IjQuNSwtMTYwIDQuNSwtMjIyIDg4LjUsLTIyMiA4OC41LC0xNjAgNC41LC0xNjAiLz4KPC9nPgo8IS0tIGZpbG1zX3Blb3BsZSYjNDU7Jmd0O2ZpbG1zIC0tPgo8ZyBpZD0iZmlsbXNfcGVvcGxlXzEiIGNsYXNzPSJlZGdlIj4KPHRpdGxlPmZpbG1zX3Blb3BsZTp0aXRsZS0mZ3Q7ZmlsbXM6dGl0bGU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik04Ny41LC0xOTFDMTExLjU4ODUsLTE5MSAxMjAuMDEwMSwtMTkxIDEzOS45MzcxLC0xOTEiLz4KPHBvbHlnb24gZmlsbD0iIzU1NTU1NSIgc3Ryb2tlPSIjNTU1NTU1IiBwb2ludHM9IjE0MCwtMTk0LjUwMDEgMTUwLC0xOTEgMTQwLC0xODcuNTAwMSAxNDAsLTE5NC41MDAxIi8+CjwvZz4KPCEtLSBwZW9wbGUgLS0+CjxnIGlkPSJwZW9wbGUiIGNsYXNzPSJub2RlIj4KPHRpdGxlPnBlb3BsZTwvdGl0bGU+Cjxwb2x5Z29uIGZpbGw9IiM2ZTk4OWIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMTMwLC0xNDEgMTMwLC0xNjEgMjAyLC0xNjEgMjAyLC0xNDEgMTMwLC0xNDEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIxNDQuOTkwMiIgeT0iLTE0Ni40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiNmZmZmZmYiPnBlb3BsZTwvdGV4dD4KPHBvbHlnb24gZmlsbD0iI2UyZWFlYiIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgcG9pbnRzPSIxMzAsLTEyMSAxMzAsLTE0MSAyMDIsLTE0MSAyMDIsLTEyMSAxMzAsLTEyMSIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ic3RhcnQiIHg9IjEzMiIgeT0iLTEyNy40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIHRleHQtZGVjb3JhdGlvbj0idW5kZXJsaW5lIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij5uYW1lPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZTJlYWViIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjEzMCwtMTAxIDEzMCwtMTIxIDIwMiwtMTIxIDIwMiwtMTAxIDEzMCwtMTAxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMTMxLjc3NjMiIHk9Ii0xMDYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij5ob21ld29ybGQ8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9IiNlMmVhZWIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMTMwLC04MSAxMzAsLTEwMSAyMDIsLTEwMSAyMDIsLTgxIDEzMCwtODEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIxMzIiIHk9Ii04Ni40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiM0NDQ0NDQiPnNwZWNpZXM8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzQ5NjU2NyIgc3Ryb2tlLW9wYWNpdHk9IjAuNjY2NjY3IiBwb2ludHM9IjEyOSwtODAgMTI5LC0xNjIgMjAzLC0xNjIgMjAzLC04MCAxMjksLTgwIi8+CjwvZz4KPCEtLSBmaWxtc19wZW9wbGUmIzQ1OyZndDtwZW9wbGUgLS0+CjxnIGlkPSJmaWxtc19wZW9wbGVfMiIgY2xhc3M9ImVkZ2UiPgo8dGl0bGU+ZmlsbXNfcGVvcGxlOmNoYXJhY3Rlci0mZ3Q7cGVvcGxlOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik04Ny41LC0xNzFDMTA5LjM4NjIsLTE3MSAxMDYuMTI5MywtMTQyLjUyMzQgMTIwLjE1ODMsLTEzMy42MjQ1Ii8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIxMjEuMjM5NSwtMTM2Ljk1ODYgMTMwLC0xMzEgMTE5LjQzNTgsLTEzMC4xOTQ5IDEyMS4yMzk1LC0xMzYuOTU4NiIvPgo8L2c+CjwhLS0gZmlsbXNfcGxhbmV0cyAtLT4KPGcgaWQ9ImZpbG1zX3BsYW5ldHMiIGNsYXNzPSJub2RlIj4KPHRpdGxlPmZpbG1zX3BsYW5ldHM8L3RpdGxlPgo8cG9seWdvbiBmaWxsPSIjYzJjN2I1IiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjQuNSwtMjgxIDQuNSwtMzAxIDg5LjUsLTMwMSA4OS41LC0yODEgNC41LC0yODEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI2LjE2MjciIHk9Ii0yODYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjMDAwMDAwIj5maWxtc19wbGFuZXRzPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjJmM2YwIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjQuNSwtMjYxIDQuNSwtMjgxIDg5LjUsLTI4MSA4OS41LC0yNjEgNC41LC0yNjEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI2LjUiIHk9Ii0yNjYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij50aXRsZTwvdGV4dD4KPHBvbHlnb24gZmlsbD0iI2YyZjNmMCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgcG9pbnRzPSI0LjUsLTI0MSA0LjUsLTI2MSA4OS41LC0yNjEgODkuNSwtMjQxIDQuNSwtMjQxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iNi41IiB5PSItMjQ2LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNC4wMCIgZmlsbD0iIzQ0NDQ0NCI+cGxhbmV0PC90ZXh0Pgo8cG9seWdvbiBmaWxsPSJub25lIiBzdHJva2U9IiM4MTg0NzgiIHN0cm9rZS1vcGFjaXR5PSIwLjY2NjY2NyIgcG9pbnRzPSIzLC0yNDAgMywtMzAyIDkwLC0zMDIgOTAsLTI0MCAzLC0yNDAiLz4KPC9nPgo8IS0tIGZpbG1zX3BsYW5ldHMmIzQ1OyZndDtmaWxtcyAtLT4KPGcgaWQ9ImZpbG1zX3BsYW5ldHNfMSIgY2xhc3M9ImVkZ2UiPgo8dGl0bGU+ZmlsbXNfcGxhbmV0czp0aXRsZS0mZ3Q7ZmlsbXM6dGl0bGU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik04OS41LC0yNzFDMTMwLjI0NzIsLTI3MSAxMDkuODA2MywtMjA0LjE1OTIgMTQwLjAzNjgsLTE5Mi42NzA5Ii8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIxNDAuNzE2NywtMTk2LjEwNTkgMTUwLC0xOTEgMTM5LjU1ODgsLTE4OS4yMDIzIDE0MC43MTY3LC0xOTYuMTA1OSIvPgo8L2c+CjwhLS0gcGxhbmV0cyAtLT4KPGcgaWQ9InBsYW5ldHMiIGNsYXNzPSJub2RlIj4KPHRpdGxlPnBsYW5ldHM8L3RpdGxlPgo8cG9seWdvbiBmaWxsPSIjYmM0NjEwIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjI0MiwtMjEwIDI0MiwtMjMwIDI5MSwtMjMwIDI5MSwtMjEwIDI0MiwtMjEwIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMjQzLjkzNjIiIHk9Ii0yMTUuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjZmZmZmZmIj5wbGFuZXRzPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjFkYWNmIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjI0MiwtMTkwIDI0MiwtMjEwIDI5MSwtMjEwIDI5MSwtMTkwIDI0MiwtMTkwIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMjQ0IiB5PSItMTk2LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgdGV4dC1kZWNvcmF0aW9uPSJ1bmRlcmxpbmUiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiM0NDQ0NDQiPm5hbWU8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzdkMmUwYSIgc3Ryb2tlLW9wYWNpdHk9IjAuNjY2NjY3IiBwb2ludHM9IjI0MC41LC0xODkgMjQwLjUsLTIzMSAyOTEuNSwtMjMxIDI5MS41LC0xODkgMjQwLjUsLTE4OSIvPgo8L2c+CjwhLS0gZmlsbXNfcGxhbmV0cyYjNDU7Jmd0O3BsYW5ldHMgLS0+CjxnIGlkPSJmaWxtc19wbGFuZXRzXzIiIGNsYXNzPSJlZGdlIj4KPHRpdGxlPmZpbG1zX3BsYW5ldHM6cGxhbmV0LSZndDtwbGFuZXRzOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik04OS41LC0yNTFDMTQwLjcyMTYsLTI1MSAxNTYuMjkzMywtMjUyLjAyNyAyMDMsLTIzMSAyMTkuNDA0NywtMjIzLjYxNDcgMjIwLjI4MDYsLTIwNy43NjU3IDIzMS45MDg5LC0yMDIuMDgxOSIvPgo8cG9seWdvbiBmaWxsPSIjNTU1NTU1IiBzdHJva2U9IiM1NTU1NTUiIHBvaW50cz0iMjMyLjkxMzUsLTIwNS40NDg1IDI0MiwtMjAwIDIzMS40OTksLTE5OC41OTI4IDIzMi45MTM1LC0yMDUuNDQ4NSIvPgo8L2c+CjwhLS0gZmlsbXNfdmVoaWNsZXMgLS0+CjxnIGlkPSJmaWxtc192ZWhpY2xlcyIgY2xhc3M9Im5vZGUiPgo8dGl0bGU+ZmlsbXNfdmVoaWNsZXM8L3RpdGxlPgo8cG9seWdvbiBmaWxsPSIjYzJjN2I1IiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjEuNSwtMTIxIDEuNSwtMTQxIDkyLjUsLTE0MSA5Mi41LC0xMjEgMS41LC0xMjEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIzLjQ0NiIgeT0iLTEyNi40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiMwMDAwMDAiPmZpbG1zX3ZlaGljbGVzPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjJmM2YwIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjEuNSwtMTAxIDEuNSwtMTIxIDkyLjUsLTEyMSA5Mi41LC0xMDEgMS41LC0xMDEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIzLjUiIHk9Ii0xMDYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij50aXRsZTwvdGV4dD4KPHBvbHlnb24gZmlsbD0iI2YyZjNmMCIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgcG9pbnRzPSIxLjUsLTgxIDEuNSwtMTAxIDkyLjUsLTEwMSA5Mi41LC04MSAxLjUsLTgxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMy41IiB5PSItODYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij52ZWhpY2xlPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSJub25lIiBzdHJva2U9IiM4MTg0NzgiIHN0cm9rZS1vcGFjaXR5PSIwLjY2NjY2NyIgcG9pbnRzPSIwLC04MCAwLC0xNDIgOTMsLTE0MiA5MywtODAgMCwtODAiLz4KPC9nPgo8IS0tIGZpbG1zX3ZlaGljbGVzJiM0NTsmZ3Q7ZmlsbXMgLS0+CjxnIGlkPSJmaWxtc192ZWhpY2xlc18xIiBjbGFzcz0iZWRnZSI+Cjx0aXRsZT5maWxtc192ZWhpY2xlczp0aXRsZS0mZ3Q7ZmlsbXM6dGl0bGU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik05Mi41LC0xMTFDMTMyLjM1MjgsLTExMSAxMTEuMDIwOSwtMTc3LjI3MDggMTM5Ljg3OTUsLTE4OS4xNzg4Ii8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIxMzkuNTM4MiwtMTkyLjY3MzUgMTUwLC0xOTEgMTQwLjc3OCwtMTg1Ljc4NDIgMTM5LjUzODIsLTE5Mi42NzM1Ii8+CjwvZz4KPCEtLSB2ZWhpY2xlcyAtLT4KPGcgaWQ9InZlaGljbGVzIiBjbGFzcz0ibm9kZSI+Cjx0aXRsZT52ZWhpY2xlczwvdGl0bGU+Cjxwb2x5Z29uIGZpbGw9IiM3MTUwM2UiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMTM5LC0zMSAxMzksLTUxIDE5MywtNTEgMTkzLC0zMSAxMzksLTMxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMTQwLjcxOTUiIHk9Ii0zNi40IiBmb250LWZhbWlseT0iSGVsdmV0aWNhLHNhbnMtU2VyaWYiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiNmZmZmZmYiPnZlaGljbGVzPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZTJkY2Q4IiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjEzOSwtMTEgMTM5LC0zMSAxOTMsLTMxIDE5MywtMTEgMTM5LC0xMSIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ic3RhcnQiIHg9IjE0MSIgeT0iLTE3LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgdGV4dC1kZWNvcmF0aW9uPSJ1bmRlcmxpbmUiIGZvbnQtc2l6ZT0iMTQuMDAiIGZpbGw9IiM0NDQ0NDQiPm5hbWU8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRiMzUyOSIgc3Ryb2tlLW9wYWNpdHk9IjAuNjY2NjY3IiBwb2ludHM9IjEzOCwtMTAgMTM4LC01MiAxOTQsLTUyIDE5NCwtMTAgMTM4LC0xMCIvPgo8L2c+CjwhLS0gZmlsbXNfdmVoaWNsZXMmIzQ1OyZndDt2ZWhpY2xlcyAtLT4KPGcgaWQ9ImZpbG1zX3ZlaGljbGVzXzIiIGNsYXNzPSJlZGdlIj4KPHRpdGxlPmZpbG1zX3ZlaGljbGVzOnZlaGljbGUtJmd0O3ZlaGljbGVzOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik05Mi41LC05MUMxMjUuOTEwNiwtOTEgMTA2Ljg2OTQsLTM0Ljk4NyAxMjkuMjE1OSwtMjMuMTcxNyIvPgo8cG9seWdvbiBmaWxsPSIjNTU1NTU1IiBzdHJva2U9IiM1NTU1NTUiIHBvaW50cz0iMTI5Ljk5NiwtMjYuNTgzOCAxMzksLTIxIDEyOC40NzkxLC0xOS43NTAxIDEyOS45OTYsLTI2LjU4MzgiLz4KPC9nPgo8IS0tIHBlb3BsZSYjNDU7Jmd0O3BsYW5ldHMgLS0+CjxnIGlkPSJwZW9wbGVfMSIgY2xhc3M9ImVkZ2UiPgo8dGl0bGU+cGVvcGxlOmhvbWV3b3JsZC0mZ3Q7cGxhbmV0czpuYW1lPC90aXRsZT4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNTU1NTU1IiBkPSJNMjAyLC0xMTFDMjQxLjMwMTMsLTExMSAyMDYuNjAzOCwtMTg0LjA5NDcgMjMyLjAzMDMsLTE5Ny44Ii8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIyMzEuNDgwNywtMjAxLjI2MjggMjQyLC0yMDAgMjMyLjk4OTIsLTE5NC40MjczIDIzMS40ODA3LC0yMDEuMjYyOCIvPgo8L2c+CjwhLS0gc3BlY2llcyAtLT4KPGcgaWQ9InNwZWNpZXMiIGNsYXNzPSJub2RlIj4KPHRpdGxlPnNwZWNpZXM8L3RpdGxlPgo8cG9seWdvbiBmaWxsPSIjYmM4MjU4IiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjI0MSwtMTAxIDI0MSwtMTIxIDI5MiwtMTIxIDI5MiwtMTAxIDI0MSwtMTAxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMjQyLjc3MjgiIHk9Ii0xMDYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjZmZmZmZmIj5zcGVjaWVzPC90ZXh0Pgo8cG9seWdvbiBmaWxsPSIjZjFlNmRkIiBzdHJva2U9InRyYW5zcGFyZW50IiBwb2ludHM9IjI0MSwtODEgMjQxLC0xMDEgMjkyLC0xMDEgMjkyLC04MSAyNDEsLTgxIi8+Cjx0ZXh0IHRleHQtYW5jaG9yPSJzdGFydCIgeD0iMjQzIiB5PSItODcuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiB0ZXh0LWRlY29yYXRpb249InVuZGVybGluZSIgZm9udC1zaXplPSIxNC4wMCIgZmlsbD0iIzQ0NDQ0NCI+bmFtZTwvdGV4dD4KPHBvbHlnb24gZmlsbD0ibm9uZSIgc3Ryb2tlPSIjN2Q1NjNhIiBzdHJva2Utb3BhY2l0eT0iMC42NjY2NjciIHBvaW50cz0iMjM5LjUsLTgwIDIzOS41LC0xMjIgMjkyLjUsLTEyMiAyOTIuNSwtODAgMjM5LjUsLTgwIi8+CjwvZz4KPCEtLSBwZW9wbGUmIzQ1OyZndDtzcGVjaWVzIC0tPgo8ZyBpZD0icGVvcGxlXzIiIGNsYXNzPSJlZGdlIj4KPHRpdGxlPnBlb3BsZTpzcGVjaWVzLSZndDtzcGVjaWVzOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik0yMDIsLTkxQzIxNS40MDYzLC05MSAyMjEuMDM1OCwtOTEgMjMwLjkxODMsLTkxIi8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIyMzEsLTk0LjUwMDEgMjQxLC05MSAyMzEsLTg3LjUwMDEgMjMxLC05NC41MDAxIi8+CjwvZz4KPCEtLSBwaWxvdHMgLS0+CjxnIGlkPSJwaWxvdHMiIGNsYXNzPSJub2RlIj4KPHRpdGxlPnBpbG90czwvdGl0bGU+Cjxwb2x5Z29uIGZpbGw9IiM2ZTk4OWIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMjMuNSwtNDEgMjMuNSwtNjEgNzAuNSwtNjEgNzAuNSwtNDEgMjMuNSwtNDEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIzMC42NjU1IiB5PSItNDYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjZmZmZmZmIj5waWxvdHM8L3RleHQ+Cjxwb2x5Z29uIGZpbGw9IiNlMmVhZWIiIHN0cm9rZT0idHJhbnNwYXJlbnQiIHBvaW50cz0iMjMuNSwtMjEgMjMuNSwtNDEgNzAuNSwtNDEgNzAuNSwtMjEgMjMuNSwtMjEiLz4KPHRleHQgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSIyNS41IiB5PSItMjYuNCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSxzYW5zLVNlcmlmIiBmb250LXNpemU9IjE0LjAwIiBmaWxsPSIjNDQ0NDQ0Ij5waWxvdDwvdGV4dD4KPHBvbHlnb24gZmlsbD0iI2UyZWFlYiIgc3Ryb2tlPSJ0cmFuc3BhcmVudCIgcG9pbnRzPSIyMy41LC0xIDIzLjUsLTIxIDcwLjUsLTIxIDcwLjUsLTEgMjMuNSwtMSIvPgo8dGV4dCB0ZXh0LWFuY2hvcj0ic3RhcnQiIHg9IjI1LjIxOTUiIHk9Ii02LjQiIGZvbnQtZmFtaWx5PSJIZWx2ZXRpY2Esc2Fucy1TZXJpZiIgZm9udC1zaXplPSIxNC4wMCIgZmlsbD0iIzQ0NDQ0NCI+dmVoaWNsZTwvdGV4dD4KPHBvbHlnb24gZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDk2NTY3IiBzdHJva2Utb3BhY2l0eT0iMC42NjY2NjciIHBvaW50cz0iMjIsMCAyMiwtNjIgNzEsLTYyIDcxLDAgMjIsMCIvPgo8L2c+CjwhLS0gcGlsb3RzJiM0NTsmZ3Q7cGVvcGxlIC0tPgo8ZyBpZD0icGlsb3RzXzEiIGNsYXNzPSJlZGdlIj4KPHRpdGxlPnBpbG90czpwaWxvdC0mZ3Q7cGVvcGxlOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik03MC41LC0zMUMxMTguMzc4NCwtMzEgODQuMjc3OCwtMTE2LjcwNzEgMTE5Ljk4NzQsLTEyOS40MjkyIi8+Cjxwb2x5Z29uIGZpbGw9IiM1NTU1NTUiIHN0cm9rZT0iIzU1NTU1NSIgcG9pbnRzPSIxMTkuNTc4NCwtMTMyLjkwNzggMTMwLC0xMzEgMTIwLjY2MzMsLTEyNS45OTI0IDExOS41Nzg0LC0xMzIuOTA3OCIvPgo8L2c+CjwhLS0gcGlsb3RzJiM0NTsmZ3Q7dmVoaWNsZXMgLS0+CjxnIGlkPSJwaWxvdHNfMiIgY2xhc3M9ImVkZ2UiPgo8dGl0bGU+cGlsb3RzOnZlaGljbGUtJmd0O3ZlaGljbGVzOm5hbWU8L3RpdGxlPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiM1NTU1NTUiIGQ9Ik03MC41LC0xMUM5Ny41NDE0LC0xMSAxMDYuMTk2OCwtMTguNzI0OCAxMjguNzg1NCwtMjAuNTk1NiIvPgo8cG9seWdvbiBmaWxsPSIjNTU1NTU1IiBzdHJva2U9IiM1NTU1NTUiIHBvaW50cz0iMTI4Ljg2OTMsLTI0LjEwMTYgMTM5LC0yMSAxMjkuMTQ2MywtMTcuMTA3MSAxMjguODY5MywtMjQuMTAxNiIvPgo8L2c+CjwvZz4KPC9zdmc+" /> </p>
+<p>Select all films with characters whose homeworld is Kamino.</p></li>
+</ol>
 </div>
 
 
