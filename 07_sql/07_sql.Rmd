@@ -747,3 +747,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 # Exercises
+
+```{r, eval=FALSE, echo=FALSE}
+## Code to write starwars.duckdb
+library(DBI)
+library(duckdb)
+library(starwarsdb)
+con <- dbConnect(duckdb(dbdir = "starwars.duckdb", read_only = FALSE))
+dbWriteTable(conn = con, name = "films", value = films)
+dbWriteTable(conn = con, name = "people", value = people)
+dbWriteTable(conn = con, name = "planets", value = planets)
+dbWriteTable(conn = con, name = "species", value = species)
+dbWriteTable(conn = con, name = "vehicles", value = vehicles)
+dbWriteTable(conn = con, name = "pilots", value = pilots)
+dbWriteTable(conn = con, name = "films_people", value = films_people)
+dbWriteTable(conn = con, name = "films_planets", value = films_planets)
+dbWriteTable(conn = con, name = "films_vehicles", value = films_vehicles)
+dbDisconnect(con, shutdown = TRUE)
+```
+
+
+

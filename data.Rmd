@@ -191,6 +191,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - `cancer`: Whether the individual had cancer (`cancer`) or was a control
       (`control`).
 <!-- - [soccer.duckdb](./data/soccer.duckdb): DuckDB database from <https://www.kaggle.com/hugomathien/soccer> -->
+- [starwars.duckdb](./data/starwars.duckdb): DuckDB database, copied from the [`{starwarsdb}`](https://cran.r-project.org/package=starwarsdb) package.
 - Tidying exercise datasets:
     - [flowers1.csv](./data/tidy_exercise/flowers1.csv)
     - [flowers2.csv](./data/tidy_exercise/flowers2.csv)
