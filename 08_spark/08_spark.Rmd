@@ -9,14 +9,15 @@ output:
 urlcolor: "blue"
 ---
 
-
 ```{r setup, include=FALSE}
-set.seed(1)
 knitr::opts_chunk$set(echo       = TRUE, 
-                      fig.height = 3, 
-                      fig.width  = 6,
-                      fig.align  = "center")
-ggplot2::theme_set(ggplot2::theme_bw())
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
 ```
 
 # Learning Objectives
@@ -34,3 +35,66 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - More general computing operations, distributed across multiple computers.
     
 - You can do arbitrarily complicated things with Spark, but for you the point of Spark is to do simple things on Big Data which won't fit on one computer.
+
+# `{sparklyr}`
+
+- The `{sparklyr}` R package provides an R API to use Spark.
+
+- It works well with `{DBI}` (used in the SQL lecture to connect to databases) and `{dplyr}`.
+
+## Install
+
+- Make sure you have java installed with (otherwise install it [here](https://therinspark.com/appendix.html#appendix-install-java)).
+    ```{r}
+    system("java -version")
+    ```
+
+- Install `{sparklyr}`
+
+    ``` r
+    install.packages("sparklyr")
+    ```
+
+- Install Spark
+
+    ``` r
+    sparklyr::spark_install()
+    ```
+
+- Check that Spark is installed.
+
+    ```{r}
+    sparklyr::spark_installed_versions()
+    ```
+
+## Connect
+
+- Load `{sparklyr}` into R
+
+    ```{r, message = FALSE}
+    library(sparklyr)
+    ```
+
+- Connect to Spark with `spark_connect()`
+
+    ```{r}
+    sc <- spark_connect(master = "local", version = "3.3.1")
+    ```
+
+- You change the `master` argument to connect to clusters. The `"local"` value says to use the Spark that is installed on your computer.
+
+- You use `sc` to run Spark commands.
+
+
+## Disconnect
+
+- Disconnect using `spark_disconnect()`.
+
+    ```{r}
+    spark_disconnect(sc)
+    ```
+
+
+
+
+
