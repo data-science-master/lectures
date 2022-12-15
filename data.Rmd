@@ -163,6 +163,9 @@ knitr::opts_chunk$set(echo = TRUE)
     hamsters became infected two days later. The variables include:
     - `Exposure`: The virus variant of the infected hamster. Either `"WT"` or `"D614G"`.
     - `Infected`: Was the healthy hamster infected (`"Yes"`) or not (`"No"`)?
+- Lahman Data: DuckDB version of the 2021 Baseball Lahman Data from <https://www.seanlahman.com/baseball-archive/statistics/>
+    - [lahman.duckdb](./data/lahman.duckdb): DuckDB database.
+    - [lahman_readme.txt](./data/lahman_readme.txt): README file from the Lahman website with data dictionary.
 - [regnal.csv](./data/regnal.csv): Table of regnal years of English monarchs,
   taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
   
