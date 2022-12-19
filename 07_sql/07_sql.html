@@ -1336,29 +1336,29 @@ USING SAMPLE 5 ROWS;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">4099</td>
-<td align="left">EWR</td>
-<td align="left">STL</td>
+<td align="right">19</td>
+<td align="left">JFK</td>
+<td align="left">LAX</td>
 </tr>
 <tr class="even">
-<td align="right">3070</td>
-<td align="left">JFK</td>
-<td align="left">TPA</td>
+<td align="right">1591</td>
+<td align="left">EWR</td>
+<td align="left">IAH</td>
 </tr>
 <tr class="odd">
-<td align="right">2047</td>
-<td align="left">LGA</td>
-<td align="left">ATL</td>
-</tr>
-<tr class="even">
-<td align="right">2065</td>
+<td align="right">301</td>
 <td align="left">JFK</td>
 <td align="left">FLL</td>
 </tr>
+<tr class="even">
+<td align="right">4166</td>
+<td align="left">EWR</td>
+<td align="left">GSP</td>
+</tr>
 <tr class="odd">
-<td align="right">1865</td>
+<td align="right">2041</td>
 <td align="left">JFK</td>
-<td align="left">SFO</td>
+<td align="left">ATL</td>
 </tr>
 </tbody>
 </table>
@@ -1410,11 +1410,11 @@ ORDER BY &quot;dep_delay&quot;;</code></pre>
 <td align="right">-26</td>
 </tr>
 <tr class="odd">
-<td align="right">4361</td>
+<td align="right">4573</td>
 <td align="right">-25</td>
 </tr>
 <tr class="even">
-<td align="right">4573</td>
+<td align="right">4361</td>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
@@ -1549,22 +1549,22 @@ ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">375</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="even">
-<td align="right">4065</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="odd">
 <td align="right">2223</td>
 <td align="left">LGA</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">3473</td>
+<td align="right">375</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="odd">
+<td align="right">4065</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">1371</td>
 <td align="left">LGA</td>
 <td align="right">-23</td>
 </tr>
@@ -1825,6 +1825,49 @@ ORDER BY &quot;month&quot;, &quot;day&quot;;</code></pre>
 </tbody>
 </table>
 </div></li>
+<li><p>Mutating over partition can be done with
+<code>OVER (PARTITION BY &lt;variable&gt;)</code>. E.g., here is how you
+find the flight numbers for the longest flights (in terms of air time)
+from each airport</p>
+<pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;air_time&quot;
+FROM
+(
+  SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;air_time&quot;, MAX(&quot;air_time&quot;) OVER (PARTITION BY &quot;origin&quot;) AS &quot;amax&quot;
+  FROM flights
+)
+WHERE &quot;air_time&quot; = &quot;amax&quot;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">51</td>
+<td align="left">JFK</td>
+<td align="right">691</td>
+</tr>
+<tr class="even">
+<td align="right">745</td>
+<td align="left">LGA</td>
+<td align="right">331</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="left">EWR</td>
+<td align="right">695</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>In the above, I chained two SQL queries. Your <code>FROM</code>
+statement can be the output of another SQL query surrounded by
+parentheses.</p></li>
 </ul>
 </div>
 <div id="group-summaries" class="section level2">
@@ -1884,12 +1927,12 @@ GROUP BY &quot;origin&quot;;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">LGA</td>
-<td align="right">10.35</td>
-</tr>
-<tr class="even">
 <td align="left">EWR</td>
 <td align="right">15.11</td>
+</tr>
+<tr class="even">
+<td align="left">LGA</td>
+<td align="right">10.35</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>
@@ -1919,10 +1962,10 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">EWR</td>
+<td align="left">LGA</td>
 </tr>
 <tr class="even">
-<td align="left">LGA</td>
+<td align="left">EWR</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>

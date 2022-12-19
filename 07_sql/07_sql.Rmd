@@ -446,6 +446,19 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ORDER BY "month", "day";
     ```
 
+- Mutating over partition can be done with `OVER (PARTITION BY <variable>)`. E.g., here is how you find the flight numbers for the longest flights (in terms of air time) from each airport 
+
+    ```{sql, connection = con}
+    SELECT "flight", "origin", "air_time"
+    FROM
+    (
+      SELECT "flight", "origin", "air_time", MAX("air_time") OVER (PARTITION BY "origin") AS "amax"
+      FROM flights
+    )
+    WHERE "air_time" = "amax"
+    ```
+
+- In the above, I chained two SQL queries. Your `FROM` statement can be the output of another SQL query surrounded by parentheses.
 
 
 ## Group Summaries
@@ -704,6 +717,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, echo = FALSE}
     writeLines(readLines("./summaries.csv"))
     ```
+
 
 # Calling SQL from R
 
