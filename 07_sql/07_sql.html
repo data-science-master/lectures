@@ -1336,29 +1336,29 @@ USING SAMPLE 5 ROWS;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">255</td>
-<td align="left">LGA</td>
-<td align="left">ORD</td>
+<td align="right">4099</td>
+<td align="left">EWR</td>
+<td align="left">STL</td>
 </tr>
 <tr class="even">
-<td align="right">1442</td>
-<td align="left">EWR</td>
+<td align="right">3070</td>
+<td align="left">JFK</td>
+<td align="left">TPA</td>
+</tr>
+<tr class="odd">
+<td align="right">2047</td>
+<td align="left">LGA</td>
 <td align="left">ATL</td>
 </tr>
-<tr class="odd">
-<td align="right">1174</td>
-<td align="left">LGA</td>
-<td align="left">PBI</td>
-</tr>
 <tr class="even">
-<td align="right">83</td>
+<td align="right">2065</td>
 <td align="left">JFK</td>
-<td align="left">MCO</td>
+<td align="left">FLL</td>
 </tr>
 <tr class="odd">
-<td align="right">44</td>
+<td align="right">1865</td>
 <td align="left">JFK</td>
-<td align="left">SYR</td>
+<td align="left">SFO</td>
 </tr>
 </tbody>
 </table>
@@ -1688,7 +1688,9 @@ FROM flights;</code></pre>
 <li><p>Beware of integer division during mutation. Integer division will
 round results to integers. E.g.</p>
 <pre class="sql"><code>SELECT DISTINCT &quot;month&quot;, &quot;day&quot;, &quot;day&quot; / &quot;month&quot; AS &quot;ratio&quot;
-FROM flights;</code></pre>
+FROM flights
+WHERE &quot;month&quot; &gt;= 5
+ORDER BY &quot;month&quot;, &quot;day&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1701,54 +1703,54 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">5</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">2</td>
-<td align="right">2</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">3</td>
-<td align="right">3</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">4</td>
-<td align="right">4</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
 <td align="right">5</td>
 <td align="right">5</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
+<td align="right">5</td>
+<td align="right">6</td>
 <td align="right">1</td>
-<td align="right">6</td>
-<td align="right">6</td>
 </tr>
 <tr class="odd">
+<td align="right">5</td>
+<td align="right">7</td>
 <td align="right">1</td>
-<td align="right">7</td>
-<td align="right">7</td>
 </tr>
 <tr class="even">
+<td align="right">5</td>
+<td align="right">8</td>
 <td align="right">1</td>
-<td align="right">8</td>
-<td align="right">8</td>
 </tr>
 <tr class="odd">
+<td align="right">5</td>
+<td align="right">9</td>
 <td align="right">1</td>
-<td align="right">9</td>
-<td align="right">9</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">10</td>
-<td align="right">10</td>
+<td align="right">2</td>
 </tr>
 </tbody>
 </table>
@@ -1756,7 +1758,9 @@ FROM flights;</code></pre>
 <li><p>Use <code>CAST()</code> to convert to a double before operations
 that should produce doubles.</p>
 <pre class="sql"><code>SELECT DISTINCT &quot;month&quot;, &quot;day&quot;, CAST(&quot;day&quot; AS DOUBLE) / CAST(&quot;month&quot; AS DOUBLE) AS &quot;ratio&quot;
-FROM flights;</code></pre>
+FROM flights
+WHERE &quot;month&quot; &gt;= 5
+ORDER BY &quot;month&quot;, &quot;day&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1769,54 +1773,54 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
+<td align="right">5</td>
 <td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
+<td align="right">0.2</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">2</td>
-<td align="right">2</td>
+<td align="right">0.4</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
+<td align="right">5</td>
 <td align="right">3</td>
-<td align="right">3</td>
+<td align="right">0.6</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
+<td align="right">5</td>
+<td align="right">4</td>
+<td align="right">0.8</td>
+</tr>
+<tr class="odd">
 <td align="right">5</td>
 <td align="right">5</td>
+<td align="right">1.0</td>
 </tr>
-<tr class="odd">
-<td align="right">1</td>
+<tr class="even">
+<td align="right">5</td>
 <td align="right">6</td>
-<td align="right">6</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">7</td>
-<td align="right">7</td>
+<td align="right">1.2</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">8</td>
-<td align="right">8</td>
+<td align="right">5</td>
+<td align="right">7</td>
+<td align="right">1.4</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">9</td>
-<td align="right">9</td>
+<td align="right">5</td>
+<td align="right">8</td>
+<td align="right">1.6</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">10</td>
-<td align="right">10</td>
+<td align="right">5</td>
+<td align="right">9</td>
+<td align="right">1.8</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="right">11</td>
+<td align="right">5</td>
+<td align="right">10</td>
+<td align="right">2.0</td>
 </tr>
 </tbody>
 </table>
@@ -1915,10 +1919,10 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">LGA</td>
+<td align="left">EWR</td>
 </tr>
 <tr class="even">
-<td align="left">EWR</td>
+<td align="left">LGA</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>

@@ -431,7 +431,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     ```{sql, connection=con}
     SELECT DISTINCT "month", "day", "day" / "month" AS "ratio"
-    FROM flights;
+    FROM flights
+    WHERE "month" >= 5
+    ORDER BY "month", "day";
     ```
 
 
@@ -439,7 +441,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     ```{sql, connection=con}
     SELECT DISTINCT "month", "day", CAST("day" AS DOUBLE) / CAST("month" AS DOUBLE) AS "ratio"
-    FROM flights;
+    FROM flights
+    WHERE "month" >= 5
+    ORDER BY "month", "day";
     ```
 
 
