@@ -425,7 +425,24 @@ ggplot2::theme_set(ggplot2::theme_bw())
     - `SQRT()`: Square root.
     - `POW()`: Power transformation. 
         - `POW(2.0, x)` would be $2^x$
-        - `POW(x, 2.0)` would be $x^2$.
+        - `POW(x, 2.0)` would be $x^2$
+        
+- Beware of integer division during mutation. Integer division will round results to integers. E.g.
+
+    ```{sql, connection=con}
+    SELECT DISTINCT "month", "day", "day" / "month" AS "ratio"
+    FROM flights;
+    ```
+
+
+- Use `CAST()` to convert to a double before operations that should produce doubles.
+
+    ```{sql, connection=con}
+    SELECT DISTINCT "month", "day", CAST("day" AS DOUBLE) / CAST("month" AS DOUBLE) AS "ratio"
+    FROM flights;
+    ```
+
+
 
 ## Group Summaries
 
