@@ -55,7 +55,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 
-- You should not see the database. Right click on the connection and create a new SQL file.
+- You should now see the database. Right click on the connection and create a new SQL file.
 
     ```{r, out.width="75%", echo=FALSE}
     knitr::include_graphics(path = "./figs/dbeaver_04_sqlfile.png")
