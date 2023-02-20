@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-19" />
+<meta name="date" content="2023-02-20" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-19</h4>
+<h4 class="date">2023-02-20</h4>
 
 </div>
 
@@ -1336,29 +1336,29 @@ USING SAMPLE 5 ROWS;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">19</td>
-<td align="left">JFK</td>
-<td align="left">LAX</td>
+<td align="right">1638</td>
+<td align="left">EWR</td>
+<td align="left">CLE</td>
 </tr>
 <tr class="even">
-<td align="right">1591</td>
-<td align="left">EWR</td>
-<td align="left">IAH</td>
+<td align="right">706</td>
+<td align="left">JFK</td>
+<td align="left">AUS</td>
 </tr>
 <tr class="odd">
-<td align="right">301</td>
-<td align="left">JFK</td>
-<td align="left">FLL</td>
+<td align="right">1637</td>
+<td align="left">EWR</td>
+<td align="left">HOU</td>
 </tr>
 <tr class="even">
-<td align="right">4166</td>
+<td align="right">4106</td>
 <td align="left">EWR</td>
-<td align="left">GSP</td>
+<td align="left">BDL</td>
 </tr>
 <tr class="odd">
-<td align="right">2041</td>
-<td align="left">JFK</td>
-<td align="left">ATL</td>
+<td align="right">3932</td>
+<td align="left">EWR</td>
+<td align="left">CVG</td>
 </tr>
 </tbody>
 </table>
@@ -1418,11 +1418,11 @@ ORDER BY &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">3318</td>
+<td align="right">2223</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1506,7 +1506,7 @@ ORDER BY &quot;dep_delay&quot; DESC;</code></pre>
 <pre class="sql"><code>SELECT &quot;flight&quot;, &quot;origin&quot;, &quot;dep_delay&quot; 
 FROM flights
 WHERE &quot;dep_delay&quot; IS NOT NULL
-ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;;</code></pre>
+ORDER BY &quot;origin&quot; DESC, &quot;dep_delay&quot;;</code></pre>
 <div class="knitsql-table">
 <table>
 <caption>Displaying records 1 - 10</caption>
@@ -1549,22 +1549,22 @@ ORDER BY &quot;origin&quot; desc, &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
+<td align="right">375</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">4065</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="odd">
 <td align="right">2223</td>
 <td align="left">LGA</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="odd">
-<td align="right">4065</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="even">
-<td align="right">1371</td>
+<td align="right">3473</td>
 <td align="left">LGA</td>
 <td align="right">-23</td>
 </tr>
@@ -1848,9 +1848,9 @@ WHERE &quot;air_time&quot; = &quot;amax&quot;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">51</td>
-<td align="left">JFK</td>
-<td align="right">691</td>
+<td align="right">15</td>
+<td align="left">EWR</td>
+<td align="right">695</td>
 </tr>
 <tr class="even">
 <td align="right">745</td>
@@ -1858,9 +1858,9 @@ WHERE &quot;air_time&quot; = &quot;amax&quot;</code></pre>
 <td align="right">331</td>
 </tr>
 <tr class="odd">
-<td align="right">15</td>
-<td align="left">EWR</td>
-<td align="right">695</td>
+<td align="right">51</td>
+<td align="left">JFK</td>
+<td align="right">691</td>
 </tr>
 </tbody>
 </table>
@@ -1927,12 +1927,12 @@ GROUP BY &quot;origin&quot;;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">EWR</td>
-<td align="right">15.11</td>
-</tr>
-<tr class="even">
 <td align="left">LGA</td>
 <td align="right">10.35</td>
+</tr>
+<tr class="even">
+<td align="left">EWR</td>
+<td align="right">15.11</td>
 </tr>
 <tr class="odd">
 <td align="left">JFK</td>
@@ -2334,19 +2334,19 @@ dbWriteTable(conn = tmpcon, name = &quot;table5&quot;, value = table5)</code></p
 <tr class="odd">
 <td align="left">table1</td>
 <td align="left">cases , country , population, year</td>
-<td align="left">INTEGER, VARCHAR, INTEGER, INTEGER</td>
+<td align="left">DOUBLE , VARCHAR, DOUBLE , DOUBLE</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
 <td align="left">table2</td>
 <td align="left">count , country, type , year</td>
-<td align="left">INTEGER, VARCHAR, VARCHAR, INTEGER</td>
+<td align="left">DOUBLE , VARCHAR, VARCHAR, DOUBLE</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="odd">
 <td align="left">table3</td>
 <td align="left">country, rate , year</td>
-<td align="left">VARCHAR, VARCHAR, INTEGER</td>
+<td align="left">VARCHAR, VARCHAR, DOUBLE</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
@@ -2358,7 +2358,7 @@ dbWriteTable(conn = tmpcon, name = &quot;table5&quot;, value = table5)</code></p
 <tr class="odd">
 <td align="left">table4b</td>
 <td align="left">1999 , 2000 , country</td>
-<td align="left">INTEGER, INTEGER, VARCHAR</td>
+<td align="left">DOUBLE , DOUBLE , VARCHAR</td>
 <td align="left">FALSE</td>
 </tr>
 <tr class="even">
@@ -2408,8 +2408,8 @@ GROUP BY &quot;origin&quot;
 TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
 <li><p>This is what the resulting file looks like:</p>
 <pre><code>## origin,avg(dep_delay)
-## LGA,10.3468756464944
 ## EWR,15.10795435218885
+## LGA,10.3468756464944
 ## JFK,12.112159099217665</code></pre></li>
 </ul>
 </div>
@@ -2477,7 +2477,7 @@ way to learn SQL.</p></li>
   filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) %&gt;%
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre>
 <pre><code>## # Source:   SQL [1 x 1]
-## # Database: DuckDB 0.6.1 [dgerard@Windows 10 x64:R 4.2.2/../data/flights.duckdb]
+## # Database: DuckDB 0.7.0 [dgerard@Linux 5.15.0-60-generic:R 4.2.1/../data/flights.duckdb]
 ##   dep_delay
 ##       &lt;dbl&gt;
 ## 1      22.0</code></pre></li>
@@ -2507,8 +2507,8 @@ SQL).</p>
 ## FROM (
 ##   SELECT flight, origin, dest, dep_delay
 ##   FROM flights
-## ) q01
-## WHERE (origin = &#39;JFK&#39;) AND (dest = &#39;CMH&#39;)</code></pre></li>
+##   WHERE (origin = &#39;JFK&#39;) AND (dest = &#39;CMH&#39;)
+## ) q01</code></pre></li>
 </ul>
 </div>
 <div id="closing-the-connection" class="section level1">

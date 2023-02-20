@@ -64,12 +64,13 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Your project will involve creating an R package for interacting with a web API.
 
-Those taking this course for graduate credit (STAT 613) will also be required to submit a written report detailing a statistical analysis concerning their project topics. You will run a statistical inference procedure, verify the assumptions of your statistical procedure, and write up concluding remarks.
-
 # Assignments and Grading
 
-- Weekly homeworks: 75%
-- Final Project: 25%
+- Weekly homeworks: 40%
+- Final Project: 30%
+- Tidyverse Quiz: 10%
+- SQL Quiz: 10%
+- Python Quiz: 10%
 
 Usual grade cutoffs will be used:
 ```{r, echo = FALSE}
