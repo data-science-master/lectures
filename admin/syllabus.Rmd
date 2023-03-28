@@ -66,11 +66,11 @@ All students will prepare a final project using the tools learned in the class. 
 
 # Assignments and Grading
 
-- Weekly homeworks: 40%
-- Final Project: 30%
-- Tidyverse Quiz: 10%
-- SQL Quiz: 10%
-- Python Quiz: 10%
+- Weekly homeworks: 25%
+- Final Project: 25%
+- Tidyverse Quiz: 20%
+- SQL Quiz: 15%
+- Python Quiz: 15%
 
 Usual grade cutoffs will be used:
 ```{r, echo = FALSE}
@@ -88,12 +88,37 @@ All assignments must be submitted, in class, on the day they are due. You will b
 
 Students requiring a temporary leave of absence for medical or mental health reasons must provide documentation to the Office of the Dean of Students (<dos@american.edu>), which will verify with the academic unit that the documentation is appropriate and supports the leave. Students with an ASAC-approved accommodation for disability reasons should, to the greatest extent possible, make arrangements in advance of the due date or deadline.
 
+# Generative AI Policy
+
+- Generative AI (like ChatGPT) gives the most accurate solutions for simple problems --- that is, problems you do in college.
+
+- Generative AI gives the least accurate solutions for hard problems --- that is, problems you do in work.
+
+- But you need to know the simple stuff (stuff in college) in order to be able to learn the hard stuff (stuff in work).
+
+- So if you use generative AI for college, I think you are cheating yourself.
+
+- Data Science and Statistics are also special fields in that a degree will only get you an interview, it won't get you a job.
+
+- Companies want to make sure you know the simple stuff (stuff in college) so that they can be sure you can learn the hard stuff (stuff in work).
+
+- So if you rely on generative AI, you won't learn the foundational skills and you will have trouble finding a job.
+
+- Therefore, **use of Generative AI is not allowed in this course**.
+
+- But I won't check your homeworks for generative AI, this is too much work for me. 
+
+- I will just have more in-class assessment. Specifically, three quizzes worth 50% of the grade.
+
+- The quizzes will be closed notes/books/computer/calculator. No reference sheet will be allowed.
+
+- If you rely on generative AI, you will likely fail those quizzes. Homeworks are the best practice for exams.
+
 # Academic Integrity Code
 
 - Standards of academic conduct are set forth in the university’s [Academic Integrity Code](http://www.american.edu/academics/integrity/index.cfm). By registering for this course, students have acknowledged their awareness of the Academic Integrity Code and they are obliged to become familiar with their rights and responsibilities as defined by the Code. Violations of the Academic Integrity Code will not be treated lightly and disciplinary action will be taken should violations occur. This includes cheating, fabrication, and plagiarism.
 
 - I expect you to work with others and me, and I expect you to use online resources as you work on your assignments/projects. However, your submissions must be composed of your own thoughts, coding, and words. You should be able to explain your work on assignments/projects and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.** 
-
 - If you use an online resource, please cite it with a URL (this is perfectly fine!).
 
 - If you do not understand an online resource, but believe it to be useful for a project/assignment, please ask me for help.
