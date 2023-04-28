@@ -28,7 +28,6 @@ This course builds on the R/tidyverse programming skills developed in DATA-412/6
 - Understand the basics of data manipulation using Python.
 - Understand the basics of data manipulation using SQL.
 - Understand the ethical questions associated with data collection and analysis.
-- For DATA-615 Students only: Implement the basic statistical methods in R.
 
 # Materials
 - **Required**: A computer with [R](https://cran.r-project.org/), [RStudio](https://rstudio.com/products/rstudio/download/), and [git](https://git-scm.com/downloads) installed.
@@ -90,6 +89,20 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 # Generative AI Policy
 
+## Official Policy:
+
+- Generative AI will be allowed for homeworks and the final project.
+
+- If you use generative AI **you must include an appendix with your prompts and resulting output**.
+
+- This can either be by printing the webpage to PDF, or by copying and pasting the prompts and output to a Word file that you then convert to a PDF.
+
+- If you use generative AI, then **failure to include a generative AI appendix will be considered a violation of the academic integrity code.**
+
+- I mostly want to see how students use generative AI and see whether I need to adapt my teaching. So please take this seriously.
+
+## My Rant
+
 - Generative AI (like ChatGPT) gives the most accurate solutions for simple problems --- that is, problems you do in college.
 
 - Generative AI gives the least accurate solutions for hard problems --- that is, problems you do in work.
@@ -104,17 +117,11 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 - So if you rely on generative AI, you won't learn the foundational skills and you will have trouble finding a job.
 
-- Therefore, **use of Generative AI is not allowed in this course**.
-
-- I probably won't check your homeworks for generative AI, this is too much work for me. 
-
-- Though, **I reserve the right to check for generative AI in all of your work**.
-
-- I will just have more in-class assessment and lower the weight of homeworks.
+- Thus, I will just have more in-class assessment and lower the weight of homeworks.
 
 - We will have three quizzes that will be closed notes/books/computer/calculator. No reference sheet will be allowed.
 
-- If you rely on generative AI, you will likely fail those quizzes. Homeworks are the best practice for exams.
+- If you rely too much on generative AI, you will likely fail those quizzes. Homeworks are the best practice for exams.
 
 # Academic Integrity Code
 
