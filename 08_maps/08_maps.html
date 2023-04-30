@@ -11,9 +11,9 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-14" />
+<meta name="date" content="2023-04-30" />
 
-<title>Spark</title>
+<title>Simple Features and Graphing Maps</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -510,9 +510,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Spark</h1>
+<h1 class="title toc-ignore">Simple Features and Graphing Maps</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-14</h4>
+<h4 class="date">2023-04-30</h4>
 
 </div>
 
@@ -521,12 +521,9 @@ display: none;
 <li><a href="#learning-objectives" id="toc-learning-objectives">Learning
 Objectives</a></li>
 <li><a href="#motivation" id="toc-motivation">Motivation</a></li>
-<li><a href="#sparklyr" id="toc-sparklyr"><code>{sparklyr}</code></a>
-<ul>
-<li><a href="#install" id="toc-install">Install</a></li>
-<li><a href="#connect" id="toc-connect">Connect</a></li>
-<li><a href="#disconnect" id="toc-disconnect">Disconnect</a></li>
-</ul></li>
+<li><a href="#simple-features" id="toc-simple-features">Simple
+Features</a></li>
+<li><a href="#map-plotting" id="toc-map-plotting">Map Plotting</a></li>
 </ul>
 </div>
 
@@ -537,75 +534,33 @@ Objectives</a></li>
 <div id="learning-objectives" class="section level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>Learn some Spark</li>
-<li><a href="https://therinspark.com/index.html">Mastering Spark in
-R</a></li>
+<li>Simple Features
+<ul>
+<li><a href="https://r-spatial.github.io/sf/articles/" class="uri">https://r-spatial.github.io/sf/articles/</a></li>
+</ul></li>
+<li>Map Plotting
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="uri">https://ggplot2.tidyverse.org/reference/ggsf.html</a></li>
+</ul></li>
 </ul>
 </div>
 <div id="motivation" class="section level1">
 <h1>Motivation</h1>
 <ul>
-<li><p>Apache Spark is a program that allows for computing on databases
-distributed across multiple computers.</p></li>
-<li><p>With Spark:</p>
-<ul>
-<li>You can do data munging (dplyr/SQL stuff) on a dataset that is
-distributed across many computers,</li>
-<li>You can fit statistical (or train machine learning) models (like
-logistic regression) on a dataset that is distributed across many
-computers.</li>
-<li>More general computing operations, distributed across multiple
-computers.</li>
-</ul></li>
-<li><p>You can do arbitrarily complicated things with Spark, but for you
-the point of Spark is to do simple things on Big Data which won’t fit on
-one computer.</p></li>
+<li><p>For some reason, people are really impressed with data
+visualizations that include maps (e.g. of D.C., the U.S., the Earth,
+etc).</p></li>
+<li><p>Let’s go over how to build simple map visualizations in
+R.</p></li>
+<li><p>For this lecture, we will try to visualize the 2020 presidential
+election results collected by the Upshot (<a href="https://github.com/dcgerard/presidential-precinct-map-2020" class="uri">https://github.com/dcgerard/presidential-precinct-map-2020</a>).</p></li>
 </ul>
 </div>
-<div id="sparklyr" class="section level1">
-<h1><code>{sparklyr}</code></h1>
-<ul>
-<li><p>The <code>{sparklyr}</code> R package provides an R API to use
-Spark.</p></li>
-<li><p>It works well with <code>{DBI}</code> (used in the SQL lecture to
-connect to databases) and <code>{dplyr}</code>.</p></li>
-</ul>
-<div id="install" class="section level2">
-<h2>Install</h2>
-<ul>
-<li><p>Make sure you have java installed with (otherwise install it <a href="https://therinspark.com/appendix.html#appendix-install-java">here</a>).</p>
-<pre class="r"><code>system(&quot;java -version&quot;)</code></pre></li>
-<li><p>Install <code>{sparklyr}</code></p>
-<pre class="r"><code>install.packages(&quot;sparklyr&quot;)</code></pre></li>
-<li><p>Install Spark</p>
-<pre class="r"><code>sparklyr::spark_install()</code></pre></li>
-<li><p>Check that Spark is installed.</p>
-<pre class="r"><code>sparklyr::spark_installed_versions()</code></pre>
-<pre><code>##   spark hadoop                                           dir
-## 1 2.4.3    2.7 /home/dgerard/spark/spark-2.4.3-bin-hadoop2.7
-## 2 3.3.1      2   /home/dgerard/spark/spark-3.3.1-bin-hadoop2</code></pre></li>
-</ul>
+<div id="simple-features" class="section level1">
+<h1>Simple Features</h1>
 </div>
-<div id="connect" class="section level2">
-<h2>Connect</h2>
-<ul>
-<li><p>Load <code>{sparklyr}</code> into R</p>
-<pre class="r"><code>library(sparklyr)</code></pre></li>
-<li><p>Connect to Spark with <code>spark_connect()</code></p>
-<pre class="r"><code>sc &lt;- spark_connect(master = &quot;local&quot;, version = &quot;3.3.1&quot;)</code></pre></li>
-<li><p>You change the <code>master</code> argument to connect to
-clusters. The <code>&quot;local&quot;</code> value says to use the Spark that is
-installed on your computer.</p></li>
-<li><p>You use <code>sc</code> to run Spark commands.</p></li>
-</ul>
-</div>
-<div id="disconnect" class="section level2">
-<h2>Disconnect</h2>
-<ul>
-<li><p>Disconnect using <code>spark_disconnect()</code>.</p>
-<pre class="r"><code>spark_disconnect(sc)</code></pre></li>
-</ul>
-</div>
+<div id="map-plotting" class="section level1">
+<h1>Map Plotting</h1>
 </div>
 
 

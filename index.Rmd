@@ -58,7 +58,7 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [07 SQL](./07_sql/07_sql.html).
     - [07 DBeaver](./07_sql/07_dbeaver.html).
 - 08 Introduction to Spark
-    - [08 Spark](./08_spark/08_spark.html).
+    - [08 Maps](./08_maps/08_maps.html).
 - 09 GNU Make
     - [09 GNU Make](./09_make/09_make.html).
     - [09 Penguins Exercise](https://github.com/data-science-master/penguins).
