@@ -28,11 +28,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Parsing Dates
 
 - The lubridate package has a bunch of convenience functions for working with 
-  dates. It is *not* a part of the tidyverse, so you need to load it separately.
+  dates. It's a part of the tidyverse, so is loaded along with it.
   
     ```{r, message=FALSE, warning=FALSE}
     library(tidyverse)
-    library(lubridate)
     ```
   
 - There are three main classes for date/time data:
@@ -68,7 +67,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Parsing Dates
 
-- You can use `parse_date()`, `parse_datetime()`, and `parse_time()` to 
+- You can use `parse_date()`, `parse_datetime()`, and `parse_time()` (from `{readr}`) to 
   [parse](https://dcgerard.github.io/stat_412_612/lectures/06_tidyr/06_parsers.pdf) 
   a date/date-time/time from a string.
 
@@ -178,12 +177,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r}
     library(nycflights13)
     data("flights")
-    flights %>%
+    flights |>
       mutate(datetime = make_datetime(year   = year, 
                                       month  = month, 
                                       day    = day,
                                       hour   = hour,
-                                      min = minute)) ->
+                                      min    = minute)) ->
       flights
       select(flights, datetime)
     ```
@@ -196,8 +195,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - It makes it easier to filter by date
     ```{r}
-    flights %>%
-      filter(as_date(datetime) == ymd(20130704)) %>%
+    flights |>
+      filter(as_date(datetime) == ymd(20130704)) |>
       ggplot(aes(x = datetime)) +
       geom_freqpoly(binwidth = 600)
     ```
@@ -226,15 +225,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, echo = FALSE, eval = FALSE}
-    fake %>%
+    fake |>
       mutate(month = str_to_sentence(month),
              month = parse_factor(month, levels = month.abb),
              month_num2 = as.numeric(month),
-             date = make_date(year = year, month = month_num2, day = day)) %>%
+             date = make_date(year = year, month = month_num2, day = day)) |>
       filter(date > ymd(20100201))
     
-    fake %>%
-      mutate(date = make_date(year = year, month = month_num, day = day)) %>%
+    fake |>
+      mutate(date = make_date(year = year, month = month_num, day = day)) |>
       filter(date > ymd(20100201))
     ```
     
@@ -276,13 +275,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, eval = FALSE, echo = FALSE}
     wmata <- read_csv("../../data/wmata_ridership.csv")
     
-    wmata %>%
+    wmata |>
       mutate(year = year(Date),
              month = month(Date),
-             day  = wday(Date, label = TRUE)) %>%
-      filter(year != 2004) %>%
-      group_by(year, month) %>%
-      mutate(prop = Total / sum(Total)) %>%
+             day  = wday(Date, label = TRUE)) |>
+      filter(year != 2004) |>
+      group_by(year, month) |>
+      mutate(prop = Total / sum(Total)) |>
       ungroup() ->
       wmata
     
@@ -309,8 +308,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - The book provides an example of using `update()` on larger elements to see fine scale patterns
 
     ```{r}
-    flights %>%
-      mutate(dt = update(datetime, yday = 1)) %>%
+    flights |>
+      mutate(dt = update(datetime, yday = 1)) |>
       ggplot(aes(x = dt)) +
       geom_freqpoly(binwidth = 300)
     ```
