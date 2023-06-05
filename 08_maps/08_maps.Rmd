@@ -33,7 +33,7 @@ klippy::klippy()
 
 - Let's go over how to build simple map visualizations in R.
 
-- For this lecture, we will try to visualize the 2020 presidential election results collected by the Upshot (<https://github.com/dcgerard/presidential-precinct-map-2020>).
+- For this lecture, we will try to visualize the 2020 presidential election elections from (<https://github.com/TheUpshot/presidential-precinct-map-2020>).
 
 # Simple Features
 
