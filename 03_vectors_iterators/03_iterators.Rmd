@@ -241,18 +241,38 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Shortcuts
 
-- You can refer to elements of the vector by "`.`" in a `map()` call if the `.f`
-  argument is preceded by a "`~`". 
-  For example, the following are three equivalent ways to calculate the mean
+- Instead of specifying a built-in funciton, you can create an anonymous function to map over.
+
+- Anonymous functions are non-named functions that are used as inputs to other functions.
+
+- Typically,t hey are one-liners and are of the form
+
+    ```{r, eval = FALSE}
+    function(args) code-using-args
+    ```
+
+- E.g., an anonymous function that outputs the interquartile range of a vector is
+
+    ```{r}
+    function(x) quantile(x, 0.75) - quantile(x, 0.25)
+    ```
+
+- R 4.0 and above allows for a shorter syntax for anonymous functions.
+
+    ```{r}
+    \(x) quantile(x, 0.75) - quantile(x, 0.25)
+    ```
+
+- For example, the following are three equivalent ways to calculate the mean
   of each column in `mtcars`.
   
     ```{r, eval = FALSE}
     map_dbl(mtcars, mean)
-    map_dbl(mtcars, function(.) mean(.))
-    map_dbl(mtcars, ~mean(.))
+    map_dbl(mtcars, function(x) mean(x))
+    map_dbl(mtcars, \(x) mean(x))
     ```
     
-- What is actually going on is that purrr is creating an "anonymous function"
+- You can think about this as purrr creating an anonymous function
 
     ```{r, eval = FALSE}
     .f <- function(.) {
@@ -271,57 +291,45 @@ ggplot2::theme_set(ggplot2::theme_bw())
   fit many simple linear regression models:
 
     ```{r}
-    mtcars %>% 
-      split(.$cyl) %>% 
-      map(function(df) lm(mpg ~ wt, data = df)) ->
-      lmlist
+    mtcars |>
+      nest(.by = cyl) |>
+      mutate(lmout = map(data, \(df) lm(mpg ~ wt, data = df))) ->
+      sumdf
     ```
       
-    - `split(.$cyl)` will turn the data frame into a list of data frames where
-      each data frame has a different value of `cyl` for all units. The
-      "`.`" references the current data frame.
-    - `function(df) lm(mpg ~ wt, data = df)` defines a function (called an 
+    - `nest(.by = cyl)` will create a new data frame containing a list column of data frames, where each data frame has the same value of `cyl` for all units within that data frame.
+    - `\(df) lm(mpg ~ wt, data = df)` defines a function (called an 
       "anonymous function") that will fit a linear model of `mpg` on `wt` 
       where those variables are in the data frame `df`.
     - The `map()` call fits that linear model to each of the three data frames
-      in the list created by `split()`.
-    - What is returned is a list of three `lm` objects that you can use to
-      get fits and summaries.
+      in the list-column called `data` created by `nest()`.
+    - What is returned is a data frame containing a new list column called `lmout` that contains the three `lm` objects that you can use to get fits and summaries.
       
     ```{r}
-    summary(lmlist[[1]])
+    summary(sumdf$lmout[[1]])
     ```
-    
-- Again, rather than create an "anonymous function", you can use the formula notation
-  to do the same thing:
-  
-    ```{r}
-    mtcars %>% 
-      split(.$cyl) %>% 
-      map(~lm(mpg ~ wt, data = .)) ->
-      lmlist
-    ```
-  
-    - Here, the "`.`" in "`data = .`" references the current data frame from
-      the list of data frames that we are iterating through.
   
 - We can use `map()` to get a list of summaries.
     ```{r}
-    lmlist %>%
-      map(summary) ->
-      sumlist
+    sumdf |>
+      mutate(sumlm = map(lmout, summary)) ->
+      sumdf
+    
+    sumdf$sumlm[[1]]
     ```
 
 
-- If you want to extract the $R^2$, you can do this using the formula notation
-  as well.
+- If you want to extract the $R^2$, you can do this using map as well
   
     ```{r}
-    sumlist[[1]]$r.squared ## only gets one R^2 out.
+    sumdf$sumlm[[1]]$r.squared ## only gets one R^2 out.
     
     ## Gets all R^2 out
-    sumlist %>%
-      map(~.$r.squared)
+    sumdf |>
+      mutate(rsquared = map_dbl(sumlm, "r.squared")) ->
+      sumdf
+
+    sumdf$rsquared
     ```
   
   
@@ -338,10 +346,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     Use `map()` to get the $p$-value for this test within each group of `cyl`.
     
     ```{r, eval = FALSE, echo = FALSE}
-    mtcars %>%
-      split(.$cyl) %>%
-      map(~t.test(mpg ~ am, data = .)) %>%
-      map(~.$p.value)
+    mtcars |>
+      nest(.by = cyl) |>
+      mutate(tout = map(data, \(df) t.test(mpg ~ am, data = df))) |>
+      mutate(pvalue = map_dbl(tout, "p.value"))
     ```
 
 ## `keep()` and `discard()`.
