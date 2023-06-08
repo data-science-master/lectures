@@ -199,13 +199,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
   tools.
   
     ```{r}
-    tibble(text = ranking_text) %>%
+    tibble(text = ranking_text) |>
       mutate(rownum = row_number(),
              iseven = rownum %% 2 == 0,
-             movie = rep(1:100, each = 2)) %>%
-      select(-rownum) %>%
-      spread(key = "iseven", value = "text") %>%
-      select(-movie, "Rank" = "FALSE", movie = "TRUE") %>%
+             movie = rep(1:100, each = 2)) |>
+      select(-rownum) |>
+      spread(key = "iseven", value = "text") |>
+      select(-movie, "Rank" = "FALSE", movie = "TRUE") |>
       mutate(Rank = parse_number(Rank)) ->
       movierank
     movierank
@@ -254,7 +254,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r}
     datadf <- tibble(text = datatext)
     
-    datadf %>%
+    datadf |>
       mutate(ismovierank = str_detect(text, "^\\d+\\.$")) ->
       datadf
     
@@ -262,8 +262,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     sum(datadf$ismovierank)
     
     ## get movie numbers and remove non-movie elements:
-    datadf %>%
-      mutate(movienum = cumsum(ismovierank)) %>%
+    datadf |>
+      mutate(movienum = cumsum(ismovierank)) |>
       filter(movienum > 0) ->
       datadf
     
@@ -274,7 +274,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
   which rows are movie names
   
     ```{r}
-    datadf %>%
+    datadf |>
       mutate(isname = text %in% movierank$movie) ->
       datadf
     
@@ -287,7 +287,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Years are surrounded by parentheses:
 
     ```{r}
-    datadf %>%
+    datadf |>
       mutate(isyear = str_detect(text, "\\(\\d+\\)")) ->
       datadf
     
@@ -300,7 +300,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Genre's begin with a new line:
     
     ```{r}
-    datadf %>%
+    datadf |>
       mutate(isgenre = str_detect(text, "^\\n")) ->
       datadf
     
@@ -311,11 +311,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Everything else should be the metacritic score:
 
     ```{r}
-    datadf %>%
-      group_by(ismovierank, isname, isyear, isgenre) %>%
+    datadf |>
+      group_by(ismovierank, isname, isyear, isgenre) |>
       count()
     
-    datadf %>%
+    datadf |>
       mutate(ismeta = !ismovierank & !isname & !isyear & !isgenre) ->
       datadf
     
@@ -325,13 +325,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Let's create a key for these data then spread them:
 
     ```{r}
-    datadf %>%
+    datadf |>
       mutate(key = case_when(ismovierank ~ "rank",
                              isname ~ "name",
                              isyear ~ "year",
                              isgenre ~ "genre",
-                             ismeta ~ "metacritic")) %>%
-      select(key, text, movienum) %>%
+                             ismeta ~ "metacritic")) |>
+      select(key, text, movienum) |>
       spread(key = "key", value = "text") ->
       datawide
     
@@ -341,7 +341,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Let's clean up the remaining variables:
 
     ```{r}
-    datawide %>%
+    datawide |>
       mutate(genre = str_replace_all(genre, "\\n", ""),
              genre = str_squish(genre),
              metacritic = parse_number(metacritic),
@@ -389,7 +389,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     tablist <- html_table(wikidat)
     class(tablist)
     length(tablist)
-    tablist[[19]] %>%
+    tablist[[19]] |>
       select(1:4)
     ```
     
@@ -438,7 +438,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     ## Table 18 doesn't have a country
     ## headers[[18]]
-    tablist[[18]] %>%
+    tablist[[18]] |>
       mutate(Country = "Russia") ->
       tablist[[18]]
     
@@ -453,13 +453,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
       tablist
     
     ## replace, e.g., 15th century with 1500 century
-    map(tablist, ~mutate(., fb = str_replace(fb, "th", "00"))) %>%
-      map(~mutate(., fb = str_extract(fb, "^\\d+"))) ->
+    map(tablist, \(df) mutate(df, fb = str_replace(fb, "th", "00"))) |>
+      map(\(df) mutate(df, fb = str_extract(fb, "^\\d+"))) ->
       tablist
     
     ## clean up headers
-    str_replace_all(headers, "\\n", "") %>%
-      str_replace_all("\\(.+\\)", "") %>%
+    str_replace_all(headers, "\\n", "") |>
+      str_replace_all("\\(.+\\)", "") |>
       str_squish() ->
       headers
     

@@ -209,7 +209,7 @@ tcl = -.25)
     `+`(5, 10) ## prefix notation
     ```
 
-- Put spaces around all infix characters `==`, `+`, `-`, `*`, `/`, `^`, `%>%`, etc...
+- Put spaces around all infix characters `==`, `+`, `-`, `*`, `/`, `^`, `|>`, etc...
     - Good:
         ```{r, eval = FALSE}
         x + 10

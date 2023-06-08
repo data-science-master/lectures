@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-12-07" />
+<meta name="date" content="2023-06-08" />
 
 <title>Web Scraping with rvest</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Web Scraping with rvest</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-12-07</h4>
+<h4 class="date">2023-06-08</h4>
 
 </div>
 
@@ -527,13 +527,13 @@ head(ranking_text)</code></pre>
 </ul></li>
 <li><p>After you do this, you need to tidy the data using your data
 munging tools.</p>
-<pre class="r"><code>tibble(text = ranking_text) %&gt;%
+<pre class="r"><code>tibble(text = ranking_text) |&gt;
   mutate(rownum = row_number(),
          iseven = rownum %% 2 == 0,
-         movie = rep(1:100, each = 2)) %&gt;%
-  select(-rownum) %&gt;%
-  spread(key = &quot;iseven&quot;, value = &quot;text&quot;) %&gt;%
-  select(-movie, &quot;Rank&quot; = &quot;FALSE&quot;, movie = &quot;TRUE&quot;) %&gt;%
+         movie = rep(1:100, each = 2)) |&gt;
+  select(-rownum) |&gt;
+  spread(key = &quot;iseven&quot;, value = &quot;text&quot;) |&gt;
+  select(-movie, &quot;Rank&quot; = &quot;FALSE&quot;, movie = &quot;TRUE&quot;) |&gt;
   mutate(Rank = parse_number(Rank)) -&gt;
   movierank
 movierank</code></pre>
@@ -550,7 +550,7 @@ movierank</code></pre>
 ##  8     8 The Wizard of Oz               
 ##  9     9 One Flew Over the Cuckoo&#39;s Nest
 ## 10    10 Lawrence of Arabia             
-## # … with 90 more rows</code></pre></li>
+## # ℹ 90 more rows</code></pre></li>
 <li><p><strong>Exercise</strong>: Extract the directors and the names of
 each film. You can extract them separately and combine them.</p></li>
 </ul>
@@ -567,19 +567,19 @@ datatext &lt;- html_text(dataobj)</code></pre></li>
 <li><p>We now have a <em>lot</em> of cleaning to do. Note that the first
 132 elements we didn’t even want:</p>
 <pre class="r"><code>head(datatext)</code></pre>
-<pre><code>## [1] &quot;\n        Prime Video\n            (7)\n    &quot;               
-## [2] &quot;\n        Freevee\n            (2)\n    &quot;                   
+<pre><code>## [1] &quot;\n        Prime Video\n            (11)\n    &quot;              
+## [2] &quot;\n        Freevee\n            (1)\n    &quot;                   
 ## [3] &quot;\n        Prime Video (Rent or Buy)\n            (97)\n    &quot;
 ## [4] &quot;\n        Drama\n            (77)\n    &quot;                    
 ## [5] &quot;\n        Romance\n            (27)\n    &quot;                  
 ## [6] &quot;\n        Adventure\n            (20)\n    &quot;</code></pre>
 <pre class="r"><code>datatext[130:136]</code></pre>
-<pre><code>## [1] &quot;\n        1930s\n            (18)\n    &quot;
-## [2] &quot;1.&quot;                                     
-## [3] &quot;The Godfather&quot;                          
-## [4] &quot;(1972)&quot;                                 
-## [5] &quot;\nCrime, Drama            &quot;             
-## [6] &quot;100        &quot;                            
+<pre><code>## [1] &quot;\n        Psychotronic Film\n            (19)\n    &quot;
+## [2] &quot;1.&quot;                                                 
+## [3] &quot;The Godfather&quot;                                      
+## [4] &quot;(1972)&quot;                                             
+## [5] &quot;\nCrime, Drama            &quot;                         
+## [6] &quot;100        &quot;                                        
 ## [7] &quot;2.&quot;</code></pre></li>
 <li><p>The rankings are always of the form <code>&quot;\\d+\\.&quot;</code>. We’ll
 use this and a cumulative sum to indicate which movies the variables
@@ -588,7 +588,7 @@ missing (e.g.  “The Great Dictator” doesn’t have a metacritic
 score).</p>
 <pre class="r"><code>datadf &lt;- tibble(text = datatext)
 
-datadf %&gt;%
+datadf |&gt;
   mutate(ismovierank = str_detect(text, &quot;^\\d+\\.$&quot;)) -&gt;
   datadf
 
@@ -596,13 +596,13 @@ datadf %&gt;%
 sum(datadf$ismovierank)</code></pre>
 <pre><code>## [1] 100</code></pre>
 <pre class="r"><code>## get movie numbers and remove non-movie elements:
-datadf %&gt;%
-  mutate(movienum = cumsum(ismovierank)) %&gt;%
+datadf |&gt;
+  mutate(movienum = cumsum(ismovierank)) |&gt;
   filter(movienum &gt; 0) -&gt;
   datadf
 
 datadf</code></pre>
-<pre><code>## # A tibble: 497 × 3
+<pre><code>## # A tibble: 498 × 3
 ##    text                         ismovierank movienum
 ##    &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt;
 ##  1 &quot;1.&quot;                         TRUE               1
@@ -614,11 +614,11 @@ datadf</code></pre>
 ##  7 &quot;The Shawshank Redemption&quot;   FALSE              2
 ##  8 &quot;(1994)&quot;                     FALSE              2
 ##  9 &quot;\nDrama            &quot;        FALSE              2
-## 10 &quot;81        &quot;                 FALSE              2
-## # … with 487 more rows</code></pre></li>
+## 10 &quot;82        &quot;                 FALSE              2
+## # ℹ 488 more rows</code></pre></li>
 <li><p>We’ll use the <code>movierank$movie</code> variable we created
 before see which rows are movie names</p>
-<pre class="r"><code>datadf %&gt;%
+<pre class="r"><code>datadf |&gt;
   mutate(isname = text %in% movierank$movie) -&gt;
   datadf
 
@@ -626,7 +626,7 @@ before see which rows are movie names</p>
 sum(datadf$isname)</code></pre>
 <pre><code>## [1] 100</code></pre>
 <pre class="r"><code>datadf</code></pre>
-<pre><code>## # A tibble: 497 × 4
+<pre><code>## # A tibble: 498 × 4
 ##    text                         ismovierank movienum isname
 ##    &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt; 
 ##  1 &quot;1.&quot;                         TRUE               1 FALSE 
@@ -638,10 +638,10 @@ sum(datadf$isname)</code></pre>
 ##  7 &quot;The Shawshank Redemption&quot;   FALSE              2 TRUE  
 ##  8 &quot;(1994)&quot;                     FALSE              2 FALSE 
 ##  9 &quot;\nDrama            &quot;        FALSE              2 FALSE 
-## 10 &quot;81        &quot;                 FALSE              2 FALSE 
-## # … with 487 more rows</code></pre></li>
+## 10 &quot;82        &quot;                 FALSE              2 FALSE 
+## # ℹ 488 more rows</code></pre></li>
 <li><p>Years are surrounded by parentheses:</p>
-<pre class="r"><code>datadf %&gt;%
+<pre class="r"><code>datadf |&gt;
   mutate(isyear = str_detect(text, &quot;\\(\\d+\\)&quot;)) -&gt;
   datadf
 
@@ -649,7 +649,7 @@ sum(datadf$isname)</code></pre>
 sum(datadf$isyear)</code></pre>
 <pre><code>## [1] 100</code></pre>
 <pre class="r"><code>datadf</code></pre>
-<pre><code>## # A tibble: 497 × 5
+<pre><code>## # A tibble: 498 × 5
 ##    text                         ismovierank movienum isname isyear
 ##    &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt;  &lt;lgl&gt; 
 ##  1 &quot;1.&quot;                         TRUE               1 FALSE  FALSE 
@@ -661,10 +661,10 @@ sum(datadf$isyear)</code></pre>
 ##  7 &quot;The Shawshank Redemption&quot;   FALSE              2 TRUE   FALSE 
 ##  8 &quot;(1994)&quot;                     FALSE              2 FALSE  TRUE  
 ##  9 &quot;\nDrama            &quot;        FALSE              2 FALSE  FALSE 
-## 10 &quot;81        &quot;                 FALSE              2 FALSE  FALSE 
-## # … with 487 more rows</code></pre></li>
+## 10 &quot;82        &quot;                 FALSE              2 FALSE  FALSE 
+## # ℹ 488 more rows</code></pre></li>
 <li><p>Genre’s begin with a new line:</p>
-<pre class="r"><code>datadf %&gt;%
+<pre class="r"><code>datadf |&gt;
   mutate(isgenre = str_detect(text, &quot;^\\n&quot;)) -&gt;
   datadf
 
@@ -672,65 +672,65 @@ sum(datadf$isyear)</code></pre>
 sum(datadf$isgenre)</code></pre>
 <pre><code>## [1] 100</code></pre></li>
 <li><p>Everything else should be the metacritic score:</p>
-<pre class="r"><code>datadf %&gt;%
-  group_by(ismovierank, isname, isyear, isgenre) %&gt;%
+<pre class="r"><code>datadf |&gt;
+  group_by(ismovierank, isname, isyear, isgenre) |&gt;
   count()</code></pre>
 <pre><code>## # A tibble: 5 × 5
 ## # Groups:   ismovierank, isname, isyear, isgenre [5]
 ##   ismovierank isname isyear isgenre     n
 ##   &lt;lgl&gt;       &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;   &lt;int&gt;
-## 1 FALSE       FALSE  FALSE  FALSE      97
+## 1 FALSE       FALSE  FALSE  FALSE      98
 ## 2 FALSE       FALSE  FALSE  TRUE      100
 ## 3 FALSE       FALSE  TRUE   FALSE     100
 ## 4 FALSE       TRUE   FALSE  FALSE     100
 ## 5 TRUE        FALSE  FALSE  FALSE     100</code></pre>
-<pre class="r"><code>datadf %&gt;%
+<pre class="r"><code>datadf |&gt;
   mutate(ismeta = !ismovierank &amp; !isname &amp; !isyear &amp; !isgenre) -&gt;
   datadf
 
 datadf</code></pre>
-<pre><code>## # A tibble: 497 × 7
-##    text                         ismovierank movie…¹ isname isyear isgenre ismeta
-##    &lt;chr&gt;                        &lt;lgl&gt;         &lt;int&gt; &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;   &lt;lgl&gt; 
-##  1 &quot;1.&quot;                         TRUE              1 FALSE  FALSE  FALSE   FALSE 
-##  2 &quot;The Godfather&quot;              FALSE             1 TRUE   FALSE  FALSE   FALSE 
-##  3 &quot;(1972)&quot;                     FALSE             1 FALSE  TRUE   FALSE   FALSE 
-##  4 &quot;\nCrime, Drama            &quot; FALSE             1 FALSE  FALSE  TRUE    FALSE 
-##  5 &quot;100        &quot;                FALSE             1 FALSE  FALSE  FALSE   TRUE  
-##  6 &quot;2.&quot;                         TRUE              2 FALSE  FALSE  FALSE   FALSE 
-##  7 &quot;The Shawshank Redemption&quot;   FALSE             2 TRUE   FALSE  FALSE   FALSE 
-##  8 &quot;(1994)&quot;                     FALSE             2 FALSE  TRUE   FALSE   FALSE 
-##  9 &quot;\nDrama            &quot;        FALSE             2 FALSE  FALSE  TRUE    FALSE 
-## 10 &quot;81        &quot;                 FALSE             2 FALSE  FALSE  FALSE   TRUE  
-## # … with 487 more rows, and abbreviated variable name ¹​movienum</code></pre></li>
+<pre><code>## # A tibble: 498 × 7
+##    text                        ismovierank movienum isname isyear isgenre ismeta
+##    &lt;chr&gt;                       &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;   &lt;lgl&gt; 
+##  1 &quot;1.&quot;                        TRUE               1 FALSE  FALSE  FALSE   FALSE 
+##  2 &quot;The Godfather&quot;             FALSE              1 TRUE   FALSE  FALSE   FALSE 
+##  3 &quot;(1972)&quot;                    FALSE              1 FALSE  TRUE   FALSE   FALSE 
+##  4 &quot;\nCrime, Drama           … FALSE              1 FALSE  FALSE  TRUE    FALSE 
+##  5 &quot;100        &quot;               FALSE              1 FALSE  FALSE  FALSE   TRUE  
+##  6 &quot;2.&quot;                        TRUE               2 FALSE  FALSE  FALSE   FALSE 
+##  7 &quot;The Shawshank Redemption&quot;  FALSE              2 TRUE   FALSE  FALSE   FALSE 
+##  8 &quot;(1994)&quot;                    FALSE              2 FALSE  TRUE   FALSE   FALSE 
+##  9 &quot;\nDrama            &quot;       FALSE              2 FALSE  FALSE  TRUE    FALSE 
+## 10 &quot;82        &quot;                FALSE              2 FALSE  FALSE  FALSE   TRUE  
+## # ℹ 488 more rows</code></pre></li>
 <li><p>Let’s create a key for these data then spread them:</p>
-<pre class="r"><code>datadf %&gt;%
+<pre class="r"><code>datadf |&gt;
   mutate(key = case_when(ismovierank ~ &quot;rank&quot;,
                          isname ~ &quot;name&quot;,
                          isyear ~ &quot;year&quot;,
                          isgenre ~ &quot;genre&quot;,
-                         ismeta ~ &quot;metacritic&quot;)) %&gt;%
-  select(key, text, movienum) %&gt;%
+                         ismeta ~ &quot;metacritic&quot;)) |&gt;
+  select(key, text, movienum) |&gt;
   spread(key = &quot;key&quot;, value = &quot;text&quot;) -&gt;
   datawide
 
 datawide</code></pre>
 <pre><code>## # A tibble: 100 × 6
-##    movienum genre                                      metac…¹ name  rank  year 
-##       &lt;int&gt; &lt;chr&gt;                                      &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-##  1        1 &quot;\nCrime, Drama            &quot;               &quot;100  … The … 1.    (197…
-##  2        2 &quot;\nDrama            &quot;                      &quot;81   … The … 2.    (199…
-##  3        3 &quot;\nBiography, Drama, History            &quot;  &quot;94   … Schi… 3.    (199…
-##  4        4 &quot;\nBiography, Drama, Sport            &quot;    &quot;89   … Ragi… 4.    (198…
-##  5        5 &quot;\nDrama, Romance, War            &quot;        &quot;100  … Casa… 5.    (194…
-##  6        6 &quot;\nDrama, Mystery            &quot;             &quot;100  … Citi… 6.    (194…
-##  7        7 &quot;\nDrama, Romance, War            &quot;        &quot;97   … Gone… 7.    (193…
-##  8        8 &quot;\nAdventure, Family, Fantasy            &quot; &quot;92   … The … 8.    (193…
-##  9        9 &quot;\nDrama            &quot;                      &quot;84   … One … 9.    (197…
-## 10       10 &quot;\nAdventure, Biography, Drama           … &quot;100  … Lawr… 10.   (196…
-## # … with 90 more rows, and abbreviated variable name ¹​metacritic</code></pre></li>
+##    movienum genre                                   metacritic name  rank  year 
+##       &lt;int&gt; &lt;chr&gt;                                   &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1        1 &quot;\nCrime, Drama            &quot;            &quot;100     … The … 1.    (197…
+##  2        2 &quot;\nDrama            &quot;                   &quot;82      … The … 2.    (199…
+##  3        3 &quot;\nBiography, Drama, History          … &quot;95      … Schi… 3.    (199…
+##  4        4 &quot;\nBiography, Drama, Sport            &quot; &quot;90      … Ragi… 4.    (198…
+##  5        5 &quot;\nDrama, Romance, War            &quot;     &quot;100     … Casa… 5.    (194…
+##  6        6 &quot;\nDrama, Mystery            &quot;          &quot;100     … Citi… 6.    (194…
+##  7        7 &quot;\nDrama, Romance, War            &quot;     &quot;97      … Gone… 7.    (193…
+##  8        8 &quot;\nAdventure, Family, Fantasy         … &quot;92      … The … 8.    (193…
+##  9        9 &quot;\nDrama            &quot;                   &quot;84      … One … 9.    (197…
+## 10       10 &quot;\nAdventure, Biography, Drama        … &quot;100     … Lawr… 10.   (196…
+## # ℹ 90 more rows</code></pre></li>
 <li><p>Let’s clean up the remaining variables:</p>
-<pre class="r"><code>datawide %&gt;%
+<pre class="r"><code>datawide |&gt;
   mutate(genre = str_replace_all(genre, &quot;\\n&quot;, &quot;&quot;),
          genre = str_squish(genre),
          metacritic = parse_number(metacritic),
@@ -743,16 +743,16 @@ datawide</code></pre>
 ##    movienum genre                       metacritic name               rank  year
 ##       &lt;int&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
 ##  1        1 Crime, Drama                       100 The Godfather         1  1972
-##  2        2 Drama                               81 The Shawshank Re…     2  1994
-##  3        3 Biography, Drama, History           94 Schindler&#39;s List      3  1993
-##  4        4 Biography, Drama, Sport             89 Raging Bull           4  1980
+##  2        2 Drama                               82 The Shawshank Re…     2  1994
+##  3        3 Biography, Drama, History           95 Schindler&#39;s List      3  1993
+##  4        4 Biography, Drama, Sport             90 Raging Bull           4  1980
 ##  5        5 Drama, Romance, War                100 Casablanca            5  1942
 ##  6        6 Drama, Mystery                     100 Citizen Kane          6  1941
 ##  7        7 Drama, Romance, War                 97 Gone with the Wi…     7  1939
 ##  8        8 Adventure, Family, Fantasy          92 The Wizard of Oz      8  1939
 ##  9        9 Drama                               84 One Flew Over th…     9  1975
 ## 10       10 Adventure, Biography, Drama        100 Lawrence of Arab…    10  1962
-## # … with 90 more rows</code></pre></li>
+## # ℹ 90 more rows</code></pre></li>
 </ul>
 </div>
 <div id="html_table" class="section level1">
@@ -775,7 +775,7 @@ class(tablist)</code></pre>
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <pre class="r"><code>length(tablist)</code></pre>
 <pre><code>## [1] 20</code></pre>
-<pre class="r"><code>tablist[[19]] %&gt;%
+<pre class="r"><code>tablist[[19]] |&gt;
   select(1:4)</code></pre>
 <pre><code>## # A tibble: 11 × 4
 ##    Year     TC    TS     H

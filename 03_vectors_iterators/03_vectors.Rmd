@@ -257,7 +257,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     a. Wario can't actually make it. Remove his row from the data frame.
     ```{r, eval = FALSE, echo = FALSE}
-    wedding$guest %>%
+    wedding$guest |>
       filter(name != "Wario") ->
       wedding$guest
     wedding$guest
@@ -282,7 +282,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     d. `"chick-fil-a"` should be capitalized. Capitalize the first `"c"`.
     
     ```{r, eval = FALSE, echo = FALSE}
-    wedding$venue %>%
+    wedding$venue |>
       str_replace(pattern = "^c", "C") ->
       wedding$venue
     wedding$venue

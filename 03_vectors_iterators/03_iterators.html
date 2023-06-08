@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-06-06" />
+<meta name="date" content="2023-06-08" />
 
 <title>Iterators</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Iterators</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-06-06</h4>
+<h4 class="date">2023-06-08</h4>
 
 </div>
 
@@ -654,8 +654,8 @@ of <code>cyl</code>.</p></li>
 in the <code>palmerpenguins::penguins</code> data frame.</p>
 <pre class="r"><code>library(palmerpenguins)
 data(&quot;penguins&quot;)
-penguins %&gt;%
-  keep(is.numeric) %&gt;%
+penguins |&gt;
+  keep(is.numeric) |&gt;
   map_dbl(mean, na.rm = TRUE)</code></pre>
 <pre><code>##    bill_length_mm     bill_depth_mm flipper_length_mm       body_mass_g 
 ##             43.92             17.15            200.92           4201.75 
@@ -665,8 +665,8 @@ penguins %&gt;%
 <code>FALSE</code> according to some function.</p></li>
 <li><p>Let’s count the number of each value for each categorical
 variable:</p>
-<pre class="r"><code>penguins %&gt;%
-  discard(is.numeric) %&gt;%
+<pre class="r"><code>penguins |&gt;
+  discard(is.numeric) |&gt;
   map(table)</code></pre>
 <pre><code>## $species
 ## 
