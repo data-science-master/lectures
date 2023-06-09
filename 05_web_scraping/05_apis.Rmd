@@ -559,7 +559,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, echo = FALSE, eval = FALSE}
-    tibble(people = sw_people) %>%
+    tibble(people = sw_people) |>
       unnest_wider(people)
     ```
   
@@ -571,7 +571,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, echo = FALSE, eval = FALSE}
-    tibble(chars = got_chars) %>%
+    tibble(chars = got_chars) |>
       unnest_wider(chars)
     ```
 
@@ -583,7 +583,7 @@ Consider the [NASA API](https://api.nasa.gov/)
 
 2. Read about the APOD API and obtain all images from January of 2022. Your response should look like this:
 
-    ```{r, echo = FALSE, eval = TRUE}
+    ```{r, echo = FALSE, eval = FALSE}
     nasa_key <- Sys.getenv("NASA_API_KEY")
     nasa_url <- modify_url(url = "https://api.nasa.gov/planetary/apod", 
                            query = list(start_date = "2022-01-01",
@@ -595,8 +595,8 @@ Consider the [NASA API](https://api.nasa.gov/)
     
 3. Clean the output into a data frame, like this:
 
-    ```{r, echo = FALSE, eval = TRUE}
-    tibble(img = content(nout)) %>%
+    ```{r, echo = FALSE, eval = FALSE}
+    tibble(img = content(nout)) |>
       unnest_wider(img)
     ```
 
