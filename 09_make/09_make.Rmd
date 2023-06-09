@@ -100,10 +100,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Motivation
 
 - There are a lot of steps in a data analysis
-    - Download data (`httr`) %>% <br>
-      tidy data (`dplyr`, `tidyr`) %>% <br>
-      exploratory data analysis (`ggplot2`, `dplyr`) %>% <br>
-      statistical analysis (`stats`, `broom`, `tidymodels`) %>% <br>
+    - Download data (`httr`) `|>` <br>
+      tidy data (`dplyr`, `tidyr`) `|>` <br>
+      exploratory data analysis (`ggplot2`, `dplyr`) `|>` <br>
+      statistical analysis (`stats`, `broom`, `tidymodels`) `|>` <br>
       present results (`shiny`, `rmarkdown`, `ggplot2`).
   
 - Each of these steps should be done in separate files. But a more typical pipeline would include *multiple files for each step*. 
@@ -127,7 +127,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
            `qqplots.pdf` ~ `sim_se_plots.R`,
            `qqplots.pdf` ~ `sims_out.csv`,
            `time.pdf` ~ `time.R`,
-           `time.pdf` ~ `sims_out.csv`) %>%
+           `time.pdf` ~ `sims_out.csv`) |>
       ggdag(layout = "sugiyama",
             text_col = "black",
             node = FALSE) +
@@ -353,7 +353,7 @@ target3 : prereq3.Rmd
            "pdat.csv" ~ "add_alt_sims.R",
            "pdat.csv" ~ "pnull.RDS",
            "panal.html" ~ "panal.Rmd",
-           "panal.html" ~ "pdat.csv") %>%
+           "panal.html" ~ "pdat.csv") |>
       ggdag(layout = "sugiyama",
             text_col = "black",
             node = FALSE) +
@@ -416,7 +416,7 @@ target3 : prereq3.Rmd
            "penguin_class.csv" ~ "classify_penguins.R",
            "penguin_report.html" ~ "penguin_pairs.png",
            "penguin_report.html" ~ "penguin_class.csv",
-           "penguin_report.html" ~ "penguin_report.Rmd") %>%
+           "penguin_report.html" ~ "penguin_report.Rmd") |>
       ggdag(layout = "sugiyama",
             text_col = "black",
             node = FALSE) +

@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-16" />
+<meta name="date" content="2023-06-09" />
 
 <title>Managing Workflows with GNU Make</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Managing Workflows with GNU Make</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-16</h4>
+<h4 class="date">2023-06-09</h4>
 
 </div>
 
@@ -503,12 +503,13 @@ your terminal.</p></li>
 <ul>
 <li><p>There are a lot of steps in a data analysis</p>
 <ul>
-<li>Download data (<code>httr</code>) %&gt;% <br> tidy data
-(<code>dplyr</code>, <code>tidyr</code>) %&gt;% <br> exploratory data
-analysis (<code>ggplot2</code>, <code>dplyr</code>) %&gt;% <br>
-statistical analysis (<code>stats</code>, <code>broom</code>,
-<code>tidymodels</code>) %&gt;% <br> present results
-(<code>shiny</code>, <code>rmarkdown</code>, <code>ggplot2</code>).</li>
+<li>Download data (<code>httr</code>) <code>|&gt;</code> <br> tidy data
+(<code>dplyr</code>, <code>tidyr</code>) <code>|&gt;</code> <br>
+exploratory data analysis (<code>ggplot2</code>, <code>dplyr</code>)
+<code>|&gt;</code> <br> statistical analysis (<code>stats</code>,
+<code>broom</code>, <code>tidymodels</code>) <code>|&gt;</code> <br>
+present results (<code>shiny</code>, <code>rmarkdown</code>,
+<code>ggplot2</code>).</li>
 </ul></li>
 <li><p>Each of these steps should be done in separate files. But a more
 typical pipeline would include <em>multiple files for each

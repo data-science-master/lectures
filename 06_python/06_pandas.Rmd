@@ -61,7 +61,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     |`spread()` and `pivot_wider()` | `<DataFrame>.pivot_table().reset_index()`|
     |`summarize()`  | `<DataFrame>.agg()`|
     |`unite()`      | `<Series>.str.cat()`|
-    |`%>%`          | Enclose pipeline in `()`|
+    |`|>`          | Enclose pipeline in `()`|
 
 
 
@@ -233,8 +233,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, eval = FALSE, echo = FALSE}
-    estate %>%
-      filter(Quality == "Medium", Pool > 0) %>%
+    estate |>
+      filter(Quality == "Medium", Pool > 0) |>
       arrange(Price)
     ```
 
@@ -304,7 +304,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
     
     ```{r, eval = FALSE, echo = FALSE}
-    estate %>%
+    estate |>
       select(Year, Price, Area)
     ```
     
@@ -373,8 +373,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
-    estate %>%
-      mutate(tot = Bed + Bath) %>%
+    estate |>
+      mutate(tot = Bed + Bath) |>
       select(Price, tot)
     ```
 
@@ -424,8 +424,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
-    estate %>%
-      group_by(Bed, Bath) %>%
+    estate |>
+      group_by(Bed, Bath) |>
       summarize(Price = mean(Price), Area = mean(Area))
     ```
     
@@ -467,7 +467,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     <mark style="background-color: lightblue">R</mark>
     ```{r, eval = FALSE}
-    estate %>%
+    estate |>
       mutate(AC = recode(AC,
                          "0" = "No AC",
                          "1" = "AC"))

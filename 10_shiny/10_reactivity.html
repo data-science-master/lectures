@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-16" />
+<meta name="date" content="2023-06-09" />
 
 <title>Reactivity and the server() Function</title>
 
@@ -512,7 +512,7 @@ display: none;
 
 <h1 class="title toc-ignore">Reactivity and the server() Function</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-16</h4>
+<h4 class="date">2023-06-09</h4>
 
 </div>
 
@@ -693,16 +693,16 @@ server &lt;- function(input, output) {
   })
 
   output$plot &lt;- renderPlot({
-    data.frame(`1` = x1(), `2` = x2()) %&gt;%
-      gather(key = &quot;Group&quot;, value = &quot;y&quot;) %&gt;%
+    data.frame(`1` = x1(), `2` = x2()) |&gt;
+      gather(key = &quot;Group&quot;, value = &quot;y&quot;) |&gt;
       ggplot(aes(x = Group, y = y)) +
       geom_boxplot() +
       theme_bw()
   })
 
   output$text &lt;- renderPrint({
-    t.test(x1(), x2()) %&gt;%
-      tidy() %&gt;%
+    t.test(x1(), x2()) |&gt;
+      tidy() |&gt;
       select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
   })
 }
@@ -767,16 +767,16 @@ server &lt;- function(input, output) {
   })
 
   output$plot &lt;- renderPlot({
-    data.frame(`1` = x1(), `2` = x2()) %&gt;%
-      gather(key = &quot;Group&quot;, value = &quot;y&quot;) %&gt;%
+    data.frame(`1` = x1(), `2` = x2()) |&gt;
+      gather(key = &quot;Group&quot;, value = &quot;y&quot;) |&gt;
       ggplot(aes(x = Group, y = y)) +
       geom_boxplot() +
       theme_bw()
   })
 
   output$text &lt;- renderPrint({
-    t.test(x1(), x2()) %&gt;%
-      tidy() %&gt;%
+    t.test(x1(), x2()) |&gt;
+      tidy() |&gt;
       select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
   })
 }
@@ -830,16 +830,16 @@ server &lt;- function(input, output) {
   })
 
   output$plot &lt;- renderPlot({
-    data.frame(`1` = x1(), `2` = x2()) %&gt;%
-      gather(key = &quot;Group&quot;, value = &quot;y&quot;) %&gt;%
+    data.frame(`1` = x1(), `2` = x2()) |&gt;
+      gather(key = &quot;Group&quot;, value = &quot;y&quot;) |&gt;
       ggplot(aes(x = Group, y = y)) +
       geom_boxplot() +
       theme_bw()
   })
 
   output$text &lt;- renderPrint({
-    t.test(x1(), x2()) %&gt;%
-      tidy() %&gt;%
+    t.test(x1(), x2()) |&gt;
+      tidy() |&gt;
       select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
   })
 }

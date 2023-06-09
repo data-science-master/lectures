@@ -199,16 +199,16 @@ klippy::klippy()
       })
       
       output$plot <- renderPlot({
-        data.frame(`1` = x1(), `2` = x2()) %>%
-          gather(key = "Group", value = "y") %>%
+        data.frame(`1` = x1(), `2` = x2()) |>
+          gather(key = "Group", value = "y") |>
           ggplot(aes(x = Group, y = y)) +
           geom_boxplot() +
           theme_bw()
       })
       
       output$text <- renderPrint({
-        t.test(x1(), x2()) %>%
-          tidy() %>%
+        t.test(x1(), x2()) |>
+          tidy() |>
           select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
       })
     }
@@ -302,16 +302,16 @@ klippy::klippy()
       })
       
       output$plot <- renderPlot({
-        data.frame(`1` = x1(), `2` = x2()) %>%
-          gather(key = "Group", value = "y") %>%
+        data.frame(`1` = x1(), `2` = x2()) |>
+          gather(key = "Group", value = "y") |>
           ggplot(aes(x = Group, y = y)) +
           geom_boxplot() +
           theme_bw()
       })
       
       output$text <- renderPrint({
-        t.test(x1(), x2()) %>%
-          tidy() %>%
+        t.test(x1(), x2()) |>
+          tidy() |>
           select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
       })
     }
@@ -397,16 +397,16 @@ klippy::klippy()
       })
       
       output$plot <- renderPlot({
-        data.frame(`1` = x1(), `2` = x2()) %>%
-          gather(key = "Group", value = "y") %>%
+        data.frame(`1` = x1(), `2` = x2()) |>
+          gather(key = "Group", value = "y") |>
           ggplot(aes(x = Group, y = y)) +
           geom_boxplot() +
           theme_bw()
       })
       
       output$text <- renderPrint({
-        t.test(x1(), x2()) %>%
-          tidy() %>%
+        t.test(x1(), x2()) |>
+          tidy() |>
           select(estimate, `P-value` = p.value, Lower = conf.low, Higher = conf.high)
       })
     }

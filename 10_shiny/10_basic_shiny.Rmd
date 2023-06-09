@@ -828,7 +828,7 @@ klippy::klippy()
     would be:
     
     ```{r, eval = FALSE}
-    mtcars %>%
+    mtcars |>
       filter(mpg > 30)
     ```
     
@@ -846,7 +846,7 @@ klippy::klippy()
     server <- function(input, output, session) {
       
       output$dt <- renderDataTable({
-        mtcars %>%
+        mtcars |>
           filter(.data[[input$var]] > input$value)
       })
       

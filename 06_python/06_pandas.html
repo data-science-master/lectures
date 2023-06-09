@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-16" />
+<meta name="date" content="2023-06-09" />
 
 <title>Data Manipulation with Pandas</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">Data Manipulation with Pandas</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-16</h4>
+<h4 class="date">2023-06-09</h4>
 
 </div>
 
@@ -523,7 +523,7 @@ method of the <code>&lt;Series&gt;</code> object.</p>
 <td><code>&lt;Series&gt;.str.cat()</code></td>
 </tr>
 <tr class="even">
-<td><code>%&gt;%</code></td>
+<td><code>|&gt;</code></td>
 <td>Enclose pipeline in <code>()</code></td>
 </tr>
 </tbody>
@@ -735,7 +735,7 @@ select(estate, Price, Area)</code></pre></li>
 ##  8 150000  1597     2     1     1      1     0  1955 Medium      1 22112       0
 ##  9 195000  1622     3     2     1      2     0  1975 Low         1 14321       0
 ## 10 160000  1976     3     3     0      1     0  1918 Low         1 32358       0
-## # … with 512 more rows</code></pre></li>
+## # ℹ 512 more rows</code></pre></li>
 <li><p><strong>Exercise</strong>: Use the tidyverse and pandas to select
 year, price, and area.</p></li>
 </ul>
@@ -778,8 +778,8 @@ estate.eval(&#39;tot = Bed + Bath&#39;)
 )</code></pre></li>
 <li><p>This looks similar to piping in the tidyverse</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>estate %&gt;%
-  mutate(tot = Bed + Bath) %&gt;%
+<pre class="r"><code>estate |&gt;
+  mutate(tot = Bed + Bath) |&gt;
   select(Price, tot)</code></pre></li>
 <li><p><strong>Exercise</strong>: Use pandas to extract all medium
 quality homes that have a pool and arrange the rows in increasing order
@@ -816,8 +816,8 @@ estate.filter([&quot;Price&quot;, &quot;Area&quot;, &quot;Bed&quot;, &quot;Bath&
 )</code></pre></li>
 <li><p>R equivalent</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>estate %&gt;%
-  group_by(Bed, Bath) %&gt;%
+<pre class="r"><code>estate |&gt;
+  group_by(Bed, Bath) |&gt;
   summarize(Price = mean(Price), Area = mean(Area))</code></pre></li>
 <li><p>You can get multiple summaries out by passing a list of
 functions:</p>
@@ -851,7 +851,7 @@ recode variable values.</p>
 <pre class="python"><code>estate.replace({&#39;AC&#39; : {0: &quot;No AC&quot;, 1: &quot;AC&quot;}})</code></pre></li>
 <li><p>R equivalent:</p>
 <p><mark style="background-color: lightblue">R</mark></p>
-<pre class="r"><code>estate %&gt;%
+<pre class="r"><code>estate |&gt;
   mutate(AC = recode(AC,
                      &quot;0&quot; = &quot;No AC&quot;,
                      &quot;1&quot; = &quot;AC&quot;))</code></pre></li>
@@ -896,7 +896,7 @@ table4a</code></pre>
 <pre class="r"><code>gather(table4a, key = &quot;variable&quot;, value = &quot;value&quot;, `1999`, `2000`)</code></pre>
 <pre><code>## # A tibble: 6 × 3
 ##   country     variable  value
-##   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;
+##   &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;
 ## 1 Afghanistan 1999        745
 ## 2 Brazil      1999      37737
 ## 3 China       1999     212258
@@ -909,7 +909,7 @@ table4a</code></pre>
              values_to = &quot;value&quot;)</code></pre>
 <pre><code>## # A tibble: 6 × 3
 ##   country     variable  value
-##   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;
+##   &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt;
 ## 1 Afghanistan 1999        745
 ## 2 Afghanistan 2000       2666
 ## 3 Brazil      1999      37737
@@ -987,7 +987,7 @@ to a sequence <code>[0, 1, ..., n-1]</code>.</p></li>
 <pre class="r"><code>spread(table2, key = &quot;type&quot;, value = &quot;count&quot;)</code></pre>
 <pre><code>## # A tibble: 6 × 4
 ##   country      year  cases population
-##   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+##   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
 ## 1 Afghanistan  1999    745   19987071
 ## 2 Afghanistan  2000   2666   20595360
 ## 3 Brazil       1999  37737  172006362
@@ -1000,7 +1000,7 @@ to a sequence <code>[0, 1, ..., n-1]</code>.</p></li>
             values_from = &quot;count&quot;)</code></pre>
 <pre><code>## # A tibble: 6 × 4
 ##   country      year  cases population
-##   &lt;chr&gt;       &lt;int&gt;  &lt;int&gt;      &lt;int&gt;
+##   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;
 ## 1 Afghanistan  1999    745   19987071
 ## 2 Afghanistan  2000   2666   20595360
 ## 3 Brazil       1999  37737  172006362
@@ -1049,7 +1049,7 @@ table3.drop(&#39;rate&#39;, axis=1)</code></pre>
 <pre class="r"><code>separate(table3, col = &quot;rate&quot;, sep = &quot;/&quot;, into = c(&quot;cases&quot;, &quot;population&quot;))</code></pre>
 <pre><code>## # A tibble: 6 × 4
 ##   country      year cases  population
-##   &lt;chr&gt;       &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;     
+##   &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     
 ## 1 Afghanistan  1999 745    19987071  
 ## 2 Afghanistan  2000 2666   20595360  
 ## 3 Brazil       1999 37737  172006362 
