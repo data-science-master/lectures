@@ -65,9 +65,9 @@ All students will prepare a final project using the tools learned in the class. 
 
 # Assignments and Grading
 
-- Weekly homeworks: 25%
-- Final Project: 25%
-- Tidyverse Quiz: 20%
+- Weekly homeworks: 35%
+- Final Project: 20%
+- Tidyverse Quiz: 15%
 - SQL Quiz: 15%
 - Python Quiz: 15%
 

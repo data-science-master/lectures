@@ -99,7 +99,7 @@ klippy::klippy()
 
 - Open up Tools > Global Options... > Git/SVN.
 
-- If you do not have an SSH key pair, then click on "Create RSA Key..."
+- If you do not have an SSH key pair, then click on "Create SSH Key..." and follow the prompts.
 
     <img src="./01_figs/rstudio_rsa.png" alt="Create RSA Key" width="50%"/>
 
