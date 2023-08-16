@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Overview of Topics and Course Objectives
 
-This course builds on the R/tidyverse programming skills developed in DATA-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, and big data manipulation.
+This course builds on the R/tidyverse programming skills developed in DATA-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, R package development, and introductions to SQL and python.
 
 # Learning Objectives:
 - Gain expertise in the `git` version control software.
@@ -25,6 +25,7 @@ This course builds on the R/tidyverse programming skills developed in DATA-412/6
 - Scrape data from the web, either with or without using an API.
 - Implement vectorized operations in R using functional programming techniques.
 - Build and deploy data science web applications using R Shiny.
+- Build a basic R package, and understand when building an R package is useful.
 - Understand the basics of data manipulation using Python.
 - Understand the basics of data manipulation using SQL.
 - Understand the ethical questions associated with data collection and analysis.
@@ -49,7 +50,7 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 ## Assignments 
 
-- Homework assignments will be posted and returned on GitHub. 
+- Most homework assignments will be posted and returned on GitHub. 
     - The best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
     - I expect frequent commits. At the minimum, I expect you to commit after you have completed each question.
     - I expect informative messages for each commit.
@@ -61,15 +62,16 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 ## Group Project
 
-All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Your project will involve creating an R package for interacting with a web API.
+All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R package.
 
 # Assignments and Grading
 
 - Weekly homeworks: 35%
-- Final Project: 20%
-- Tidyverse Quiz: 15%
-- SQL Quiz: 15%
-- Python Quiz: 15%
+- Final Project: 25%
+- Tidyverse Quiz: 10%
+- Git/Vectors/Iteration/Dates Quiz: 10%
+- SQL Quiz: 10%
+- Python Quiz: 10%
 
 Usual grade cutoffs will be used:
 ```{r, echo = FALSE}
@@ -93,11 +95,13 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 - Generative AI will be allowed for homeworks and the final project.
 
-- If you use generative AI **you must include an appendix with your prompts and resulting output**.
+- If you use generative AI **you must include an appendix with your prompts and resulting output**. You can alternatively use a share link (e.g., ChatGPT has this feature).
 
 - This can either be by printing the webpage to PDF, or by copying and pasting the prompts and output to a Word file that you then convert to a PDF.
 
-- If you use generative AI, then **failure to include a generative AI appendix will be considered a violation of the academic integrity code.**
+- If you use generative AI, then **failure to include a generative AI appendix or share link will be considered a violation of the academic integrity code.**
+
+- I still expect you to be able to explain your work on assignments/projects and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.** 
 
 - I mostly want to see how students use generative AI and see whether I need to adapt my teaching. So please take this seriously.
 
@@ -128,7 +132,7 @@ Students requiring a temporary leave of absence for medical or mental health rea
 - Standards of academic conduct are set forth in the university’s [Academic Integrity Code](http://www.american.edu/academics/integrity/index.cfm). By registering for this course, students have acknowledged their awareness of the Academic Integrity Code and they are obliged to become familiar with their rights and responsibilities as defined by the Code. Violations of the Academic Integrity Code will not be treated lightly and disciplinary action will be taken should violations occur. This includes cheating, fabrication, and plagiarism.
 
 - I expect you to work with others and me, and I expect you to use online resources as you work on your assignments/projects. However, your submissions must be composed of your own thoughts, coding, and words. You should be able to explain your work on assignments/projects and your rationale.  **Based on your explanation (or lack thereof), I may modify your grade.** 
-- If you use an online resource, please cite it with a URL (this is perfectly fine!).
+- If you use an online resource, please cite it with a URL (this is perfectly fine!). If you use a generative AI, see the above policy.
 
 - If you do not understand an online resource, but believe it to be useful for a project/assignment, please ask me for help.
 
@@ -140,7 +144,9 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 # Important Dates
 
-TBD
+- 11/22/2022: Thanksgiving break (no classes).
+- 12/13/2022: Final exam period (final project presentations). 
+    - If there is enough interest, I can move this to Zoom so folks can start their holiday travel early.
 
 # Incomplete Policy
 
