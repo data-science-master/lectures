@@ -60,6 +60,16 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 - Because `git` allows me to view your progress on an assignment, I will sometimes accept a late assignment if I see some progress and a **consistent commit history** in that assignment. This should only be used under extraordinary circumstances. If I do not see any progress in an assignment, I will not accept a late submission.
 - To account for life circumstances that pop up, I will also drop the lowest homework assignment grade.
 
+## Quizzes
+
+- We will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 40% of the grade (10% each).
+
+- My intention is to make these straightforward (no trick questions). But you will still have to know the material to do well on them.
+
+- I will provide practice questions to study from.
+
+- I plan on each quiz taking about 30 minutes.
+
 ## Group Project
 
 All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R package.
@@ -144,9 +154,15 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 # Important Dates
 
-- 11/22/2022: Thanksgiving break (no classes).
-- 12/13/2022: Final exam period (final project presentations). 
+- \* 09/13/2023: Tidyverse Quiz
+- \* 09/27/2023: Git/Bash/Iteration/Dates Quiz
+- \* 10/25/2023: Python Quiz
+- \* 11/08/2023: SQL Quiz
+- 11/22/2023: Thanksgiving break (no classes).
+- 12/13/2023: Final exam period (final project presentations). 
     - If there is enough interest, I can move this to Zoom so folks can start their holiday travel early.
+    
+\* Tentative, subject to change.
 
 # Incomplete Policy
 
