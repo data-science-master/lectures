@@ -21,13 +21,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
 # Learning Objectives
 
 - Manipulating dates and times.
-- Chapter 16 of [RDS](https://r4ds.had.co.nz/).
+- Chapter 18 of [RDS](https://r4ds.hadley.nz).
 - [Dates and Times Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf).
 - [Lubridate Overview](https://lubridate.tidyverse.org/).
 
 # Parsing Dates
 
-- The lubridate package has a bunch of convenience functions for working with 
+- The `{lubridate}` package has a bunch of convenience functions for working with 
   dates. It's a part of the tidyverse, so is loaded along with it.
   
     ```{r, message=FALSE, warning=FALSE}
@@ -84,8 +84,20 @@ ggplot2::theme_set(ggplot2::theme_bw())
     z
     class(z)
     ```
-    
-- lubridate comes with a bunch of helper functions to parse dates more 
+
+- For "AM" and "PM", you would use `%p` and for seconds that contain decimals, you would use `%OS`. See the help file of `parse_time()`.
+
+- **Exercise**: Parse this
+    ```{r, eval = FALSE}
+    t2 <- "11:15:10.12 PM"
+    ```
+
+    ```{r, echo = FALSE, eval = FALSE}
+    parse_time(t2, format = "%H:%M:%OS %p")
+    ```
+
+
+- `{lubridate}` comes with a bunch of helper functions to parse dates more 
   automatically. The helper function name itself specifies the order of the 
   year, month, day, hours, minutes, and seconds. 
 
@@ -145,7 +157,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     parse_date_time(x = "26 2004 05 UTC 11/11/11.444", orders = "dYmHMS")
     ```
     
-- **Exercise** (RDS 16.2.4.3): Use the appropriate lubridate function to parse 
+- **Exercise** (RDS1e16.2.4.3): Use the appropriate lubridate function to parse 
   each of the following dates:
 
     ```{r}
@@ -314,13 +326,21 @@ ggplot2::theme_set(ggplot2::theme_bw())
       geom_freqpoly(binwidth = 300)
     ```
 
-- You can round components
+- You can round components with `round_date()`. You round to the nearest "unit" (e.g., year or day).
 
     ```{r}
     ddat <- mdy_hms("01/02/1970 03:51:44")
     ddat
     round_date(ddat, unit = "year")
     ```
+    
+- You can round down using `floor_date()` and round up with `ceiling_date()`
+
+```{r}
+floor_date(ddat, unit = "year")
+ceiling_date(ddat, unit = "year")
+```
+
     
 # Time Spans
 
@@ -419,4 +439,46 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r}
     with_tz(d1, tzone = "America/New_York")
     ```
+
+# Regnal Year Exercise
+
+Consider the [regnal.csv](https://data-science-master.github.io/lectures/data/regnal.csv), a table of regnal years of English monarchs, taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
+  
+"Regnal years" are years that correspond to a monarch, and might differ from
+the actual reign of that monarch. It's mostly used for dating legal
+documents ("nth year of the reign of King X"). It's a weird English thing.
+The variables include:
+    
+- `monarch`: The name of the monarch.
+- `num_years`: The number of years of the reign.
+- `first`: The start year of the reign.
+- `start_date`: The date when each regnal year begins.
+- `end_date`: The date when each regnal year ends.
+- `final`: The final date of the reign.
+
+Clean these data to get the start and end dates of each reign in proper date format. E.g.
+
+```{r, eval = TRUE, echo = FALSE}
+regnal <- read_csv("https://data-science-master.github.io/lectures/data/regnal.csv")
+
+## from reading Wikipedia, John's start date in the first year was May 27. 
+## The regnal year varies each year for John to be on Ascension day, but
+## The first day was May 27.
+
+regnal |>
+  mutate(start_date = str_replace(start_date, "\\(Ascension Day\\)", "27")) |>
+  unite(start_date, first, col = "start", sep = " ") |>
+  mutate(start = dmy(start),
+         end = dmy(final)) |>
+  select(monarch, num_years, start, end) ->
+  regnsub
+regnsub
+```
+
+Use the `start` and `end` columns to verify that the `num_years` column from Wikipedia is accurage.
+
+```{r}
+regnsub |>
+  mutate(duration = end - start)
+```
 

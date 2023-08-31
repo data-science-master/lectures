@@ -177,8 +177,8 @@ knitr::opts_chunk$set(echo = TRUE)
     - `monarch`: The name of the monarch.
     - `num_years`: The number of years of the reign.
     - `first`: The start year of the reign.
-    - `start_date`: The date in the first year when the regnal year began.
-    - `end_date`: The date in the final year when the regnal year ends.
+    - `start_date`: The date when each regnal year begins.
+    - `end_date`: The date when each regnal year ends.
     - `final`: The final date of the reign.
 - [remakes_1.html](./data/remakes_1.html) and 
   [remakes_2.html](./data/remakes_2.html): These are copies of the Wikipedia
