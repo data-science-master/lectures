@@ -1,0 +1,350 @@
+---
+title: "Subsetting"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
+# Learning Objectives
+
+- How to subset atomic vectors and lists.
+- Chapter 4 from [Advanced R](https://adv-r.hadley.nz/)
+    - These lecture notes are mostly taken straight out of Hadley's book. Many thanks for making my life easier.
+    - His images, which I use here, are licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" height="15" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/></a>
+
+# Subsetting an Atomic Vector
+
+- **Subsetting** is extracting elements from an object.
+    - Subset because you only want some elements of a vector.
+    - Subset so you can assign new elements to that subset.
+    
+- Six ways to subset atomic vector.
+
+    ```{r}
+    x <- c(8, 1.2, 33, 14)
+    ```
+
+
+1. **Integer Subsetting**:
+    - Put integers in brackets and it will extract those elements. R starts counting at 1.
+        ```{r}
+        x[1]
+        x[c(1, 3)]
+        iset <- c(1, 3)
+        x[iset]
+        ```
+    - This can be used for sorting
+        ```{r}
+        order(x)
+        x[order(x)]
+        ```
+    - You can use duplicate integers to extract elements more than once.
+        ```{r}
+        x[c(2, 2, 2)]
+        ```
+2. **Negative Integer Subsetting**:
+    - Putting negative integers in instead will return all elements except the negative elements.
+        ```{r}
+        x[-1]
+        x[c(-1, -3)]
+        x[-c(1, 3)]
+        ```
+3. **Logical Vector Subsetting**: 
+    - Wherever there is a `TRUE` will return the element.
+        ```{r}
+        x[c(TRUE, FALSE, TRUE, FALSE)]
+        ```
+
+4. **No Subsetting**:
+    - Empty brackets will return the original object.
+        ```{r}
+        x[]
+        ```
+
+5. **Zero Subsetting**:
+    - Using `0` in a bracket will return a zero-length vector.
+        ```{r}
+        x[0]
+        ```
+
+6. **Names Subsetting**:
+    - If a vector has names, then you can subset using those names in quotes.
+        ```{r}
+        names(x) <- c("a", "b", "c", "d")
+        x["a"]
+        x[c("a", "c")]
+        x[c("a", "a")]
+        ```
+    - If you know what names you want to remove, use `setdiff()`.
+        ```{r}
+        setdiff(names(x), "a")
+        x[setdiff(names(x), "a")]
+        ```
+
+- **Exercise**: Explain the output of the following
+    ```{r}
+    y <- 1:9
+    y[c(TRUE, TRUE, FALSE)]
+    y[TRUE]
+    y[FALSE]
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    R will recycle the logical values.
+    ```
+
+- **Exercise**: Explain the output of the following
+    ```{r}
+    y <- c(1, 2)
+    y[c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE)]
+    ```
+    ```{block, eval = FALSE, echo = FALSE}
+    R assumes that all values after the second are NA.
+    ```
+
+- **Exercise**: Show all the ways to extract the second element of the following vector:
+    ```{r}
+    y <- c(af = 3, bd = 6, dd = 2)
+    ```
+    ```{r, eval = FALSE, echo = FALSE}
+    y[2]
+    y[c(-1, -3)]
+    y[c(FALSE, TRUE, FALSE)]
+    y["bd"]
+    ```
+
+- Double brackets enforces that you are only extracting one element. This is really good in places where you know that you should only subset one element (like for-loops).
+
+    ```{r}
+    x <- runif(100)
+    sval <- 0
+    for (i in seq_along(x)) {
+      sval <- sval + x[[i]]
+    }
+    ```
+
+- Double brackets remove attributes of the vector (even names).
+
+    ```{r}
+    x <- c(a = 1, b = 2)
+    x[1]
+    x[[1]]
+    ```
+
+# List subsetting
+
+- If you subset a list using single brackets, you will get a sublist. You can use integers, negative integers, logicals, and names as before
+
+    ```{r}
+    x <- list(a = 1:3, b = "hello", c = 4:6)
+    str(x)
+    
+    x[1]
+    x[c(1, 3)]
+    x[-1]
+    x[c(TRUE, FALSE, FALSE)]
+    x["a"]
+    x[c("a", "c")]
+    ```
+
+- Using double brackets extracts out a single element.
+
+    ```{r}
+    x[[1]]
+    x[["a"]]
+    ```
+    
+- A shorthand for using names inside double brackets is to use dollar signs.
+
+    ```{r}
+    x$a
+    ```
+
+- **Exericse**: Why does this not work. Suggest a correction.
+
+    ```{r}
+    var <- "a"
+    x$var
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    `var` is not a name in `x`. Instead, use `x[[var]]`.
+    ```
+
+# Data Frame Subsetting
+
+- Data frame subsetting behaves both like lists and like matrices.
+
+    ```{r}
+    df <- data.frame(a = 1:3,
+                     b = c("a", "b", "c"),
+                     c = 4:6)
+    ```
+
+- It behaves like a list for `$`, `[[`, and `[` if you only provide one index. The columns are the elements of the list.
+
+    ```{r}
+    df$a
+    df[1]
+    df[[1]]
+    df[c(1, 3)]
+    ```
+
+- It behaves like a matrix if you provide two indices.
+
+    ```{r}
+    df[1:2, 2]
+    ```
+
+- You can keep the data frame structure by using `drop = FALSE`.
+
+    ```{r}
+    df[1:2, 2, drop = FALSE]
+    ```
+
+- It is common to filter by rows by using the matrix indexing.
+
+    ```{r}
+    df[df$a < 3, ]
+    ```
+
+
+# Hadley's Advanced R Exercises
+
+
+1. Fix each of the following common data frame subsetting errors:
+    ```{r, eval = FALSE}
+    mtcars[mtcars$cyl = 4, ]
+    mtcars[-1:4, ]
+    mtcars[mtcars$cyl <= 5]
+    mtcars[mtcars$cyl == 4 | 6, ]
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    mtcars[mtcars$cyl == 4, ]
+    mtcars[-c(1:4), ]
+    mtcars[mtcars$cyl <= 5, ]
+    mtcars[mtcars$cyl == 4 | mtcars$cyl == 6, ]
+    ```
+    
+
+2. Why does the following code yield five missing values? (Hint: why is it different from `x[NA_real_]`?)
+    ```{r}
+    x <- 1:5
+    x[NA]
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    Recycling happens with logical indices. For integer indices, we just get `NA` since we are choosing a missing value index.
+    ```
+
+3. What does `upper.tri()` return? How does subsetting a matrix with it work?
+
+    ```{r}
+    x <- outer(1:5, 1:5, FUN = "*")
+    x[upper.tri(x)]
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    It returns a vector of `TRUE` and `FALSE` values, where a `TRUE` will be the location of an upper triangular elemetn of the matrix. When we use it in subsetting, we get all of the upper triangular elements of the matrix.
+    ```
+
+4. Why does `mtcars[1:20]` return an error? How does it differ from the similar `mtcars[1:20, ]`?
+
+    ```{block, eval = FALSE, echo = FALSE}
+    There aren't 20 columns in `mtcars`. There are only 11.
+    
+    The second one will extract hte first 20 rows of `mtcars`.
+    ```
+
+5. An `lm` object is a list-like object. Given a linear model, e.g., `mod <- lm(mpg ~ wt, data = mtcars)`, extract the residual degrees of freedom. Then extract the R squared from the model summary (`summary(mod)`).
+
+    ```{r, echo = FALSE, eval = FALSE}
+    mod <- lm(mpg ~ wt, data = mtcars)
+    # str(mod)
+    mod$df.residual
+    sumval <- summary(mod)
+    # str(sumval)
+    sumval$r.squared
+    ```
+
+# Subassignment
+
+- All subsetting operators can be used to assign subsets of a vector new values. This is called **subassignment**.
+
+    ```{r}
+    x <- 1:5
+    x[[2]] <- 200
+    x
+    x[c(1, 3)] <- 0
+    x
+    x[x == 0] <- NA_real_
+    x
+    
+    y <- list(a = 1:3,
+              b = "hello",
+              c = 4:6)
+    y$a <- "no way"
+    y
+    ```
+
+- Remove a list element with `NULL`.
+
+    ```{r}
+    y[[1]] <- NULL
+    y
+    y$b <- NULL
+    y
+    ```
+    
+# Exercises
+
+These are just meant to buff up your Base R skills. Consider the data from the `{Sleuth3}` package that contains information on sex and salary at a bank. Try to use just base R methods.
+
+```{r}
+library(Sleuth3)
+data("case0102")
+sal <- case0102
+```
+
+1. What is the salary of the person in the 51st row? Use two different subsetting strategies to get this.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sal$Salary[51]
+    sal[51, 1]
+    ```
+
+2. What is the mean salary of Male's?
+
+    ```{r, eval = FALSE, echo = FALSE}
+    mean(sal$Salary[sal$Sex == "Male"])
+    ```
+
+3. How many Females are in the data?
+    ```{r, eval = FALSE, echo = FALSE}
+    sum(sal$Sex == "Female")
+    ```
+
+4. How many Females make over \$6000?
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sum(sal$Salary[sal$Sex == "Female"] > 6000)
+    ```
+
