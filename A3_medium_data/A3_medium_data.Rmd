@@ -38,19 +38,17 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - `data.frame`s are a base R class. We've learned about them [before](https://dcgerard.github.io/stat_412_612/lectures/01_intro/01_data_frames.pdf).
 
-- There are many competitors to `data.frame`s: [`tibble`s](https://tibble.tidyverse.org/), [`DataFrame`s](https://bioconductor.org/packages/release/bioc/html/S4Vectors.html) (from Bioconductor), and [`data.table`s](https://github.com/Rdatatable/data.table/wiki).
+- There are many competitors to `data.frame`s: [`tibble`](https://tibble.tidyverse.org/), [`DataFrame`](https://bioconductor.org/packages/release/bioc/html/S4Vectors.html) (from Bioconductor), and [`data.table`](https://github.com/Rdatatable/data.table/wiki).
 
-- Julia (another statistical programming language) has its own [`DataFrames`](https://juliadata.github.io/DataFrames.jl/stable/) class. Python's data frames package is called [`pandas`](https://pandas.pydata.org/).
+- Julia (another statistical programming language) has its own [`DataFrames`](https://juliadata.github.io/DataFrames.jl/stable/) class. Python's data frame packages are [`pandas`](https://pandas.pydata.org/) and [`polars`](https://www.pola.rs/).
 
-- `data.table` is the fastest: <https://h2oai.github.io/db-benchmark/>.
+- `data.table` is among the fastest in most benchmarks: <https://h2oai.github.io/db-benchmark/>. 
+    - Python's `polars`, and Julia's `DataFrames.jl` come close and are faster in some benchmarks.
+    - `dplyr` doesn't come close.
 
 - So why did we learn the tidyverse? 
-    - It's easier to read. This is important if you are sharing code, or 
-      if you are looking at your code 6 months after you write it
-      (this is a *very* controversial opinion and Matt Dowle would disagree
-      with this).
-    - For datasets with fewer than, like, one million observations, it works 
-      fast enough.
+    - The Posit folks are better at marketing, so `dplyr` is more widely used.
+    - For datasets with fewer than, like, one million observations, dplyr works fast enough.
 
 # Syntax
 

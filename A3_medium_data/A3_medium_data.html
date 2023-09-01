@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2022-11-16" />
+<meta name="date" content="2023-09-01" />
 
 <title>Manipulating Large(ish) Datasets with data.table</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Manipulating Large(ish) Datasets with
 data.table</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2022-11-16</h4>
+<h4 class="date">2023-09-01</h4>
 
 </div>
 
@@ -411,18 +411,22 @@ manipulate it.</p></li>
 <li><p>The data.table package helps you with biggish data.</p></li>
 <li><p><code>data.frame</code>s are a base R class. We’ve learned about
 them <a href="https://dcgerard.github.io/stat_412_612/lectures/01_intro/01_data_frames.pdf">before</a>.</p></li>
-<li><p>There are many competitors to <code>data.frame</code>s: <a href="https://tibble.tidyverse.org/"><code>tibble</code>s</a>, <a href="https://bioconductor.org/packages/release/bioc/html/S4Vectors.html"><code>DataFrame</code>s</a>
-(from Bioconductor), and <a href="https://github.com/Rdatatable/data.table/wiki"><code>data.table</code>s</a>.</p></li>
+<li><p>There are many competitors to <code>data.frame</code>s: <a href="https://tibble.tidyverse.org/"><code>tibble</code></a>, <a href="https://bioconductor.org/packages/release/bioc/html/S4Vectors.html"><code>DataFrame</code></a>
+(from Bioconductor), and <a href="https://github.com/Rdatatable/data.table/wiki"><code>data.table</code></a>.</p></li>
 <li><p>Julia (another statistical programming language) has its own <a href="https://juliadata.github.io/DataFrames.jl/stable/"><code>DataFrames</code></a>
-class. Python’s data frames package is called <a href="https://pandas.pydata.org/"><code>pandas</code></a>.</p></li>
-<li><p><code>data.table</code> is the fastest: <a href="https://h2oai.github.io/db-benchmark/" class="uri">https://h2oai.github.io/db-benchmark/</a>.</p></li>
+class. Python’s data frame packages are <a href="https://pandas.pydata.org/"><code>pandas</code></a> and <a href="https://www.pola.rs/"><code>polars</code></a>.</p></li>
+<li><p><code>data.table</code> is among the fastest in most benchmarks:
+<a href="https://h2oai.github.io/db-benchmark/" class="uri">https://h2oai.github.io/db-benchmark/</a>.</p>
+<ul>
+<li>Python’s <code>polars</code>, and Julia’s <code>DataFrames.jl</code>
+come close and are faster in some benchmarks.</li>
+<li><code>dplyr</code> doesn’t come close.</li>
+</ul></li>
 <li><p>So why did we learn the tidyverse?</p>
 <ul>
-<li>It’s easier to read. This is important if you are sharing code, or
-if you are looking at your code 6 months after you write it (this is a
-<em>very</em> controversial opinion and Matt Dowle would disagree with
-this).</li>
-<li>For datasets with fewer than, like, one million observations, it
+<li>The Posit folks are better at marketing, so <code>dplyr</code> is
+more widely used.</li>
+<li>For datasets with fewer than, like, one million observations, dplyr
 works fast enough.</li>
 </ul></li>
 </ul>
@@ -703,10 +707,10 @@ dt4a</code></pre>
 ## 2:      Brazil  37737  80488
 ## 3:       China 212258 213766</code></pre>
 <pre class="r"><code>dt4b</code></pre>
-<pre><code>##        country       1999       2000
-## 1: Afghanistan   19987071   20595360
-## 2:      Brazil  172006362  174504898
-## 3:       China 1272915272 1280428583</code></pre></li>
+<pre><code>##        country      1999      2000
+## 1: Afghanistan 1.999e+07 2.060e+07
+## 2:      Brazil 1.720e+08 1.745e+08
+## 3:       China 1.273e+09 1.280e+09</code></pre></li>
 <li><p>Solution: <code>melt()</code>:</p>
 <pre class="r"><code>## data.table way
 melt(dt4a, 
@@ -742,19 +746,19 @@ for the different variables.</p></li>
 <li><p>Recall <code>table2</code> from the tidyr package</p>
 <pre class="r"><code>dt2 &lt;- as.data.table(tidyr::table2)
 dt2</code></pre>
-<pre><code>##         country year       type      count
-##  1: Afghanistan 1999      cases        745
-##  2: Afghanistan 1999 population   19987071
-##  3: Afghanistan 2000      cases       2666
-##  4: Afghanistan 2000 population   20595360
-##  5:      Brazil 1999      cases      37737
-##  6:      Brazil 1999 population  172006362
-##  7:      Brazil 2000      cases      80488
-##  8:      Brazil 2000 population  174504898
-##  9:       China 1999      cases     212258
-## 10:       China 1999 population 1272915272
-## 11:       China 2000      cases     213766
-## 12:       China 2000 population 1280428583</code></pre></li>
+<pre><code>##         country year       type     count
+##  1: Afghanistan 1999      cases 7.450e+02
+##  2: Afghanistan 1999 population 1.999e+07
+##  3: Afghanistan 2000      cases 2.666e+03
+##  4: Afghanistan 2000 population 2.060e+07
+##  5:      Brazil 1999      cases 3.774e+04
+##  6:      Brazil 1999 population 1.720e+08
+##  7:      Brazil 2000      cases 8.049e+04
+##  8:      Brazil 2000 population 1.745e+08
+##  9:       China 1999      cases 2.123e+05
+## 10:       China 1999 population 1.273e+09
+## 11:       China 2000      cases 2.138e+05
+## 12:       China 2000 population 1.280e+09</code></pre></li>
 <li><p>Solution: <code>dcast()</code>. In the <code>formula</code>
 argument, put the “id variables” to the left and the “key” variables to
 the right. In tidyverse jargon, the <code>value</code> is everything not
