@@ -18,6 +18,10 @@ knitr::opts_chunk$set(echo       = TRUE,
 ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
 # Learning Objectives
 
 - Manipulating dates and times.
@@ -36,13 +40,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - There are three main classes for date/time data:
     - `Date` for just the date.
+        - In tibbles, this shows up as `<date>`.
     - `POSIXct` for both the date and the time. "POSIXct" stands for 
       "Portable Operating System Interface Calendar Time" (don't ask me where 
       the "X" comes from). It is a part of a 
       [standardized system](https://en.wikipedia.org/wiki/Unix_time) 
       of representing time across many computing computing platforms.
+        - In tibbles, this shows up as `<dttm>`.
     - `hms` from the hms R package for just the time. "hms" stands for
       "hours, minutes, and seconds."
+        - In tibbles, this shows up as `<time>`.
     
 - `today()` will give you the current date in the `Date` class. 
     ```{r}
@@ -65,7 +72,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 
-# Parsing Dates
+# Parsing Dates using `{readr}`
 
 - You can use `parse_date()`, `parse_datetime()`, and `parse_time()` (from `{readr}`) to 
   [parse](https://dcgerard.github.io/stat_412_612/lectures/06_tidyr/06_parsers.pdf) 
@@ -85,7 +92,27 @@ ggplot2::theme_set(ggplot2::theme_bw())
     class(z)
     ```
 
-- For "AM" and "PM", you would use `%p` and for seconds that contain decimals, you would use `%OS`. See the help file of `parse_time()`.
+- Table 18.1 from RDS (2e): All date formats understood by readr:
+
+    | Type  | Code  | Meaning                        | Example         |
+    |-------|-------|--------------------------------|-----------------|
+    | Year  | `%Y`  | 4 digit year                   | 2021            |
+    |       | `%y`  | 2 digit year                   | 21              |
+    | Month | `%m`  | Number                         | 2               |
+    |       | `%b`  | Abbreviated name               | Feb             |
+    |       | `%B`  | Full name                      | February        |
+    | Day   | `%d`  | Two digits                     | 02              |
+    |       | `%e`  | One or two digits              | 2               |
+    | Time  | `%H`  | 24-hour hour                   | 13              |
+    |       | `%I`  | 12-hour hour                   | 1               |
+    |       | `%p`  | AM/PM                          | pm              |
+    |       | `%M`  | Minutes                        | 35              |
+    |       | `%S`  | Seconds                        | 45              |
+    |       | `%OS` | Seconds with decimal component | 45.35           |
+    |       | `%Z`  | Time zone name                 | America/Chicago |
+    |       | `%z`  | Offset from UTC                | +0800           |
+    | Other | `%.`  | Skip one non-digit             | :               |
+    |       | `%*`  | Skip any number of non-digits  |                 |
 
 - **Exercise**: Parse this
     ```{r, eval = FALSE}
@@ -96,6 +123,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     parse_time(t2, format = "%H:%M:%OS %p")
     ```
 
+# Parsing dates using `{lubridate}`
 
 - `{lubridate}` comes with a bunch of helper functions to parse dates more 
   automatically. The helper function name itself specifies the order of the 
@@ -219,9 +247,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - `as_datetime()` tries to coerce an object to a `POSIXct` object.  
 
-- **Exercise**: Create a date variable from the following data frame. Then
-  filter out all rows before Feb 1, 2010. If you finish early, try converting the month
-  variable to the numeric representation of the month.
+- **Exercise**: Create a date variable from the following data frame. Then filter out all rows before Feb 1, 2010. If you finish early, try converting the month variable to the numeric representation of the month. (*Hint*: use `{stringr}` to fix the `month` variable then use the built-in vector `month.abb`).
   
     ```{r, eval = FALSE, echo = TRUE}
     fake <- tribble(~year, ~month, ~day, ~month_num,
@@ -408,7 +434,11 @@ ceiling_date(ddat, unit = "year")
 
 - You create an interval with `start_date %--% end_date`. E.g.
     
-- The main use of intervals is when you want to do division. E.g., the number of days between between Jan 1 2019 and Jan 1 2020 is 
+- The main use of intervals is when you want to do division. 
+  - Divide an interval by a duration to determine its physical length. 
+  - Divide an interval by a period to determine its *implied length* in clock time.
+
+- E.g., the number of days between between Jan 1 2019 and Jan 1 2020 is 
     ```{r}
     (ymd("2019-01-01") %--% ymd("2020-01-01")) / days(1)
     ```
