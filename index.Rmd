@@ -72,9 +72,6 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [10 File Uploads](./10_shiny/10_upload.html).
     - [10 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
     - [10 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
-- 11 Personal Websites
-    - [11 A Personal Website using Blogdown](./11_websites/11_websites_blogdown.html).
-    - [11 A Personal Website using GitHub Pages](./11_websites/11_websites_github.html).
 
 # Extra Lectures
     
