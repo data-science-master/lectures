@@ -2,7 +2,13 @@
 title: "Data"
 author: "David Gerard"
 date: "`r Sys.Date()`"
-output: html_document
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
 ---
 
 ```{r setup, include=FALSE}
@@ -152,6 +158,12 @@ knitr::opts_chunk$set(echo = TRUE)
     - `air_time`: The amount of time in the air, in minutes.
     - `distance`: The distance traveled, in miles.
     - `hour`: Hour of scheduled departure.
+- [halberstadt.csv](./data/halberstadt.csv): The composer [John Cage](https://en.wikipedia.org/wiki/John_Cage) asked his organ piece to be played "as slow as possible", so the [Halberstadt Cathedral](https://en.wikipedia.org/wiki/Halberstadt_Cathedral) started a 639 year continuous performance. Each note in the piece lasts months and these data contain the schedule the performance. These data contain the first 71 years of the performance and were taken from [Wikipedia](https://en.wikipedia.org/wiki/As_Slow_as_Possible#Performance). Variables include:
+    - `Impulse`: The order of the action.
+    - `Action`: Either `"Sound"` (for adding a note) or `"Release"` (for stopping a note).
+    - `Notes`: The notes being added or stopped.
+    - `Date`: The date that the action began.
+    - `Length`: The length, in days, of the resulting cord.
 - [hamsters.csv](./data/hamsters.csv): Data from [doi:10.1126/science.abe8499](https://www.doi.org/10.1126/science.abe8499).
     
     Eight hamsters were exposed to the wild type (WT) of SARS-CoV-2, 

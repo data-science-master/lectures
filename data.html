@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-08-31" />
+<meta name="date" content="2023-09-06" />
 
 <title>Data</title>
 
@@ -32,8 +32,6 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -46,16 +44,6 @@
   ul.task-list{list-style: none;}
     </style>
 
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
 
 
 
@@ -271,7 +259,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Data</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-08-31</h4>
+<h4 class="date">2023-09-06</h4>
 
 </div>
 
@@ -484,6 +472,25 @@ vignettes. The 11 variables include:</p>
 minutes.</li>
 <li><code>distance</code>: The distance traveled, in miles.</li>
 <li><code>hour</code>: Hour of scheduled departure.</li>
+</ul></li>
+<li><p><a href="./data/halberstadt.csv">halberstadt.csv</a>: The
+composer <a href="https://en.wikipedia.org/wiki/John_Cage">John Cage</a>
+asked his organ piece to be played “as slow as possible”, so the <a
+href="https://en.wikipedia.org/wiki/Halberstadt_Cathedral">Halberstadt
+Cathedral</a> started a 639 year continuous performance. Each note in
+the piece lasts months and these data contain the schedule the
+performance. These data contain the first 71 years of the performance
+and were taken from <a
+href="https://en.wikipedia.org/wiki/As_Slow_as_Possible#Performance">Wikipedia</a>.
+Variables include:</p>
+<ul>
+<li><code>Impulse</code>: The order of the action.</li>
+<li><code>Action</code>: Either <code>"Sound"</code> (for adding a note)
+or <code>"Release"</code> (for stopping a note).</li>
+<li><code>Notes</code>: The notes being added or stopped.</li>
+<li><code>Date</code>: The date that the action began.</li>
+<li><code>Length</code>: The length, in days, of the resulting
+cord.</li>
 </ul></li>
 <li><p><a href="./data/hamsters.csv">hamsters.csv</a>: Data from <a
 href="https://www.doi.org/10.1126/science.abe8499">doi:10.1126/science.abe8499</a>.</p>

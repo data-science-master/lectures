@@ -42,8 +42,8 @@ klippy::klippy()
     - `Date` for just the date.
         - In tibbles, this shows up as `<date>`.
     - `POSIXct` for both the date and the time. "POSIXct" stands for 
-      "Portable Operating System Interface Calendar Time" (don't ask me where 
-      the "X" comes from). It is a part of a 
+      "Portable Operating System Interface Calendar Time" ([don't ask me where 
+      the "X" comes from](https://stallman.org/articles/posix.html)). It is a part of a 
       [standardized system](https://en.wikipedia.org/wiki/Unix_time) 
       of representing time across many computing computing platforms.
         - In tibbles, this shows up as `<dttm>`.
