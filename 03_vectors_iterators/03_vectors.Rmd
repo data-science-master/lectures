@@ -99,7 +99,7 @@ klippy::klippy()
 
 - Missing values are represented by `NA`.
 
-- `NA` is technically is a logical value.
+- `NA` is technically a logical value.
 
     ```{r}
     typeof(NA)

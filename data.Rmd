@@ -163,7 +163,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - `Action`: Either `"Sound"` (for adding a note) or `"Release"` (for stopping a note).
     - `Notes`: The notes being added or stopped.
     - `Date`: The date that the action began.
-    - `Length`: The length, in days, of the resulting cord.
+    - `Length`: The length, in days, of the previous chord.
 - [hamsters.csv](./data/hamsters.csv): Data from [doi:10.1126/science.abe8499](https://www.doi.org/10.1126/science.abe8499).
     
     Eight hamsters were exposed to the wild type (WT) of SARS-CoV-2, 
