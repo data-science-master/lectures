@@ -38,6 +38,7 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 03 Vectors and Iteration
     - [03 Vectors](./03_vectors_iterators/03_vectors.html).
     - [03 Subsetting](./03_vectors_iterators/03_subsetting.html).
+    - [03 Functions](./03_vectors_iterators/03_functions.html).
     - [03 Iteration](./03_vectors_iterators/03_iterators.html).
     - [03 Lab](https://github.com/data-science-master/lab_03).
 - 04 R Packages
