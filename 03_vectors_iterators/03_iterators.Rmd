@@ -1,5 +1,5 @@
 ---
-title: "Iterators"
+title: "Iteration"
 author: "David Gerard"
 date: "`r Sys.Date()`"
 output: 
@@ -20,10 +20,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # Learning Objectives
 
-- Learn about iteration.
-- Iterators in base R.
-- Iterators in purrr.
-- Chapter 21 of [RDS](https://r4ds.had.co.nz/).
+- For-loops.
+- Iteration.
+- Chapter 27 of [RDS](https://r4ds.had.co.nz/).
 - [Purrr Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf).
 - [Purrr Overview](https://purrr.tidyverse.org/).
 
@@ -286,7 +285,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     map_dbl(mtcars, .f)
     ```
   
-
 - Why is this useful? Consider the following chunk of code which allows us to
   fit many simple linear regression models:
 
@@ -318,7 +316,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
     sumdf$sumlm[[1]]
     ```
 
-
 - If you want to extract the $R^2$, you can do this using map as well
   
     ```{r}
@@ -331,7 +328,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
     sumdf$rsquared
     ```
-  
   
 - **Exercise**: A [$t$-test](https://en.wikipedia.org/wiki/Student%27s_t-test)
   is used to test for differences in population means. R implements this
@@ -391,6 +387,3 @@ ggplot2::theme_set(ggplot2::theme_bw())
       keep(~mean(.) > 10) |>
       map(mean)
     ```
-
-
-
