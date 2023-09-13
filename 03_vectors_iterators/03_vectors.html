@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-09-07" />
+<meta name="date" content="2023-09-13" />
 
 <title>Vectors</title>
 
@@ -584,7 +584,7 @@ display: none;
 
 <h1 class="title toc-ignore">Vectors</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-09-07</h4>
+<h4 class="date">2023-09-13</h4>
 
 </div>
 
@@ -622,6 +622,7 @@ Functions</a></li>
 <li>Understanding vectors, the fundamental objects in R.</li>
 <li>This is mostly a long list of facts about vectors that you should be
 aware of.</li>
+<li>Chapter 5 of <a href="https://rstudio-education.github.io/hopr/">HOPR</a></li>
 <li>Chapter 3 from <a href="https://adv-r.hadley.nz/">Advanced R</a>
 <ul>
 <li>These lecture notes are mostly taken straight out of Hadley’s book.
@@ -911,7 +912,7 @@ values.</p></li>
 <pre><code>## [1] &quot;Date&quot;</code></pre></li>
 <li><p>Let’s look at the underlying double to today:</p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="fu">unclass</span>(today)</span></code></pre></div>
-<pre><code>## [1] 19607</code></pre>
+<pre><code>## [1] 19613</code></pre>
 <ul>
 <li>This is the number of days since January 1, 1970:</li>
 </ul>
@@ -929,7 +930,7 @@ representing the number of seconds since the beginning of 1970.</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" tabindex="-1"></a><span class="fu">class</span>(now)</span></code></pre></div>
 <pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" tabindex="-1"></a><span class="fu">unclass</span>(now)</span></code></pre></div>
-<pre><code>## [1] 1.694e+09</code></pre></li>
+<pre><code>## [1] 1.695e+09</code></pre></li>
 <li><p><code>POSIXlt</code> is a named list of vectors with elements
 representing seconds, minutes, hours, days of the month, months, years,
 weekdays, etc…</p>
@@ -1040,7 +1041,7 @@ simulation study.</p>
 <span id="cb122-6"><a href="#cb122-6" tabindex="-1"></a>  mvec[[i]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> nsamp, <span class="at">mean =</span> true_mean))</span>
 <span id="cb122-7"><a href="#cb122-7" tabindex="-1"></a>}</span>
 <span id="cb122-8"><a href="#cb122-8" tabindex="-1"></a><span class="fu">mean</span>((mvec <span class="sc">-</span> true_mean)<span class="sc">^</span><span class="dv">2</span>) <span class="do">## mean squared error</span></span></code></pre></div>
-<pre><code>## [1] 0.1102</code></pre></li>
+<pre><code>## [1] 0.1002</code></pre></li>
 <li><p>If you are filling in the values of a matrix, you need to be able
 to create a matrix with missing values.</p>
 <div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
@@ -1126,7 +1127,7 @@ the vector into a list where each element is a list.</p>
 ## [1,] integer,2 numeric,4  
 ## [2,] integer,8 character,2</code></pre>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" tabindex="-1"></a>lmat[[<span class="dv">1</span>, <span class="dv">2</span>]]</span></code></pre></div>
-<pre><code>## [1] 0.03058 0.83460 0.85586 0.63127</code></pre></li>
+<pre><code>## [1] 0.86391 0.05473 0.44827 0.23682</code></pre></li>
 </ul>
 </div>
 <div id="data-frames" class="section level1">

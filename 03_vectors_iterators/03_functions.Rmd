@@ -25,6 +25,7 @@ klippy::klippy()
 ## Learning Objectives
 
 - Creating your own functions.
+- Chapter 2 of [HOPR](https://rstudio-education.github.io/hopr/)
 - Chapter 26 of [RDS](https://r4ds.hadley.nz/)
 
 ## Functions

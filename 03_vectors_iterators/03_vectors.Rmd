@@ -26,6 +26,7 @@ klippy::klippy()
 
 - Understanding vectors, the fundamental objects in R.
 - This is mostly a long list of facts about vectors that you should be aware of.
+- Chapter 5 of [HOPR](https://rstudio-education.github.io/hopr/)
 - Chapter 3 from [Advanced R](https://adv-r.hadley.nz/)
     - These lecture notes are mostly taken straight out of Hadley's book. Many thanks for making my life easier.
     - His images, which I use here, are licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" height="15" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/></a>

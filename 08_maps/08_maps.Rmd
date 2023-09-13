@@ -22,6 +22,9 @@ klippy::klippy()
 
 # Learning Objectives
 
+- Understand the concept and utility of spatial data visualization in R.
+- Get acquainted with the basic functions and data types in the `{sf}` package.
+- Create simple maps using the `{sf}` package.
 - Simple Features
     - <https://r-spatial.github.io/sf/articles/>
 - Map Plotting
@@ -35,6 +38,11 @@ klippy::klippy()
 
 - For this lecture, we will try to visualize the 2020 presidential election elections from (<https://github.com/TheUpshot/presidential-precinct-map-2020>).
 
-# Simple Features
+# Introduction to Simple Features in R
 
-# Map Plotting
+- The `sf` package, implements the "simple features" standard, making it easier to manipulate geographical data in R.
+
+```{r}
+library(sf)
+```
+
