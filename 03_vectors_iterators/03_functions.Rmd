@@ -137,6 +137,10 @@ klippy::klippy()
 
 - **Exercise**: Write a function that takes a numeric vector as input and replaces all instances of `-9` with `NA`.
 
+- **Exercise**: Write a function that takes a numeric vector and returns the coefficient of variation (the mean divided by the standard deviation).
+
+- **Exercise**: Write a function that takes as input a vector and returns the number of missing values.
+
 - **Exercise**: Re-write the the function `range()`. Use functions: `min()`, `max()`
 
     ```{r, echo = FALSE, eval = FALSE}
