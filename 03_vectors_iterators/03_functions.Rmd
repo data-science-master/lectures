@@ -141,6 +141,14 @@ klippy::klippy()
 
 - **Exercise**: Write a function that takes as input a vector and returns the number of missing values.
 
+- **Exercise** (from RDS): Given a vector of birth dates, write a function to compute the age in years.
+
+    ```{r, echo = FALSE, eval = FALSE}
+    age <- function(x) {
+      (x %--% lubridate::today()) / years(1)
+    }
+    ```
+
 - **Exercise**: Re-write the the function `range()`. Use functions: `min()`, `max()`
 
     ```{r, echo = FALSE, eval = FALSE}

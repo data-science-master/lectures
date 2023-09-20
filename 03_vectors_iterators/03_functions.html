@@ -673,13 +673,13 @@ the function.</p></li>
 <li><p>How many inputs does each line have?</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> df<span class="sc">$</span>a</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>(x <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> (<span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>##  [1] 0.08242 0.00000 0.27986 0.38429 0.31424 0.46818 0.10043 0.34515 0.18299
-## [10] 1.00000</code></pre>
+<pre><code>##  [1] 0.0328336 0.4655800 1.0000000 0.5985189 0.0000000 0.0003578 0.5912672
+##  [8] 0.8056156 0.4987288 0.2805086</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># get rid of duplication</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>rng <span class="ot">&lt;-</span> <span class="fu">range</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>(x <span class="sc">-</span> rng[<span class="dv">1</span>]) <span class="sc">/</span> (rng[<span class="dv">2</span>] <span class="sc">-</span> rng[<span class="dv">1</span>])</span></code></pre></div>
-<pre><code>##  [1] 0.08242 0.00000 0.27986 0.38429 0.31424 0.46818 0.10043 0.34515 0.18299
-## [10] 1.00000</code></pre>
+<pre><code>##  [1] 0.0328336 0.4655800 1.0000000 0.5985189 0.0000000 0.0003578 0.5912672
+##  [8] 0.8056156 0.4987288 0.2805086</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># make it into a function and test it</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>rescale01 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  rng <span class="ot">&lt;-</span> <span class="fu">range</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
@@ -731,6 +731,8 @@ vector and returns the coefficient of variation (the mean divided by the
 standard deviation).</p></li>
 <li><p><strong>Exercise</strong>: Write a function that takes as input a
 vector and returns the number of missing values.</p></li>
+<li><p><strong>Exercise</strong> (from RDS): Given a vector of birth
+dates, write a function to compute the age in years.</p></li>
 <li><p><strong>Exercise</strong>: Re-write the the function
 <code>range()</code>. Use functions: <code>min()</code>,
 <code>max()</code></p></li>
