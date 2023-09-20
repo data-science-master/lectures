@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-09-13" />
+<meta name="date" content="2023-09-20" />
 
 <title>Function Creation</title>
 
@@ -584,7 +584,7 @@ display: none;
 
 <h1 class="title toc-ignore">Function Creation</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-09-13</h4>
+<h4 class="date">2023-09-20</h4>
 
 </div>
 
@@ -630,7 +630,7 @@ has no default but <code>arg2</code> and <code>arg3</code> have
 defaults.</p></li>
 <li><p>Your code creates some output which I call <code>result</code>
 above.</p></li>
-<li><p>You put the oupt in a <code>return()</code> call at the end of
+<li><p>You put the output in a <code>return()</code> call at the end of
 the function.</p></li>
 <li><p>Steps to creating a function:</p>
 <ol style="list-style-type: decimal">
@@ -673,11 +673,11 @@ the function.</p></li>
 <li><p>How many inputs does each line have?</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> df<span class="sc">$</span>a</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>(x <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> (<span class="fu">max</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>##  [1] 0.6026 0.7622 0.1446 0.0000 0.8757 0.5809 0.5397 0.2486 1.0000 0.5476</code></pre>
+<pre><code>##  [1] 0.5411 0.8999 0.0000 0.6609 0.2530 0.2067 0.5449 1.0000 0.3475 0.5411</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># get rid of duplication</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>rng <span class="ot">&lt;-</span> <span class="fu">range</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>(x <span class="sc">-</span> rng[<span class="dv">1</span>]) <span class="sc">/</span> (rng[<span class="dv">2</span>] <span class="sc">-</span> rng[<span class="dv">1</span>])</span></code></pre></div>
-<pre><code>##  [1] 0.6026 0.7622 0.1446 0.0000 0.8757 0.5809 0.5397 0.2486 1.0000 0.5476</code></pre>
+<pre><code>##  [1] 0.5411 0.8999 0.0000 0.6609 0.2530 0.2067 0.5449 1.0000 0.3475 0.5411</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># make it into a function and test it</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>rescale01 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  rng <span class="ot">&lt;-</span> <span class="fu">range</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
@@ -716,6 +716,14 @@ have Inf as one of the values.</p>
 of your code or to break up your code into sections using something like
 <code># load data --------------------</code></li>
 </ul></li>
+<li><p><strong>Exercise</strong>: Write a function that calculates the
+<span class="math inline">\(z\)</span>-scores of a numeric vector. The
+<span class="math inline">\(z\)</span>-score takes each value, subtracts
+the mean, then divides the standard deviation. It is the measure of how
+many standard deviations above (or below) the mean a value is.</p></li>
+<li><p><strong>Exercise</strong>: Write a function that takes a numeric
+vector as input and replaces all instances of <code>-9</code> with
+<code>NA</code>.</p></li>
 <li><p><strong>Exercise</strong>: Re-write the the function
 <code>range()</code>. Use functions: <code>min()</code>,
 <code>max()</code></p></li>

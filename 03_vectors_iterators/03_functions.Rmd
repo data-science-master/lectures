@@ -44,7 +44,7 @@ klippy::klippy()
     - These are the inputs the user will use.
 - Arguments can have defaults by setting `arg1 = default1`, where `default1` is whatever the default value of arg1 is. In the above example, `arg1` has no default but `arg2` and `arg3` have defaults.
 - Your code creates some output which I call `result` above.
-- You put the oupt in a `return()` call at the end of the function.
+- You put the output in a `return()` call at the end of the function.
 
 - Steps to creating a function:
 
@@ -132,6 +132,10 @@ klippy::klippy()
     * use lots of comments in your code, particularly to explain the "why"
       of your code or to break up your code into sections using something 
       like `# load data --------------------`
+      
+- **Exercise**: Write a function that calculates the $z$-scores of a numeric vector. The $z$-score takes each value, subtracts the mean, then divides the standard deviation. It is the measure of how many standard deviations above (or below) the mean a value is.
+
+- **Exercise**: Write a function that takes a numeric vector as input and replaces all instances of `-9` with `NA`.
 
 - **Exercise**: Re-write the the function `range()`. Use functions: `min()`, `max()`
 
