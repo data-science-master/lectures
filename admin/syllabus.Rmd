@@ -9,11 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-- **Time**: TBD
+- **Time**: See Registrar
 - **Instructor**: Dr. David Gerard
 - **Email**: <dgerard@american.edu>
 - **Office**: DMTI 106E
-- **Office Hours**: TBD
+- **Office Hours**: T 11 AM -- Noon, W 2:30 PM -- 3:30 PM
 
 # Overview of Topics and Course Objectives
 
@@ -62,7 +62,7 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 ## Quizzes
 
-- We will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 40% of the grade (10% each).
+- We will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 40% of the grade (about 10% each).
 
 - My intention is to make these straightforward (no trick questions). But you will still have to know the material to do well on them.
 
@@ -79,9 +79,9 @@ All students will prepare a final project using the tools learned in the class. 
 - Weekly homeworks: 35%
 - Final Project: 25%
 - Tidyverse Quiz: 10%
-- Git/Vectors/Iteration/Dates Quiz: 10%
-- SQL Quiz: 10%
-- Python Quiz: 10%
+- Git/Vectors/Iteration/Dates Quiz: 14%
+- SQL Quiz: 8%
+- Python Quiz: 8%
 
 Usual grade cutoffs will be used:
 ```{r, echo = FALSE}
