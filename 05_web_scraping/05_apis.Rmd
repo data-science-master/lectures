@@ -72,31 +72,27 @@ klippy::klippy()
 - Examples:
     - tidycensus: U.S. Census data API. 
         
-        <https://walkerke.github.io/tidycensus/>
-        
-    - twitteR: Twitter API.
-    
-        <http://geoffjentry.hexdump.org/twitteR.pdf>
+        <https://cran.r-project.org/package=tidycensus>
         
     - gh: GitHub API.
     
-        <https://github.com/r-lib/gh#readme>
+        <https://cran.r-project.org/package=gh>
         
     - wbstats: World Bank data.
     
-        <https://cran.r-project.org/web/packages/wbstats/vignettes/Using_the_wbstats_package.html>
+        <https://cran.r-project.org/package=wbstats>
 
     - rebird: Ebird dataset for bird sitings.
     
-        <https://cran.r-project.org/web/packages/rebird/vignettes/rebird_vignette.html>
+        <https://cran.r-project.org/package=rebird>
         
     - geonames: Dataset containing unique names for geographic locations.
     
-        <https://docs.ropensci.org/geonames/>
+        <https://cran.r-project.org/package=geonames>
         
     - WikipediR: Wikipedia API:
     
-        <https://cran.r-project.org/web/packages/WikipediR/vignettes/WikipediR.html>
+        <https://cran.r-project.org/package=WikipediR>
         
 - Each package will be entirely unique, and you have to read its documentation
   to know how to download data. So we won't cover any of them.
