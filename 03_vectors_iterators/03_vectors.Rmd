@@ -139,7 +139,7 @@ klippy::klippy()
     is.character("1")
     ```
 
-- Attempting to combine vectors of different types coerces them to the same type. The order of preference  is character > integer > double > logical.
+- Attempting to combine vectors of different types coerces them to the same type. The order of preference  is character > double > integer > logical.
 
     ```{r}
     typeof(c(1L, TRUE))
