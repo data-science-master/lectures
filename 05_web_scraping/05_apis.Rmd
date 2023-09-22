@@ -419,7 +419,7 @@ klippy::klippy()
 
 - Consider the [icanhazdadjoke](https://icanhazdadjoke.com/api) API. One option is to include a header to specify plain text returns, rather than JSON returns.
 
-    ```{r}
+    ```{r, eval = FALSE}
     request("https://icanhazdadjoke.com/search") |>
       req_headers(Accept = "text/plain") |>
       req_perform() ->
@@ -429,7 +429,7 @@ klippy::klippy()
     ```
     
 - This is different than a JSON output
-    ```{r}
+    ```{r, eval = FALSE}
     request("https://icanhazdadjoke.com/search") |>
       req_perform() ->
       dadout2
@@ -472,8 +472,6 @@ klippy::klippy()
 - `resp_header("content-type")` will often tell you the type of body output.
     ```{r}
     resp_header(mout, "content-type")
-    resp_header(dadout, "content-type")
-    resp_header(dadout2, "content-type")
     resp_header(eout, "content-type")
     ```
 
