@@ -19,9 +19,14 @@ knitr::opts_chunk$set(echo       = TRUE,
 ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
 # Learning Objectives
 
 - Basics of Web Scraping
+- Chapter 25 of [RDS](https://r4ds.hadley.nz/)
 - [Overview of rvest](https://rvest.tidyverse.org/).
 - [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
 - [Web Scraping](https://r4ds.hadley.nz/webscraping.html)
@@ -36,8 +41,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
 - This lesson, we talk about how to do 4.
 
-- Note that you shouldn't download thousands of HTML files from a website
+- Note: You shouldn't download thousands of HTML files from a website
   to parse --- the admins might block you if you send too many requests.
+  
+- Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information. **I don't give legal advice**, so see Chapter 25 of [RDS](https://r4ds.hadley.nz/) for some general recommendations, and talk to a lawyer if you are not sure.
 
 - Let's load the tidyverse:
     
@@ -47,12 +54,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 # CSS
 
-- We have to know a little bit about CSS in order to understand how to extract
-  certain elements from a website.
+- We have to know a little bit about HTML and CSS in order to understand how to extract certain elements from a website.
   
-- CSS stands from "Cascading Style Sheets". It's a formatting language that
-  indicates how HTML files should look. Every website you have been on is formatted
-  with CSS.
+- CSS stands from "Cascading Style Sheets". It's a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.
   
 - Here is some example CSS:
 
@@ -85,6 +89,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
   
 - CSS applies the same *properties* to the same *selectors*. So every time
   we use h3 will result in the h3 styling of red and italicized text.
+  
+- CSS selectors define patterns for selecting HTML elements. This is useful for scraping because we can extract all text in an HTML that corresponds to some CSS selector.
+
+- You can get a long way just selecting all `p` elements (standing for "paragraph") since that is where a lot of text lives. Also `.title` and `#title`.
 
 # SelectorGadget
 
@@ -186,9 +194,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ranking_elements <- html_elements(html_obj, css = ".lister-item-header a , .text-primary")
     head(ranking_elements)
     ```
+    
+- Note: `html_element()` is similar, but will return exactly one response per element, so is useful if some elements have missing components.
 
 - To extract the text inside the obtained nodes, use `html_text()` or `html_text2()`:
-  - `html_text2()` just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc).
+  - `html_text2()` just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc). So you should typically use this.
 
     ```{r}
     ranking_text <- html_text2(ranking_elements)
