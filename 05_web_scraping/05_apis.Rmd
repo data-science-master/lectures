@@ -416,7 +416,7 @@ klippy::klippy()
 - Consider the [icanhazdadjoke](https://icanhazdadjoke.com/api) API. One option is to include a header to specify plain text returns, rather than JSON returns.
 
     ```{r, eval = FALSE}
-    request("https://icanhazdadjoke.com/search") |>
+    request("https://icanhazdadjoke.com/") |>
       req_headers(Accept = "text/plain") |>
       req_perform() ->
       dadout
@@ -426,7 +426,7 @@ klippy::klippy()
     
 - This is different than a JSON output
     ```{r, eval = FALSE}
-    request("https://icanhazdadjoke.com/search") |>
+    request("https://icanhazdadjoke.com/") |>
       req_perform() ->
       dadout2
     resp_body_string(dadout2)
@@ -437,7 +437,7 @@ klippy::klippy()
 - Functions that work with the response are all of the form `resp_*()`.
     
 - The *status code* describes whether your request was successful.
-    - List of codes: <https://www.flickr.com/photos/girliemac/sets/72157628409467125>
+    - List of codes: <https://http.cat/>
     - Use `resp_status()` to get the code for our request:
         ```{r}
         resp_status(mout)
@@ -525,15 +525,15 @@ klippy::klippy()
     ```{r}
     df2 <- hoist(df, users, 
                  login = "login",
-                 follows = "follows")
+                 followers = "followers")
     df2
     ```
     
-- Notice that the new data frame still has a list column, but each each list now only has 28 elements instead of 30. That's because `hoist()` has removed the `login` and `follows` elements from each list in the list column.
+- Notice that the new data frame still has a list column, but each each list now only has 28 elements instead of 30. That's because `hoist()` has removed the `login` and `followers` elements from each list in the list column.
 
     ```{r}
-    df2$users[[1]]$login
-    df2$users[[1]]$follows
+    df2$users[[1]]["login"]
+    df2$users[[1]]["followers"]
     ```
 
 - Graphic:
@@ -614,9 +614,9 @@ Consider the [NASA API](https://api.nasa.gov/)
 
 1. Generate an API key and save it as `NASA_API_KEY` in your R environment file.
 
-2. Read about the APOD API and obtain all images from January of 2022. Your response should look like this:
+2. Read about the APOD API and obtain all images from January of 2022.
 
-    ```{r, echo = FALSE, eval = FALSE}
+    ```{r, echo = FALSE, eval = TRUE}
     nasa_key <- Sys.getenv("NASA_API_KEY")
     request("https://api.nasa.gov/planetary/apod") |>
       req_url_query(start_date = "2022-01-01",
@@ -624,12 +624,11 @@ Consider the [NASA API](https://api.nasa.gov/)
                     api_key = nasa_key) |>
       req_perform() ->
       nout
-    nout
     ```
     
 3. Clean the output into a data frame, like this:
 
-    ```{r, echo = FALSE, eval = FALSE}
+    ```{r, echo = FALSE, eval = TRUE}
     tibble(img = resp_body_json(nout)) |>
       unnest_wider(img)
     ```
