@@ -48,11 +48,6 @@ klippy::klippy()
 
 - Folks showcase some pretty sophisticated interactive data visualizations:
   <https://shiny.rstudio.com/gallery/>.
-  
-- I have students who have used Shiny to start a business: <https://www.finplyapp.com/>
-
-- If you get really good at Shiny, you can make sophisticated websites with it: 
-  <http://letsrun.com/shoes>.
 
 - This can all be accomplished *without learning HTML, CSS, or JavaScript*.
 
@@ -679,7 +674,6 @@ klippy::klippy()
 
 - In Shiny, you **only** need to use the `.data` object when interacting with a variable in the tidyverse functions (e.g. `mutate()`, `filter()`, `summarize()`, `ggplot()`, etc...).
 
-
 # Putting Inputs and Outputs Together
 
 - Let's build a very simple shiny app that let's the user choose
@@ -714,11 +708,9 @@ klippy::klippy()
     - These inputs must be used *inside* a render function in order to 
       obtain reactivity.
   
-- In the `server()` function, notice that we set the outputs to the `output()`
-  variable.
+- In the `server()` function, notice that we set the outputs to the `output()` variable.
   
-- Notice that I used the `.data`, subsetted using `input$var1` and `input$var2`. You have
-  to do this to use variable names in the tidyverse (`ggplot`, `dplyr`, `tidyr`, etc).
+- Notice that I used the `.data`, subsetted using `input$var1` and `input$var2`. You have to do this to use variable names in the tidyverse (`ggplot`, `dplyr`, `tidyr`, etc).
 
 - **Exercise**: Let the user choose whether they want red points or blue points.
 
