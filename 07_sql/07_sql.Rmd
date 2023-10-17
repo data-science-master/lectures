@@ -519,6 +519,70 @@ ggplot2::theme_set(ggplot2::theme_bw())
     SELECT DISTINCT "origin" 
     FROM flights;
     ```
+    
+## Creating Grouped Summaries without Grouping the Results
+
+- This section is based on Richard Ressler's notes.
+
+- There may be times when you want to add a grouped summary to the data *without collapsing the data into the groups*.
+
+- As an example, you want to calculate the total departure delay time for each destination so you can use it to then calculate the percentage of that departure delay time for each airline flying to that destination. 
+- You could do that with a summarized dataframe and then a join.
+- in R, this can be done by using `mutate()` instead of `summarize()` to add a new column to the data frame while preserving all of the rows.
+
+- In SQL, you have to indicate you want to use the aggregate function as a **Window Function** to combine grouped aggregated and non-aggregated data into a single result-set table.
+
+- When operating as a window function, the table is partitioned into sets of records based on a Field.
+
+- Then, the aggregate function is applied to the set of records in each partition and a new field is added to the record with the aggregated value for that partition.
+
+- To use an aggregate function as a window function, use the `OVER` clause with a `(PARTITION BY myfield)` modifier.
+
+- Here is how you find the flight numbers for the longest flights (in terms of air time) from each airport.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT
+    	"flight",
+    	"origin",
+    	"air_time",
+    	MAX("air_time") 
+        OVER (PARTITION BY "origin") AS "amax"
+    FROM
+    	flights
+    LIMIT 10 OFFSET 120827;
+    ```
+
+- Note the `amax` field is new and the values are all the same for the records for each origin.
+- See [SQL Window Functions](https://www.sqltutorial.org/sql-window-functions/) or [SQL PARTITION BY Clause overview](https://www.sqlshack.com/sql-partition-by-clause-overview/) for other examples.
+
+- This approach can be useful as a sub-query (or inner nested query) inside the outer query `FROM` clause.
+
+- Here is how you find the flight numbers  and destination for the longest flights (in terms of air time) from each airport after using the sub-query to find the longest air time from each origin.
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection=con}
+    SELECT
+    	"flight",
+    	"origin",
+    	"dest",
+    	"air_time"
+    FROM
+    	(
+    	SELECT
+    		"flight",
+    		"origin",
+    		"dest",
+    		"air_time",
+    		MAX("air_time") OVER (PARTITION BY "origin") AS "amax"
+    	FROM
+    		flights
+    )
+    WHERE
+    	"air_time" = "amax"
+    ```
+
+- Note that all fields used in the outer query must be returned by the inner query 
 
 ## Recoding
 

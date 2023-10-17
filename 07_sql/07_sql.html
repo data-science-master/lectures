@@ -375,6 +375,8 @@ Rows</a></li>
 <li><a href="#mutate" id="toc-mutate">Mutate</a></li>
 <li><a href="#group-summaries" id="toc-group-summaries">Group
 Summaries</a></li>
+<li><a href="#creating-grouped-summaries-without-grouping-the-results" id="toc-creating-grouped-summaries-without-grouping-the-results">Creating
+Grouped Summaries without Grouping the Results</a></li>
 <li><a href="#recoding" id="toc-recoding">Recoding</a></li>
 <li><a href="#joining" id="toc-joining">Joining</a></li>
 <li><a href="#creating-some-tables" id="toc-creating-some-tables">Creating some Tables</a></li>
@@ -1350,29 +1352,29 @@ USING SAMPLE 5 ROWS;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1139</td>
-<td align="left">EWR</td>
-<td align="left">DEN</td>
+<td align="right">4357</td>
+<td align="left">JFK</td>
+<td align="left">ORF</td>
 </tr>
 <tr class="even">
-<td align="right">1843</td>
-<td align="left">LGA</td>
-<td align="left">CLT</td>
+<td align="right">926</td>
+<td align="left">EWR</td>
+<td align="left">ATL</td>
 </tr>
 <tr class="odd">
-<td align="right">1121</td>
-<td align="left">LGA</td>
-<td align="left">DFW</td>
+<td align="right">4294</td>
+<td align="left">EWR</td>
+<td align="left">SAV</td>
 </tr>
 <tr class="even">
-<td align="right">2261</td>
-<td align="left">EWR</td>
-<td align="left">PHX</td>
+<td align="right">133</td>
+<td align="left">JFK</td>
+<td align="left">LAX</td>
 </tr>
 <tr class="odd">
-<td align="right">366</td>
-<td align="left">LGA</td>
-<td align="left">STL</td>
+<td align="right">85</td>
+<td align="left">JFK</td>
+<td align="left">FLL</td>
 </tr>
 </tbody>
 </table>
@@ -1947,12 +1949,12 @@ GROUP BY &quot;origin&quot;;</code></pre>
 <td align="right">10.35</td>
 </tr>
 <tr class="even">
-<td align="left">JFK</td>
-<td align="right">12.11</td>
-</tr>
-<tr class="odd">
 <td align="left">EWR</td>
 <td align="right">15.11</td>
+</tr>
+<tr class="odd">
+<td align="left">JFK</td>
+<td align="right">12.11</td>
 </tr>
 </tbody>
 </table>
@@ -1978,17 +1980,197 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">LGA</td>
-</tr>
-<tr class="even">
 <td align="left">JFK</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">EWR</td>
+</tr>
+<tr class="odd">
+<td align="left">LGA</td>
 </tr>
 </tbody>
 </table>
 </div></li>
+</ul>
+</div>
+<div id="creating-grouped-summaries-without-grouping-the-results" class="section level2">
+<h2>Creating Grouped Summaries without Grouping the Results</h2>
+<ul>
+<li><p>This section is based on Richard Ressler’s notes.</p></li>
+<li><p>There may be times when you want to add a grouped summary to the
+data <em>without collapsing the data into the groups</em>.</p></li>
+<li><p>As an example, you want to calculate the total departure delay
+time for each destination so you can use it to then calculate the
+percentage of that departure delay time for each airline flying to that
+destination.</p></li>
+<li><p>You could do that with a summarized dataframe and then a
+join.</p></li>
+<li><p>in R, this can be done by using <code>mutate()</code> instead of
+<code>summarize()</code> to add a new column to the data frame while
+preserving all of the rows.</p></li>
+<li><p>In SQL, you have to indicate you want to use the aggregate
+function as a <strong>Window Function</strong> to combine grouped
+aggregated and non-aggregated data into a single result-set
+table.</p></li>
+<li><p>When operating as a window function, the table is partitioned
+into sets of records based on a Field.</p></li>
+<li><p>Then, the aggregate function is applied to the set of records in
+each partition and a new field is added to the record with the
+aggregated value for that partition.</p></li>
+<li><p>To use an aggregate function as a window function, use the
+<code>OVER</code> clause with a <code>(PARTITION BY myfield)</code>
+modifier.</p></li>
+<li><p>Here is how you find the flight numbers for the longest flights
+(in terms of air time) from each airport.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT
+    &quot;flight&quot;,
+    &quot;origin&quot;,
+    &quot;air_time&quot;,
+    MAX(&quot;air_time&quot;) 
+    OVER (PARTITION BY &quot;origin&quot;) AS &quot;amax&quot;
+FROM
+    flights
+LIMIT 10 OFFSET 120827;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="right">air_time</th>
+<th align="right">amax</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4372</td>
+<td align="left">EWR</td>
+<td align="right">44</td>
+<td align="right">695</td>
+</tr>
+<tr class="even">
+<td align="right">4596</td>
+<td align="left">EWR</td>
+<td align="right">154</td>
+<td align="right">695</td>
+</tr>
+<tr class="odd">
+<td align="right">5678</td>
+<td align="left">EWR</td>
+<td align="right">88</td>
+<td align="right">695</td>
+</tr>
+<tr class="even">
+<td align="right">750</td>
+<td align="left">EWR</td>
+<td align="right">230</td>
+<td align="right">695</td>
+</tr>
+<tr class="odd">
+<td align="right">1579</td>
+<td align="left">EWR</td>
+<td align="right">167</td>
+<td align="right">695</td>
+</tr>
+<tr class="even">
+<td align="right">407</td>
+<td align="left">EWR</td>
+<td align="right">235</td>
+<td align="right">695</td>
+</tr>
+<tr class="odd">
+<td align="right">717</td>
+<td align="left">EWR</td>
+<td align="right">39</td>
+<td align="right">695</td>
+</tr>
+<tr class="even">
+<td align="right">2471</td>
+<td align="left">EWR</td>
+<td align="right">270</td>
+<td align="right">695</td>
+</tr>
+<tr class="odd">
+<td align="right">3928</td>
+<td align="left">EWR</td>
+<td align="right">189</td>
+<td align="right">695</td>
+</tr>
+<tr class="even">
+<td align="right">527</td>
+<td align="left">EWR</td>
+<td align="right">187</td>
+<td align="right">695</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>Note the <code>amax</code> field is new and the values are all
+the same for the records for each origin.</p></li>
+<li><p>See <a href="https://www.sqltutorial.org/sql-window-functions/">SQL Window
+Functions</a> or <a href="https://www.sqlshack.com/sql-partition-by-clause-overview/">SQL
+PARTITION BY Clause overview</a> for other examples.</p></li>
+<li><p>This approach can be useful as a sub-query (or inner nested
+query) inside the outer query <code>FROM</code> clause.</p></li>
+<li><p>Here is how you find the flight numbers and destination for the
+longest flights (in terms of air time) from each airport after using the
+sub-query to find the longest air time from each origin.</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT
+    &quot;flight&quot;,
+    &quot;origin&quot;,
+    &quot;dest&quot;,
+    &quot;air_time&quot;
+FROM
+    (
+    SELECT
+        &quot;flight&quot;,
+        &quot;origin&quot;,
+        &quot;dest&quot;,
+        &quot;air_time&quot;,
+        MAX(&quot;air_time&quot;) OVER (PARTITION BY &quot;origin&quot;) AS &quot;amax&quot;
+    FROM
+        flights
+)
+WHERE
+    &quot;air_time&quot; = &quot;amax&quot;</code></pre>
+<div class="knitsql-table">
+<table>
+<caption>3 records</caption>
+<thead>
+<tr class="header">
+<th align="right">flight</th>
+<th align="left">origin</th>
+<th align="left">dest</th>
+<th align="right">air_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">51</td>
+<td align="left">JFK</td>
+<td align="left">HNL</td>
+<td align="right">691</td>
+</tr>
+<tr class="even">
+<td align="right">15</td>
+<td align="left">EWR</td>
+<td align="left">HNL</td>
+<td align="right">695</td>
+</tr>
+<tr class="odd">
+<td align="right">745</td>
+<td align="left">LGA</td>
+<td align="left">DEN</td>
+<td align="right">331</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><p>Note that all fields used in the outer query must be returned by
+the inner query</p></li>
 </ul>
 </div>
 <div id="recoding" class="section level2">
@@ -2441,8 +2623,8 @@ TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
 <li><p>This is what the resulting file looks like:</p>
 <pre><code>## origin,avg(dep_delay)
 ## LGA,10.3468756464944
-## JFK,12.112159099217665
-## EWR,15.10795435218885</code></pre></li>
+## EWR,15.10795435218885
+## JFK,12.112159099217665</code></pre></li>
 </ul>
 </div>
 </div>
