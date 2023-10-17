@@ -427,7 +427,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
         - `POW(2.0, x)` would be $2^x$
         - `POW(x, 2.0)` would be $x^2$
         
-- Beware of integer division during mutation. Integer division will round results to integers. E.g.
+- DuckDB is good about implicit coercion. E.g., the following integer division results in a double:
 
     ```{sql, connection=con}
     SELECT DISTINCT "month", "day", "day" / "month" AS "ratio"
@@ -436,6 +436,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ORDER BY "month", "day";
     ```
 
+- But many SQL backends are not so good about implicit coercion.
 
 - Use `CAST()` to convert to a double before operations that should produce doubles.
 
