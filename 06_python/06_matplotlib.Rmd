@@ -15,8 +15,11 @@ set.seed(1)
 knitr::opts_chunk$set(echo       = TRUE, 
                       fig.height = 4, 
                       fig.width  = 6,
-                      fig.align  = "center")
+                      fig.align  = "center",
+                      warning    = FALSE)
 ggplot2::theme_set(ggplot2::theme_bw())
+library(reticulate)
+use_condaenv("r-reticulate")
 ```
 
 # Learning Objectives
@@ -191,10 +194,11 @@ mpg = r.mpg
     
 # Facets
 
-- Use `sns.FacetGrid()` followed by the `map()` method to plot facets.
+- Use `sns.FacetGrid()` followed by the `map_dataframe()` method to plot facets. You pass arguments to the plot (`sns.histplot()` or `sns.scatterplot()` etc) inside the map function.
     ```{python, results = "hide"}
     g = sns.FacetGrid(data=mpg, row='drv', col='class')
-    g.map(sns.histplot, 'hwy', kde=False)
+    g = g.map_dataframe(sns.histplot, x = 'hwy', kde=False)
+    plt.show()
     ```
     
     ```{python}
