@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-10-17" />
+<meta name="date" content="2023-11-06" />
 
 <title>SQL</title>
 
@@ -352,7 +352,7 @@ display: none;
 
 <h1 class="title toc-ignore">SQL</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-10-17</h4>
+<h4 class="date">2023-11-06</h4>
 
 </div>
 
@@ -384,6 +384,8 @@ Grouped Summaries without Grouping the Results</a></li>
 <li><a href="#writing-tables-to-a-csv-file" id="toc-writing-tables-to-a-csv-file">Writing Tables to a CSV
 File</a></li>
 </ul></li>
+<li><a href="#passing-sql-output-to-r-in-r-markdown" id="toc-passing-sql-output-to-r-in-r-markdown">Passing SQL output to R
+in R Markdown</a></li>
 <li><a href="#calling-sql-from-r" id="toc-calling-sql-from-r">Calling
 SQL from R</a></li>
 <li><a href="#use-r-to-generate-sql-with-dbplyr" id="toc-use-r-to-generate-sql-with-dbplyr">Use R to generate SQL with
@@ -1352,29 +1354,29 @@ USING SAMPLE 5 ROWS;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1819</td>
-<td align="left">LGA</td>
-<td align="left">MSP</td>
-</tr>
-<tr class="even">
-<td align="right">2181</td>
-<td align="left">LGA</td>
-<td align="left">DCA</td>
-</tr>
-<tr class="odd">
-<td align="right">4323</td>
+<td align="right">73</td>
 <td align="left">EWR</td>
-<td align="left">CVG</td>
+<td align="left">SFO</td>
 </tr>
 <tr class="even">
-<td align="right">2139</td>
-<td align="left">LGA</td>
-<td align="left">MIA</td>
+<td align="right">1421</td>
+<td align="left">EWR</td>
+<td align="left">IAH</td>
 </tr>
 <tr class="odd">
-<td align="right">535</td>
-<td align="left">JFK</td>
-<td align="left">LAX</td>
+<td align="right">1744</td>
+<td align="left">LGA</td>
+<td align="left">IAH</td>
+</tr>
+<tr class="even">
+<td align="right">2261</td>
+<td align="left">EWR</td>
+<td align="left">PHX</td>
+</tr>
+<tr class="odd">
+<td align="right">2054</td>
+<td align="left">LGA</td>
+<td align="left">CLT</td>
 </tr>
 </tbody>
 </table>
@@ -1434,11 +1436,11 @@ ORDER BY &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
-<td align="right">2223</td>
+<td align="right">3318</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">3318</td>
+<td align="right">375</td>
 <td align="right">-24</td>
 </tr>
 </tbody>
@@ -1565,22 +1567,22 @@ ORDER BY &quot;origin&quot; DESC, &quot;dep_delay&quot;;</code></pre>
 <td align="right">-25</td>
 </tr>
 <tr class="odd">
+<td align="right">375</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="even">
+<td align="right">4065</td>
+<td align="left">LGA</td>
+<td align="right">-24</td>
+</tr>
+<tr class="odd">
 <td align="right">2223</td>
 <td align="left">LGA</td>
 <td align="right">-24</td>
 </tr>
 <tr class="even">
-<td align="right">375</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="odd">
-<td align="right">4065</td>
-<td align="left">LGA</td>
-<td align="right">-24</td>
-</tr>
-<tr class="even">
-<td align="right">1371</td>
+<td align="right">5956</td>
 <td align="left">LGA</td>
 <td align="right">-23</td>
 </tr>
@@ -1980,13 +1982,13 @@ FROM flights;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">JFK</td>
-</tr>
-<tr class="even">
 <td align="left">LGA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">EWR</td>
+</tr>
+<tr class="odd">
+<td align="left">JFK</td>
 </tr>
 </tbody>
 </table>
@@ -2045,63 +2047,63 @@ LIMIT 10 OFFSET 120827;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">4372</td>
+<td align="right">1100</td>
 <td align="left">EWR</td>
-<td align="right">44</td>
+<td align="right">324</td>
 <td align="right">695</td>
 </tr>
 <tr class="even">
-<td align="right">4596</td>
+<td align="right">449</td>
 <td align="left">EWR</td>
-<td align="right">154</td>
+<td align="right">82</td>
 <td align="right">695</td>
 </tr>
 <tr class="odd">
-<td align="right">1192</td>
+<td align="right">4382</td>
 <td align="left">EWR</td>
-<td align="right">182</td>
+<td align="right">87</td>
 <td align="right">695</td>
 </tr>
 <tr class="even">
-<td align="right">750</td>
+<td align="right">4691</td>
 <td align="left">EWR</td>
-<td align="right">230</td>
+<td align="right">114</td>
 <td align="right">695</td>
 </tr>
 <tr class="odd">
-<td align="right">1579</td>
+<td align="right">1037</td>
 <td align="left">EWR</td>
-<td align="right">167</td>
+<td align="right">330</td>
 <td align="right">695</td>
 </tr>
 <tr class="even">
-<td align="right">407</td>
+<td align="right">1266</td>
 <td align="left">EWR</td>
-<td align="right">235</td>
+<td align="right">301</td>
 <td align="right">695</td>
 </tr>
 <tr class="odd">
-<td align="right">717</td>
+<td align="right">1199</td>
 <td align="left">EWR</td>
-<td align="right">39</td>
+<td align="right">38</td>
 <td align="right">695</td>
 </tr>
 <tr class="even">
-<td align="right">1942</td>
+<td align="right">3709</td>
 <td align="left">EWR</td>
-<td align="right">110</td>
+<td align="right">114</td>
 <td align="right">695</td>
 </tr>
 <tr class="odd">
-<td align="right">216</td>
+<td align="right">4407</td>
 <td align="left">EWR</td>
-<td align="right">112</td>
+<td align="right">164</td>
 <td align="right">695</td>
 </tr>
 <tr class="even">
-<td align="right">1107</td>
+<td align="right">580</td>
 <td align="left">EWR</td>
-<td align="right">235</td>
+<td align="right">192</td>
 <td align="right">695</td>
 </tr>
 </tbody>
@@ -2387,53 +2389,53 @@ ON flights.&quot;tailnum&quot; = planes.&quot;tailnum&quot;;</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1545</td>
-<td align="left">N14228</td>
+<td align="right">569</td>
+<td align="left">N846UA</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">1714</td>
-<td align="left">N24211</td>
+<td align="right">4424</td>
+<td align="left">N19966</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">1141</td>
-<td align="left">N619AA</td>
+<td align="right">684</td>
+<td align="left">N809UA</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">725</td>
-<td align="left">N804JB</td>
+<td align="right">1279</td>
+<td align="left">N328NB</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">1696</td>
-<td align="left">N39463</td>
+<td align="right">1691</td>
+<td align="left">N34137</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">507</td>
-<td align="left">N516JB</td>
+<td align="right">1447</td>
+<td align="left">N117UW</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">79</td>
-<td align="left">N593JB</td>
+<td align="right">583</td>
+<td align="left">N632JB</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">49</td>
-<td align="left">N793JB</td>
+<td align="right">3574</td>
+<td align="left">N790SW</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="odd">
-<td align="right">71</td>
-<td align="left">N657JB</td>
+<td align="right">3351</td>
+<td align="left">N711MQ</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 <tr class="even">
-<td align="right">194</td>
-<td align="left">N29129</td>
+<td align="right">303</td>
+<td align="left">N502UA</td>
 <td align="left">Fixed wing multi engine</td>
 </tr>
 </tbody>
@@ -2628,6 +2630,46 @@ TO &#39;summaries.csv&#39; (HEADER, DELIMITER &#39;,&#39;);</code></pre></li>
 </ul>
 </div>
 </div>
+<div id="passing-sql-output-to-r-in-r-markdown" class="section level1">
+<h1>Passing SQL output to R in R Markdown</h1>
+<ul>
+<li><p>The <code>output.var</code> option in an R Markdown SQL chunk
+allows the output of SQL query to be called a new variable.</p></li>
+<li><p>E.g., this chunk option will make the SQL output to a new data
+frame called <code>df</code> (don’t forget quotes around the new
+variable name).</p>
+<pre><code>```{sql, connection=con, output.var=&quot;df&quot;}
+
+```</code></pre></li>
+<li><p>Here is me setting the output variable to <code>df</code>:</p>
+<p><mark style="background-color: #e24e2f">SQL</mark></p>
+<pre class="sql"><code>SELECT * FROM flights;</code></pre></li>
+<li><p>Here is the <code>df</code> variable in R:</p>
+<p><mark style="background-color: lightblue">R</mark></p>
+<pre class="r"><code>glimpse(df)</code></pre>
+<pre><code>## Rows: 336,776
+## Columns: 19
+## $ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
+## $ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558, …
+## $ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600, …
+## $ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -1…
+## $ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849,…
+## $ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851,…
+## $ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -1…
+## $ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV&quot;, &quot;B6&quot;, &quot;…
+## $ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, 4…
+## $ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668DN&quot;, &quot;N394…
+## $ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EWR&quot;, &quot;LGA&quot;,…
+## $ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FLL&quot;, &quot;IAD&quot;,…
+## $ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, 1…
+## $ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733, …
+## $ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6…
+## $ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 0…
+## $ time_hour      &lt;dttm&gt; 2013-01-01 10:00:00, 2013-01-01 10:00:00, 2013-01-01 1…</code></pre></li>
+</ul>
+</div>
 <div id="calling-sql-from-r" class="section level1">
 <h1>Calling SQL from R</h1>
 <ul>
@@ -2691,7 +2733,7 @@ way to learn SQL.</p></li>
   filter(origin == &quot;JFK&quot;, dest == &quot;CMH&quot;) |&gt;
   summarize(dep_delay = mean(dep_delay, na.rm = TRUE))</code></pre>
 <pre><code>## # Source:   SQL [1 x 1]
-## # Database: DuckDB v0.9.1 [dgerard@Linux 6.2.0-34-generic:R 4.3.0/../data/flights.duckdb]
+## # Database: DuckDB v0.9.1 [dgerard@Linux 5.15.0-88-generic:R 4.3.2/../data/flights.duckdb]
 ##   dep_delay
 ##       &lt;dbl&gt;
 ## 1      22.0</code></pre></li>

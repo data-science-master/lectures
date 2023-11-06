@@ -782,6 +782,31 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{r, echo = FALSE}
     writeLines(readLines("./summaries.csv"))
     ```
+    
+# Passing SQL output to R in R Markdown
+
+- The `output.var` option in an R Markdown SQL chunk allows the output of SQL query to be called a new variable.
+
+- E.g., this chunk option will make the SQL output to a new data frame called `df` (don't forget quotes around the new variable name).
+
+    ```{r, echo = FALSE, comment = ""}
+    codechunk <- "```{sql, connection=con, output.var=\"df\"}\n\n```"
+    writeLines(codechunk)
+    ```
+
+- Here is me setting the output variable to `df`:
+
+    <mark style="background-color: #e24e2f">SQL</mark>
+    ```{sql, connection = con, output.var = "df"}
+    SELECT * FROM flights;
+    ```
+
+- Here is the `df` variable in R:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    glimpse(df)
+    ```
 
 
 # Calling SQL from R
