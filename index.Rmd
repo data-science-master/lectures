@@ -19,10 +19,6 @@ University by [David Gerard](https://dcgerard.github.io/).
   to have already obtained a solid grasp on the materials from Sections 01 to
   09 from my DATA 412/612 teaching website.
 
-# Final Project
-
-- TBD
-
 # Lectures
 
 - 01 Git and the Terminal
