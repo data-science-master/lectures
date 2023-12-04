@@ -11,7 +11,7 @@
 
 <meta name="author" content="David Gerard" />
 
-<meta name="date" content="2023-09-06" />
+<meta name="date" content="2023-12-04" />
 
 <title>Dates</title>
 
@@ -512,7 +512,7 @@ display: none;
 
 <h1 class="title toc-ignore">Dates</h1>
 <h4 class="author">David Gerard</h4>
-<h4 class="date">2023-09-06</h4>
+<h4 class="date">2023-12-04</h4>
 
 </div>
 
@@ -580,20 +580,20 @@ stands for “hours, minutes, and seconds.”
 <li><p><code>today()</code> will give you the current date in the
 <code>Date</code> class.</p>
 <pre class="r"><code>today()</code></pre>
-<pre><code>## [1] &quot;2023-09-06&quot;</code></pre>
+<pre><code>## [1] &quot;2023-12-04&quot;</code></pre>
 <pre class="r"><code>class(today())</code></pre>
 <pre><code>## [1] &quot;Date&quot;</code></pre></li>
 <li><p><code>now()</code> will give you the current date-time in the
 <code>POSIXct</code> class.</p>
 <pre class="r"><code>now()</code></pre>
-<pre><code>## [1] &quot;2023-09-06 10:08:58 EDT&quot;</code></pre>
+<pre><code>## [1] &quot;2023-12-04 09:39:38 EST&quot;</code></pre>
 <pre class="r"><code>class(now())</code></pre>
 <pre><code>## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre></li>
 <li><p>There is no built-in R function to find the current time without
 the date. But you can use <code>hms::as_hms(now())</code> to get the
 current time.</p>
 <pre class="r"><code>hms::as_hms(now())</code></pre>
-<pre><code>## 10:08:58.260384</code></pre>
+<pre><code>## 09:39:38.368617</code></pre>
 <pre class="r"><code>class(hms::as_hms(now()))</code></pre>
 <pre><code>## [1] &quot;hms&quot;      &quot;difftime&quot;</code></pre></li>
 </ul>
@@ -947,7 +947,7 @@ is using durations</p>
 d2 &lt;- today()
 agesec &lt;- as.duration(d2 - d1)
 agesec</code></pre>
-<pre><code>## [1] &quot;2623968000s (~83.15 years)&quot;</code></pre></li>
+<pre><code>## [1] &quot;2631657600s (~83.39 years)&quot;</code></pre></li>
 <li><p>You can also create durations from years with
 <code>dyears()</code>, from days with <code>ddays()</code>, etc…</p>
 <pre class="r"><code>dyears(1)</code></pre>

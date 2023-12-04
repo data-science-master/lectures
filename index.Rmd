@@ -32,9 +32,10 @@ University by [David Gerard](https://dcgerard.github.io/).
     - [01 Git Large File Storage](./01_git/01_git_lfs.html).
     - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
     - [01 Lab: Review of Tidyverse Concepts](https://github.com/data-science-master/lab_01).
-- 02 Dates and Times
-    - [02 Dates](./02_dates/02_dates.html).
-    - [02 Lab](https://github.com/data-science-master/lab_02).
+- 02 Organization
+    - 02 File Structure
+    - 02 Project Structure
+    - 02 Project Management
 - 03 Vectors and Iteration
     - [03 Vectors](./03_vectors_iterators/03_vectors.html).
     - [03 Subsetting](./03_vectors_iterators/03_subsetting.html).
@@ -59,20 +60,18 @@ University by [David Gerard](https://dcgerard.github.io/).
 - 07 Introduction to SQL
     - [07 SQL](./07_sql/07_sql.html).
     - [07 DBeaver](./07_sql/07_dbeaver.html).
-- 08 Making Maps in R
-    - [08 Maps](./08_maps/08_maps.html).
-- 09 GNU Make
-    - [09 GNU Make](./09_make/09_make.html).
-    - [09 Penguins Exercise](https://github.com/data-science-master/penguins).
-    - [09 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims).
-- 10 Shiny Apps
-    - [10 Shiny Basics](./10_shiny/10_basic_shiny.html).
-    - [10 Layouts](./10_shiny/10_layouts.html).
-    - [10 Reactivity](./10_shiny/10_reactivity.html).
-    - [10 HTML](./10_shiny/10_html.html).
-    - [10 File Uploads](./10_shiny/10_upload.html).
-    - [10 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
-    - [10 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
+- 08 GNU Make
+    - [08 GNU Make](./08_make/08_make.html).
+    - [08 Penguins Exercise](https://github.com/data-science-master/penguins).
+    - [08 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims).
+- 09 Shiny Apps
+    - [09 Shiny Basics](./09_shiny/09_basic_shiny.html).
+    - [09 Layouts](./09_shiny/09_layouts.html).
+    - [09 Reactivity](./09_shiny/09_reactivity.html).
+    - [09 HTML](./09_shiny/09_html.html).
+    - [09 File Uploads](./09_shiny/09_upload.html).
+    - [09 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
+    - [09 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
 
 # Extra Lectures
     
@@ -87,6 +86,9 @@ University by [David Gerard](https://dcgerard.github.io/).
 - A3 Data.table    
     - [A3 Manipulating Large(ish) Datasets with data.table](./A3_medium_data/A3_medium_data.html).
     - [A3 Lab](https://github.com/data-science-master/lab_07).
+- A4 Dates and Times
+    - [A4 Dates](./A4_dates/A4_dates.html).
+    - [A4 Lab](https://github.com/data-science-master/lab_02).
 
 # Code of Conduct
 
