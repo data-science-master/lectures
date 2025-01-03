@@ -44,15 +44,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Download and install Rtools: <https://cran.r-project.org/bin/windows/Rtools/>
 
-<!-- - You can use `make` in windows (<http://gnuwin32.sourceforge.net/packages/make.htm>) -->
-
-- Add `make` to the PATH whenever you open R via typing the following in R:
-
-    ```{r, eval = FALSE}
-    writeLines('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
-    ```
-
-- Restart R
+- Restart R.
 
 - Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Windows Powershell". This will make it so that the terminal is [Windows PowerShell](https://en.wikipedia.org/wiki/PowerShell), **not** git bash (so it will look a little weird and act a little differently).
 
@@ -61,6 +53,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Always run `make` in the Windows PowerShell from R Studio. This pipeline won't work if you try to directly open the PowerShell outside of R Studio.
 
 - You can always convert the terminal back to git bash later.
+
+- To verify `make` is installed, run `make --version` in the Windows PowerShell.
 
 - I am not a big fan of RStudio Projects, but if you like them then there is some R Studio `make` functionality when you use an RStudio Project (<https://stat545.com/make-test-drive.html>). This lets you avoid using Windows PowerShell.
     
@@ -76,15 +70,10 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Install Ubuntu using these directions: <https://ubuntu.com/wsl>
 
-- Install `r-base-dev` using the instructions found by heading to <https://cran.r-project.org/> then navigating to "Download R for Linux > ubuntu/"
+- Open up Ubuntu (this will be a shell).
 
-    - Try installing it without Secure Apt first. But you'll probablly need to run the following to install it:
+- Follow the instructions on CRAN (<https://cran.r-project.org/>) to install R for Ubuntu inside the Ubuntu shell.
     
-        ```{bash, eval=FALSE}
-        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-        ```
-    
-
 - In Ubuntu open up the command line for R
 
     ```
@@ -96,6 +85,8 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - Change R Studio's settings "Global Options... > Terminal > New terminals open with" so that it reads "Bash (Windows Subsystem for Linux)".
 
 - Open up a new terminal, and you should now be using Ubuntu for your terminal.
+
+- To verify `make` is installed, run `make --version` in the Ubuntu terminal.
 
 # Motivation
 
@@ -220,6 +211,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - At the *top* of the makefile, you then list the phony targets after `all`:
 
     ```
+    .PHONY : all
     all : phony_target1 phony_target2 phony_target3 ...
     ```
 
@@ -232,6 +224,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ## Pseudo-code for Makefile
 
 ``` make
+.PHONY : all
 all : phony_target1 phony_target2
 
 .PHONY : phony_target1
@@ -364,6 +357,7 @@ target3 : prereq3.Rmd
 - The Makefile that organizes this structure is
 
     ``` make
+    .PHONY : all
     all : sims
     
     .PHONY : sims
@@ -483,6 +477,7 @@ target3 : prereq3.Rmd
 - **Exercise**: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:
 
     ``` make
+    .PHONY : all
     all : sims
     
     .PHONY : sims
