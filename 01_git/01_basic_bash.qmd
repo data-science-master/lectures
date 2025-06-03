@@ -1,0 +1,236 @@
+---
+title: "Basic Bash"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+```
+
+# Learning Objectives
+
+- Open up the terminal.
+- Basic shell commands.
+- Chapter 4 of [Git for Scientists](https://milesmcbain.github.io/git_4_sci/).
+- [Terminus](http://web.mit.edu/mprat/Public/web/Terminus/Web/main.html).
+
+# The Command Line
+
+- The **command line** is like the R command prompt: you insert code, hit enter,
+  and then the computer executes your command.
+
+- However, instead of inserting R code, you insert [Shell Script](https://en.wikipedia.org/wiki/Shell_script).
+
+- In this class, we will use the command line primarily for two things:
+    - Moving around your file system.
+    - Running git commands.
+
+- Other words for command line: shell, terminal, command line interface (cli), and console.
+    - These terms are technically slightly
+      [different](https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line).
+
+- There are many types of shells, each with their own scripting language. We will use the
+  [bash scripting language ](https://en.wikipedia.org/wiki/Bash_(Unix_shell))
+  for this class.
+
+- A huge difference between R and bash is how commands/functions are called.
+    - R: `f(x, y = 1)`
+    - Bash: `f x --y=1`
+    - Arguments that are "flags" use only one dash, like `f x -g` would
+      incorporate the `g` flag.
+
+- If you are using Linux or Mac, then you can keep going. If you are using Windows,
+  you need to first download and install git (and thus git bash) from here:
+  <http://git-scm.com/download/win>. You might need to restart R Studio if you
+  are already running it.
+
+- Open up the terminal
+    - Windows: Open up the `Git Bash` app. It should look like this:
+
+        <img src="./01_figs/git_bash.png" alt="Git Bash for Windows" width="50%"/>
+
+    - Mac: On your Mac, do one of the following:
+        - Type "Terminal" in the search field, then click Terminal.
+        - In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.
+    - Ubuntu: Do one of the following
+        - Open the dash and search for "terminal". Open up the terminal.
+        - Use keyboard shortcut: Ctrl+Alt+T
+        - It should look like this:
+
+            <img src="./01_figs/terminal_ubuntu.png" alt="Git Bash for Windows" width="50%"/>
+
+- All commands get placed after the dollar sign.
+
+- The path before the dollar sign is the working directory of the terminal,
+  **not** R's working directory. It's where the shell will reference all files
+  from.
+
+- The tilde "`~`" is shorthand for the "home directory". Each computer has
+  a home directory that is the "default directory".
+
+# Useful Commands:
+
+-   `pwd`: Print working directory. Show the current working directory. This is like `getwd()` in R.
+
+    ```{bash}
+    pwd
+    ```
+
+-   `ls`: List the current files and folders in a directory.
+
+    ```{bash}
+    ls
+    ```
+
+-   `cd`: Change directories. This is like `setwd()` in R. As when we specified
+  paths in R, using two periods mean "move back a folder".
+    ```{bash}
+    cd ../
+    pwd
+    ```
+    -   If you use `cd` without specifying a folder to move to, it will move the
+      working directory to the home directory.
+        ```{bash}
+        cd
+        pwd
+        ```
+    -   OK, I'm going to move us back to the 01_git directory.
+        ```{bash, eval=FALSE}
+        cd ./Dropbox/teaching/data_496_696/lectures/01_git
+        ```
+
+-   `man`: Read the manual of a command. Just like `help()` in R.
+    ```{bash, eval=FALSE}
+    man ls
+    ```
+    - This will open up the man page of `ls`. You can scroll through this page
+      using the up and down arrows. You can exit this page by typing `q`.
+    - This won't work for Git Bash (for Windows users). Instead, you'll need to type
+      ```{bash, eval=FALSE}
+      ls --help
+      ```
+
+- **Exercise**: What is your home directory? What files/folders exist in your
+  home directory? Navigate to it and then navigate back to your notes.
+
+-   **Exercise**: Where does the following command take you? How does it work?
+
+    ```{bash, eval=FALSE}
+    cd ~/../../..
+    ```
+
+- **Exercise**: Read the manual page of `ls`. What does the `a` flag do?
+  Try it out!
+
+# Other commands.
+
+-   `touch`: Create an empty file.
+
+    ```{bash, eval = FALSE}
+    touch empty_file.txt
+    ```
+
+-   `more`: Open up a preview of a document. You can exit the preview by typeing `q`.
+
+    ```{bash, eval = FALSE}
+    more 01_basic_bash.Rmd
+    ```
+
+-   `cp`: Copy a file.
+
+    ```{bash}
+    cp 01_basic_bash.Rmd hellobash.Rmd
+    ls
+    ```
+
+-   `mv`: Move/rename a file.
+
+    ```{bash}
+    mv hellobash.Rmd goodbyebash.Rmd
+    ls
+    ```
+
+-   `rm`: Remove a file.
+
+    ```{bash}
+    rm goodbyebash.Rmd
+    ls
+    ```
+
+-   `mkdir`: Make a directory/folder.
+
+    ```{bash}
+    mkdir tempdir
+    ls
+    ```
+
+-   `rmdir`: Remove a directory/folder.
+
+    ```{bash}
+    rmdir tempdir
+    ls
+    ```
+
+# String search with `grep`
+
+Find any string in any file in the current working  directory (or subdirectories or the current working directory).
+
+- `-r` recursive
+- `-n` line number
+- `-w` whole word only
+- `-e` pattern
+- `pdfgrep` (need to install separately) for searching text in PDFs.
+
+```{bash}
+grep -rnw -e "move"
+```
+
+```{bash}
+grep -rnw -e "mov"
+```
+
+```{bash}
+grep -rn -e "mov"
+```
+
+# Download data with `wget`
+
+Non-interactive downloading of data.
+
+Not available for Git Bash for Windows.
+
+- `-nc` Don't download new copies if already there.
+- `-nd` Put all files in current working directory.
+- `-P` Tell where to download the files. Default is current working directory (`.`)
+- `-r` Recursive downloading. Download all files in the directory up to a certain level.
+- `l` Determine the level for recursive downloading.
+
+E.g. to download the HTML file that contains the Wikipedia list of [theological demons](https://en.wikipedia.org/wiki/List_of_theological_demons), we can go
+
+```{bash}
+wget -nc -nd https://en.wikipedia.org/wiki/List_of_theological_demons
+```
+
+```{bash}
+ls
+```
+
+I'll remove that file now
+
+```{bash}
+rm List_of_theological_demons
+```
+
+# Search your command history with `reverse-i-search`
+
+1. `ctrl`+`r` to get search prompt
+2. Type a search term
+3. `ctrl`+`r` to cycle through matches
+4. Hit `enter` if you want to reuse the match. Hit `ctrl`+`c` to exit out of the search.

@@ -1,0 +1,18 @@
+---
+title: "Bias in Machine Learning"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: revealjs::revealjs_presentation
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Learning Objectives
+
+- Why do biases arise in predictive algorithms?
+- Why is this bad for society?
+- How do we fix this? (*hint*: no easy answers)
+- <https://fivethirtyeight.com/features/technology-is-biased-too-how-do-we-fix-it/>

@@ -1,0 +1,73 @@
+---
+title: "DATA 413/613 Data Science"
+---
+
+[Syllabus](./admin/syllabus.qmd)
+
+# Lectures
+
+- 01 Git and the Terminal
+    - [01 The Terminal and Bash Basics](./01_git/01_basic_bash.qmd).
+    - [01 Git Setup](./01_git/01_git_setup.qmd).
+    - [01 Git and GitHub](./01_git/01_git_github.qmd).
+    - [01 Git Large File Storage](./01_git/01_git_lfs.qmd).
+    - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
+    - [01 Lab: Review of Tidyverse Concepts](https://github.com/data-science-master/lab_01).
+- 02 Organization
+    - 02 File Structure
+    - 02 Project Structure
+    - 02 Project Management
+- 03 Vectors and Iteration
+    - [03 Vectors](./03_vectors_iterators/03_vectors.qmd).
+    - [03 Subsetting](./03_vectors_iterators/03_subsetting.qmd).
+    - [03 Functions](./03_vectors_iterators/03_functions.qmd).
+    - [03 Iteration](./03_vectors_iterators/03_iterators.qmd).
+    - [03 Lab](https://github.com/data-science-master/lab_03).
+- 04 R Packages
+    - [04 R Packages](./04_packages/04_packages.qmd).
+    - [04 Unit Testing](./04_packages/04_testing.qmd).
+    - [04 Automated Checks](./04_packages/04_checking.qmd).
+    - [04 Style](./04_packages/04_style.qmd).
+- 05 Web Scraping
+    - [05 APIs](./05_web_scraping/05_apis.qmd).
+    - [05 Web Scraping](./05_web_scraping/05_web_scraping.qmd).
+    - [05 Lab](https://github.com/data-science-master/lab_08).
+- 06 Introduction to Python
+    - [06 Python Setup and Reticulate](./06_python/06_python_setup.qmd).
+    - [06 Numpy](./06_python/06_numpy.qmd).
+    - [06 Pandas](./06_python/06_pandas.qmd).
+    - [06 Seaborn](./06_python/06_matplotlib.qmd).
+    - [06 Seaborn.objects](./06_python/06_seaborn_objects.qmd).
+- 07 Introduction to SQL
+    - [07 SQL](./07_sql/07_sql.qmd).
+    - [07 DBeaver](./07_sql/07_dbeaver.qmd).
+- 08 GNU Make
+    - [08 GNU Make](./08_make/08_make.qmd).
+    - [08 Penguins Exercise](https://github.com/data-science-master/penguins).
+    - [08 Very Basic Makefile Example](https://github.com/data-science-master/pvalue_sims).
+- 09 Shiny Apps
+    - [09 Shiny Basics](./09_shiny/09_basic_shiny.qmd).
+    - [09 Layouts](./09_shiny/09_layouts.qmd).
+    - [09 Reactivity](./09_shiny/09_reactivity.qmd).
+    - [09 HTML](./09_shiny/09_html.qmd).
+    - [09 File Uploads](./09_shiny/09_upload.qmd).
+    - [09 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
+    - [09 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
+
+# Extra Lectures
+    
+- A1 Basic Statistics
+    - [A1 Basic Statistics](./A1_basic_stats/A1_basic_stats.qmd).
+    - [A1 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations](./A1_basic_stats/greenland_etal_2016.pdf).
+    - [A1 Lab](https://github.com/data-science-master/lab_04).
+- A2 Linear Models
+    - [A2 Simple Linear Regression](./A2_linear_regression/A2_simple_linear_regression.qmd).
+    - [A2 Many Models](./A2_linear_regression/A2_many_models.qmd).
+    - [A2 Lab](https://github.com/data-science-master/lab_05).
+- A3 Data.table    
+    - [A3 Manipulating Large(ish) Datasets with data.table](./A3_medium_data/A3_medium_data.qmd).
+    - [A3 Lab](https://github.com/data-science-master/lab_07).
+- A4 Dates and Times
+    - [A4 Dates](./A4_dates/A4_dates.qmd).
+    - [A4 Lab](https://github.com/data-science-master/lab_02).
+    

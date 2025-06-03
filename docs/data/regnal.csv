@@ -1,0 +1,44 @@
+monarch,num_years,first,start_date,end_date,final
+William I,21,1066,14 October,13 October,9 Sep 1087
+William II,13,1087,26 September,25 September,2 Aug 1100
+Henry I,36,1100,5 August,4 August,1 Dec 1135
+Stephen,19,1135,26 December,25 December,25 Oct 1154
+Henry II,35,1154,19 December,18 December,6 Jul 1189
+Richard I,10,1189,3 September,2 September,6 Apr 1199
+John,18,1199,May (Ascension Day),May (varied),19 Oct 1216
+Henry III,57,1216,28 October,27 October,16 Nov 1272
+Edward I,35,1272,20 November,20 November,7 Jul 1307
+Edward II,20,1307,8 July,7 July,20 Jan 1327
+Edward III,"51 (England), 38 (France)",1327,25 January,24 January,21 Jun 1377
+Richard II,23,1377,22 June,21 June,29 Sep 1399
+Henry IV,14,1399,30 September,29 September,20 Mar 1413
+Henry V,10,1413,21 March,20 March,31 Aug 1422
+Henry VI,39 + 1,1422,1 September,31 August,4 Mar 1461
+Edward IV,23,1461,4 March,3 March,9 Apr 1483
+Edward V,1,1483,9 April,25 June,25 Jun 1483
+Richard III,3,1483,26 June,25 June,22 Aug 1485
+Henry VII,24,1485,22 August,21 August,21 Apr 1509
+Henry VIII,38,1509,22 April,21 April,28 Jan 1547
+Edward VI,7,1547,28 January,27 January,6 Jul 1553
+Mary I,2,1553,6 July,5 July,24 Jul 1554
+"""Philip and Mary""",5 & 6,1554,25 July,24 July,17 Nov 1558
+Elizabeth I,45,1558,17 November,16 November,24 Mar 1603
+James I,23,1603,25 Mar,24 March,27 Mar 1625
+Charles I,24,1625,27 March,26 March,30 Jan 1649
+Charles II,37,1649,30 January,29 January,6 Feb 1685
+James II,4,1685,6 February,5 February,11 Dec 1688
+"""William and Mary""",6,1689,13 February,12 February,27 Dec 1694
+William III,8 (7 to 1),1694,28 December,27 December,8 Mar 1702
+Anne,13,1702,8 March,7 March,1 Aug 1714
+George I,13,1714,1 August,31 July,11 Jun 1727
+George II,34,1727,11 June,10 June,25 Oct 1760
+George III,60,1760,25 October,24 October,29 Jan 1820
+George IV,11,1820,29 January,28 January,26 Jun 1830
+William IV,7,1830,26 June,25 June,20 Jun 1837
+Victoria,64,1837,20 June,19 June,22 Jan 1901
+Edward VII,10,1901,22 January,21 January,6 May 1910
+George V,26,1910,6 May,5 May,20 Jan 1936
+Edward VIII,1,1936,20 January,11 December,11 Dec 1936
+George VI,16,1936,11 December,10 December,5 Feb 1952
+Elizabeth II,71,1952,6 February,5 February,8 Sep 2022
+Charles III,NA,2022,8 September,7 September,NA

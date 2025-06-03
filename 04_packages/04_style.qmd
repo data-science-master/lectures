@@ -1,0 +1,356 @@
+---
+title: "Style Guide"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, 
+                      fig.width  = 4)
+knitr::opts_knit$set(global.par = TRUE)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+```{r, echo=FALSE, include=TRUE}
+par(mar = c(3, 3, 2, 1),
+mgp = c(1.8, 0.4, 0), 
+las = 1,
+tcl = -.25)
+```
+
+# Learning Objectives
+
+- Coding Style
+- [tidyverse style guide](https://style.tidyverse.org/)
+- [Google style guide](https://google.github.io/styleguide/Rguide.html)
+- [Bioconductor Style Guide](https://www.bioconductor.org/developers/how-to/coding-style/)
+
+# Style Guides
+
+- Each organization has a style guide on how code should be formatted that you should adhere to.
+
+- When everyone on a project uses a consistent style, it makes code easier to read and understand, and it makes collaboration easier and faster.
+
+- There are lots of style guides (see links in the Learning Objectives). This document contains the style guide for our class.
+
+- This style guide is obviously opinionated, and others have their own thoughts (which is perfectly fine!). The important thing is consistency among collaborators.
+
+- We will mostly follow the [tidyverse style guide](https://style.tidyverse.org/). Below I place some points of emphasis and note differences.
+
+- I expect you to follow this style guide in all homeworks and assignments.
+
+# File Names
+
+- File and folder names should only have
+  1. Letters
+  2. Numbers
+  3. Underscores (`_`).
+  4. Possibly dashes `-`. But these are discouraged.
+  
+- In particular, never use spaces or periods in a file name.
+
+- Capital letters are discouraged. You should work almost entirely with lower-case letters.
+
+- Always begin a file name with a lower-case letter.
+
+- Exceptions to this are:
+  - Hidden files/folders begin with a period `.`
+  - Standard/Required files, such as `NAMESPACE`, `README.md`, etc...
+    
+- R scripts should end in `.R` (not `.r`).
+
+- R markdown files should end in `.Rmd`.
+
+# Syntax
+
+
+## Names
+
+- Only use lower-case snake_case.
+
+  - Good
+    ```{r, eval = FALSE}
+    red_apple
+    ```
+  
+  - Bad
+    ```{r, eval = FALSE}
+    Red_apple
+    red.apple
+    redApple
+    RedApple
+    ```
+
+- Variables should be nouns and functions should be verbs
+
+- Never use single letters as variables/functions
+  - Good:
+    ```{r, eval = FALSE}
+    num_sim <- 10
+    ```
+  - Bad
+    ```{r}
+    simulate <- 10 ## verb
+    x <- 10 ## single letter
+    ```
+
+- **Exceptions**: Some letters are standard. Such as `n` for the sample size in `rnorm()`, `runif()`, etc...
+
+## Commas
+
+- Always put a space after a comma, not before (like English).
+  - Good:
+    ```{r, eval = FALSE}
+    mat[1, ]
+    ```
+  - Bad:
+    ```{r, eval = FALSE}
+    mat[1 ,]
+    mat[1 , ]
+    mat[1,]
+    ```
+
+## Parentheses
+
+- Don't put a space in or around parentheses for functions.
+  - Good:
+    ```{r, eval = FALSE}
+    mean(x)
+    ```
+  - Bad:
+    ```{r, eval = FALSE}
+    mean (x)
+    mean(x )
+    ```
+        
+- Put spaces around parentheses for `if` statements, and `for` and `while` loops.
+  - Good:
+    ```{r, eval = FALSE}
+    if (x) {
+      
+    }
+    ```
+  - Bad:
+    ```{r, eval = FALSE}
+    if(x){
+      
+    }
+    ```
+
+- Put a space only after `()` for function creations.
+  - Good:
+    ```{r, eval=FALSE}
+    sim <- function(x) {
+    }
+    ```
+  - Bad:
+    ```{r, eval = FALSE}
+    sim <- function (x) {
+    }
+    
+    sim <- function(x){
+    }
+    ```
+        
+## Curley Braces
+
+- Whenever you use curly braces `{}`, the opening brace should be the last character on a line, and the closing brace should be the first character on a line.
+  - Good:
+    ```{r, eval=FALSE}
+    if (condition) {
+      dostuff()
+    }
+    ```
+  - Bad
+    ```{r, eval=FALSE}
+    if (condition)
+    {
+      dostuff()
+    }
+    
+    if (condition) {
+      dostuff() }
+    ```
+        
+## `if-else`
+        
+- `else` statements should be on the same line as a closing brace.
+  - Good:
+    ```{r, eval=FALSE}
+    if (condition) {
+      
+    } else if (condition2) {
+      
+    } else {
+      
+    }
+    ```
+
+- Only use `ifelse()` where vectorization is important. If `condition` should be length 1, then use full `if-else` statements.
+
+- In a `if-then` statement, use `||` or `&&`, not `|` or `&`, since the latter two vectorize operations.
+        
+## Infix Characters
+
+-   An [**infix**](https://en.wikipedia.org/wiki/Infix_notation) operator is one where arguments on both sides of it are used in a function. The alternative is [**prefix**](https://en.wikipedia.org/wiki/Polish_notation) notation. Compare
+    ```{r}
+    5 + 10 ## infix notation
+    `+`(5, 10) ## prefix notation
+    ```
+
+- Put spaces around all infix characters `==`, `+`, `-`, `*`, `/`, `^`, `|>`, etc...
+  - Good:
+    ```{r, eval = FALSE}
+    x + 10
+    ```
+  - Bad:
+    ```{r, eval=FALSE}
+    x+10
+    x+ 10
+    x +10
+    ```
+        
+- Exceptions: `::`, `:::`, `$`, `@`, `[`, `[[`, unary `-`, unary `+`, `:`, and `?`.
+  - E.g. do `ggplot2::qplot()` or `-1`, not `ggplot2 :: qplot()` and `- 1`
+
+## Code Length
+
+- No lines should be greater than 80 characters.
+
+- To get a vertical line displaying the code length, in R studio go to "Tools > Global Options... > Code > Display". Make sure "Show margin" is checked with "80" in the text box.
+
+-   If a function call/definition is too long, break up arguments on new line.
+    ```{r, eval = FALSE}
+    this <- is_a_very_long_function_call(
+      that = "is",
+      broken = "up",
+      into = "many",
+      indented = "lines",
+      that = "are",
+      easier = "to",
+      read = NULL
+    )
+    ```
+
+## Other things
+
+- Always use `<-` for assignment, not `=`.
+
+- Always use `"` for strings, not `'`.
+
+- Always use `TRUE` or `FALSE`, not `T` or `F`
+    - `T` and `F` are aliases for `TRUE` and `FALSE`, and so may be overwritten by the user, which is scary.
+    
+- Don't include [non-ASCII](https://en.wikipedia.org/wiki/ASCII#Character_set) characters in your code. 
+  - ASCII characters are lower case letters (`a` through `z`), upper case letters (`A` through `Z`), digits (`0` through `9`), and common punctuation.
+  - Including non-ASCII characters will give you a CRAN note.
+  - Non-ASCII characters usually show up when you copy and paste from the web. E.g. the following look normal but are non-ASCII (and are all different): 
+    - En Dash: "–"
+    - Em Dash: "—"
+    - Horizontal Bar: "―"
+    - En Quad: " "
+    - Em Quad: " "
+    - En Space: " "
+    - Em Space: " "
+  - If you accidentally include such characters, you can find them with
+    ```{r, eval = FALSE}
+    tools::showNonASCIIfile()
+    ```
+    
+# Functions
+
+## Function Argument Length
+
+-   If you have a lot of arguments, indent the arguments on new lines.
+    ```{r, eval = FALSE}
+    run_me <- function(this,
+                       is,
+                       a = "lot",
+                       of = "arguments",
+                       that = "are longer than 80 characters") {
+    }
+    ```
+
+## Function Length
+
+- You should break up your functions into discrete tasks.
+  - Reduces duplicating code, so less prone to bugs.
+  - Allows you to think more modularly about tasks, which makes code easier to reason about.
+  - Makes it easier to combine code in new ways.
+
+- To force you to do this, make all functions be less than 50 lines. This is what [Bioconductor does](https://bioconductor.org/packages/devel/bioc/vignettes/BiocCheck/inst/doc/BiocCheck.html#function-length-checking).
+
+## Explicit returns
+
+-   In R, the last value evaluated in a function will be implicitly returned. I think this is bad practice since it makes it harder to reason about what R is returning. So always include a `return()` statement. **Never** do
+    ```{r, eval = FALSE}
+    add_two <- function(x, y) {
+      x + y
+    }
+    ```
+    **Always** do
+    ```{r, eval = FALSE}
+    add_two <- function(x, y) {
+      return(x + y)
+    }
+    ```
+
+## Importing
+
+- **Never** use the `@import` tag in a package to bring all of a package's exported functions into the `NAMESPACE`. This creates too much risk for name collision.
+
+-   In a package, never import functions, always type the package where the function came from. This makes it easier to reason about namespaces. **Never** do
+    ```{r, eval=FALSE}
+    #' @importFrom ggplot2 qplot
+    plot_red <- function(x, y) {
+      qplot(x, y, color = I("red"))
+    }
+    ```
+    **Always** do
+    ```{r, eval=FALSE}
+    plot_red <- function(x, y) {
+      ggplot2::qplot(x, y, color = I("red"))
+    }
+    ```
+    
+- **Exceptions**: 
+  - You will have to import infix functions (surrounded by percent signs). Such as
+    ```{r}
+    #' @importFrom magrittr %>%
+    #' @importFrom foreach %dopar%
+    ```
+  - There is a small performance penalty for using `::` (about 5 µs). So import a function if you are iterating it $\sim$ million times, and each iteration takes on the order of 1 ns.
+    
+## Order of Arguments
+
+- Always place arguments with defaults after arguments without defaults.
+-   Good:
+    ```{r, eval = FALSE}
+    function(arg1, arg2, arg3 = NULL) {
+      
+    }
+    ```
+-   Bad:
+    ```{r, eval = FALSE}
+    function(arg1, arg3 = NULL, arg2) {
+      
+    }
+    ```
+
+# `lintr`
+
+-   The `lintr` package will check many coding issues. Try running the following in the top directory of your package.
+    ```{r, eval = FALSE}
+    lintr::lint_package()
+    ```
+

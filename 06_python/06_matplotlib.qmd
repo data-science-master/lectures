@@ -1,0 +1,263 @@
+---
+title: "Plotting with Matplotlib and Seaborn"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 4, 
+                      fig.width  = 6,
+                      fig.align  = "center",
+                      warning    = FALSE)
+ggplot2::theme_set(ggplot2::theme_bw())
+library(reticulate)
+use_condaenv("r-reticulate")
+```
+
+# Learning Objectives
+
+- Data visualization with seaborn and matplotlib
+- Chapter 4 of [Python Data Science Handbook](https://jakevdp.github.io/PythonDataScienceHandbook/).
+
+# Python Overview
+
+| In R I Want | In Python I Use |
+|-------------|-----------------|
+| Base R      | numpy           |
+| dplyr/tidyr | pandas          |
+| ggplot2     | matplotlib/seaborn |
+
+# Import Matplotlib and Seaborn, and Load Dataset
+
+<mark style="background-color: lightblue">R</mark>
+```{r}
+library(ggplot2)
+data("mpg")
+```
+
+All other code will be Python unless otherwise marked.
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+mpg = r.mpg
+```
+
+# Show and clear plots.
+
+- Use `plt.show()` to display a plot.
+
+- Use `plt.clf()` to clear a figure when making a new plot.
+
+# One Quantitative Variable: Histogram
+
+-   `sns.histplot()` makes a histogram.
+    ```{python}
+    sns.histplot(x='hwy', data=mpg)
+    plt.show()
+    ```
+
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+
+# One Categorical Variable: Barplot
+
+-   Use `sns.countplot()` to make a barplot to look at the distribution of a
+  categorical variable:
+
+    ```{python}
+    sns.countplot(x='class', data=mpg)
+    plt.show()
+    ```
+
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+# One Quantitative Variable, One Categorical Variable: Boxplot
+
+-   Use `sns.boxplot()` to make boxplots:
+    ```{python}
+    sns.boxplot(x='class', y='hwy', data=mpg)
+    plt.show()
+    ```
+
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+<!-- - A boxenplot is a cool graphic that gives you more quantiles to look at: -->
+<!--     ```{python} -->
+<!--     sns.boxenplot(x='class', y='hwy', data=mpg) -->
+<!--     plt.show() -->
+<!--     ``` -->
+
+# Two Quantitative Variables: Scatterplot
+
+-   Use `sns.scatterplot()` to make a basic scatterplot.
+    ```{python}
+    sns.scatterplot(x='displ', y='hwy', data=mpg)
+    plt.show()
+    ```
+
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+## Lines/Smoothers
+
+- Use `sns.regplot()` to make a scatterplot with a regression line or a loess smoother.
+
+-   Regression line with 95% Confidence interval
+    ```{python}
+    sns.regplot(x='displ', y='hwy', data=mpg)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+    
+-   Loess smoother with confidence interval removed.
+    ```{python}
+    sns.regplot(x='displ', y='hwy', data=mpg, lowess=True, ci='None')
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+## Annotating by Third Variable
+
+-   Use the `hue` or `style` arguments to annotate by a categorical variable:
+    ```{python}
+    sns.scatterplot(x='displ', y='hwy', hue='class', data=mpg)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+    
+    ```{python}
+    sns.scatterplot(x='displ', y='hwy', style='class', data=mpg)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+-   Use the `hue` or `size` arguments to annotate by a quantitative variable:
+
+    ```{python}
+    sns.scatterplot(x='cty', y='hwy', hue='displ', data=mpg)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+    
+    ```{python}
+    sns.scatterplot(x='cty', y='hwy', size='displ', data=mpg)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```
+
+# Two Categorical Variables: Mosaic Plot
+
+-   Usually, you should just show a table of proportions when you have two
+  categorical variables.
+  
+    ```{python}
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='all')
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='index')
+    pd.crosstab(mpg['class'], mpg['drv'], normalize='columns')
+    ```
+    
+# Facets
+
+-   Use `sns.FacetGrid()` followed by the `map_dataframe()` method to plot facets. You pass arguments to the plot (`sns.histplot()` or `sns.scatterplot()` etc) inside the map function.
+    ```{python, results = "hide"}
+    g = sns.FacetGrid(data=mpg, row='drv', col='class')
+    g = g.map_dataframe(sns.histplot, x = 'hwy', kde=False)
+    plt.show()
+    ```
+    
+    ```{python}
+    #| eval: false
+    plt.clf()
+    ```    
+
+# Labels
+
+```{python, echo = FALSE}
+plt.close()
+```
+
+-   Assign plot to an object. Then use the `set_*()` methods to add labels.
+
+    ```{python, fig.height=3, fig.width=6}
+    scatter = sns.scatterplot(x='displ', y='hwy', data=mpg)
+    scatter.set_xlabel('Displacement')
+    scatter.set_ylabel('Highway')
+    scatter.set_title('Highway versus Displacement')
+    plt.show()
+    ```
+
+    
+# Saving Figures
+
+1.  First, assign a figure to an object.
+
+    ```{python, eval=FALSE}
+    scatter = sns.scatterplot(x='displ', y='hwy', data=mpg)
+    ```
+
+2.  Extract the figure. Assign this to an object.
+    ```{python, eval=FALSE}
+    fig = scatter.get_figure()
+    ```
+
+3.  Save the figure.
+    ```{python, eval=FALSE}
+    fig.savefig('./scatter.pdf')
+    ```
+
+-   You can do all of these steps using piping.
+    ```{python, eval=FALSE}
+    sns.scatterplot(x='displ', y='hwy', data=mpg) \
+      .get_figure() \
+      .savefig('./scatter.pdf')
+    ```
+
+
+
+

@@ -1,0 +1,44 @@
+---
+title: "Simple Features and Graphing Maps"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+# Learning Objectives
+
+- Understand the concept and utility of spatial data visualization in R.
+- Get acquainted with the basic functions and data types in the `{sf}` package.
+- Create simple maps using the `{sf}` package.
+- Simple Features
+  - <https://r-spatial.github.io/sf/articles/>
+- Map Plotting
+  - <https://ggplot2.tidyverse.org/reference/ggsf.html>
+
+# Motivation
+
+- For some reason, people are really impressed with data visualizations that include maps (e.g. of D.C., the U.S., the Earth, etc).
+
+- Let's go over how to build simple map visualizations in R.
+
+- For this lecture, we will try to visualize the 2020 presidential election elections from (<https://github.com/TheUpshot/presidential-precinct-map-2020>).
+
+# Introduction to Simple Features in R
+
+-   The `sf` package, implements the "simple features" standard, making it easier to manipulate geographical data in R.
+
+    ```{r}
+    library(sf)
+    ```
+

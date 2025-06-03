@@ -1,0 +1,166 @@
+---
+title: "Python and Reticulate"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Set up R Studio environment for Python.
+- Python REPL.
+- Python chunks and Python scripts.
+- [Getting Started with Reticulate](https://rstudio.github.io/reticulate/)
+- [Installing Python Packages](https://rstudio.github.io/reticulate/articles/python_packages.html)
+
+# Setting Up Python for R Studio
+
+- Most Python pros use [Jupyter Notebook](https://jupyter.org/) as their 
+  [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
+  when developing in Python.
+
+-   But for R programmers who only need to dabble in Python (me, for example), 
+  we can use R Studio and the reticulate package.
+  
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    install.packages("reticulate")
+    ```
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    library(reticulate)
+    ```
+
+-   To install a version of Python that reticulate will use, run in the terminal:
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::install_miniconda()
+    ```
+    
+-   To validate that Python was installed and is available, run
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::py_available()
+    ```
+    
+- Python programmers typically modularize their projects into environments, which are separate installations of python and packages. That way, if you go back to a project, you go back to the exact same version of python and packages that you know work for that project. This reduces chances for breaking changes to affect old projects.
+
+-   Use `conda_list()` to list all of the environments.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    reticulate::conda_list()
+    ```
+    
+-   Use `conda_create()` to create a new environment. You can choose the version of python that this environment uses.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::conda_create(envname = "objects", python_version = "3.13.3")
+    ```
+
+-   Use `use_condaenv()` to specify the environment you want to use.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::use_condaenv("objects")
+    ```
+
+-   To install Python packages, use `py_install()`. You need to specify the environment to which the packages are installed. For example, we can install the numpy, pandas, and matplotlib packages via
+  
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::py_install(envname = "objects", packages = c("numpy", "pandas", "matplotlib", "seaborn"))
+    ```
+
+- Note: We used conda environments here, but there is a competing system of environments called "virtualenv" which some folks use.
+
+- If you want to update the python version of a specific environment, I've found the easiest way was to just remove it with `conda_remove()` and recreate it with the specified python version.
+
+# Python REPL's, Chunks, and Scripts
+
+-   To start an [IPython shell](https://en.wikipedia.org/wiki/IPython) --- similar
+  to the R command promp --- run the following in R:
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r, eval = FALSE}
+    reticulate::repl_python()
+    ```
+    
+    ![](./fig/python1.png)\ 
+    
+- "REPL" stands for "read–eval–print loop", which is an interactive 
+  programming environment (like the R command prompt or the IPython shell).
+  
+-   You can exit the REPL by typing the following:
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python, eval = FALSE}
+    exit
+    ```
+
+-   You can have Python chunks in R Markdown files by replacing the "`r`" at the
+  beginning of the chunk by "`python`":
+
+    ```{r, eval = TRUE, echo = FALSE, comment = ""}
+    cat({
+    "  ```{python}
+      # Code goes here
+      ```"
+      })
+    ```
+    
+-   You can access R objects in Python using the `r` object. That is, `r.x` will access, in Python, the `x` variable defined using R.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    x <- c(1, 4, 6, 2)
+    ```
+    
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    r.x
+    ```
+    
+-   You can access Python objects in R using the `py` object. That is, `py$x` will access, in R, the `x` variable defined using Pythong.
+
+    <mark style="background-color: lightblue">Python</mark>
+    ```{python}
+    x = [8, 9, 11, 3]
+    ```
+    
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    py$x
+    ```
+    
+- Sometimes it's buggy, but you can usually begin a Python REPL by also
+  hitting Control/Command + Enter inside the Python chunk:
+  
+  ![](./fig/python3.png)\ 
+    
+- Python scripts (where there is only Python code and no plain text) end in
+  ".py". You can create a Python script in R Studio:
+  
+  ![](./fig/python2.png)\ 
+    
+- Hitting Control/Command + Enter inside a Python script will also 
+  start a Python REPL.
+

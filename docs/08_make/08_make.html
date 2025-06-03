@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Gerard">
+<meta name="dcterms.date" content="2025-06-03">
+
+<title>Managing Workflows with GNU Make – DATA 413/613 Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DATA 413/613 Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#installation-maclinux" id="toc-installation-maclinux" class="nav-link" data-scroll-target="#installation-maclinux">Installation Mac/Linux</a></li>
+  <li><a href="#installation-windows" id="toc-installation-windows" class="nav-link" data-scroll-target="#installation-windows">Installation Windows</a>
+  <ul class="collapse">
+  <li><a href="#use-rtools-light" id="toc-use-rtools-light" class="nav-link" data-scroll-target="#use-rtools-light">Use Rtools (light)</a></li>
+  <li><a href="#windows-subsystem-for-linux-heavy" id="toc-windows-subsystem-for-linux-heavy" class="nav-link" data-scroll-target="#windows-subsystem-for-linux-heavy">Windows Subsystem for Linux (heavy)</a></li>
+  </ul></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#make" id="toc-make" class="nav-link" data-scroll-target="#make">Make</a>
+  <ul class="collapse">
+  <li><a href="#rules" id="toc-rules" class="nav-link" data-scroll-target="#rules">Rules</a></li>
+  <li><a href="#useful-bash-commands-for-data-science" id="toc-useful-bash-commands-for-data-science" class="nav-link" data-scroll-target="#useful-bash-commands-for-data-science">Useful bash commands for data science</a></li>
+  <li><a href="#phony-targets" id="toc-phony-targets" class="nav-link" data-scroll-target="#phony-targets">Phony Targets</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments">Comments</a></li>
+  <li><a href="#pseudo-code-for-makefile" id="toc-pseudo-code-for-makefile" class="nav-link" data-scroll-target="#pseudo-code-for-makefile">Pseudo-code for Makefile</a></li>
+  <li><a href="#evaluate-a-makefile" id="toc-evaluate-a-makefile" class="nav-link" data-scroll-target="#evaluate-a-makefile">Evaluate a makefile</a></li>
+  <li><a href="#working-directory-considerations" id="toc-working-directory-considerations" class="nav-link" data-scroll-target="#working-directory-considerations">Working directory considerations</a></li>
+  </ul></li>
+  <li><a href="#a-worked-example" id="toc-a-worked-example" class="nav-link" data-scroll-target="#a-worked-example">A worked example</a></li>
+  <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables">Variables</a>
+  <ul class="collapse">
+  <li><a href="#automatic-variables" id="toc-automatic-variables" class="nav-link" data-scroll-target="#automatic-variables">Automatic Variables</a></li>
+  </ul></li>
+  <li><a href="#competitors" id="toc-competitors" class="nav-link" data-scroll-target="#competitors">Competitors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Managing Workflows with GNU Make</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 3, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
+<ul>
+<li>Automated workflow with GNU make.</li>
+<li>Required Reading:
+<ul>
+<li><a href="https://kbroman.org/minimal_make/">Minimal Make</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Makefile">Makefile Wiki Page</a></li>
+</ul></li>
+<li>Additional Resources
+<ul>
+<li><a href="https://www.gnu.org/software/make/manual/make.html">Official Manual</a></li>
+<li><a href="http://uploads.mitechie.com/books/Managing_Projects_with_GNU_Make_Third_Edition.pdf">Managing Projects with GNU Make</a></li>
+<li><a href="./baker_2020.pdf">Using <em>GNU Make</em> to Manage the Workflow of Data Analysis Projects</a></li>
+<li><a href="https://stat545.com/automating-pipeline.html">Stat 545 Chapter on Make</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="installation-maclinux" class="level1">
+<h1>Installation Mac/Linux</h1>
+<ul>
+<li>If you are using Mac or Linux, you probably have <code>make</code> already installed.
+<ul>
+<li>To verify, open up the terminal and run <code>make --version</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="installation-windows" class="level1">
+<h1>Installation Windows</h1>
+<ul>
+<li>This is one of the cases where Windows is really inferior to Mac and Linux. I will show you two pipelines. You only need to choose one pipeline.</li>
+</ul>
+<section id="use-rtools-light" class="level2">
+<h2 class="anchored" data-anchor-id="use-rtools-light">Use Rtools (light)</h2>
+<ul>
+<li><p>Download and install Rtools: <a href="https://cran.r-project.org/bin/windows/Rtools/" class="uri">https://cran.r-project.org/bin/windows/Rtools/</a></p></li>
+<li><p>Restart R.</p></li>
+<li><p>Change R Studio’s settings “Global Options… &gt; Terminal &gt; New terminals open with” so that it reads “Windows Powershell”. This will make it so that the terminal is <a href="https://en.wikipedia.org/wiki/PowerShell">Windows PowerShell</a>, <strong>not</strong> git bash (so it will look a little weird and act a little differently).</p></li>
+<li><p>Open a new terminal. Again, this is a <a href="https://en.wikipedia.org/wiki/PowerShell">Windows PowerShell</a>.</p></li>
+<li><p>Always run <code>make</code> in the Windows PowerShell from R Studio. This pipeline won’t work if you try to directly open the PowerShell outside of R Studio.</p></li>
+<li><p>You can always convert the terminal back to git bash later.</p></li>
+<li><p>To verify <code>make</code> is installed, run <code>make --version</code> in the Windows PowerShell.</p></li>
+<li><p>I am not a big fan of RStudio Projects, but if you like them then there is some R Studio <code>make</code> functionality when you use an RStudio Project (<a href="https://stat545.com/make-test-drive.html" class="uri">https://stat545.com/make-test-drive.html</a>). This lets you avoid using Windows PowerShell.</p></li>
+</ul>
+</section>
+<section id="windows-subsystem-for-linux-heavy" class="level2">
+<h2 class="anchored" data-anchor-id="windows-subsystem-for-linux-heavy">Windows Subsystem for Linux (heavy)</h2>
+<ul>
+<li><p>Only start this if you are willing to spend a few hours fiddling around your computer.</p></li>
+<li><p>You can install Ubuntu on Windows to use all of its powerful features. This is what you would need to do for more advanced computational operations. This is how I use Windows.</p></li>
+<li><p>But on Ubuntu, you’ll need to install a <em>separate</em> version of R, all of the R packages that you usually use, and git.</p></li>
+<li><p><strong>NOTE</strong>: This strategy could take up to a gigabyte of storage.</p></li>
+<li><p>Install Ubuntu using these directions: <a href="https://ubuntu.com/wsl" class="uri">https://ubuntu.com/wsl</a></p></li>
+<li><p>Open up Ubuntu (this will be a shell).</p></li>
+<li><p>Follow the instructions on CRAN (<a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a>) to install R for Ubuntu inside the Ubuntu shell.</p></li>
+<li><p>In Ubuntu open up the command line for R</p>
+<pre><code>R</code></pre></li>
+<li><p>In the R command prompt, install all of the R packages you will need with <code>install.packages()</code>. You can exit R afterwards with <code>q()</code>.</p></li>
+<li><p>Change R Studio’s settings “Global Options… &gt; Terminal &gt; New terminals open with” so that it reads “Bash (Windows Subsystem for Linux)”.</p></li>
+<li><p>Open up a new terminal, and you should now be using Ubuntu for your terminal.</p></li>
+<li><p>To verify <code>make</code> is installed, run <code>make --version</code> in the Ubuntu terminal.</p></li>
+</ul>
+</section>
+</section>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<ul>
+<li><p>There are a lot of steps in a data analysis</p>
+<ul>
+<li>Download data (<code>httr</code>) <code>|&gt;</code> <br> tidy data (<code>dplyr</code>, <code>tidyr</code>) <code>|&gt;</code> <br> exploratory data analysis (<code>ggplot2</code>, <code>dplyr</code>) <code>|&gt;</code> <br> statistical analysis (<code>stats</code>, <code>broom</code>, <code>tidymodels</code>) <code>|&gt;</code> <br> present results (<code>shiny</code>, <code>rmarkdown</code>, <code>ggplot2</code>).</li>
+</ul></li>
+<li><p>Each of these steps should be done in separate files. But a more typical pipeline would include <em>multiple files for each step</em>.</p>
+<ul>
+<li>Download multiple datasets using multiple scripts</li>
+<li>Breakdown complex tidying into multiple scripts.</li>
+<li>Explore many aspects of your data, using multiple scripts.</li>
+<li>Modify your statistical models based on model-checks.</li>
+<li>Develop multiple reports on different aspects of your project.</li>
+</ul></li>
+<li><p>Files downstream in this pipeline typically depend on files upstream in this pipeline.</p></li>
+<li><p>Here is a really basic example from a recent project of mine. Each node is a file name. The direction of the arrows indicates the dependency between the files. E.g. “sims.R” is used to create “sims_out.csv”.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_make_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The top row contains R scripts. The middle row contains some simulation output (sims_out.csv), and the bottom row contains the output of my analyses.</p></li>
+<li><p>If I make a modification to “time.R”, I would only need to re-generate “time.pdf”, since that is the only downstream file.</p></li>
+<li><p>However, if I modify “sims.R” and re-generate “sims_out.csv”, then I should also re-generate “simplots.pdf”, “qqplots.pdf”, and “time.pdf” because all of those files are created using “sims_out.csv”.</p></li>
+<li><p>Having to manually remember to re-run all these scripts is prone to error (because of forgetfulness, tediousness, etc), so ideally there should be some automated way to know that when a file upstream as been changed, then all downstream files need to be re-generated.</p></li>
+<li><p><em>This is exactly what make does!</em></p></li>
+</ul>
+</section>
+<section id="make" class="level1">
+<h1>Make</h1>
+<ul>
+<li><p>You place all commands for <code>make</code> in a file <em>exactly</em> titled “Makefile”. You can create this file in the terminal via</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> Makefile</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<section id="rules" class="level2">
+<h2 class="anchored" data-anchor-id="rules">Rules</h2>
+<ul>
+<li><p>Inside the Makefile, you prepare a series of <em>rules</em> of the form</p>
+<pre><code>target: prereq_1 prereq_2 prereq_3 ...
+  first bash command to make target
+  second bash command and so on</code></pre></li>
+<li><p>Each <em>rule</em> contains three things: a <em>target</em>, <em>prerequisites</em>, and <em>commands</em>.</p></li>
+<li><p><code>target</code> is the name of the file that will be generated.</p></li>
+<li><p><code>prereq_1</code>, <code>prereq_2</code>, <code>prereq_3</code>, etc are the names of the files which are used to generate <code>target</code>. These can be datasets, R scripts, etc.</p></li>
+<li><p>Each subsequent line is a <em>bash</em> command that will be evaluated in the terminal in the order listed. This sequence of commands is sometimes called a <em>recipe</em>.</p>
+<ul>
+<li><strong>IMPORTANT</strong>: Make sure each bash command has one <strong>tab</strong> (not spaces) at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!</li>
+<li>From the terminal, it is possible to evaluate R scripts, python scripts, and knit R Markdown files.</li>
+<li>You can also use the usual bash commands you are used do (<code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, etc…)</li>
+<li>There are tons of other commands that you can install that allow you to do things like download files (<a href="https://en.wikipedia.org/wiki/CURL"><code>curl</code></a> and <a href="https://en.wikipedia.org/wiki/Wget"><code>wget</code></a>), unzip files (<a href="https://en.wikipedia.org/wiki/7-Zip"><code>7z</code></a> and <a href="https://www.gnu.org/software/tar/manual/tar.html#SEC25"><code>tar</code></a>), <a href="https://www.imagemagick.org/script/convert.php"><code>convert</code></a> image files, compile LaTeX documents, etc…</li>
+</ul></li>
+</ul>
+</section>
+<section id="useful-bash-commands-for-data-science" class="level2">
+<h2 class="anchored" data-anchor-id="useful-bash-commands-for-data-science">Useful bash commands for data science</h2>
+<ul>
+<li><p>Run an R script</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD BATCH <span class="at">--no-save</span> <span class="at">--no-restore</span> input_file.R output_file.Rout</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Make sure to change “input_file.R” and “output_file.Rout”</p>
+<ul>
+<li>The <code>--no-save --no-restore</code> options make sure that you are working with a clean environment and that you don’t save this environment after the command is executed. This is a good thing for reproducibility.</li>
+</ul></li>
+<li><p>Render a Quarto Document</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render quarto_file.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Use Quarto to Render an Jupyter Notebook (<code>.ipynb</code> Document):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebook.ipynb <span class="at">--execute</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Knit an R Markdown file</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"library(rmarkdown);render('rmarkdown_file.Rmd')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Make sure to change “rmarkdown_file.Rmd”</p></li>
+<li><p>Run python script</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> input_file.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Make sure to change “input_file.py”</p></li>
+<li><p>Download data from the web</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--no-clobber</span> url_to_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="phony-targets" class="level2">
+<h2 class="anchored" data-anchor-id="phony-targets">Phony Targets</h2>
+<ul>
+<li><p>If you have multiple, related, final outputs, it is common to place these as prerequisites to “phony” targets:</p>
+<pre><code>.PHONY : phony_target
+phony_target : target1 target2 target3 ...</code></pre>
+<p>where “phony_target” is a name you provide to represent the operation being performed.</p></li>
+<li><p>“Phony” targets are not real files. They are just convenient names to use to describe a collection of targets that should be generated.</p></li>
+<li><p>At the <em>top</em> of the makefile, you then list the phony targets after <code>all</code>:</p>
+<pre><code>.PHONY : all
+all : phony_target1 phony_target2 phony_target3 ...</code></pre></li>
+<li><p><strong>NOTE</strong>: It is important to have <code>all : phony_target1 phony_target2</code> as the very first <em>rule</em> because by default <code>make</code> will only evaluate the very first rule in the file. So if <code>all</code> is first, then <code>make</code> will evaluate all targets.</p></li>
+</ul>
+</section>
+<section id="comments" class="level2">
+<h2 class="anchored" data-anchor-id="comments">Comments</h2>
+<ul>
+<li>Use a hashtag <code>#</code> for comments in a makefile.</li>
+</ul>
+</section>
+<section id="pseudo-code-for-makefile" class="level2">
+<h2 class="anchored" data-anchor-id="pseudo-code-for-makefile">Pseudo-code for Makefile</h2>
+<pre class="make"><code>.PHONY : all
+all : phony_target1 phony_target2
+
+.PHONY : phony_target1
+phony_target1 : target1 target2
+
+.PHONY : phony_target2
+phony_target2 : target3
+
+# Comment 1
+target1 : prereq1.R data0.csv data1.RDS
+  R CMD BATCH --no-save --no-restore prereq1.R prereq1_out.Rout
+
+# Comment 2
+target2 : prereq2.py data2.csv
+  python prereq2.py
+
+# Comment 3
+target3 : prereq3.Rmd
+  Rscript -e "library(rmarkdown);render('prereq3.Rmd')"</code></pre>
+</section>
+<section id="evaluate-a-makefile" class="level2">
+<h2 class="anchored" data-anchor-id="evaluate-a-makefile">Evaluate a makefile</h2>
+<ul>
+<li><p>You can generate all target files by running the following in the terminal</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>You can run just the targets in a phony target by specifying the phony target</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> phony_target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Make will check if any of the prerequisites have changes for each <code>target</code> and, if so, will re-run the bash commands of that <em>rule</em>.</p></li>
+<li><p><code>Make</code> will not re-run commands if the prerequisites have not changed. That is, if no upstream files to <code>target</code> were modified, then <code>target</code> will not be re-generated. This makes <code>make</code> very efficient.</p></li>
+</ul>
+</section>
+<section id="working-directory-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="working-directory-considerations">Working directory considerations</h2>
+<ul>
+<li><p>tl;dr</p>
+<ul>
+<li>For R and the terminal: Assume the working directory is the location of the Makefile.</li>
+<li>For R Markdown: Assume the working directory is the location of the Rmd file.</li>
+</ul></li>
+<li><p>So if your file structure is</p>
+<pre><code>Makefile
+analysis/script.R
+analysis/report.Rmd
+data/data.csv</code></pre>
+<p>Then you need specify your targets according to this structure</p>
+<pre class="make"><code>data/data.csv : analysis/script.R
+  R CMD BATCH --no-save --no-restore analysis/script.R</code></pre>
+<p><strong>NOTE</strong> that the following will <strong>not</strong> work because each command is executed in its <em>own</em> subshell (assuming the working directory is the location of the Makefile):</p>
+<pre class="make"><code># DOES NOT WORK
+data/data.csv : analysis/script.R
+  cd analysis 
+  R CMD BATCH --no-save --no-restore script.R</code></pre>
+<p>But you can get around this by putting these commands on one line, with each command separated by a semicolon:</p>
+<pre class="make"><code># Works, but not recommended
+data/data.csv : analysis/script.R
+  cd analysis; R CMD BATCH --no-save --no-restore script.R</code></pre></li>
+<li><p>Any file manipulation in “script.R” needs to be done assuming the working directory is where Makefile is (<strong>notice the single dot</strong>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>However, confusingly, when you render an R Markdown file using <code>knitr</code>, you need to assume the working directory is the location of the R Markdown file, not the location of <code>Makefile</code>. So in “report.Rmd” you would write (<strong>notice the double dots</strong>)</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+</section>
+<section id="a-worked-example" class="level1">
+<h1>A worked example</h1>
+<ul>
+<li><p>I created a repo with a very basic example of using a Makefile: <a href="https://github.com/data-science-master/pvalue_sims" class="uri">https://github.com/data-science-master/pvalue_sims</a></p></li>
+<li><p>The files after everything is evaluated are:</p>
+<ul>
+<li>Makefile</li>
+<li>Readme.Rmd</li>
+<li>Readme.md</li>
+<li>analysis
+<ul>
+<li>add_alt_sims.R</li>
+<li>null_sims.R</li>
+<li>panal.html</li>
+<li>panal.Rmd</li>
+</ul></li>
+<li>output
+<ul>
+<li>add_alt_sims.Rout</li>
+<li>null_sims.Rout</li>
+<li>pdat.csv</li>
+<li>pnull.RDS</li>
+</ul></li>
+</ul></li>
+<li><p>These files have the following dependency structure:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_make_files/figure-html/another-dependency-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>The Makefile that organizes this structure is</p>
+<pre class="make"><code>.PHONY : all
+all : sims
+
+.PHONY : sims
+sims : analysis/panal.html
+
+analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+
+output/pnull.RDS : analysis/null_sims.R
+    R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+
+output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
+<li><p><strong>Exercise</strong>: Clone this repo and run <code>make</code> in the terminal.</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “panal.Rmd” and you rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “add_alt_sims.R” and rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “null_sims.R” and rerun <code>make</code>?</p></li>
+</ul>
+</section>
+<section id="your-turn" class="level1">
+<h1>Your turn</h1>
+<ul>
+<li><p>Clone the penguins repo: <a href="https://github.com/data-science-master/penguins" class="uri">https://github.com/data-science-master/penguins</a></p></li>
+<li><p>Use your new skills to create a makefile to manage a small project that examines the really cool <a href="https://allisonhorst.github.io/palmerpenguins/">Palmer Penguins data</a>.</p></li>
+<li><p>The files in the final report are:</p>
+<ul>
+<li>Makefile</li>
+<li>Readme.Rmd</li>
+<li>Readme.md</li>
+<li>analysis
+<ul>
+<li>classify_penguins.R</li>
+<li>penguin_report.html</li>
+<li>penguin_report.Rmd</li>
+<li>plot_penguin.R</li>
+</ul></li>
+<li>output
+<ul>
+<li>penguin_class.csv</li>
+<li>penguin_pairs.png</li>
+</ul></li>
+</ul></li>
+<li><p>These files have the following dependency structure:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="08_make_files/figure-html/dependency-graph-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+</ul>
+<ol start="0" type="1">
+<li><p>Make sure you have the necessary R packages installed:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Modify the Makefile to automatically manage this pipeline.</p></li>
+<li><p>Run <code>make</code> in the terminal to generate all of the output (penguin_class.csv, penguin_pairs.png, and penguin_report.html)</p></li>
+<li><p>Change the color scheme in the pairs plot and re-run <code>make</code>.</p></li>
+<li><p>Correct the date field in the YAML header in “penguin_report.html” and re-run <code>make</code></p></li>
+</ol>
+</section>
+<section id="variables" class="level1">
+<h1>Variables</h1>
+<ul>
+<li><p>You usually define variables at the top of a file use an equals sign (<code>=</code>).</p>
+<pre class="make"><code>my_first_variable = fig.pdf</code></pre></li>
+<li><p>You access a variable value by placing the variable name in parentheses after a dollar sign <code>$</code>.</p></li>
+<li><p>So when a makefile comes across <code>$(my_first_variable)</code>, it will actually read it as <code>fig.pdf</code>.</p></li>
+<li><p>For example, suppose the file <code>fig_create.R</code> generates multiple pdf files: <code>fig1.pdf</code>, <code>fig2.pdf</code>, and <code>fig3.pdf</code>. Then we could write this rule in the following two equivalent ways:</p>
+<pre class="make"><code>fig1.pdf fig2.pdf fig3.pdf : fig_create.R
+  R CMD BATCH --no-save --no-restore fig_create.R</code></pre>
+<pre class="make"><code>figs = fig1.pdf fig2.pdf fig3.pdf
+$(figs) : fig_create.R
+  R CMD BATCH --no-save --no-restore fig_create.R</code></pre></li>
+<li><p>If you do not like writing <code>R CMD BATCH --no-save --no-restore</code> each time, then you can save this command as a variable. The following two rules are equivalent:</p>
+<pre class="make"><code>fig.pdf : script.R
+  R CMD BATCH --no-save --no-restore script.R</code></pre>
+<pre class="make"><code>rexec = R CMD BATCH --no-save --no-restore
+fig.pdf : script.R
+  $(rexec) script.R</code></pre></li>
+<li><p><strong>Exercise</strong>: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:</p>
+<pre class="make"><code>.PHONY : all
+all : sims
+
+.PHONY : sims
+sims : analysis/panal.html
+
+analysis/panal.html : analysis/panal.Rmd output/pdat.csv
+    Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+
+output/pnull.RDS : analysis/null_sims.R
+    R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
+
+output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
+</ul>
+<section id="automatic-variables" class="level2">
+<h2 class="anchored" data-anchor-id="automatic-variables">Automatic Variables</h2>
+<ul>
+<li><p>There are a lot of <a href="https://www.gnu.org/software/make/manual/make.html#Automatic-Variables">automatic variables</a> that you can use to make your Makefile more concise.</p></li>
+<li><p>Here are the ones I use:</p>
+<ul>
+<li><code>$@</code>: The target of the rule.</li>
+<li><code>$&lt;</code>: The first prerequisite.</li>
+<li><code>$^</code>: All of the prerequisites, with spaces between them.</li>
+<li><code>$(@D)</code>: The directory part of the target, with the trailing slash removed.</li>
+<li><code>$(@F)</code>: The file part of the target</li>
+<li><code>$(&lt;D)</code>: The directory part of the first prerequisite.</li>
+<li><code>$(&lt;F)</code>: The file part of the first prerequisite.</li>
+<li><code>$(basename names)</code>: Extracts all but the suffix of each file name in names.</li>
+</ul></li>
+<li><p><em>Example</em>: Suppose I have the following rule:</p>
+<pre class="make"><code>output/figs/foo.pdf : analysis/scripts/gaa.R data/hii.csv
+  R CMD BATCH --no-save --no-restore analysis/scripts/gaa.R</code></pre>
+<p>Then the following are these automatic variable values:</p>
+<ul>
+<li><code>$@</code>: output/figs/foo.pdf</li>
+<li><code>$&lt;</code>: analysis/scripts/gaa.R</li>
+<li><code>$^</code>: analysis/scripts/gaa.R data/hii.csv</li>
+<li><code>$(@D)</code>: output/figs</li>
+<li><code>$(@F)</code>: foo.pdf</li>
+<li><code>$(&lt;D)</code>: analysis/scripts</li>
+<li><code>$(&lt;F)</code>: gaa.R</li>
+<li><code>$(basename $(&lt;F))</code>: gaa</li>
+</ul></li>
+<li><p>For example, if you always place the R script first that generates the target, and the datasets that the R script uses second, then the following is typically how I evaluate the R script.</p>
+<pre class="make"><code>rexec = R CMD BATCH --no-save --no-restore
+figure.pdf : script.R data1.csv data2.csv
+  $(rexec) $&lt; $(basename $(&lt;F)).Rout</code></pre>
+<p>The variables and automatic variables would interpret this as</p>
+<pre class="make"><code>figure.pdf : script.R data1.csv data2.csv
+  R CMD BATCH --no-save --no-restore script.R script.Rout</code></pre></li>
+<li><p><strong>Exercise</strong>: Re-write the following to use an automatic variable instead of the Rmd’s file name in the recipe.</p>
+<pre class="make"><code>report.html : report.Rmd
+  Rscript -e "library(rmarkdown);render('report.Rmd')"</code></pre></li>
+</ul>
+</section>
+</section>
+<section id="competitors" class="level1">
+<h1>Competitors</h1>
+<ul>
+<li><p>There are lots of pipeline management competitors to <code>make</code>. The most-likely that you’ll run across are</p>
+<ul>
+<li><a href="https://cran.r-project.org/package=targets"><code>targets</code></a> is a <code>make</code>-like R package.</li>
+<li><a href="https://snakemake.github.io/"><code>snakemake</code></a> is a python-based tool for workflow management that is perhaps more readable than <code>make</code> and allows for more options than only using shell commands. This is probably the most popular alternative to <code>make</code>.</li>
+</ul></li>
+<li><p>But <code>make</code> has been around since the 1970s, is widely used, and isn’t going anywhere.</p></li>
+<li><p>It is also relatively simple compared to more sophisticated pipeline management tools, so I think that makes it easier to setup and use with fewer chances for bugs.</p></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

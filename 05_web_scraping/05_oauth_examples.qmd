@@ -1,0 +1,23 @@
+---
+title: "Other OAuth Examples"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# StackExchange
+
+- StackExchange has a page for describing authentication: <https://api.stackexchange.com/docs/authentication>
+
+- It describes "server side applications" like posting stuff, and "client side applications" like reading stuff. We will use the "implicit" flow for reading stuff since that requires less security.
+
+- Register for an app key here: <https://stackapps.com/users/login?returnurl=/apps/oauth/register>
+
+```{r}
+authorize_url <- "https://stackoverflow.com/oauth/dialog"
+```
+

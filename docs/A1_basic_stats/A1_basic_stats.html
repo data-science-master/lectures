@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Gerard">
+<meta name="dcterms.date" content="2025-06-03">
+
+<title>Basic Statistics – DATA 413/613 Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DATA 413/613 Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#a-note-on-this-review" id="toc-a-note-on-this-review" class="nav-link" data-scroll-target="#a-note-on-this-review">A Note on this Review</a></li>
+  <li><a href="#probability-and-distributions-in-r." id="toc-probability-and-distributions-in-r." class="nav-link" data-scroll-target="#probability-and-distributions-in-r.">Probability and Distributions in R.</a></li>
+  <li><a href="#all-of-statistics" id="toc-all-of-statistics" class="nav-link" data-scroll-target="#all-of-statistics">All of Statistics</a></li>
+  <li><a href="#pattern-mean-is-shifted-one-quantitative-variable" id="toc-pattern-mean-is-shifted-one-quantitative-variable" class="nav-link" data-scroll-target="#pattern-mean-is-shifted-one-quantitative-variable">Pattern: Mean is shifted (one quantitative variable)</a></li>
+  <li><a href="#pattern-means-of-two-groups-are-different-one-quantitative-one-binary" id="toc-pattern-means-of-two-groups-are-different-one-quantitative-one-binary" class="nav-link" data-scroll-target="#pattern-means-of-two-groups-are-different-one-quantitative-one-binary">Pattern: Means of two groups are different (one quantitative, one binary)</a></li>
+  <li><a href="#note-on-assumptions-of-t-tools" id="toc-note-on-assumptions-of-t-tools" class="nav-link" data-scroll-target="#note-on-assumptions-of-t-tools">Note on Assumptions of <span class="math inline">\(t\)</span>-tools</a></li>
+  <li><a href="#pattern-proportion-is-shifted-one-binary-variable." id="toc-pattern-proportion-is-shifted-one-binary-variable." class="nav-link" data-scroll-target="#pattern-proportion-is-shifted-one-binary-variable.">Pattern: Proportion is shifted (one binary variable).</a></li>
+  <li><a href="#pattern-two-categorical-variables-are-associated." id="toc-pattern-two-categorical-variables-are-associated." class="nav-link" data-scroll-target="#pattern-two-categorical-variables-are-associated.">Pattern: Two categorical variables are associated.</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Basic Statistics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 3, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
+<ul>
+<li>Review intermediate Statistics (STAT 302/320/614).</li>
+<li>Probability distributions in R.</li>
+<li>P-values/confidence intervals.</li>
+<li><span class="math inline">\(t\)</span>-tests for means in R.</li>
+<li>Proportion tests in R.</li>
+</ul>
+</section>
+<section id="a-note-on-this-review" class="level1">
+<h1>A Note on this Review</h1>
+<ul>
+<li><p>This review assumes that you have had <em>some</em> basic statistics course and have seen all of these concepts in the past.</p></li>
+<li><p>If you haven’t taken a basic statistics course, you will find this review <strong>very</strong> difficult and incomplete.</p></li>
+<li><p>If you are having difficulty remembering these topics, then you can review them in the free OpenIntro book: <a href="https://leanpub.com/openintro-statistics" class="uri">https://leanpub.com/openintro-statistics</a>. The most pertinent sections (from the third edition) are 3.1, 4.1, 4.2, 4.3, 5.1, 5.2, 5.3, 6.1, 6.2, and 6.5.</p></li>
+</ul>
+</section>
+<section id="probability-and-distributions-in-r." class="level1">
+<h1>Probability and Distributions in R.</h1>
+<ul>
+<li><p><strong>Distribution</strong>: The possible values of a variable and how often it takes those values.</p></li>
+<li><p>A <strong>density</strong> describes the distribution of a <em>quantitative</em> variable. You can think of it as approximating a histogram. It is a curve where</p>
+<ul>
+<li>The area under the curve between any two points is approximately the probability of being between those two points.</li>
+<li>The total area under the curve is 1 (something must happen).</li>
+<li>The curve is never negative (can’t have negative probabilities).</li>
+</ul></li>
+<li><p>The density of birthweights in America:</p>
+<p><img src="./cartoons/birthweights.png" class="img-fluid">&nbsp;</p></li>
+<li><p>The distribution of many variables in Statistics approximate the <strong>normal distribution</strong>.</p>
+<ul>
+<li>If you know the mean and standard deviation of a normal distribution, then you know the whole distribution.</li>
+<li>Larger standard deviation implies more spread out (larger and smaller values are both more likely).</li>
+<li>Mean determines where the data are centered.</li>
+</ul></li>
+<li><p>Normal densities with different means.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Normal densities with different standard deviations</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Density Function (height of curve, <strong>NOT</strong> probability of a value).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dnorm</span>(<span class="at">x =</span> <span class="dv">2</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.242</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `qplot()` was deprecated in ggplot2 3.4.0.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Random Generation (generate samples from a given normal distribution).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3735 1.1836 0.1644 2.5953 1.3295 0.1795</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Cumulative Distribution Function (probability of being less than or equal to some value).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="at">q =</span> <span class="dv">2</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8413</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Quantile function (find value that has a given the probability of being less than or equal to it).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="fl">0.8413</span>, <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong>: Use <code>rnorm()</code> to generate 10,000 random draws from a normal distribution with mean 5 and standard deviation 2. What proportion are less than 3? Can you think up a way to approximate this proportion using a different function?</p></li>
+<li><p><strong>Exercise</strong>: In Hong Kong, human male height is approximately normally distributed with mean 171.5 cm and standard deviation 5.5 cm. What proportion of the Hong Kong population is between 170 cm and 180 cm?</p></li>
+<li><p>The <span class="math inline">\(t\)</span>-distribution shows up a lot in Statistics.</p>
+<ul>
+<li>It is also bell-curved but has “thicker tails” (more extreme observations are more likely).</li>
+<li>It is always centered at 0.</li>
+<li>It only has one parameter, called the “degrees of freedom”, which determines how thick the tails are.</li>
+<li>Smaller degrees of freedom mean thicker tails, larger degrees of freedom means thinner tails.</li>
+<li>If the degrees of freedom is large enough, the <span class="math inline">\(t\)</span>-distribution is approximately the same as a normal distribution with mean 0 and variance 1.</li>
+</ul></li>
+<li><p><span class="math inline">\(t\)</span>-distributions with different degrees of freedom:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Density Function</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dt</span>(<span class="at">x =</span> <span class="sc">-</span><span class="dv">6</span>, <span class="at">df =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004269</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Random Generation</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>samp <span class="ot">&lt;-</span> <span class="fu">rt</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">df =</span> <span class="dv">2</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(samp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  0.89857 -1.07176  0.09639  0.79371 -0.42428 -0.64561</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Cumulative Distribution Function</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pt</span>(<span class="at">q =</span> <span class="dv">2</span>, <span class="at">df =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9082</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Quantile Function</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">qt</span>(<span class="at">p =</span> <span class="fl">0.9082</span>, <span class="at">df =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.999</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>There are many other distributions implemented in R. To see the most common, run:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(<span class="st">"Distributions"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p><strong>Exercise</strong>: Calculate the 0.75 quantile of the <span class="math inline">\(t\)</span>-distribution for degrees of freedom <span class="math inline">\(1, 2, 3,\ldots,50\)</span>. Reproduce this plot:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Can you use a function to come up with the asymptotic value of the 0.75 quantile as the degrees of freedom approaches infinity?</p></li>
+</ul>
+</section>
+<section id="all-of-statistics" class="level1">
+<h1>All of Statistics</h1>
+<ul>
+<li><p><strong>Observational/experimental Units</strong>: The people/places/things/animals/groups that we collect information about. Also known as “individuals” or “cases”. Sometimes I just say “units”.</p></li>
+<li><p><strong>Variable</strong>: A property of the observational/experimental units.</p>
+<ul>
+<li>E.g.: height of a person, area of a country, marital status.</li>
+</ul></li>
+<li><p><strong>Value</strong>: The specific level of a variable for an observational/experimental unit.</p>
+<ul>
+<li>E.g.: Bob is 5’11’’, China has an area of 3,705,407 square miles, Jane is divorced.</li>
+</ul></li>
+<li><p><strong>Quantitative Variable</strong>: The variable takes on numerical values where arithmetic operations (plus/minus/divide/times) make sense.</p>
+<ul>
+<li>E.g.: height, weight, area, income.</li>
+<li>Counterexample: Phone numbers, social security numbers.</li>
+</ul></li>
+<li><p><strong>Categorical Variable</strong>: The variable puts observational/experimental units into different groups/categories based on the values of that variable.</p>
+<ul>
+<li>E.g.: race/ethnicity, marital status, religion.</li>
+</ul></li>
+<li><p><strong>Binary Variable</strong>: A categorical variable that takes on only two values.</p>
+<ul>
+<li>E.g.: dead/alive, treatment/control.</li>
+</ul></li>
+<li><p><strong>Population</strong>: The collection of all observational units we are interested in.</p></li>
+<li><p><strong>Parameter</strong>: A numerical summary of the population.</p>
+<ul>
+<li>E.g.: Average height, proportion of people who are divorced, standard deviation of weight.</li>
+</ul></li>
+<li><p><strong>Sample</strong>: A subset of the population (some observational units, but not all of them).</p></li>
+<li><p><strong>Statistic</strong>: A numeric summary of the sample.</p>
+<ul>
+<li>E.g.: Average height of the sample, proportion of people who are divorced in the sample, standard deviation of weight of a sample.</li>
+</ul></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/pop_vs_sample.png" class="img-fluid">&nbsp;</p></li>
+<li><p><strong>Sampling Distribution</strong>: The distribution of a statistic over many hypothetical random samples from the population.</p>
+<p><img src="./cartoons/sampling_dist.png" class="img-fluid">&nbsp;</p></li>
+<li><p>All of Statistics: We see a pattern in the sample.</p>
+<ul>
+<li><strong>Estimation</strong>: Guess the pattern in the population based on the sample. Guess a parameter with a statistic. A statistic which is a guess for a parameter is called an <strong>estimate</strong>.</li>
+<li><strong>Hypothesis Testing</strong>: Ask if the pattern we see in the sample also exists in the population. Test if a parameter is some value.</li>
+<li><strong>Confidence Intervals</strong>: Quantify our (un)certainty of the pattern in the population based on the sample. Provide a range of likely parameter values.</li>
+</ul></li>
+<li><p>We will go through a lot of examples of this below</p></li>
+<li><p>For the examples below, we will use the data from the Sleuth3 package in R.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Sleuth3)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p><strong>Exercise</strong>: Read the help page of the <code>ex0126</code> data frame from the Sleuth3 package. What are the observational units? What are the variables? Which are quantitative and which are categorical?</p></li>
+<li><p><strong>Exercise</strong>: Read the help page of the <code>ex0223</code> data frame from the Sleuth3 package. What are the observational units? What are the variables? Which are quantitative and which are categorical?</p></li>
+</ul>
+</section>
+<section id="pattern-mean-is-shifted-one-quantitative-variable" class="level1">
+<h1>Pattern: Mean is shifted (one quantitative variable)</h1>
+<ul>
+<li><p>Example: Researchers measured the volume of the left hippocampus in 15 twins where one twin had schizophrenia and the other did not. They were interested in whether the left hippocampus differed in size between the normal and schizophrenic twin.</p></li>
+<li><p>Observational Units: The twins.</p></li>
+<li><p>Population: All twins where one has schizophrenia and the other does not.</p></li>
+<li><p>Sample: The 15 twins in our study.</p></li>
+<li><p>Variable: The difference in volume in the left hippocampus between the twins. We derived this quantitative variable by subtracting one volume from another.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>case0202 <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff =</span> Unaffected <span class="sc">-</span> Affected) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(diff) <span class="ot">-&gt;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  schizo</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(schizo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 15
+Columns: 1
+$ diff &lt;dbl&gt; 0.67, -0.19, 0.09, 0.19, 0.13, 0.40, 0.04, 0.10, 0.50, 0.07, 0.23…</code></pre>
+</div>
+</div></li>
+<li><p>Pattern: Use a histogram/boxplot to visualize the shift from 0.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(schizo, <span class="fu">aes</span>(<span class="at">x =</span> diff)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">15</span>, <span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Difference in Brain Volumes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/twins1.png" class="img-fluid">&nbsp;</p></li>
+<li><p>Parameter of interest: Mean difference in left hippocampus volumes for all twins.</p></li>
+<li><p>Estimate: Use sample mean</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>schizo <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">meandiff =</span> <span class="fu">mean</span>(diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  meandiff
+     &lt;dbl&gt;
+1    0.199</code></pre>
+</div>
+</div></li>
+<li><p>0.199 is our “best guess” for the parameter, but it is almost certainly not the value of the parameter (since we didn’t measure everyone).</p></li>
+<li><p>Hypothesis Testing:</p>
+<ul>
+<li>We are interested in if the mean difference is different from 0.</li>
+<li>Two possibilities:
+<ol type="1">
+<li><strong>Alternative Hypothesis</strong>: Mean is different from 0.</li>
+<li><strong>Null Hypothesis</strong>: Mean is not different from 0, we just happened <em>by chance</em> to get twins that had a big difference in volume.</li>
+</ol></li>
+<li>Strategy: We calculate the probability of the data assuming possibility 2 (called a <span class="math inline">\(p\)</span>-value). If this probability is low, we conclude possibility 1. If the this probability is high, we don’t conclude anything.</li>
+<li><strong>p-value</strong>: the probability that you would see data as or more supportive of the alternative hypothesis than what you saw <em>assuming that the null hypothesis is true</em>.</li>
+</ul></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/p-value.png" class="img-fluid">&nbsp;</p></li>
+<li><p>The distribution of possible null sample means is given by statistical theory. Specifically, the <span class="math inline">\(t\)</span>-statistic (mean divided by the standard deviation of the sampling distribution of the mean) has a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - 1\)</span> degrees of freedom (<span class="math inline">\(n\)</span> is the sample size). It works as long as your data aren’t too skewed or if you have a large enough sample size.</p></li>
+<li><p>Function: <code>t.test()</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tout <span class="ot">&lt;-</span> <span class="fu">t.test</span>(schizo<span class="sc">$</span>diff)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>tout</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  schizo$diff
+t = 3.2, df = 14, p-value = 0.006
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 0.0667 0.3306
+sample estimates:
+mean of x 
+   0.1987 </code></pre>
+</div>
+</div></li>
+<li><p>The <code>tidy()</code> function from the broom package will format the output of common procedures to a convenient data frame.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>tdf <span class="ot">&lt;-</span> <span class="fu">tidy</span>(tout)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>mean of x 
+   0.1987 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.006062</code></pre>
+</div>
+</div></li>
+<li><p>We often want a range of “likely” values. These are called confidence intervals. <code>t.test()</code> will return these confidence intervals, giving lowest and highest likely values for the mean difference in volumes:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>conf.low</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0667</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>conf.high</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3306</code></pre>
+</div>
+</div></li>
+<li><p>Interpreting confidence intervals:</p>
+<ul>
+<li>CORRECT: We used a procedure that would capture the true parameter in 95% of repeated samples.</li>
+<li>CORRECT: <em>Prior to sampling</em>, the probability of capturing the true parameter is 0.95.</li>
+<li>WRONG: After sampling, the probability of capturing the true parameter is 0.95.
+<ul>
+<li>Because after sampling the parameter is either in the interval or it’s not. We just don’t know which.</li>
+</ul></li>
+<li>WRONG: 95% of twins have volume differences within the bounds of the 95% confidence interval.
+<ul>
+<li>Because confidence intervals are statements about parameters, not observational units or statistics.</li>
+</ul></li>
+</ul></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/ci_graphic.png" class="img-fluid">&nbsp;</p></li>
+<li><p>Intuition: Statistical theory tells us that the sample mean will be within (approximately) 2 standard deviations of the population mean in 95% of repeated samples. This is two standard deviations of the sampling distribution of the sample mean, <em>not</em> two standard deviations of the sample. So we just add and subtract (approximately) two standard deviations of the sampling distribution from the sample mean.</p></li>
+<li><p><strong>Exercise</strong>: An investor sued his broker for lack of diversification. Below are the rates of return (in percent) for the investor’s portfolio over 39 months (data from <span class="citation" data-cites="moore1998introduction">Moore, McCabe, and Craig (<a href="#ref-moore1998introduction" role="doc-biblioref">2017</a>)</span>). The average of the S&amp;P 500 stock index for the same period was 0.95%. Does the broker perform worse than average? Explore the data, set up hypotheses, and run the appropriate test.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>stock <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">return =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">8.36</span>,   <span class="fl">1.63</span>,  <span class="sc">-</span><span class="fl">2.27</span>, <span class="sc">-</span><span class="fl">2.93</span>,  <span class="sc">-</span><span class="fl">2.70</span>, </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                           <span class="sc">-</span><span class="fl">2.93</span>,  <span class="sc">-</span><span class="fl">9.14</span>,  <span class="sc">-</span><span class="fl">2.64</span>,  <span class="fl">6.82</span>,  <span class="sc">-</span><span class="fl">2.35</span>, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                           <span class="sc">-</span><span class="fl">3.58</span>,   <span class="fl">6.13</span>,   <span class="fl">7.00</span>, <span class="sc">-</span><span class="fl">15.25</span>, <span class="sc">-</span><span class="fl">8.66</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                           <span class="sc">-</span><span class="fl">1.03</span>,  <span class="sc">-</span><span class="fl">9.16</span>,  <span class="sc">-</span><span class="fl">1.25</span>, <span class="sc">-</span><span class="fl">1.22</span>,  <span class="sc">-</span><span class="fl">10.27</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                           <span class="sc">-</span><span class="fl">5.11</span>,  <span class="sc">-</span><span class="fl">0.80</span>,  <span class="sc">-</span><span class="fl">1.44</span>,  <span class="fl">1.28</span>,  <span class="sc">-</span><span class="fl">0.65</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                            <span class="fl">4.34</span>,   <span class="fl">12.22</span>, <span class="sc">-</span><span class="fl">7.21</span>, <span class="sc">-</span><span class="fl">0.09</span>,   <span class="fl">7.34</span>, </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>                            <span class="fl">5.04</span>,  <span class="sc">-</span><span class="fl">7.24</span>,  <span class="sc">-</span><span class="fl">2.14</span>, <span class="sc">-</span><span class="fl">1.01</span>,  <span class="sc">-</span><span class="fl">1.41</span>, </span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                            <span class="fl">12.03</span>, <span class="sc">-</span><span class="fl">2.53</span>,   <span class="fl">4.33</span>,  <span class="fl">1.35</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="pattern-means-of-two-groups-are-different-one-quantitative-one-binary" class="level1">
+<h1>Pattern: Means of two groups are different (one quantitative, one binary)</h1>
+<ul>
+<li><p>Example: Beaks depths were measured on Daphne Major finches in 1976 (before a harsh drought) and in 1978 (after a harsh drought). The researchers hypothesized that finches with deeper peaks were more likely to survive.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"case0201"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>case0201 <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">as.factor</span>(Year)) <span class="ot">-&gt;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  finch</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(finch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 178
+Columns: 2
+$ Year  &lt;fct&gt; 1976, 1976, 1976, 1976, 1976, 1976, 1976, 1976, 1976, 1976, 1976…
+$ Depth &lt;dbl&gt; 6.2, 6.8, 7.1, 7.1, 7.4, 7.8, 7.9, 8.0, 8.2, 8.4, 8.4, 8.4, 8.5,…</code></pre>
+</div>
+</div></li>
+<li><p>Observational Units: The finches.</p></li>
+<li><p>Population: All finches.</p></li>
+<li><p>Sample: The 178 finches that the researches measured.</p></li>
+<li><p>Variables: The year the finch was measured (binary/categorical) and the beak depth (quantitative). Possible to also treat year as quantitative.</p></li>
+<li><p>Pattern: Use a boxplot to see if the groups differ.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(finch, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Depth)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">coef =</span> <span class="cn">Inf</span>) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Parameter of interest: Difference in mean beak depths between 1976 finches and 1978 finches.</p></li>
+<li><p>Estimate: The difference in mean beak depths between 1976 finches and 1978 finches in our sample.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>finch <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">%&gt;%</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">meandepth =</span> <span class="fu">mean</span>(Depth)) <span class="sc">%&gt;%</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> Year, <span class="at">value =</span> meandepth) <span class="sc">%&gt;%</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">diff =</span> <span class="st">`</span><span class="at">1978</span><span class="st">`</span> <span class="sc">-</span> <span class="st">`</span><span class="at">1976</span><span class="st">`</span>) <span class="do">## do you remember why we need back-ticks?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  `1976` `1978`  diff
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1   9.47   10.1 0.669</code></pre>
+</div>
+</div></li>
+<li><p>Hypothesis Test:</p>
+<ul>
+<li>We want to know if the difference in the mean depths in the two years is actually different.</li>
+<li>Two possibilities:
+<ul>
+<li><strong>Alternative Hypothesis</strong>: The mean depths are different in the two years.</li>
+<li><strong>Null Hypothesis</strong>: The mean depths are the same in the two years. We just happened by chance to get deep 1978 finches and shallow 1976 finches.</li>
+<li>Strategy: We calculate the probability of the data assuming possibility 2 (called a p-value). If this probability is low, we conclude possibility 1. If the this probability is high, we don’t conclude anything.</li>
+</ul></li>
+</ul></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/two_sample_p.png" class="img-fluid">&nbsp;</p></li>
+<li><p>The distribution of possible null sample means comes from statistical theory. The t-statistic has a <span class="math inline">\(t\)</span> distribution with a complicated degrees of freedom.</p></li>
+<li><p>Function: <code>t.test()</code>. The quantitative variable goes to the left of the tilde and the binary variable goes to the right of the tilde.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tout <span class="ot">&lt;-</span> <span class="fu">t.test</span>(Depth <span class="sc">~</span> Year, <span class="at">data =</span> finch)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>tdf <span class="ot">&lt;-</span> <span class="fu">tidy</span>(tout)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>estimate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.6685</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>tdf<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.739e-06</code></pre>
+</div>
+</div></li>
+<li><p><code>t.test()</code> also returns a 95% confidence interval for the difference in means. This has the exact same interpretation as in the previous section.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(tdf<span class="sc">$</span>conf.low, tdf<span class="sc">$</span>conf.high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.9564 -0.3806</code></pre>
+</div>
+</div></li>
+<li><p>Assumptions (in decreasing order of importance):</p>
+<ol type="1">
+<li>Independence: conditional on year, beak length of one finch doesn’t give us any information on the beak lengths of any other finch.</li>
+<li>Approximate normality: The distribution of beak lengths is bell-curved in each year. Doesn’t matter for moderate-large sample sizes because of the central limit theorem.</li>
+</ol></li>
+<li><p><strong>Exercise</strong>: The Armed Forces Qualifying Test is designed for evaluating suitability of military recruits. There are different subjects tested: arithmetic, word knowledge, paragraph comprehension, and mathematics. They also provide a composite score. These data are stored in the <code>ex0222</code> data frame from the Sleuth3 package. For which subjects do we have evidence that the genders differ? Make appropriate exploratory plots, set up the appropriate hypotheses, and run appropriate hypothesis tests.</p></li>
+</ul>
+</section>
+<section id="note-on-assumptions-of-t-tools" class="level1">
+<h1>Note on Assumptions of <span class="math inline">\(t\)</span>-tools</h1>
+<ul>
+<li><p>Assumptions of <span class="math inline">\(t\)</span>-tools in decreasing order of importance:</p>
+<ol type="1">
+<li>Independence: Knowing value of one observation does not tell you value of another.</li>
+<li>Normality: Distribution of quantitative variable (within each group) is normal.</li>
+</ol></li>
+<li><p>Hire a statistician if the independence assumption is violated.</p></li>
+<li><p>If data are <em>very</em> skewed (violating assumption 2) and the sample size is small and the quantitative variable is <em>always positive</em>, then take a log to make the data more symmetric.</p></li>
+<li><p>Example: Seeded clouds with either silver iodide or a control substance. Measured rainfall.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"case0301"</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(case0301, <span class="fu">aes</span>(<span class="at">x =</span> Treatment, <span class="at">y =</span> Rainfall)) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(case0301, <span class="fu">aes</span>(<span class="at">x =</span> Treatment, <span class="at">y =</span> Rainfall)) <span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-49-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>case0301 <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logRainfall =</span> <span class="fu">log</span>(Rainfall)) <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(logRainfall <span class="sc">~</span> Treatment, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="ot">-&gt;</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  tout</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Inference is then stated in terms of <em>medians</em> and <em>ratios of medians</em> since the log of the median is the median of the log (which is not true of means). Equivalently, the exponentiation of the median is equal to the median of the exponentiation. Also, when data are symmetric, median = mean.</p>
+<ul>
+<li><span class="math inline">\(\mu_1\)</span> = mean of log-rainfall in seeded group = median of log-rainfall in seeded group.</li>
+<li><span class="math inline">\(\mu_2\)</span> = mean of log-rainfall in unseeded group = median of log-rainfall in unseeded group.<br>
+</li>
+<li><span class="math inline">\(\mu_1 - \mu_2\)</span> = difference in median log-rainfalls in two groups.</li>
+<li><span class="math inline">\(e^{\mu_1 - \mu_2} = e^{\mu_1}/e^{\mu_2}\)</span> = median rainfall in seeded group divided by median rainfall in unseeded group.</li>
+<li>We estimate and get confidence intervals for <span class="math inline">\(\mu_1 - \mu_2\)</span>, which implies we can estimate and get confidence intervals of <span class="math inline">\(e^{\mu_1}/e^{\mu_2}\)</span> by just exponentiating the output of <code>t.test()</code>.</li>
+</ul></li>
+<li><p><span class="math inline">\(p\)</span>-value:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>tout<span class="sc">$</span>p.value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01408</code></pre>
+</div>
+</div></li>
+<li><p>Estimate ratio of median rainfall in seeded group to median rainfall in unseeded group:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(tout<span class="sc">$</span>estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.139</code></pre>
+</div>
+</div></li>
+<li><p>Confidence interval for ratio of median rainfall in seeded group to median rainfall in unseeded group:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">c</span>(<span class="at">low =</span> tout<span class="sc">$</span>conf.low, <span class="at">high =</span> tout<span class="sc">$</span>conf.high))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  low  high 
+1.272 7.742 </code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong>: Read up on the <code>ex0330</code> dataset from the Sleuth3 R package. Determine if education level is associated with income. Interpret any estimates and confidence intervals you derive.</p></li>
+</ul>
+</section>
+<section id="pattern-proportion-is-shifted-one-binary-variable." class="level1">
+<h1>Pattern: Proportion is shifted (one binary variable).</h1>
+<ul>
+<li><p>Example: A 2013 Gallup poll (<a href="https://news.gallup.com/poll/161198/favor-russian-nuclear-arms-reductions.aspx" class="uri">https://news.gallup.com/poll/161198/favor-russian-nuclear-arms-reductions.aspx</a>) surveyed 1,028 U.S. adults. Of the respondents, 576 said they they support nuclear arms reduction</p></li>
+<li><p>Observational Units: U.S. adults</p></li>
+<li><p>Population: All U.S. adults.</p></li>
+<li><p>Sample: The 1028 U.S. adults in the survey.</p></li>
+<li><p>Variable: Did they support nuclear arms reduction (yes or no). This is a binary variable.</p></li>
+<li><p>Pattern: Calculate sample proportion.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="dv">576</span> <span class="sc">/</span> <span class="dv">1028</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5603</code></pre>
+</div>
+</div></li>
+<li><p>Parameter of interest: Proportion of U.S. adults who support nuclear arms reduction.</p></li>
+<li><p>Estimate with sample proportion, 0.56.</p></li>
+<li><p>Hypothesis Testing:</p>
+<ul>
+<li>We are interested in if more than half of U.S. adults support nuclear arms reduction.</li>
+<li>Two possibilities:
+<ol type="1">
+<li><strong>Alternative Hypothesis</strong>: Proportion of U.S. adults who support nuclear arms reduction is different from 0.5.</li>
+<li><strong>Null Hypothesis</strong>: Proportion of U.S. adults who support nuclear arms reduction is 0.5. We just happened <em>by chance</em> to get a sample proportion far from 0.5</li>
+</ol></li>
+<li>Strategy: We calculate the probability of the data assuming possibility 2 (called a <em>p</em>-value). If this probability is low, we conclude possibility 1. If this probability is high, we don not conclude anything.</li>
+</ul></li>
+<li><p>Graphic:</p>
+<p><img src="./cartoons/proptest_pvalue.png" class="img-fluid">&nbsp;</p></li>
+<li><p>The distribution of possible null sample proportions comes from statistical theory. The number of successes has a binomial distribution with success probability 0.5 and size parameter equal to the sample size. The sample proportion is the number successes divided by the sample size.</p></li>
+<li><p>Function: <code>prop.test()</code> (when you have a large number of both successes and failures) or <code>binom.test()</code> (for any number of successes and failures).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>bout <span class="ot">&lt;-</span> <span class="fu">tidy</span>(<span class="fu">binom.test</span>(<span class="at">x =</span> <span class="dv">576</span>, <span class="at">n =</span> <span class="dv">1028</span>, <span class="at">p =</span> <span class="fl">0.5</span>))</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>bout <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(estimate, p.value, conf.low, conf.high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  estimate  p.value conf.low conf.high
+     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.560 0.000123    0.529     0.591</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>pout <span class="ot">&lt;-</span> <span class="fu">tidy</span>(<span class="fu">prop.test</span>(<span class="at">x =</span> <span class="dv">576</span>, <span class="at">n =</span> <span class="dv">1028</span>, <span class="at">p =</span> <span class="fl">0.5</span>))</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>pout <span class="sc">%&gt;%</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(estimate, p.value, conf.low, conf.high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  estimate  p.value conf.low conf.high
+     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1    0.560 0.000125    0.529     0.591</code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong> (from OpenIntro): The 2010 General Social Survey asked 1,259 US residents: “Do you think the use of marijuana should be made legal, or not?” 48% of the respondents said it should be made legal.</p>
+<ol type="a">
+<li>Is 48% a sample statistic or a population parameter? Explain.</li>
+<li>Construct a 95% confidence interval for the proportion of US residents who think marijuana should be made legal, and interpret it in the context of the data.</li>
+</ol></li>
+</ul>
+</section>
+<section id="pattern-two-categorical-variables-are-associated." class="level1">
+<h1>Pattern: Two categorical variables are associated.</h1>
+<ul>
+<li><p>Example: 86 lung cancer patients and 86 controls were interviewed on their smoking history in a 1954 study. The data can be found at: <a href="https://data-science-master.github.io/lectures/data/smoke.csv" class="uri">https://data-science-master.github.io/lectures/data/smoke.csv</a>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>smoke <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"../data/smoke.csv"</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(smoke)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 172
+Columns: 3
+$ individual &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+$ smoke      &lt;chr&gt; "smoker", "smoker", "smoker", "smoker", "smoker", "smoker",…
+$ cancer     &lt;chr&gt; "cancer", "cancer", "control", "cancer", "cancer", "cancer"…</code></pre>
+</div>
+</div></li>
+<li><p>Usually, for two categorical variables, data are presented/provided in two-way tables:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>tabdat <span class="ot">&lt;-</span> <span class="fu">table</span>(smoke<span class="sc">$</span>smoke, smoke<span class="sc">$</span>cancer)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>tabdat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+            cancer control
+  nonsmoker      3      14
+  smoker        83      72</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(tabdat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+            cancer control Sum
+  nonsmoker      3      14  17
+  smoker        83      72 155
+  Sum           86      86 172</code></pre>
+</div>
+</div></li>
+<li><p>Or two-way tables of proportions.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tabdat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+             cancer control
+  nonsmoker 0.01744 0.08140
+  smoker    0.48256 0.41860</code></pre>
+</div>
+</div></li>
+<li><p>Observational Units: People.</p></li>
+<li><p>Population: All people.</p></li>
+<li><p>Sample: The 172 people in the study.</p></li>
+<li><p>Variables: The smoking status of the person (<code>smoke</code>) and the cancer status of the person (<code>cancer</code>).</p></li>
+<li><p>Pattern: Visualize by calculating conditional proportions. For example, the following code calculates the proportion of cancer cases that are smokers, and the proportion of controls that are smokers.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tabdat, <span class="at">margin =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+             cancer control
+  nonsmoker 0.03488 0.16279
+  smoker    0.96512 0.83721</code></pre>
+</div>
+</div></li>
+<li><p>If you need a fancy plot for your boss, try a mosaic plot:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(tabdat) <span class="sc">%&gt;%</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> Freq, <span class="at">x =</span> Var2, <span class="at">fill =</span> Var1)) <span class="sc">+</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_colorblind</span>(<span class="at">name =</span> <span class="st">"Smoking</span><span class="sc">\n</span><span class="st">Status"</span>) <span class="sc">+</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Cancer Status"</span>) <span class="sc">+</span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Proportion"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A1_basic_stats_files/figure-html/unnamed-chunk-63-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Intuition: If the two variables are not related, then we would expect about the same proportion of smokers in each group. But if these conditional proportions are very different, then to variables might be related.</p></li>
+<li><p>Null hypothesis: cancer status and smoking status are independent.</p></li>
+<li><p>Alternative hypothesis: cancer status and smoking status are dependent.</p></li>
+<li><p>Function:<code>fisher.test()</code> tests for whether we see more smokers in one group versus the other. Or, symmetrically, whether we see more cancer cases in the smoker group versus the nonsmoker group. We won’t get into the test statistic or the null distribution of this test.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(<span class="fu">fisher.test</span>(tabdat)) <span class="sc">%&gt;%</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(p.value, estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  p.value estimate
+    &lt;dbl&gt;    &lt;dbl&gt;
+1 0.00882    0.188</code></pre>
+</div>
+</div></li>
+<li><p>The value in the “estimate” column is the odds ratio. It’s the multiplicative change in the odds of being a nonsmoker when you consider the cancer versus control groups. Specifically <span class="math display">\[
+\frac{3/86}{83/86} \div \frac{14/86}{72/86}
+\]</span></p></li>
+<li><p>You might see a chi-squared test in the wild. They are only appropriate for large numbers of counts in each cell. I don’t see a reason to use it since we have computers, but it’s fine most of the time to use:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(<span class="fu">chisq.test</span>(tabdat)) <span class="sc">%&gt;%</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(p.value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  p.value
+    &lt;dbl&gt;
+1  0.0106</code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong>: Researches collected information on women 60 years old or older. They asked them about their sexual activity and their coffee drinking status. Data are from: Diokno, Ananias C., Morton B. Brown, and A. Regula Herzog. “Sexual function in the elderly.” <em>Archives of Internal Medicine</em> 150, no. 1 (1990): 197-200. The table is below:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>tabdat <span class="ot">&lt;-</span> <span class="fu">as.table</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">115</span>, <span class="dv">25</span>, <span class="dv">70</span>), <span class="at">nrow =</span> <span class="dv">2</span>))</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(tabdat) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">coffee =</span> <span class="fu">c</span>(<span class="st">"yes"</span>, <span class="st">"no"</span>), <span class="at">sex =</span> <span class="fu">c</span>(<span class="st">"yes"</span>, <span class="st">"no"</span>))</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>tabdat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      sex
+coffee yes  no
+   yes  15  25
+   no  115  70</code></pre>
+</div>
+</div>
+<p>Does there appear to be an association between coffee drinking and sexual activity? Create a table to explore this association. Then run a hypothesis test. What is the null hypothesis?</p></li>
+</ul>
+</section>
+<section id="references" class="level1">
+
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-moore1998introduction" class="csl-entry" role="listitem">
+Moore, David S, George P McCabe, and Bruce A Craig. 2017. <span>“Introduction to the Practice of Statistics, Ninth Edition.”</span> W.H. Freeman &amp; Company.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

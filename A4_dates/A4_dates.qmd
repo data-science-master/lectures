@@ -1,0 +1,524 @@
+---
+title: "Dates"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+# Learning Objectives
+
+- Manipulating dates and times.
+- Chapter 18 of [RDS](https://r4ds.hadley.nz).
+- [Dates and Times Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/lubridate.pdf).
+- [Lubridate Overview](https://lubridate.tidyverse.org/).
+
+# Parsing Dates
+
+-   The `{lubridate}` package has a bunch of convenience functions for working with 
+  dates. It's a part of the tidyverse, so is loaded along with it.
+  
+    ```{r, message=FALSE, warning=FALSE}
+    library(tidyverse)
+    ```
+  
+- There are three main classes for date/time data:
+  - `Date` for just the date.
+    - In tibbles, this shows up as `<date>`.
+  - `POSIXct` for both the date and the time. "POSIXct" stands for 
+    "Portable Operating System Interface Calendar Time" ([don't ask me where 
+    the "X" comes from](https://stallman.org/articles/posix.html)). It is a part of a 
+    [standardized system](https://en.wikipedia.org/wiki/Unix_time) 
+    of representing time across many computing computing platforms.
+    - In tibbles, this shows up as `<dttm>`.
+  - `hms` from the hms R package for just the time. "hms" stands for
+    "hours, minutes, and seconds."
+    - In tibbles, this shows up as `<time>`.
+    
+-   `today()` will give you the current date in the `Date` class. 
+    ```{r}
+    today()
+    class(today())
+    ```
+
+-   `now()` will give you the current date-time in the `POSIXct` class.
+    ```{r}
+    now()
+    class(now())
+    ```
+    
+-   There is no built-in R function to find the current time without the date. 
+  But you can use `hms::as_hms(now())` to get the current time.
+
+    ```{r}
+    hms::as_hms(now())
+    class(hms::as_hms(now()))
+    ```
+
+
+# Parsing Dates using `{readr}`
+
+-   You can use `parse_date()`, `parse_datetime()`, and `parse_time()` (from `{readr}`) to 
+  [parse](https://dcgerard.github.io/stat_412_612/lectures/06_tidyr/06_parsers.pdf) 
+  a date/date-time/time from a string.
+
+    ```{r}
+    x <- parse_date("10/11/2020", format = "%m/%d/%Y")
+    x
+    class(x)
+    
+    y <- parse_datetime("10/11/2020 11:59:20", format = "%m/%d/%Y %H:%M:%S")
+    y
+    class(y)
+    
+    z <- parse_time("11:59:20", "%H:%M:%S")
+    z
+    class(z)
+    ```
+
+- Table 18.1 from RDS (2e): All date formats understood by readr:
+
+  | Type  | Code  | Meaning                        | Example         |
+  |-------|-------|--------------------------------|-----------------|
+  | Year  | `%Y`  | 4 digit year                   | 2021            |
+  |       | `%y`  | 2 digit year                   | 21              |
+  | Month | `%m`  | Number                         | 2               |
+  |       | `%b`  | Abbreviated name               | Feb             |
+  |       | `%B`  | Full name                      | February        |
+  | Day   | `%d`  | Two digits                     | 02              |
+  |       | `%e`  | One or two digits              | 2               |
+  | Time  | `%H`  | 24-hour hour                   | 13              |
+  |       | `%I`  | 12-hour hour                   | 1               |
+  |       | `%p`  | AM/PM                          | pm              |
+  |       | `%M`  | Minutes                        | 35              |
+  |       | `%S`  | Seconds                        | 45              |
+  |       | `%OS` | Seconds with decimal component | 45.35           |
+  |       | `%Z`  | Time zone name                 | America/Chicago |
+  |       | `%z`  | Offset from UTC                | +0800           |
+  | Other | `%.`  | Skip one non-digit             | :               |
+  |       | `%*`  | Skip any number of non-digits  |                 |
+
+-   **Exercise**: Parse this
+    ```{r, eval = FALSE}
+    t2 <- "11:15:10.12 PM"
+    ```
+
+    ```{r, echo = FALSE, eval = FALSE}
+    parse_time(t2, format = "%H:%M:%OS %p")
+    ```
+
+# Parsing dates using `{lubridate}`
+
+- `{lubridate}` comes with a bunch of helper functions to parse dates more 
+  automatically. The helper function name itself specifies the order of the 
+  year, month, day, hours, minutes, and seconds. 
+
+-   To parse dates, look at the help page of
+    ```{r, eval = FALSE}
+    help(ymd)
+    ```
+
+    ```{r}
+    ## Only the order of year, month, and day matters
+    ymd(c("2011/01-10", "2011-01/10", "20110110"))
+    mdy(c("01/10/2011", "01 adsl; 10 df 2011", "January 10, 2011"))
+    ```
+
+-   To parse times, look at the help page of
+    ```{r}
+    help(ms)
+    ```
+    
+    ```{r}
+    ## only the order of hours, minutes, and seconds matter
+    hms(c("10:40:10", "10 40 10"))
+    ```
+    
+-   Note that `ms()`, `hm()`, and `hms()` won't recognize "`-`" as a separator 
+  because it treats it as negative time. So use `parse_time()` here.
+    ```{r}
+    ms("10-10")
+    ```
+
+-   To parse date-times, look at the help page of
+    ```{r}
+    help(ymd_hms)
+    ```
+    
+-   More generally, you can choose the order of elements with `parse_date_time()`, which has a different and easier syntax than `readr::parse_datetime()`.
+
+    ```{r}
+    parse_date_time("11, 22, 01 here is a trap! 11/02/2002", orders = "HMSmdy")
+    ```
+
+
+-   **Exercise**: Parse the following date-times.
+
+    ```{r, eval = FALSE}
+    "05/26/2004 UTC 11:11:11.444"
+    "26 2004 05 UTC 11/11/11.444"
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    mdy_hms("05/26/2004 UTC 11:11:11.444")
+    
+    ## No dym_hms() function is defined, so need to use parse_datetime()
+    parse_datetime("26 2004 05 UTC 11/11/11.444", "%d %Y %m UTC %H/%M/%S")
+    
+    parse_date_time(x = "26 2004 05 UTC 11/11/11.444", orders = "dYmHMS")
+    ```
+    
+-   **Exercise** (RDS1e16.2.4.3): Use the appropriate lubridate function to parse 
+  each of the following dates:
+
+    ```{r}
+    d1 <- "January 1, 2010"
+    d2 <- "2015-Mar-07"
+    d3 <- "06-Jun-2017"
+    d4 <- c("August 19 (2015)", "July 1 (2015)")
+    d5 <- "12/30/14" # Dec 30, 2014 
+    ```
+
+    ```{r, eval = FALSE, echo = FALSE}
+    mdy(d1)
+    ymd(d2)
+    dmy(d3)
+    mdy(d4)
+    mdy(d5)
+    ```
+# Dates from individual components
+
+-   If you have a vector of years, months, days, hours, minutes, or seconds, you
+  can use `make_date()` or `make_datetime()` to create dates and date-times.
+  
+    ```{r}
+    make_date(year = 1981, month = 6, day = 25)
+    make_datetime(year = 1972, month = 2, day = 22, hour = 10, min = 9, sec = 01)
+    ```
+
+-   nycflights13 example:
+    ```{r}
+    library(nycflights13)
+    data("flights")
+    flights |>
+      mutate(datetime = make_datetime(year   = year, 
+                                      month  = month, 
+                                      day    = day,
+                                      hour   = hour,
+                                      min    = minute)) ->
+      flights
+      select(flights, datetime)
+    ```
+    
+-   Having it in the date-time format makes it easier to plot.
+    ```{r}
+    ggplot(flights, aes(x = datetime)) +
+      geom_freqpoly(bins = 365)
+    ```
+
+-   It makes it easier to filter by date
+    ```{r}
+    flights |>
+      filter(as_date(datetime) == ymd(20130704)) |>
+      ggplot(aes(x = datetime)) +
+      geom_freqpoly(binwidth = 600)
+    ```
+    
+- I used `as_date()` in the previous example. This function will try to coerce
+  an object to a date. Sometimes successfully! It is particularly useful for
+  extracting the date component of a `POSIXct` object.
+
+- `as_datetime()` tries to coerce an object to a `POSIXct` object.  
+
+-   **Exercise**: Create a date variable from the following data frame. Then filter out all rows before Feb 1, 2010. If you finish early, try converting the month variable to the numeric representation of the month. (*Hint*: use `{stringr}` to fix the `month` variable then use the built-in vector `month.abb`).
+  
+    ```{r, eval = FALSE, echo = TRUE}
+    fake <- tribble(~year, ~month, ~day, ~month_num,
+                    ##----/-------/----------------
+                    2018,  "Oct",  1,    10,
+                    2011,  "Nov",  2,    11,
+                    2019,  "Dec",  3,    12,
+                    2010,  "JAN",  5,     1,
+                    1999,  "MAr",  1,     3,
+                    1987,  "ApR",  3,     4,
+                    2020,  "maY",  2,     5,
+                    2010,  "May",  4,     5)  
+    ```
+    
+    ```{r, echo = FALSE, eval = FALSE}
+    fake |>
+      mutate(month = str_to_sentence(month),
+             month = parse_factor(month, levels = month.abb),
+             month_num2 = as.numeric(month),
+             date = make_date(year = year, month = month_num2, day = day)) |>
+      filter(date > ymd(20100201))
+    
+    fake |>
+      mutate(date = make_date(year = year, month = month_num, day = day)) |>
+      filter(date > ymd(20100201))
+    ```
+
+# Extracting Components
+
+- `year()` extracts the year.
+- `month()` extracts the month.
+- `week()` extracts the week.
+- `mday()` extracts the day of the month (1, 2, 3, ...).
+- `wday()` extracts the day of the week (Saturday, Sunday, Monday ...).
+- `yday()` extracts the day of the year (1, 2, 3, ...)
+- `hour()` extracts the hour.
+- `minute()` extract the minute.
+- `second()` extracts the second.
+
+```{r}
+ddat <- mdy_hms("01/02/1970 03:51:44")
+ddat
+year(ddat)
+month(ddat, label = TRUE)
+week(ddat)
+mday(ddat)
+wday(ddat, label = TRUE)
+yday(ddat)
+hour(ddat)
+minute(ddat)
+second(ddat)
+```
+
+
+-   **Exercise**: Load the `wmata_ridership` data frame into R from
+  <https://dcgerard.github.io/stat_412_612/data/wmata_ridership.csv>. For each 
+  month, calculate the proportion of rides made on a given day of the month. Then
+  make box plots of the proportions of ridership vs day of the weak. But exclude
+  any days from 2004.
+  
+    ```{r, eval = FALSE, echo = FALSE}
+    wmata <- read_csv("../../data/wmata_ridership.csv")
+    
+    wmata |>
+      mutate(year = year(Date),
+             month = month(Date),
+             day  = wday(Date, label = TRUE)) |>
+      filter(year != 2004) |>
+      group_by(year, month) |>
+      mutate(prop = Total / sum(Total)) |>
+      ungroup() ->
+      wmata
+    
+    ggplot(wmata, aes(x = day, y = prop)) +
+      geom_boxplot()
+    ```
+  
+-   You can overwrite components.
+
+    ```{r}
+    ddat <- mdy_hms("01/02/1970 03:51:44")
+    ddat
+    year(ddat) <- 1988
+    ddat
+    ```
+-   To create a new date with the updated component, rather than overwrite a component, use `update()`.
+
+    ```{r}
+    ddat
+    update(ddat, year = 1999)
+    ddat ## still 1988
+    ```
+
+-   The book provides an example of using `update()` on larger elements to see fine scale patterns
+
+    ```{r}
+    flights |>
+      mutate(dt = update(datetime, yday = 1)) |>
+      ggplot(aes(x = dt)) +
+      geom_freqpoly(binwidth = 300)
+    ```
+
+-   You can round components with `round_date()`. You round to the nearest "unit" (e.g., year or day).
+
+    ```{r}
+    ddat <- mdy_hms("01/02/1970 03:51:44")
+    ddat
+    round_date(ddat, unit = "year")
+    ```
+    
+-   You can round down using `floor_date()` and round up with `ceiling_date()`
+
+    ```{r}
+    floor_date(ddat, unit = "year")
+    ceiling_date(ddat, unit = "year")
+    ```
+    
+# Time Spans
+
+-   To count the number of seconds between two dates, use a `duration`. You can
+  read about durations using
+    ```{r, eval = FALSE}
+    help("Duration-class")
+    ```
+
+- You first subtract two dates, then use `as.duration()` to create a duration.
+
+-   We can find out how old 
+  [Patrick Stewart](https://en.wikipedia.org/wiki/Patrick_Stewart) 
+  is using durations
+    ```{r}
+    d1 <- ymd(19400713)
+    d2 <- today()
+    agesec <- as.duration(d2 - d1)
+    agesec
+    ```
+
+-   You can also create durations from years with `dyears()`, from days with 
+  `ddays()`, etc...
+  
+    ```{r}
+    dyears(1)
+    ddays(1)
+    dhours(1)
+    dminutes(1)
+    dseconds(1)
+    ```
+
+-   You can add durations to date-times, but you always add *seconds*, so if there is daylight savings you get weird results (add a day but the time is not the same as the time the previous day).
+  
+    ```{r}
+    one_pm <- ymd_hms("2016-03-12 13:00:00", tz = "America/New_York")
+    one_pm
+    one_pm + ddays(1)
+    ```
+
+-   Periods are human readable time spans. You create periods with
+    ```{r}
+    years(1)
+    days(1)
+    hours(1)
+    minutes(1)
+    seconds(1)
+    ```
+    
+-   Adding a `period` takes into account daylight savings.
+    ```{r}
+    one_pm
+    one_pm + days(1)
+    ```
+
+-   You can read more about periods with
+    ```{r, eval = FALSE}
+    help("Period-class")
+    ```
+
+-   Intervals are like durations, but they also have an associated start time and end time. You can read more about intervals with
+    ```{r, eval = FALSE}
+    help("Interval-class")
+    ```
+
+- You create an interval with `start_date %--% end_date`. E.g.
+    
+- The main use of intervals is when you want to do division. 
+  - Divide an interval by a duration to determine its physical length. 
+  - Divide an interval by a period to determine its *implied length* in clock time.
+
+-   E.g., the number of days between between Jan 1 2019 and Jan 1 2020 is 
+    ```{r}
+    (ymd("2019-01-01") %--% ymd("2020-01-01")) / days(1)
+    ```
+    while the number of days between Jan 1 2020 and Jan 1 2021 is
+    ```{r}
+    (ymd("2020-01-01") %--% ymd("2021-01-01")) / days(1)
+    ```
+    because of the leap year.
+    
+-   **Exercise**: How long of a time-span is covered in the WMATA ridership 
+  dataset?
+  
+    ```{r, eval = FALSE, echo = FALSE}
+    wmata <- read_csv("../../data/wmata_ridership.csv")
+    rng <- range(wmata$Date)
+    as.duration(rng[2] - rng[1])
+    as.interval(rng[2] - rng[1], start = rng[1]) / years(1)
+    ```
+    
+# Time Zones
+
+- Time zones are specified using the `tz` or `tzone` arguments (for example, in the call to `ymd_hms()` above).
+  
+- Time zones are specified by "content/city." For example, `"America/New_York"` and `"Europe_Paris"`
+  
+- You can see a complete list of time zones with `OlsonNames()`.
+
+- The default time zone is `UTC` (which has no daylight savings).
+
+- You usually don't have to worry about timezones unless you loaded them in incorrectly. For example, R might think it's `UTC` even though it should be  `America/New_York` and then forget daylight savings.
+  
+-   If a date-time is labelled with the incorrect time zone, use `force_tz()`.
+
+    ```{r}
+    d1 <- ymd_hms("20140101 10:01:11")
+    d1
+    force_tz(d1, tzone = "America/New_York")
+    ```
+
+-   If the timezone is correct, but you want to change it, use `with_tz()`.
+  
+    ```{r}
+    with_tz(d1, tzone = "America/New_York")
+    ```
+
+# Regnal Year Exercise
+
+Consider the [regnal.csv](https://data-science-master.github.io/lectures/data/regnal.csv), a table of regnal years of English monarchs, taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
+  
+"Regnal years" are years that correspond to a monarch, and might differ from
+the actual reign of that monarch. It's mostly used for dating legal
+documents ("nth year of the reign of King X"). It's a weird English thing.
+The variables include:
+    
+- `monarch`: The name of the monarch.
+- `num_years`: The number of years of the reign.
+- `first`: The start year of the reign.
+- `start_date`: The date when each regnal year begins.
+- `end_date`: The date when each regnal year ends.
+- `final`: The final date of the reign.
+
+Clean these data to get the start and end dates of each reign in proper date format. E.g.
+
+```{r, eval = TRUE, echo = FALSE, message = FALSE}
+regnal <- read_csv("https://data-science-master.github.io/lectures/data/regnal.csv")
+
+## from reading Wikipedia, John's start date in the first year was May 27. 
+## The regnal year varies each year for John to be on Ascension day, but
+## The first day was May 27.
+
+regnal |>
+  mutate(start_date = str_replace(start_date, "May \\(Ascension Day\\)", "27 May")) |>
+  unite(start_date, first, col = "start", sep = " ") |>
+  mutate(start = dmy(start),
+         end = dmy(final)) |>
+  select(monarch, num_years, start, end) ->
+  regnsub
+regnsub
+```
+
+Use the `start` and `end` columns to verify that the `num_years` column from Wikipedia is accurate.
+
+```{r, eval = FALSE, echo = FALSE}
+regnsub |>
+  mutate(ys = (start %--% end) / years(1),
+         ys_ceil = ceiling(ys)) ->
+  regnsub
+
+## this is fine
+filter(regnsub, ys_ceil != num_years)
+```

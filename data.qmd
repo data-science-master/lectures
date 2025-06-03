@@ -1,0 +1,257 @@
+---
+title: "Data"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- [airfares.csv](./data/airfares.csv): Average first quarter domestic airline
+  fares by origin airport for major U.S. airports from 1993 to 2019. The
+  data are from The Bureau of Transportation Statistics 
+  (<https://www.transtats.bts.gov/AverageFare/>). Variables include:
+  - `code`: The origin airport code.
+  - `name`: The name of the origin airport.
+  - `city`: The city of the origin airport.
+  - `state`: The state of the origin airport.
+  - `fare`: Average first quarter fare from the origin airport in a given year.
+    "Fares are based on the total ticket value which consists of the price 
+    charged by the airlines plus any additional taxes and fees levied by an 
+    outside entity at the time of purchase. Fares include only the price paid 
+    at the time of the ticket purchase and do not include other fees, such as 
+    baggage fees, paid at the airport or onboard the aircraft. Averages do not
+    include frequent-flyer or 'zero fares' or a few abnormally high reported 
+    fares."
+  - `adj_fare`: Inflation adjusted average fare (in 2019 dollars). 
+    "The inflation adjustment was performed using Consumer Price Index 
+    for all urban consumers."
+  - `year`: The year.
+- [big_mac.csv](./data/big_mac.csv): Measurements from the Economist's 
+  famous [Big Mac Index](https://en.wikipedia.org/wiki/Big_Mac_Index) 
+  from 2000 to 2017. It contains the price (in 2018 US dollars) of a
+  Big Mac for each country during this time. It also contains the data on the
+  implied [purchasing power parity](https://en.wikipedia.org/wiki/Purchasing_power_parity)
+  using Big Mac prices. Specifically, the variables are of the form:
+  - `price_<year>`: The average price of a Big Mac in a given year. For example,
+    `price_2017` contains the average price of a Big Mac in 2017.
+  - `ppp_<year>`: The purchasing power parity based on the Big Mac in a given
+    year. For example, `ppp_2011` contains the purchasing power parity 
+    of a Big Mac in 2011.
+- [bob.csv](./data/bob.csv): [Bob Ross](https://en.wikipedia.org/wiki/Bob_Ross) 
+  was a painter who hosted a popular television series on PBS. Each episode 
+  would consist of him completing an entire painting. His paintings almost 
+  always consisted heavily of elements from nature: trees, clouds, mountains, 
+  lakes, etc. These data consist of indicators for what elements are in each 
+  episode. This dataset was taken from the excellent crew at
+  [fivethirtyeight](https://github.com/fivethirtyeight/data/tree/master/bob-ross). 
+  See [here](https://fivethirtyeight.com/features/a-statistical-analysis-of-the-work-of-bob-ross/) 
+  for their article. The data were obtained using
+  [this](https://github.com/dcgerard/stat234/blob/master/analysis/clean_datasets/bob_ross/get_bob.R) 
+  code. The variables are:
+    - `EPISODE`: The season and episode number of the episode.
+    - `TITLE`: The title of the painting.
+    - Every other variable is an indicator for whether the episode contains 
+      the element described by the variable name. For example, `BARN` 
+      is `0` if the episode does not have a barn in the painting and `1` if the 
+      episode does have a barn in the painting.
+- [civil_war.csv](./data/civil_war.csv): List of American Civil War battles, taken from
+  [Wikipedia](https://en.wikipedia.org/wiki/List_of_American_Civil_War_battles). 
+  Variables include:
+    - `Battle`: The name of the battle.
+    - `Date`: The date(s) of the battle. If it took place on one day, then the
+      format is "month day, year". If it took place over multiple days, then
+      the format is "month day_start-day_end, year". If it took place over
+      multiple days spanning multiple months then the format is 
+      "month_start day_start - month_end day_end, year". If it took place over
+      multiple days spanning multiple years then the format is
+      "month_start day_start, year_start - month_end day_end, year_end".
+    - `State`: The state where the battle took place. Annotations (e.g. 
+      describing that the state was a territory at the time) are in parentheses.
+    - `CWSAC`: A rating of the military significance of the battle by the
+      Civil War Sites Advisory Commission. `A` = Decisive, `B` = Major, 
+      `C` = Formative, `D` = Limited.
+    - `Outcome`: Usually `"Confederate victory"`, `"Union victory"`, or 
+      `"Inconclusive"`, followed by notes.
+- [college_score.csv](./data/college_score.csv): Contains a subset of the 
+  variables found in the 2016 to 2017 
+  [College Scorecard](https://collegescorecard.ed.gov/data/)
+  database. These data contain information on colleges in the United States. 
+  The variables included are:
+    - `UNITID` and `OPEID`: Identifiers for the colleges.
+    - `INSTNM`: Institution name
+    - `ADM_RATE`: The Admission Rate.
+    - `SAT_AVE`: Average SAT equivalent score of students admitted.
+    - `UGDS`: Enrollment of undergraduate certificate/degree-seeking students
+    - `COSTT4_A`: Average cost of attendance (academic year institutions)
+    - `AVGFACSAL`: Average faculty salary
+    - `GRAD_DEBT_MDN`: The median debt for students who have completed
+    - `AGE_ENTRY`: Average age of entry
+    - `ICLEVEL`: Level of institution (`1` = 4-year, `2` = 2-year, `3` = less than 2-year).
+    - `MN_EARN_WNE_P6`: Mean earnings of students working and not enrolled 6 years 
+      after entry (so students who graduated in the 2009 to 2010 academic year).
+- [English Women Artists](./data/engart.html): This is a copy of the Wikipedia
+  page on the list of English women artists. I use this for an example
+  on webscraping.
+    - Original Wikipedia page: <https://en.wikipedia.org/wiki/List_of_English_women_artists>
+- [engart.csv](./data/engart.csv): Contains a partially cleaned table 
+  of English women artists scraped from Wikipedia (see above). The 
+  variables include:
+  - `artist`: The full name of the artist, as shown on Wikipedia.
+  - `years`: The year information provided by Wikipedia. Most of the time, 
+    the format is birth-death. However, these are the following exceptions:
+      - `born YYYY`: Gives the birth date with the death date missing because
+        the artist is still alive (or the death date is unknown).
+      - `died YYYY`: Gives the death date with the birth date missing because 
+        it is unknown.
+      - `fl.YYYY-YYYY`: "fl" means "floruit" which is Latin for "he/she flourished". 
+        So these are the artist's active years and the birth/death years are unknown.
+  - `media`: The media with which the artist primarily worked: <https://en.wikipedia.org/wiki/List_of_art_media>
+- [eqbig.csv](./data/eqbig.csv): Summary information on the largest earthquakes
+  for each year between 1999 and 2019. The data are from 
+  [Wikipedia](https://en.wikipedia.org/wiki/Lists_of_earthquakes#Lists_by_country)
+  The variables include
+    - `Year`: The year of the earthquake.
+    - `Magnitude`: The 
+      [seismic magnitude](https://en.wikipedia.org/wiki/Seismic_magnitude_scales) 
+      of the earthquake (larger means more intense).
+    - `Deathtoll`: The number of people who died as a result of the earthquake.
+    - `Location`: The region of the [epicenter](https://en.wikipedia.org/wiki/Epicenter)
+      of the earthquake.
+    - `Event`: The name of the earthquake event.
+    - `Date`: The month and day of the earthquake.
+- [estate.csv](./data/estate.csv): Data on 522 home sales in a Midwestern
+  city during the year 2002. The 13 variables are
+    - `Price`: Sales price of residence (in dollars)
+    - `Area`: Finished area of residence (in square feet)
+    - `Bed`: Total number of bedrooms in residence
+    - `Bath`: Total number of bathrooms in residence
+    - `AC`: 1 = presence of air conditioning, 0 = absence of air conditioning
+    - `Garage`: Number of cars that a garage will hold
+    - `Pool`: 1 = presence of a pool, 0 = absence of a pool
+    - `Year`: Year property was originally constructed
+    - `Quality`: Index for quality of construction. `High`, `Medium`, or `Low`.
+    - `Style`: Categorical variable indicating architectural style 
+    - `Lot`: Lot size (in square feet)
+    - `Highway`: 1 = highway adjacent, 0 = highway not adjacent.
+- [flights.duckdb](./data/flights.duckdb): DuckDB database of the `{nycflights13}` data. See that package documentation for details.
+- [flights14.csv](./data/flights14.csv): Data from 253,316 flights originating
+  from New York City in 2014. This is from the
+  [data.table](https://cloud.r-project.org/web/packages/data.table/vignettes/datatable-intro.html) 
+  vignettes. The 11 variables include:
+    - `year`: Year of scheduled departure.
+    - `month`: Month of scheduled departure.
+    - `day`: Day of scheduled departure.
+    - `dep_delay`: Departure delay in minutes.
+    - `arr_delay`: Arrival delay in minutes.
+    - `carrier`: The two-letter carrier abbreviation.
+    - `origin`: The originating airport.
+    - `dest`: The destination airport.
+    - `air_time`: The amount of time in the air, in minutes.
+    - `distance`: The distance traveled, in miles.
+    - `hour`: Hour of scheduled departure.
+- [halberstadt.csv](./data/halberstadt.csv): The composer [John Cage](https://en.wikipedia.org/wiki/John_Cage) asked his organ piece to be played "as slow as possible", so the [Halberstadt Cathedral](https://en.wikipedia.org/wiki/Halberstadt_Cathedral) started a 639 year continuous performance. Each note in the piece lasts months and these data contain the schedule the performance. These data contain the first 71 years of the performance and were taken from [Wikipedia](https://en.wikipedia.org/wiki/As_Slow_as_Possible#Performance). Variables include:
+    - `Impulse`: The order of the action.
+    - `Action`: Either `"Sound"` (for adding a note) or `"Release"` (for stopping a note).
+    - `Notes`: The notes being added or stopped.
+    - `Date`: The date that the action began.
+    - `Length`: The length, in days, of the previous chord.
+- [hamsters.csv](./data/hamsters.csv): Data from [doi:10.1126/science.abe8499](https://www.doi.org/10.1126/science.abe8499).
+    
+    Eight hamsters were exposed to the wild type (WT) of SARS-CoV-2, 
+    and eight were exposed to a variant of SARS-CoV-2 that contained 
+    a particular mutation that the researchers hypothesized increased 
+    transmissibility (D614G). The researchers paired these 16 hamsters 
+    with 16 healthy hamsters, where the pairs were placed in cages a 
+    few inches apart. The researchers then monitored if the healthy 
+    hamsters became infected two days later. The variables include:
+    - `Exposure`: The virus variant of the infected hamster. Either `"WT"` or `"D614G"`.
+    - `Infected`: Was the healthy hamster infected (`"Yes"`) or not (`"No"`)?
+- Lahman Data: DuckDB version of the 2021 Baseball Lahman Data from <https://www.seanlahman.com/baseball-archive/statistics/>
+    - [lahman.duckdb](./data/lahman.duckdb): DuckDB database.
+    - [lahman_readme.txt](./data/lahman_readme.txt): README file from the Lahman website with data dictionary.
+- [regnal.csv](./data/regnal.csv): Table of regnal years of English monarchs,
+  taken from Wikipedia: <https://en.wikipedia.org/wiki/Regnal_years_of_English_monarchs>
+  
+    "Regnal years" are years that correspond to a monarch, and might differ from
+    the actual reign of that monarch. It's mostly used for dating legal
+    documents ("nth year of the reign of King X"). It's a weird English thing.
+    The variables include:
+    
+    - `monarch`: The name of the monarch.
+    - `num_years`: The number of years of the reign.
+    - `first`: The start year of the reign.
+    - `start_date`: The date when each regnal year begins.
+    - `end_date`: The date when each regnal year ends.
+    - `final`: The final date of the reign.
+- [remakes_1.html](./data/remakes_1.html) and 
+  [remakes_2.html](./data/remakes_2.html): These are copies of the Wikipedia
+  pages on film remakes. I use these for exercises on webscraping.
+    - A-M original link: <https://en.wikipedia.org/wiki/List_of_film_remakes_(A-M)>
+    - N-Z original link: <https://en.wikipedia.org/wiki/List_of_film_remakes_(N-Z)>
+- [smoke.csv](./data/smoke.csv): A data frame containing information on 
+  smoking status and cancer status for 172 individuals. Data are from 
+  Dorn, Harold F. "The relationship of cancer of the lung and the use of 
+  tobacco." *The American Statistician* 8, no. 5 (1954): 7-13. Variables include
+    - `individual`: The individual number.
+    - `smoke`: Whether the individual smoked (`smoker`) or did not (`nonsmoker`).
+    - `cancer`: Whether the individual had cancer (`cancer`) or was a control
+      (`control`).
+<!-- - [soccer.duckdb](./data/soccer.duckdb): DuckDB database from <https://www.kaggle.com/hugomathien/soccer> -->
+- [starwars.duckdb](./data/starwars.duckdb): DuckDB database, copied from the [`{starwarsdb}`](https://cran.r-project.org/package=starwarsdb) package.
+- Tidying exercise datasets:
+    - [flowers1.csv](./data/tidy_exercise/flowers1.csv)
+    - [flowers2.csv](./data/tidy_exercise/flowers2.csv)
+    - [monkeymem.csv](./data/tidy_exercise/monkeymem.csv)
+    - [pew.csv](./data/tidy_exercise/pew.csv)
+    - [preg.csv](./data/tidy_exercise/preg.csv)
+    - [tb.csv](./data/tidy_exercise/tb.csv)
+    - [weather.csv](./data/tidy_exercise/weather.csv)
+    - [wine.csv](./data/tidy_exercise/wine.csv)
+- [words.txt](./data/words.txt): The list of acceptable 2015 Scrabble Words.
+- World Bank Data: The World Bank is an international organization that
+  provides loans to countries with the goal of reducing poverty. The following
+  data frames were all taken from the public data repositories of the World
+  Bank.
+    - [country.csv](./data/country.csv): 
+      Contains information on the countries in the data set. The
+      variables are:
+        - `Country_Code`: A three-letter code for the country. Note that not all
+          rows are countries; some are regions.
+        - `Region`: The region of the country.
+        - `IncomeGroup`: Either `"High income"`, `"Upper middle income"`, 
+          `"Lower middle income"`, or `"Low income"`.
+        - `TableName`: The full name of the country.
+    - [fertility.csv](./data/fertility.csv): 
+      Contains the fertility rate information for each country
+      for each year. For the variables `1960` to `2017`, the values in the cells
+      represent the fertility rate in total births per woman for the that year. 
+      Total fertility rate represents the number of children 
+      that would be born to a woman if she were to live to the end of her 
+      childbearing years and bear children in accordance with age-specific 
+      fertility rates of the specified year.
+    - [life_exp.csv](./data/life_exp.csv): 
+      Contains the life expectancy information for each country 
+      for each year. For the variables `1960` to `2017`, the values in the cells
+      represent life expectancy at birth in years for the given year. 
+      Life expectancy at birth indicates the number of years a newborn 
+      infant would live if prevailing patterns of mortality at the time of its
+      birth were to stay the same throughout its life.
+    - [population.csv](./data/population.csv): 
+      Contains the population information for each country. For
+      the variables `1960` to `2017`, the values in the cells represent the total
+      population in number of people for the given year. 
+      Total population is based on the de facto definition of
+      population, which counts all residents regardless of legal status or 
+      citizenship. The values shown are midyear estimates.
+
+
+

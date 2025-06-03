@@ -1,0 +1,178 @@
+---
+title: "DATA-413/613 Data Science"
+author: "David Gerard"
+date: "Updated: `r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- **Time**: See Registrar
+- **Instructor**: Dr. David Gerard
+- **Email**: <dgerard@american.edu>
+- **Office**: DMTI 106E
+- **Office Hours**: TBD
+
+# Overview of Topics and Course Objectives
+
+This course builds on the R/tidyverse programming skills developed in DATA-412/612 for the collection, organization, analysis, interpretation, and presentation of data. Topics include version control, web scraping, date manipulation, vectorized operations, web application development with R Shiny, R package development, and introductions to SQL and python.
+
+# Learning Objectives:
+- Gain expertise in the `git` version control software.
+- Collaborate and share code using [GitHub](https://github.com/)
+- Scrape data from the web, either with or without using an API.
+- Implement vectorized operations in R using functional programming techniques.
+- Build and deploy data science web applications using R Shiny.
+- Build a basic R package, and understand when building an R package is useful.
+- Understand the basics of data manipulation using Python.
+- Understand the basics of data manipulation using SQL.
+- Understand the ethical questions associated with data collection and analysis.
+
+# Materials
+- **Lectures**: <https://data-science-master.github.io/lectures/>
+- **GitHub Organization**: <https://github.com/data-science-fall-2025>
+- **GitHub Classroom**: <https://classroom.github.com/classrooms/214701722-data-science-fall-2025>
+- **Required**: A computer with [R](https://cran.r-project.org/), [RStudio](https://rstudio.com/products/rstudio/download/), and [git](https://git-scm.com/downloads) installed.
+- **Books**: All course material is freely available online.
+    - R for Data Science by Wickham and Grolemund: <http://r4ds.had.co.nz/>
+    - Hands-On Programming with R by Grolemund: <https://rstudio-education.github.io/hopr/>
+    - Advanced R by Wickham: <http://adv-r.had.co.nz/>
+    - Mastering Shiny by Wickham: <https://mastering-shiny.org/>
+    - Git for Scientists by McBain: <https://milesmcbain.github.io/git_4_sci/>
+    - DuckDB SQL Introduction: <https://duckdb.org/docs/sql/introduction>
+    - OpenIntro Statistics by Diez, Cetinkaya-Rundel, and Barr: <https://www.openintro.org/book/stat/>
+
+# Course Material
+
+Almost all course material will be posted and accessed through GitHub. `git` is a widely used [version control system](https://en.wikipedia.org/wiki/Version_control) for collaborating, deploying, and managing data science projects. `git` works by saving snapshots, or "commits", of your projects. These snapshots are always retrievable, even if you make further changes to your code/notes/reports. You can also write small descriptions of what you have accomplished since the last time you committed. [GitHub](https://github.com/) is a website that hosts `git` repositories. We will spend the first week or two covering `git` and the command line. Following that, all assignments will be accessed and submitted through `git`.
+
+# Graded Work
+
+## Assignments 
+
+- Most homework assignments will be posted and returned on GitHub. 
+    - The best practice for a version control system is to commit frequently with informative commit messages. Thus, this will be formal part of your homework grade.
+    - I expect frequent commits. At the minimum, I expect you to commit after you have completed each question.
+    - I expect informative messages for each commit.
+    - Example good message: "Completes Question 1.2 that required tidying the college scorecard data."
+    - Example bad message: "More stuff"
+    - **Lack of frequent and informative commits will result in up to a 20% reduction in an assignment grade.**
+- Because `git` allows me to view your progress on an assignment, I will sometimes accept a late assignment if I see some progress and a **consistent commit history** in that assignment. This should only be used under extraordinary circumstances. If I do not see any progress in an assignment, I will not accept a late submission.
+- To account for life circumstances that pop up, I will also drop the lowest homework assignment grade.
+
+## Quizzes
+
+- We will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 50% of the grade.
+
+- My intention is to make these straightforward (no trick questions). But you will still have to know the material to do well on them.
+
+- I will provide practice questions to study from.
+
+- I plan on each quiz taking about 30 minutes.
+
+## Group Project
+
+All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R package.
+
+# Assignments and Grading
+
+- Weekly homeworks: 25%
+- Final Project: 25%
+- Tidyverse Quiz: 15%
+- Git/Vectors/Iteration/Dates Quiz: 15%
+- SQL Quiz: 10%
+- Python Quiz: 10%
+
+Usual grade cutoffs will be used:
+```{r, echo = FALSE}
+curve_df <- data.frame(Grade = c("A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"),
+                       Lower = c(93, 90, 88, 83, 80, 78, 73, 70, 60, 0),
+                       Upper = c(100, 92, 89, 87, 82, 79, 77, 72, 69, 59))
+knitr::kable(curve_df)
+```
+
+Individual assignments will not be curved. However, at the discretion of the instructor, the overall course grade at the end of the semester may be curved.
+
+# Late Work Policy
+
+All assignments must be submitted, in class, on the day they are due. You will be penalized 15% every day an assignment is late. I will not accept assignments submitted over three days after the deadline. If you become ill or the victim of an emergency, please let me know within 48 hours.
+
+Students requiring a temporary leave of absence for medical or mental health reasons must provide documentation to the Office of the Dean of Students (<dos@american.edu>), which will verify with the academic unit that the documentation is appropriate and supports the leave. Students with an ASAC-approved accommodation for disability reasons should, to the greatest extent possible, make arrangements in advance of the due date or deadline.
+
+# Generative AI Policy
+
+## Official Policy
+
+- You are allowed to use generative AI (e.g., ChatGPT) for homework assignments and the final project.
+
+- However, **you must be able to explain your work and the reasoning behind your solutions**.
+  **If you cannot do so, your grade may be adjusted accordingly.**
+
+  - If something in your work seems off, I may ask you to meet with me. If you're unable to explain how or why you did something, you will receive a zero on that assignment.
+
+  - This is not a penalty for "cheating". Since generative AI is permitted, using it is not academic misconduct. But I will grade based on your demonstrated understanding, not just your submitted answers.
+
+## Some Thoughts
+
+- Generative AI performs best on simple, well-documented problems—that is, problems like the ones you encounter in college.
+
+  - These are overrepresented in its training data.
+
+- It performs worst on complex, messy, or proprietary problems—that is, problems you'll encounter in the workplace.
+
+  - These are underrepresented in its training data.
+
+- To solve real-world problems, you need to master the fundamentals first.
+
+  - If you use generative AI to shortcut your way through college-level work, you're undermining your own preparation.
+
+- In data science and statistics, a degree may get you an interview, but it won't get you the job.
+
+  - Employers want evidence that you understand the basics and can build from them.
+
+- If you rely too heavily on generative AI, you may struggle to develop the core skills needed to succeed in the field—and that will show during interviews and on the job.
+
+# Academic Integrity Code
+
+- Standards of academic conduct are set forth in the university’s [Academic Integrity Code](http://www.american.edu/academics/integrity/index.cfm). By registering for this course, students have acknowledged their awareness of the Academic Integrity Code and they are obliged to become familiar with their rights and responsibilities as defined by the Code. Violations of the Academic Integrity Code will not be treated lightly and disciplinary action will be taken should violations occur. This includes cheating, fabrication, and plagiarism.
+
+- No outside resources are allowed for the in-class quizzes. Any use of phones/notes/books/etc will result in a failing grade for the entire course.
+
+- It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously (whether they wrote those solutions, or I wrote those solutions).
+
+- All solutions that I provide are under my copyright. These solutions are for personal use only and may not be distributed to anyone else. Giving these solutions to others, including other students or posting them on the internet, is a violation of my copyright and a violation of the student code of conduct.
+
+- A [short guide for students](https://american0.sharepoint.com/sites/ctrl-allstaff/Shared%20Documents/Content%20Management/Academic%20Integrity%20Advice%202019.pdf) on how to meet the expectations of the AU’s Academic Integrity Code
+
+# Important Dates
+
+- 09/01/2025: Memorial Day (no classes)
+- 09/08/2025\*: Tidyverse Quiz
+- 09/25/2025\*: Git/Bash/Iteration/Dates Quiz
+- 10/23/2025\*: Python Quiz
+- 11/06/2025\*: SQL Quiz
+- 11/27/2025: Thanksgiving break (no classes).
+- TBD (between 12/08/2025 and 12/12/2025): Final exam period (final project presentations). 
+  - If there is enough interest, I can move this to Zoom so folks can start their holiday travel early.
+    
+\* Tentative, subject to change.
+
+# Incomplete Policy
+
+At the discretion of the faculty member and before the end of the semester, the grade of I (Incomplete) may be given to a student who, because of extenuating circumstances, is unable to complete the course during the semester. The grade of Incomplete may be given only if the student is receiving a passing grade for the coursework completed. Students on academic probation may not receive an Incomplete. The instructor must provide in writing to the student the conditions, which are described below, for satisfying the Incomplete and must enter those same conditions when posting the grades for the course. The student is responsible for verifying that the conditions were entered correctly.
+
+Conditions for satisfying the Incomplete must include what work needs to be completed, by when the work must be completed, and what the course grade will be if the student fails to complete that work. At the latest, any outstanding coursework must be completed before the end of the following semester, absent an agreement to the contrary. Instructors will submit the grade of I and the aforementioned conditions to the Office of the University Registrar when submitting all other final grades for the course. If the student does not meet the conditions, the Office of the University Registrar will assign the default grade automatically.
+
+The Associate Dean of the Academic Unit, with the concurrence of the instructor, may grant an extension beyond the agreed deadline, but only in extraordinary circumstances. Incomplete courses may not be retroactively dropped. An Incomplete may not stand as a permanent grade and must be resolved before a degree can be awarded. 
+
+[More information on AU Regulations and Policies](https://www.american.edu/provost/undergrad/undergrad-rules-and-regulations.cfm).
+    
+# Sharing Course Content: 
+
+Students are not permitted to make visual or audio recordings (including livestreams) of lectures or any class-related content or use any type of recording device unless prior permission from the instructor is obtained and there are no objections from any student in the class. If permission is granted, only students registered in the course may use or share recordings and any electronic copies of course materials (e.g., PowerPoints, formulas, lecture notes, and any discussions – online or otherwise). Use is limited to educational purposes even after the end of the course. Exceptions will be made for students who present a signed Letter of Accommodation from the Academic Support and Access Center. Further details are available from the [ASAC website](https://www.american.edu/provost/academic-access/index.cfm).
+
+# Syllabus Change Policy
+
+This syllabus is a guide for the course and is subject to change with advanced notice. These changes may come via email. Make sure to check your university-supplied email regularly. You are accountable for all such communications.

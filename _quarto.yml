@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "DATA 413/613 Data Science"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: data.qmd
+        text: Data
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: vapor
+    css: styles.css
+    toc: true
+
+
+

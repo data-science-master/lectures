@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Gerard">
+<meta name="dcterms.date" content="2025-06-03">
+
+<title>Simple Linear Regression – DATA 413/613 Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DATA 413/613 Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#broom" id="toc-broom" class="nav-link" data-scroll-target="#broom">Broom</a></li>
+  <li><a href="#mtcars" id="toc-mtcars" class="nav-link" data-scroll-target="#mtcars"><code>mtcars</code></a></li>
+  <li><a href="#line-review" id="toc-line-review" class="nav-link" data-scroll-target="#line-review">Line Review</a></li>
+  <li><a href="#simple-linear-regression-model" id="toc-simple-linear-regression-model" class="nav-link" data-scroll-target="#simple-linear-regression-model">Simple Linear Regression Model</a></li>
+  <li><a href="#estimating-coefficients" id="toc-estimating-coefficients" class="nav-link" data-scroll-target="#estimating-coefficients">Estimating Coefficients</a></li>
+  <li><a href="#estimating-variance" id="toc-estimating-variance" class="nav-link" data-scroll-target="#estimating-variance">Estimating Variance</a></li>
+  <li><a href="#hypothesis-testing" id="toc-hypothesis-testing" class="nav-link" data-scroll-target="#hypothesis-testing">Hypothesis Testing</a></li>
+  <li><a href="#prediction-interpolation" id="toc-prediction-interpolation" class="nav-link" data-scroll-target="#prediction-interpolation">Prediction (Interpolation)</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions">Assumptions</a>
+  <ul class="collapse">
+  <li><a href="#assumptions-and-violations" id="toc-assumptions-and-violations" class="nav-link" data-scroll-target="#assumptions-and-violations">Assumptions and Violations</a></li>
+  <li><a href="#evaluating-independence" id="toc-evaluating-independence" class="nav-link" data-scroll-target="#evaluating-independence">Evaluating Independence</a></li>
+  <li><a href="#evaluating-other-assumptions" id="toc-evaluating-other-assumptions" class="nav-link" data-scroll-target="#evaluating-other-assumptions">Evaluating other assumptions</a>
+  <ul class="collapse">
+  <li><a href="#example-1-a-perfect-residual-plot" id="toc-example-1-a-perfect-residual-plot" class="nav-link" data-scroll-target="#example-1-a-perfect-residual-plot">Example 1: A perfect residual plot</a></li>
+  <li><a href="#example-2-curved-monotone-relationship-equal-variances" id="toc-example-2-curved-monotone-relationship-equal-variances" class="nav-link" data-scroll-target="#example-2-curved-monotone-relationship-equal-variances">Example 2: Curved Monotone Relationship, Equal Variances</a></li>
+  <li><a href="#example-3-curved-non-monotone-relationship-equal-variances" id="toc-example-3-curved-non-monotone-relationship-equal-variances" class="nav-link" data-scroll-target="#example-3-curved-non-monotone-relationship-equal-variances">Example 3: Curved Non-monotone Relationship, Equal Variances</a></li>
+  <li><a href="#example-4-curved-relationship-variance-increases-with-y" id="toc-example-4-curved-relationship-variance-increases-with-y" class="nav-link" data-scroll-target="#example-4-curved-relationship-variance-increases-with-y">Example 4: Curved Relationship, Variance Increases with <span class="math inline">\(Y\)</span></a></li>
+  <li><a href="#example-5-linear-relationship-equal-variances-skewed-distribution" id="toc-example-5-linear-relationship-equal-variances-skewed-distribution" class="nav-link" data-scroll-target="#example-5-linear-relationship-equal-variances-skewed-distribution">Example 5: Linear Relationship, Equal Variances, Skewed Distribution</a></li>
+  <li><a href="#example-6-linear-relationship-unequal-variances" id="toc-example-6-linear-relationship-unequal-variances" class="nav-link" data-scroll-target="#example-6-linear-relationship-unequal-variances">Example 6: Linear Relationship, Unequal Variances</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#some-exercises" id="toc-some-exercises" class="nav-link" data-scroll-target="#some-exercises">Some Exercises</a></li>
+  <li><a href="#interpreting-coefficients-when-you-use-logs" id="toc-interpreting-coefficients-when-you-use-logs" class="nav-link" data-scroll-target="#interpreting-coefficients-when-you-use-logs">Interpreting Coefficients when you use logs</a></li>
+  <li><a href="#summary-of-r-commands" id="toc-summary-of-r-commands" class="nav-link" data-scroll-target="#summary-of-r-commands">Summary of R commands</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Simple Linear Regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 3, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
+<ul>
+<li>Simple Linear Regression</li>
+<li>Chapter 8 of <a href="https://www.openintro.org/stat/textbook.php">OpenIntro Statistics (Fourth Edition)</a></li>
+<li><a href="https://cran.r-project.org/web/packages/broom/vignettes/broom.html">Introduction to Broom</a></li>
+</ul>
+</section>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<ul>
+<li>The simple linear model is not sexy.</li>
+<li>But the most commonly used methods in Statistics are either <a href="https://lindeloev.github.io/tests-as-linear/">specific applications of it</a> or are generalizations of it.</li>
+<li>Understanding it well will help you better understand methods taught in other classes.</li>
+<li>We teach Linear Regression in STAT 415/615 (the most important course we teach). So these notes are just meant to give you a couple tools that you can build on in that course.</li>
+</ul>
+</section>
+<section id="broom" class="level1">
+<h1>Broom</h1>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>For the most popular model output (t-tests, linear models, generalized linear models), the <code>broom</code> package provides three functions that aid in data analysis.</p>
+<ol type="1">
+<li><code>tidy()</code>: Provides summary information of the model (such as parameter estimates and <span class="math inline">\(p\)</span>-values) in a tidy format. We used this last class.</li>
+<li><code>augment()</code>: Creates data derived from the model and adds it to the original data, such as residuals and fits. It formats this augmented data in a tidy format.</li>
+<li><code>glance()</code>: Prints a single row summary of the model fit.</li>
+</ol></li>
+<li><p>These three functions are <em>very</em> useful and incorporate well with the tidyverse.</p></li>
+<li><p>You will see examples of using these functions for the linear models below.</p></li>
+</ul>
+</section>
+<section id="mtcars" class="level1">
+<h1><code>mtcars</code></h1>
+<ul>
+<li><p>For this lesson, we will use the (infamous) <code>mtcars</code> dataset that comes with R by default.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mtcars"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 32
+Columns: 11
+$ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8,…
+$ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8,…
+$ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7, 140.8, 16…
+$ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, 180, 180…
+$ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.92, 3.92,…
+$ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190, 3.150, 3.…
+$ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00, 22.90, 18…
+$ vs   &lt;dbl&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,…
+$ am   &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0,…
+$ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3,…
+$ carb &lt;dbl&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2, 1, 1, 2,…</code></pre>
+</div>
+</div></li>
+<li><p>It’s “infamous” because <a href="https://twitter.com/ZachDrakeTweets/status/1151549076992876551?s=20">every R class uses it</a>. But it’s a really nice dataset to showcase some statistical methods.</p></li>
+<li><p>The goal of this dataset is to determine which variables affect fuel consumption (the <code>mpg</code> variable in the dataset).</p></li>
+<li><p>To begin, we’ll look at the association between the variables log-weight and mpg (more on why we used log-weight later).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> wt, mpg)) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Weight"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Miles Per Gallon"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>It seems that log-weight is negatively associated with mpg.</p></li>
+<li><p>It seems that the data approximately fall on a line.</p></li>
+</ul>
+</section>
+<section id="line-review" class="level1">
+<h1>Line Review</h1>
+<ul>
+<li><p>Every line may be represented by a formula of the form <span class="math display">\[
+Y = \beta_0 + \beta_1 X
+\]</span></p></li>
+<li><p><span class="math inline">\(Y\)</span> = response variable on <span class="math inline">\(y\)</span>-axis</p></li>
+<li><p><span class="math inline">\(X\)</span> = explanatory variable on the <span class="math inline">\(x\)</span>-axis</p></li>
+<li><p><span class="math inline">\(\beta_1\)</span> = slope (rise over run)</p>
+<ul>
+<li>How much larger is <span class="math inline">\(Y\)</span> when <span class="math inline">\(X\)</span> is increased by 1.</li>
+</ul></li>
+<li><p><span class="math inline">\(\beta_0\)</span> = <span class="math inline">\(y\)</span>-intercept (the value of the line at <span class="math inline">\(X = 0\)</span>)</p></li>
+<li><p>You can represent any line in terms of its slope and its <span class="math inline">\(y\)</span>-intercept:</p>
+<p><img src="./cartoons/line_review.png" class="img-fluid">&nbsp;</p></li>
+<li><p>If <span class="math inline">\(\beta_1 &lt; 0\)</span> then the line slopes downward. If <span class="math inline">\(\beta_1 &gt; 0\)</span> then the line slopes upward. If <span class="math inline">\(\beta_1 = 0\)</span> then the line is horizontal.</p></li>
+<li><p><strong>Exercise</strong>: Suppose we consider the line defined by the following equation: <span class="math display">\[
+Y = 2 + 4X
+\]</span></p>
+<ul>
+<li>What is the value of <span class="math inline">\(Y\)</span> at <span class="math inline">\(X = 3\)</span>?</li>
+<li>What is the value of <span class="math inline">\(Y\)</span> at <span class="math inline">\(X = 4\)</span>?</li>
+<li>What is the difference in <span class="math inline">\(Y\)</span> values at <span class="math inline">\(X = 3\)</span> versus <span class="math inline">\(X = 4\)</span>?</li>
+<li>What is the value of <span class="math inline">\(Y\)</span> at <span class="math inline">\(X = 0\)</span>?</li>
+</ul></li>
+</ul>
+</section>
+<section id="simple-linear-regression-model" class="level1">
+<h1>Simple Linear Regression Model</h1>
+<ul>
+<li><p>A line does not <em>exactly</em> fit the <code>mtcars</code> dataset. But a line does <em>approximate</em> the <code>mtcars</code> data.</p></li>
+<li><p>Model: Response variable = line + noise. <span class="math display">\[
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+\]</span></p></li>
+<li><p>We typically assume that the noise (<span class="math inline">\(\epsilon_i\)</span>’s) for each individual has mean 0 and some variance <span class="math inline">\(\sigma^2\)</span>. We estimate <span class="math inline">\(\sigma^2\)</span>.</p></li>
+<li><p><strong>LINEAR MODEL IN A NUTSHELL</strong>:</p>
+<blockquote class="blockquote">
+<p><em>Given</em> <span class="math inline">\(X_i\)</span>, mean of <span class="math inline">\(Y_i\)</span> is <span class="math inline">\(\beta_0 + \beta_1 X_i\)</span>. Points vary about this mean.</p>
+</blockquote>
+<p><img src="./cartoons/reg1.png" class="img-fluid">&nbsp;</p></li>
+<li><p>Some intuition:</p>
+<ul>
+<li>The distribution of <span class="math inline">\(Y\)</span> is <em>conditional</em> on the value of <span class="math inline">\(X\)</span>.</li>
+<li>The distribution of <span class="math inline">\(Y\)</span> is assumed to have the <strong>same variance</strong>, <span class="math inline">\(\sigma^2\)</span> for <strong>all possible values of <span class="math inline">\(X\)</span></strong>.</li>
+<li>This last one is a considerable assumption.</li>
+</ul></li>
+<li><p>Interpretation:</p>
+<ul>
+<li>Randomized Experiment: A 1 unit increase in <span class="math inline">\(x\)</span> results in a <span class="math inline">\(\beta_1\)</span> unit increase in <span class="math inline">\(y\)</span>.</li>
+<li>Observational Study: Individuals that differ only in 1 unit of <span class="math inline">\(x\)</span> are expected to differ by <span class="math inline">\(\beta_1\)</span> units of <span class="math inline">\(y\)</span>.</li>
+</ul></li>
+<li><p><strong>Exercise</strong>: What is the interpretation of <span class="math inline">\(\beta_0\)</span>?</p></li>
+</ul>
+</section>
+<section id="estimating-coefficients" class="level1">
+<h1>Estimating Coefficients</h1>
+<ul>
+<li><p>How do we estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>?</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are <strong>parameters</strong></li>
+<li>We want to estimate them from our <strong>sample</strong></li>
+<li>Idea: Draw a line through the cloud of points and calculate the slope and intercept of that line?</li>
+<li>Problem: Subjective</li>
+<li>Another idea: Minimize residuals (sum of squared residuals).</li>
+</ul></li>
+<li><p>Ordinary Least Squares</p>
+<ul>
+<li>Residuals: <span class="math inline">\(\hat{\epsilon}_i = Y_{i} - (\hat{\beta}_0 + \hat{\beta}_1X_i)\)</span></li>
+<li>Sum of squared residuals: <span class="math inline">\(\hat{\epsilon}_1^2 + \hat{\epsilon}_2^2 + \cdots + \hat{\epsilon}_n^2\)</span></li>
+<li>Find <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> that have small sum of squared residuals.</li>
+<li>The obtained estimates, <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, are called the <strong>ordinary least squares</strong> (OLS) estimates.</li>
+</ul></li>
+<li><p>Bad Fit:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Better Fit:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Best Fit (OLS Fit):</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>How to find OLS fits in R:</p>
+<ol type="1">
+<li><p>Make sure you have the explanatory variables in the format you want:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logwt =</span> <span class="fu">log</span>(wt)) <span class="ot">-&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  mtcars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Use <code>lm()</code></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>lmout <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> logwt, <span class="at">data =</span> mtcars)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lmtide <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lmout)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(lmtide, term, estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  term        estimate
+  &lt;chr&gt;          &lt;dbl&gt;
+1 (Intercept)     39.3
+2 logwt          -17.1</code></pre>
+</div>
+</div></li>
+</ol></li>
+<li><p>The first argument in <code>lm()</code> is a <strong>formula</strong>, where the response variable is to the left of the tilde and the explanatory variable is to the right of the tilde.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>response <span class="sc">~</span> explanatory</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This formula says that <code>lm()</code> should find the OLS estimates of the following model:</p>
+<p>response = <span class="math inline">\(\beta_0\)</span> + <span class="math inline">\(\beta_1\)</span>explanatory + noise</p></li>
+<li><p>The <code>data</code> argument tells <code>lm()</code> where to find the response and explanatory variables.</p></li>
+<li><p>We often put a “hat” over the coefficient names to denote that they are estimates:</p>
+<ul>
+<li><span class="math inline">\(\hat{\beta}_0\)</span> = 39.3.</li>
+<li><span class="math inline">\(\hat{\beta}_1\)</span> = -17.1.</li>
+</ul></li>
+<li><p>Thus, the estimated line is:</p>
+<ul>
+<li><span class="math inline">\(E[Y_i]\)</span> = 39.3 + -17.1<span class="math inline">\(X_i\)</span>.</li>
+</ul></li>
+<li><p><strong>Exercise</strong>: Fit a linear model of displacement on weight. What are the regression coefficient estimates. Interpret them.</p></li>
+</ul>
+</section>
+<section id="estimating-variance" class="level1">
+<h1>Estimating Variance</h1>
+<ul>
+<li><p>We assume that the variance of <span class="math inline">\(Y_i\)</span> is the same for each <span class="math inline">\(X_i\)</span>.</p></li>
+<li><p>Call this variance <span class="math inline">\(\sigma^2\)</span>.</p></li>
+<li><p>We estimate it by the variability in the residuals.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-11-3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>The variance of residuals is the estimated variance in the data. This is a general technique.</p>
+<ul>
+<li>Technical note: people adjust for the number of parameters in a model when calculating the variance, so they no-longer divide by “n - 1”.</li>
+</ul></li>
+<li><p>In R, use the broom function <code>glance()</code> function to get the estimated standard deviation. It’s the value in the <code>sigma</code> column.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(lmout) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  sigma
+  &lt;dbl&gt;
+1  2.67</code></pre>
+</div>
+</div></li>
+<li><p>Estimating the variance/standard deviation is important because it is a component in the standard error of <span class="math inline">\(\hat{\beta}_1\)</span> and <span class="math inline">\(\hat{\beta}_0\)</span>. These standard errors are output by <code>tidy()</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lmout) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, std.error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  term        std.error
+  &lt;chr&gt;           &lt;dbl&gt;
+1 (Intercept)      1.76
+2 logwt            1.51</code></pre>
+</div>
+</div></li>
+<li><p>The variance is also used when calculating prediction intervals.</p></li>
+</ul>
+</section>
+<section id="hypothesis-testing" class="level1">
+<h1>Hypothesis Testing</h1>
+<ul>
+<li>The sign of <span class="math inline">\(\beta_1\)</span> denotes different types of relationships between the two quantitative variables:
+<ul>
+<li><span class="math inline">\(\beta_1 = 0\)</span>: The two quantitative variables are not linearly associated.</li>
+<li><span class="math inline">\(\beta_1 &gt; 0\)</span>: The two quantitative variables are positively associated.</li>
+<li><span class="math inline">\(\beta_1 &lt; 0\)</span>: The two quantitative variables are negatively associated.</li>
+</ul></li>
+<li>Hypothesis Testing:
+<ul>
+<li>We are often interested in testing if a relationship exists:</li>
+<li>Two possibilities:
+<ol type="1">
+<li>Alternative Hypothesis: <span class="math inline">\(\beta_1 \neq 0\)</span>.</li>
+<li>Null Hypothesis: <span class="math inline">\(\beta_1 = 0\)</span>.</li>
+</ol></li>
+<li>Strategy: We calculate the probability of the data assuming possibility 2 (called a <span class="math inline">\(p\)</span>-value). If this probability is low, we conclude possibility 1. If the this probability is high, we don’t conclude anything.</li>
+</ul></li>
+<li>Graphic: <img src="cartoons/linear_p.png" class="img-fluid"> &nbsp;</li>
+</ul>
+<ul>
+<li><p>The sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> comes from statistical theory. The <span class="math inline">\(t\)</span>-statistic is <span class="math inline">\(\hat{\beta}_1 / SE(\hat{\beta}_1)\)</span>. It has a <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
+<ul>
+<li><span class="math inline">\(SE(\hat{\beta}_1)\)</span>: Estimated standard deviation of the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span>.</li>
+</ul></li>
+<li><p>The confidence intervals for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are easy to obtain from the output of <code>tidy()</code> if you set <code>conf.int = TRUE</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>lmtide <span class="ot">&lt;-</span> <span class="fu">tidy</span>(lmout, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(lmtide, conf.low, conf.high)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  conf.low conf.high
+     &lt;dbl&gt;     &lt;dbl&gt;
+1     35.7      42.8
+2    -20.2     -14.0</code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong> (8.18 in OpenIntro 4th Edition): Which is higher? Determine if (i) or (ii) is higher or if they are equal. Explain your reasoning. For a regression line, the uncertainty associated with the slope estimate, <span class="math inline">\(\hat{\beta}_1\)</span> , is higher when</p>
+<ol type="i">
+<li>there is a lot of scatter around the regression line or</li>
+<li>there is very little scatter around the regression line</li>
+</ol></li>
+<li><p><strong>Exercise</strong>: Load in the <code>bac</code> dataset from the openintro R package.</p>
+<ol type="1">
+<li><p>Create an appropriate plot to visualize the association between the number of beers and the BAC.</p></li>
+<li><p>Does the relationship appear positive or negative?</p></li>
+<li><p>Write out equation of the OLS line.</p></li>
+<li><p>Do we have evidence that the number of beers is associated with BAC? Formally justify.</p></li>
+<li><p>Interpret the coefficient estimates.</p></li>
+<li><p>What happens to the standard errors of the estimates when we force the intercept to be 0? Why?</p></li>
+</ol></li>
+</ul>
+</section>
+<section id="prediction-interpolation" class="level1">
+<h1>Prediction (Interpolation)</h1>
+<ul>
+<li><p>Definitions</p>
+<ul>
+<li><strong>Interpolation</strong>: Making estimates/predictions within the range of the data.</li>
+<li><strong>Extrapolation</strong>: Making estimates/predictions outside the range of the data.</li>
+<li>Interpolation is good. Extrapolation is bad.</li>
+</ul></li>
+<li><p>Interpolation</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Extrapolation</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div></li>
+<li><p>Why is extrapolation bad?</p>
+<ol type="1">
+<li>Not sure if the linear relationship is the same outside the range of the data (because we don’t have data there to see the relationship).</li>
+<li>Not sure if the variability is the same outside the range of the data (because we don’t have data there to see the variability).</li>
+</ol></li>
+<li><p>To make a prediction:</p>
+<ol type="1">
+<li><p>You need a data frame with the exact same variable name as the explanatory variable.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>newdf <span class="ot">&lt;-</span> <span class="fu">tribble</span>(<span class="sc">~</span>logwt,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Then you use the <code>predict()</code> function to obtain predictions.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>newdf <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">predictions =</span> <span class="fu">predict</span>(<span class="at">object =</span> lmout, <span class="at">newdata =</span> newdf)) <span class="ot">-&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  newdf</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>newdf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  logwt predictions
+  &lt;dbl&gt;       &lt;dbl&gt;
+1   1          22.2
+2   1.5        13.6</code></pre>
+</div>
+</div></li>
+</ol></li>
+<li><p><strong>Exercise</strong>: Derive the predictions above by hand (not using <code>predict()</code>).</p></li>
+<li><p><strong>Exercise</strong>: from the BAC dataset, suppose someone had 5 beers. Use <code>predict()</code> to predict their BAC.</p></li>
+</ul>
+</section>
+<section id="assumptions" class="level1">
+<h1>Assumptions</h1>
+<section id="assumptions-and-violations" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions-and-violations">Assumptions and Violations</h2>
+<ul>
+<li><p>The linear model has many assumptions.</p></li>
+<li><p><strong>You should always check these assumptions</strong>.</p></li>
+<li><p>Assumptions in <em>decreasing</em> order of importance</p>
+<ol type="1">
+<li><strong>Linearity</strong> - The relationship looks like a straight line.</li>
+<li><strong>Independence</strong> - The knowledge of the value of one observation does not give you any information on the value of another.</li>
+<li><strong>Equal Variance</strong> - The spread is the same for every value of <span class="math inline">\(x\)</span></li>
+<li><strong>Normality</strong> - The distribution of the errors isn’t too skewed and there aren’t any <em>too</em> extreme points. (Only an issue if you have outliers and a small number of observations because of the <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">central limit theorem</a>).</li>
+</ol></li>
+<li><p>Problems when violated</p>
+<ol type="1">
+<li><strong>Linearity</strong> violated - Linear regression line does not pick up actual relationship. Results aren’t meaningful.</li>
+<li><strong>Independence</strong> violated - Linear regression line is unbiased, but standard errors are off. Your <span class="math inline">\(p\)</span>-values are too small.</li>
+<li><strong>Equal Variance</strong> violated - Linear regression line is unbiased, but standard errors are off. Your <span class="math inline">\(p\)</span>-values may be too small, or too large.</li>
+<li><strong>Normality</strong> violated - Unstable results if outliers are present and sample size is small. Not usually a big deal.</li>
+</ol></li>
+<li><p><strong>Exercise</strong>: What assumptions are made about the distribution of the explanatory variable (the <span class="math inline">\(x_i\)</span>’s)?</p></li>
+</ul>
+</section>
+<section id="evaluating-independence" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-independence">Evaluating Independence</h2>
+<ul>
+<li><p>Think about the problem.</p>
+<ul>
+<li>Were different responses measured on the same observational/experimental unit?</li>
+<li>Were data collected in groups?</li>
+</ul></li>
+<li><p>Example of non-independence: The temperature today and the temperature tomorrow. If it is warm today, it is probably warm tomorrow.</p></li>
+<li><p>Example of non-independence: You are collecting a survey. To obtain individuals, you select a house at random and then ask all participants in this house to answer the survey. The participants’ responses inside each house are probably not independent because they probably share similar beliefs/backgrounds/situations.</p></li>
+<li><p>Example of independence: You are collecting a survey. To obtain individuals, you randomly dial phone numbers until an individual picks up the phone.</p></li>
+</ul>
+</section>
+<section id="evaluating-other-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="evaluating-other-assumptions">Evaluating other assumptions</h2>
+<ul>
+<li><p><strong>Evaluate issues by plotting the residuals.</strong></p></li>
+<li><p>The <strong>residuals</strong> are the observed values minus the predicted values. <span class="math display">\[
+r_i = y_i - \hat{y}_i
+\]</span></p></li>
+<li><p>In the linear model, <span class="math inline">\(\hat{y}_i = \hat{\beta}_0 + \hat{\beta}_1x_i\)</span>.</p></li>
+<li><p>Obtain the residuals by using <code>augment()</code> from broom. They will be the <code>.resid</code> variable.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>aout <span class="ot">&lt;-</span> <span class="fu">augment</span>(lmout)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(aout)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 32
+Columns: 9
+$ .rownames  &lt;chr&gt; "Mazda RX4", "Mazda RX4 Wag", "Datsun 710", "Hornet 4 Drive…
+$ mpg        &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2,…
+$ logwt      &lt;dbl&gt; 0.9632, 1.0561, 0.8416, 1.1678, 1.2355, 1.2413, 1.2726, 1.1…
+$ .fitted    &lt;dbl&gt; 22.80, 21.21, 24.88, 19.30, 18.15, 18.05, 17.51, 19.44, 19.…
+$ .resid     &lt;dbl&gt; -1.79984, -0.21293, -2.07761, 2.09684, 0.55260, 0.05164, -3…
+$ .hat       &lt;dbl&gt; 0.03930, 0.03263, 0.05637, 0.03193, 0.03539, 0.03582, 0.038…
+$ .sigma     &lt;dbl&gt; 2.694, 2.715, 2.686, 2.686, 2.713, 2.715, 2.646, 2.548, 2.6…
+$ .cooksd    &lt;dbl&gt; 9.677e-03, 1.109e-04, 1.917e-02, 1.051e-02, 8.149e-04, 7.21…
+$ .std.resid &lt;dbl&gt; -0.68788, -0.08110, -0.80119, 0.79833, 0.21077, 0.01970, -1…</code></pre>
+</div>
+</div></li>
+<li><p>You should always make the following scatterplots. The residuals always go on the <span class="math inline">\(y\)</span>-axis.</p>
+<ul>
+<li>Fits <span class="math inline">\(\hat{y}_i\)</span> vs residuals <span class="math inline">\(r_i\)</span>.</li>
+<li>Response <span class="math inline">\(y_i\)</span> vs residuals <span class="math inline">\(r_i\)</span>.</li>
+<li>Explanatory variable <span class="math inline">\(x_i\)</span> vs residuals <span class="math inline">\(r_i\)</span>.</li>
+</ul></li>
+<li><p>In the simple linear model, you can probably evaluate these issues by plotting the data (<span class="math inline">\(x_i\)</span> vs <span class="math inline">\(y_i\)</span>). But residual plots generalize to <em>much</em> more complicated models, whereas just plotting the data does not.</p></li>
+</ul>
+<section id="example-1-a-perfect-residual-plot" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-a-perfect-residual-plot">Example 1: A perfect residual plot</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `qplot()` was deprecated in ggplot2 3.4.0.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Means are straight lines</li>
+<li>Residuals seem to be centered at 0 for all <span class="math inline">\(x\)</span></li>
+<li>Variance looks equal for all <span class="math inline">\(x\)</span></li>
+<li>Everything looks perfect</li>
+</ul>
+</section>
+<section id="example-2-curved-monotone-relationship-equal-variances" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-curved-monotone-relationship-equal-variances">Example 2: Curved Monotone Relationship, Equal Variances</h3>
+<ul>
+<li><p>Generate fake data:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">100</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x <span class="sc">-</span> <span class="fu">min</span>(x) <span class="sc">+</span> <span class="fl">0.5</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(x) <span class="sc">*</span> <span class="dv">20</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">4</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df_fake <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-36-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Curved (but always increasing) relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p></li>
+<li><p>Variance looks equal for all <span class="math inline">\(x\)</span></p></li>
+<li><p>Residual plot has a parabolic shape.</p></li>
+<li><p><strong>Solution</strong>: These indicate a <span class="math inline">\(\log\)</span> transformation of <span class="math inline">\(x\)</span> could help.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_fake <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logx =</span> <span class="fu">log</span>(x)) <span class="ot">-&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  df_fake</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>lm_fake <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> logx, <span class="at">data =</span> df_fake)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="example-3-curved-non-monotone-relationship-equal-variances" class="level3">
+<h3 class="anchored" data-anchor-id="example-3-curved-non-monotone-relationship-equal-variances">Example 3: Curved Non-monotone Relationship, Equal Variances</h3>
+<ul>
+<li><p>Generate fake data:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>df_fake <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-39-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Curved relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></p></li>
+<li><p>Sometimes the relationship is increasing, sometimes it is decreasing.</p></li>
+<li><p>Variance looks equal for all <span class="math inline">\(x\)</span></p></li>
+<li><p>Residual plot has a parabolic form.</p></li>
+<li><p><strong>Solution</strong>: Include a squared term in the model (or hire a statistician).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>lmout <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x<span class="sc">^</span><span class="dv">2</span>, <span class="at">data =</span> df_fake)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="example-4-curved-relationship-variance-increases-with-y" class="level3">
+<h3 class="anchored" data-anchor-id="example-4-curved-relationship-variance-increases-with-y">Example 4: Curved Relationship, Variance Increases with <span class="math inline">\(Y\)</span></h3>
+<ul>
+<li><p>Generate fake data:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">exp</span>(x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>df_fake <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-42-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Curved relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span></p></li>
+<li><p>Variance looks like it increases as <span class="math inline">\(y\)</span> increases</p></li>
+<li><p>Residual plot has a parabolic form.</p></li>
+<li><p>Residual plot variance looks larger to the right and smaller to the left.</p></li>
+<li><p><strong>Solution</strong>: Take a log-transformation of <span class="math inline">\(y\)</span>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df_fake <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">logy =</span> <span class="fu">log</span>(y)) <span class="ot">-&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  df_fake</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>lm_fake <span class="ot">&lt;-</span> <span class="fu">lm</span>(logy <span class="sc">~</span> x, <span class="at">data =</span> df_fake)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="example-5-linear-relationship-equal-variances-skewed-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="example-5-linear-relationship-equal-variances-skewed-distribution">Example 5: Linear Relationship, Equal Variances, Skewed Distribution</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-44-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Straight line relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</li>
+<li>Variances about equal for all <span class="math inline">\(x\)</span></li>
+<li>Skew for all <span class="math inline">\(x\)</span></li>
+<li>Residual plots show skew.</li>
+<li><strong>Solution</strong>: Do nothing, but report skew (usually OK to do)</li>
+</ul>
+</section>
+<section id="example-6-linear-relationship-unequal-variances" class="level3">
+<h3 class="anchored" data-anchor-id="example-6-linear-relationship-unequal-variances">Example 6: Linear Relationship, Unequal Variances</h3>
+<ul>
+<li><p>Generate fake data:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>) <span class="sc">*</span> <span class="dv">10</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">0.85</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">sd =</span> (x <span class="sc">-</span> <span class="dv">5</span>) <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>df_fake <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="A2_simple_linear_regression_files/figure-html/unnamed-chunk-46-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p>Linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p></li>
+<li><p>Variance is different for different values of <span class="math inline">\(x\)</span>.</p></li>
+<li><p>Residual plots really good at showing this.</p></li>
+<li><p><strong>Solution</strong>: The modern solution is to use sandwich estimates of the standard errors (hire a statistician).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sandwich)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>lm_fake <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> df_fake)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>semat <span class="ot">&lt;-</span> <span class="fu">sandwich</span>(lm_fake)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_fake) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sandwich_se =</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(semat)),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">sandwich_t  =</span> estimate <span class="sc">/</span> sandwich_se,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">sandwich_p  =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(sandwich_t), <span class="at">df =</span> <span class="fu">df.residual</span>(lm_fake)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 8
+  term    estimate std.error statistic p.value sandwich_se sandwich_t sandwich_p
+  &lt;chr&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1 (Inter…    -2.86     2.01      -1.43 1.57e-1       2.78       -1.03    0.307  
+2 x           1.37     0.345      3.97 1.37e-4       0.508       2.70    0.00827</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="some-exercises" class="level1">
+<h1>Some Exercises</h1>
+<ul>
+<li><p><strong>Exercise</strong>: From the <code>mtcars</code> data frame, run a regression of MPG on displacement. Evaluate the regression fit and fix any issues. Interpret the coefficient estimates.</p></li>
+<li><p><strong>Exercise</strong>: Consider the data frame <code>case0801</code> from the Sleuth3 R package:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Sleuth3)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"case0801"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Find an appropriate linear regression model for relating the effect of island area on species number. Find the regression estimates. Interpret them.</p></li>
+</ul>
+</section>
+<section id="interpreting-coefficients-when-you-use-logs" class="level1">
+<h1>Interpreting Coefficients when you use logs</h1>
+<ul>
+<li><p>Generally, when you use logs, you interpret associations on a <em>multiplicative</em> scale instead of an <em>additive</em> scale.</p></li>
+<li><p>No log:</p>
+<ul>
+<li>Model: <span class="math inline">\(E[y_i] = \beta_0 + \beta_1 x_i\)</span></li>
+<li>Observations that differ by 1 unit in <span class="math inline">\(x\)</span> tend to differ by <span class="math inline">\(\beta_1\)</span> units in <span class="math inline">\(y\)</span>.</li>
+</ul></li>
+<li><p>Log <span class="math inline">\(x\)</span>:</p>
+<ul>
+<li>Model: <span class="math inline">\(E[y_i] = \beta_0 + \beta_1 \log_2(x_i)\)</span></li>
+<li>Observations that are twice as large in <span class="math inline">\(x\)</span> tend to differ by <span class="math inline">\(\beta_1\)</span> units in <span class="math inline">\(y\)</span>.</li>
+</ul></li>
+<li><p>Log <span class="math inline">\(y\)</span>:</p>
+<ul>
+<li>Model: <span class="math inline">\(E[\log_2(y_i)] = \beta_0 + \beta_1 x_i\)</span></li>
+<li>Observations that differ by 1 unit in <span class="math inline">\(x\)</span> tend to be <span class="math inline">\(2^{\beta_1}\)</span> times larger in <span class="math inline">\(y\)</span>.</li>
+</ul></li>
+<li><p>Log both:</p>
+<ul>
+<li>Model: <span class="math inline">\(E[\log_2(y_i)] = \beta_0 + \beta_1 \log_2(x_i)\)</span></li>
+<li>Observations that are twice as large in <span class="math inline">\(x\)</span> tend to be <span class="math inline">\(2^{\beta_1}\)</span> times larger in <span class="math inline">\(y\)</span>.</li>
+</ul></li>
+<li><p><strong>Exercise</strong>: Re-interpret the regression coefficients estimates you calculated using the <code>case0801</code> dataset.</p></li>
+<li><p><strong>Exercise</strong> Re-interpret the regression coefficient estimates you calculated in the <code>mtcars</code> data frame when you were exploring the effect of displacement on mpg.</p></li>
+</ul>
+</section>
+<section id="summary-of-r-commands" class="level1">
+<h1>Summary of R commands</h1>
+<ul>
+<li><code>augment()</code>:
+<ul>
+<li>Residuals <span class="math inline">\(r_i = y_i - \hat{y}_i\)</span>: <code>$.resid</code></li>
+<li>Fitted Values <span class="math inline">\(\hat{y}_i\)</span>: <code>$.fitted</code></li>
+</ul></li>
+<li><code>tidy()</code>:
+<ul>
+<li>Name of variables: <code>$term</code></li>
+<li>Coefficient Estimates: <code>$estimate</code></li>
+<li>Standard Error (standard deviation of sampling distribution of coefficient estimates): <code>$std.error</code></li>
+<li>t-statistic: <code>$statistic</code></li>
+<li>p-value: <code>$p.value</code></li>
+</ul></li>
+<li><code>glance()</code>:
+<ul>
+<li>R-squared value (proportion of variance explained by regression line, higher is better): <code>$r.squared</code></li>
+<li>AIC (lower is better): <code>$AIC</code></li>
+<li>BIC (lower is better): <code>$BIC</code></li>
+</ul></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
