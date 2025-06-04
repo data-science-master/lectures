@@ -17,7 +17,9 @@ class are to
 2.  Expand a student’s presentation abilities (R shiny).
 3.  Improve a student’s basic R programming skills (data types, function
     creation, basic programming tasks).
-4.  Expose students to common data programming languages beyond R (SQL,
+4.  Improve a student’s data acquisition abilities (web APIs, web
+    scraping).
+5.  Expose students to common data programming languages beyond R (SQL,
     python).
 
 Website: <https://data-science-master.github.io/lectures/>

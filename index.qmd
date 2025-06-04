@@ -70,4 +70,3 @@ title: "DATA 413/613 Data Science"
 - A4 Dates and Times
     - [A4 Dates](./A4_dates/A4_dates.qmd).
     - [A4 Lab](https://github.com/data-science-master/lab_02).
-    
