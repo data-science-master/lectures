@@ -1,0 +1,26 @@
+---
+title: "File Structure"
+author: "David Gerard"
+---
+
+# Learning Objectives
+
+- Understand Windows and Mac File Systems
+
+# Overview
+
+- Your files on your computer are arranged in a **hierarchical directory structure**.
+
+- There is a tree-like pattern of **directories**. On Mac and Windows these are called **folders**.
+
+- **Folders** contain **files** and other folders, called **subfolders** or **subdirectories**.
+
+- The first directory is called the **root**.
+
+- The **root** contains all files and other directories on your computer.
+
+- The **home** directory is the default location for your files. On a local Mac, this is typically "Users/user_name", but it can be something else.
+
+  - It's the working directory of your shell when you first open it up.
+
+- You use a **file management program** to view and manage the 

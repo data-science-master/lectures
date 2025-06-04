@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
 - Open up the terminal.
 - Basic shell commands.
 - Chapter 4 of [Git for Scientists](https://milesmcbain.github.io/git_4_sci/).
+- [LinuxCommand](https://linuxcommand.org/)
 - [Terminus](http://web.mit.edu/mprat/Public/web/Terminus/Web/main.html).
 
 # The Command Line
@@ -41,10 +42,10 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
   for this class.
 
 - A huge difference between R and bash is how commands/functions are called.
-    - R: `f(x, y = 1)`
-    - Bash: `f x --y=1`
-    - Arguments that are "flags" use only one dash, like `f x -g` would
-      incorporate the `g` flag.
+    - R: `f(x, arg = 1)`
+    - Bash: `f x --arg=1`
+    - There are also arguments that are "flags" where its presence alters the behavior of the command. E.g., `f x -g` would incorporate the `g` flag and have a different behavior than `f x` which does not have the `g` flag.
+    - Typically, two dashes are for longer named commands, like `--arg` versus `-a`.
 
 - If you are using Linux or Mac, then you can keep going. If you are using Windows,
   you need to first download and install git (and thus git bash) from here:
@@ -137,7 +138,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
     touch empty_file.txt
     ```
 
--   `more`: Open up a preview of a document. You can exit the preview by typeing `q`.
+-   `more`: Open up a preview of a document. You can exit the preview by typing `q`.
 
     ```{bash, eval = FALSE}
     more 01_basic_bash.Rmd

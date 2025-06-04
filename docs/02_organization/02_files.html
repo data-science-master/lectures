@@ -7,9 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-06-04">
 
-<title>Basic Bash – DATA 413/613 Data Science</title>
+<title>File Structure – DATA 413/613 Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -318,12 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#the-command-line" id="toc-the-command-line" class="nav-link" data-scroll-target="#the-command-line">The Command Line</a></li>
-  <li><a href="#useful-commands" id="toc-useful-commands" class="nav-link" data-scroll-target="#useful-commands">Useful Commands:</a></li>
-  <li><a href="#other-commands." id="toc-other-commands." class="nav-link" data-scroll-target="#other-commands.">Other commands.</a></li>
-  <li><a href="#string-search-with-grep" id="toc-string-search-with-grep" class="nav-link" data-scroll-target="#string-search-with-grep">String search with <code>grep</code></a></li>
-  <li><a href="#download-data-with-wget" id="toc-download-data-with-wget" class="nav-link" data-scroll-target="#download-data-with-wget">Download data with <code>wget</code></a></li>
-  <li><a href="#search-your-command-history-with-reverse-i-search" id="toc-search-your-command-history-with-reverse-i-search" class="nav-link" data-scroll-target="#search-your-command-history-with-reverse-i-search">Search your command history with <code>reverse-i-search</code></a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   </ul>
 </nav>
     </div>
@@ -333,7 +292,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Basic Bash</h1>
+<h1 class="title">File Structure</h1>
 </div>
 
 
@@ -347,12 +306,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 4, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -365,336 +318,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="learning-objectives" class="level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>Open up the terminal.</li>
-<li>Basic shell commands.</li>
-<li>Chapter 4 of <a href="https://milesmcbain.github.io/git_4_sci/">Git for Scientists</a>.</li>
-<li><a href="https://linuxcommand.org/">LinuxCommand</a></li>
-<li><a href="http://web.mit.edu/mprat/Public/web/Terminus/Web/main.html">Terminus</a>.</li>
+<li>Understand Windows and Mac File Systems</li>
 </ul>
 </section>
-<section id="the-command-line" class="level1">
-<h1>The Command Line</h1>
+<section id="overview" class="level1">
+<h1>Overview</h1>
 <ul>
-<li><p>The <strong>command line</strong> is like the R command prompt: you insert code, hit enter, and then the computer executes your command.</p></li>
-<li><p>However, instead of inserting R code, you insert <a href="https://en.wikipedia.org/wiki/Shell_script">Shell Script</a>.</p></li>
-<li><p>In this class, we will use the command line primarily for two things:</p>
+<li><p>Your files on your computer are arranged in a <strong>hierarchical directory structure</strong>.</p></li>
+<li><p>There is a tree-like pattern of <strong>directories</strong>. On Mac and Windows these are called <strong>folders</strong>.</p></li>
+<li><p><strong>Folders</strong> contain <strong>files</strong> and other folders, called <strong>subfolders</strong> or <strong>subdirectories</strong>.</p></li>
+<li><p>The first directory is called the <strong>root</strong>.</p></li>
+<li><p>The <strong>root</strong> contains all files and other directories on your computer.</p></li>
+<li><p>The <strong>home</strong> directory is the default location for your files. On a local Mac, this is typically “Users/user_name”, but it can be something else.</p>
 <ul>
-<li>Moving around your file system.</li>
-<li>Running git commands.</li>
+<li>It’s the working directory of your shell when you first open it up.</li>
 </ul></li>
-<li><p>Other words for command line: shell, terminal, command line interface (cli), and console.</p>
-<ul>
-<li>These terms are technically slightly <a href="https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line">different</a>.</li>
-</ul></li>
-<li><p>There are many types of shells, each with their own scripting language. We will use the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">bash scripting language</a> for this class.</p></li>
-<li><p>A huge difference between R and bash is how commands/functions are called.</p>
-<ul>
-<li>R: <code>f(x, arg = 1)</code></li>
-<li>Bash: <code>f x --arg=1</code></li>
-<li>There are also arguments that are “flags” where its presence alters the behavior of the command. E.g., <code>f x -g</code> would incorporate the <code>g</code> flag and have a different behavior than <code>f x</code> which does not have the <code>g</code> flag.</li>
-<li>Typically, two dashes are for longer named commands, like <code>--arg</code> versus <code>-a</code>.</li>
-</ul></li>
-<li><p>If you are using Linux or Mac, then you can keep going. If you are using Windows, you need to first download and install git (and thus git bash) from here: <a href="http://git-scm.com/download/win" class="uri">http://git-scm.com/download/win</a>. You might need to restart R Studio if you are already running it.</p></li>
-<li><p>Open up the terminal</p>
-<ul>
-<li><p>Windows: Open up the <code>Git Bash</code> app. It should look like this:</p>
-<p><img src="./01_figs/git_bash.png" alt="Git Bash for Windows" width="50%"></p></li>
-<li><p>Mac: On your Mac, do one of the following:</p>
-<ul>
-<li>Type “Terminal” in the search field, then click Terminal.</li>
-<li>In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.</li>
-</ul></li>
-<li><p>Ubuntu: Do one of the following</p>
-<ul>
-<li><p>Open the dash and search for “terminal”. Open up the terminal.</p></li>
-<li><p>Use keyboard shortcut: Ctrl+Alt+T</p></li>
-<li><p>It should look like this:</p>
-<p><img src="./01_figs/terminal_ubuntu.png" alt="Git Bash for Windows" width="50%"></p></li>
-</ul></li>
-</ul></li>
-<li><p>All commands get placed after the dollar sign.</p></li>
-<li><p>The path before the dollar sign is the working directory of the terminal, <strong>not</strong> R’s working directory. It’s where the shell will reference all files from.</p></li>
-<li><p>The tilde “<code>~</code>” is shorthand for the “home directory”. Each computer has a home directory that is the “default directory”.</p></li>
+<li><p>You use a <strong>file management program</strong> to view and manage the</p></li>
 </ul>
-</section>
-<section id="useful-commands" class="level1">
-<h1>Useful Commands:</h1>
-<ul>
-<li><p><code>pwd</code>: Print working directory. Show the current working directory. This is like <code>getwd()</code> in R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>/Users/dgerard/Library/CloudStorage/Dropbox/teaching/stat_413_613/lectures/01_git</code></pre>
-</div>
-</div></li>
-<li><p><code>ls</code>: List the current files and folders in a directory.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib</code></pre>
-</div>
-</div></li>
-<li><p><code>cd</code>: Change directories. This is like <code>setwd()</code> in R. As when we specified paths in R, using two periods mean “move back a folder”.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>/Users/dgerard/Library/CloudStorage/Dropbox/teaching/stat_413_613/lectures</code></pre>
-</div>
-</div>
-<ul>
-<li><p>If you use <code>cd</code> without specifying a folder to move to, it will move the working directory to the home directory.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>/Users/dgerard</code></pre>
-</div>
-</div></li>
-<li><p>OK, I’m going to move us back to the 01_git directory.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ./Dropbox/teaching/data_496_696/lectures/01_git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-</ul></li>
-<li><p><code>man</code>: Read the manual of a command. Just like <code>help()</code> in R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<ul>
-<li><p>This will open up the man page of <code>ls</code>. You can scroll through this page using the up and down arrows. You can exit this page by typing <code>q</code>.</p></li>
-<li><p>This won’t work for Git Bash (for Windows users). Instead, you’ll need to type</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-</ul></li>
-<li><p><strong>Exercise</strong>: What is your home directory? What files/folders exist in your home directory? Navigate to it and then navigate back to your notes.</p></li>
-<li><p><strong>Exercise</strong>: Where does the following command take you? How does it work?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/../../..</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p><strong>Exercise</strong>: Read the manual page of <code>ls</code>. What does the <code>a</code> flag do? Try it out!</p></li>
-</ul>
-</section>
-<section id="other-commands." class="level1">
-<h1>Other commands.</h1>
-<ul>
-<li><p><code>touch</code>: Create an empty file.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> empty_file.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p><code>more</code>: Open up a preview of a document. You can exit the preview by typing <code>q</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">more</span> 01_basic_bash.Rmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p><code>cp</code>: Copy a file.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> 01_basic_bash.Rmd hellobash.Rmd</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>cp: 01_basic_bash.Rmd: No such file or directory
-01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib</code></pre>
-</div>
-</div></li>
-<li><p><code>mv</code>: Move/rename a file.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> hellobash.Rmd goodbyebash.Rmd</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>mv: rename hellobash.Rmd to goodbyebash.Rmd: No such file or directory
-01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib</code></pre>
-</div>
-</div></li>
-<li><p><code>rm</code>: Remove a file.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> goodbyebash.Rmd</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>rm: goodbyebash.Rmd: No such file or directory
-01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib</code></pre>
-</div>
-</div></li>
-<li><p><code>mkdir</code>: Make a directory/folder.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> tempdir</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib
-tempdir</code></pre>
-</div>
-</div></li>
-<li><p><code>rmdir</code>: Remove a directory/folder.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rmdir</span> tempdir</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib</code></pre>
-</div>
-</div></li>
-</ul>
-</section>
-<section id="string-search-with-grep" class="level1">
-<h1>String search with <code>grep</code></h1>
-<p>Find any string in any file in the current working directory (or subdirectories or the current working directory).</p>
-<ul>
-<li><code>-r</code> recursive</li>
-<li><code>-n</code> line number</li>
-<li><code>-w</code> whole word only</li>
-<li><code>-e</code> pattern</li>
-<li><code>pdfgrep</code> (need to install separately) for searching text in PDFs.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rnw</span> <span class="at">-e</span> <span class="st">"move"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>./.Rhistory:2:grep -rnwe "move"
-./01_basic_bash.qmd:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.qmd:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.qmd:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.qmd:193:grep -rnw -e "move"
-./01_basic_bash.rmarkdown:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.rmarkdown:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.rmarkdown:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.rmarkdown:193:grep -rnw -e "move"
-./01_git_github.qmd:64:- You can go back to previous versions of your code/text, then move forward to
-./01_git_github.qmd:221:-   Then move into your new repo</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rnw</span> <span class="at">-e</span> <span class="st">"mov"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>./01_basic_bash.qmd:197:grep -rnw -e "mov"
-./01_basic_bash.qmd:201:grep -rn -e "mov"
-./01_basic_bash.rmarkdown:197:grep -rnw -e "mov"
-./01_basic_bash.rmarkdown:201:grep -rn -e "mov"</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rn</span> <span class="at">-e</span> <span class="st">"mov"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>./.Rhistory:2:grep -rnwe "move"
-./.Rhistory:9:conda_remove(envname = "r-reticulate")
-./.Rhistory:11:conda_remove("bs4")
-./01_basic_bash.qmd:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.qmd:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.qmd:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.qmd:161:-   `rm`: Remove a file.
-./01_basic_bash.qmd:175:-   `rmdir`: Remove a directory/folder.
-./01_basic_bash.qmd:193:grep -rnw -e "move"
-./01_basic_bash.qmd:197:grep -rnw -e "mov"
-./01_basic_bash.qmd:201:grep -rn -e "mov"
-./01_basic_bash.qmd:226:I'll remove that file now
-./01_basic_bash.rmarkdown:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.rmarkdown:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.rmarkdown:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.rmarkdown:161:-   `rm`: Remove a file.
-./01_basic_bash.rmarkdown:175:-   `rmdir`: Remove a directory/folder.
-./01_basic_bash.rmarkdown:193:grep -rnw -e "move"
-./01_basic_bash.rmarkdown:197:grep -rnw -e "mov"
-./01_basic_bash.rmarkdown:201:grep -rn -e "mov"
-./01_basic_bash.rmarkdown:226:I'll remove that file now
-./01_git_github.qmd:64:- You can go back to previous versions of your code/text, then move forward to
-./01_git_github.qmd:221:-   Then move into your new repo
-./01_git_github.qmd:394:- Lines after a "`+`" are being added. Lines after a "`-`" are being removed.</code></pre>
-</div>
-</div>
-</section>
-<section id="download-data-with-wget" class="level1">
-<h1>Download data with <code>wget</code></h1>
-<p>Non-interactive downloading of data.</p>
-<p>Not available for Git Bash for Windows.</p>
-<ul>
-<li><code>-nc</code> Don’t download new copies if already there.</li>
-<li><code>-nd</code> Put all files in current working directory.</li>
-<li><code>-P</code> Tell where to download the files. Default is current working directory (<code>.</code>)</li>
-<li><code>-r</code> Recursive downloading. Download all files in the directory up to a certain level.</li>
-<li><code>l</code> Determine the level for recursive downloading.</li>
-</ul>
-<p>E.g. to download the HTML file that contains the Wikipedia list of <a href="https://en.wikipedia.org/wiki/List_of_theological_demons">theological demons</a>, we can go</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-nc</span> <span class="at">-nd</span> https://en.wikipedia.org/wiki/List_of_theological_demons</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>--2025-06-04 09:04:32--  https://en.wikipedia.org/wiki/List_of_theological_demons
-Resolving en.wikipedia.org (en.wikipedia.org)... 208.80.154.224
-Connecting to en.wikipedia.org (en.wikipedia.org)|208.80.154.224|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 105005 (103K) [text/html]
-Saving to: ‘List_of_theological_demons’
-
-     0K .......... .......... .......... .......... .......... 48% 1.58M 0s
-    50K .......... .......... .......... .......... .......... 97% 8.33M 0s
-   100K ..                                                    100% 50.9K=0.04s
-
-2025-06-04 09:04:32 (2.72 MB/s) - ‘List_of_theological_demons’ saved [105005/105005]</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>01_basic_bash.qmd
-01_basic_bash.rmarkdown
-01_figs
-01_git_github.qmd
-01_git_lfs.qmd
-01_git_setup.qmd
-blischak_etal_2016.PDF
-citation.bib
-List_of_theological_demons</code></pre>
-</div>
-</div>
-<p>I’ll remove that file now</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> List_of_theological_demons</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="search-your-command-history-with-reverse-i-search" class="level1">
-<h1>Search your command history with <code>reverse-i-search</code></h1>
-<ol type="1">
-<li><code>ctrl</code>+<code>r</code> to get search prompt</li>
-<li>Type a search term</li>
-<li><code>ctrl</code>+<code>r</code> to cycle through matches</li>
-<li>Hit <code>enter</code> if you want to reuse the match. Hit <code>ctrl</code>+<code>c</code> to exit out of the search.</li>
-</ol>
 
 
 </section>

@@ -33,7 +33,6 @@ This course builds on the R/tidyverse programming skills developed in DATA-412/6
 # Materials
 - **Lectures**: <https://data-science-master.github.io/lectures/>
 - **GitHub Organization**: <https://github.com/data-science-fall-2025>
-- **GitHub Classroom**: <https://classroom.github.com/classrooms/214701722-data-science-fall-2025>
 - **Required**: A computer with [R](https://cran.r-project.org/), [RStudio](https://rstudio.com/products/rstudio/download/), and [git](https://git-scm.com/downloads) installed.
 - **Books**: All course material is freely available online.
     - R for Data Science by Wickham and Grolemund: <http://r4ds.had.co.nz/>

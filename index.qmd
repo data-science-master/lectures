@@ -14,10 +14,10 @@ title: "DATA 413/613 Data Science"
     - [01 A Quick Introduction to Git and GitHub](https://doi.org/10.1371/journal.pcbi.1004668).
     - [01 Lab: Review of Tidyverse Concepts](https://github.com/data-science-master/lab_01).
 - 02 Organization
-    - 02 File Structure
+    - [02 File Structure](./02_organization/02_files.qmd)
     - 02 Project Structure
     - 02 Project Management
-- 03 Vectors and Iteration
+- 03 Programming
     - [03 Vectors](./03_vectors_iterators/03_vectors.qmd).
     - [03 Subsetting](./03_vectors_iterators/03_subsetting.qmd).
     - [03 Functions](./03_vectors_iterators/03_functions.qmd).
