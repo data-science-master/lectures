@@ -5,22 +5,79 @@ author: "David Gerard"
 
 # Learning Objectives
 
-- Understand Windows and Mac File Systems
+- Understand file systems on Windows and Mac.
 
 # Overview
 
-- Your files on your computer are arranged in a **hierarchical directory structure**.
+- Your computer organizes files using a **hierarchical directory structure**.
 
-- There is a tree-like pattern of **directories**. On Mac and Windows these are called **folders**.
+- This structure follows a tree-like pattern of **directories**—called **folders** on Windows and Mac.
 
 - **Folders** contain **files** and other folders, called **subfolders** or **subdirectories**.
 
-- The first directory is called the **root**.
+- The top-level directory is called the **root**.
 
-- The **root** contains all files and other directories on your computer.
+- The **root** contains all files and directories on your computer.
 
-- The **home** directory is the default location for your files. On a local Mac, this is typically "Users/user_name", but it can be something else.
+- Your **home** directory is the default location for your files. On a Mac, this is typically `Users/your_username`, but it may differ.
 
-  - It's the working directory of your shell when you first open it up.
+  - It’s also the working directory of your shell when you first open it.
 
-- You use a **file management program** to view and manage the 
+- You use a [**file management program**](https://en.wikipedia.org/wiki/File_manager) to navigate and manage your files:
+
+  - On Windows: **File Explorer**
+  - On Mac: **Finder**
+  
+- There are tons of [alternatives](https://en.wikipedia.org/wiki/Comparison_of_file_managers) if you are curious.
+
+- You should know how to perform the following tasks using your file management system. If you do not know how to do **any** of them, come talk to me:
+
+  - Navigate to your home directory.
+  - Navigate to your Documents folder.
+  - Navigate to your AU OneDrive.
+  - Create a new folder.
+  - Move a file from one folder to another.
+  - Copy a file and paste it in another folder.
+  - Rename a file or folder.
+  
+- I won't cover how to do them in these notes because even different versions of the same operating system have slightly different workflows.
+
+- To add the home directory to your sidebar on Mac for quick access:
+  - Finder → Settings → “Show these items in the sidebar” → Check your username (with the home icon).
+
+- When naming files or folders, **do not use spaces**. Use underscores (`_`) instead.
+
+# File Organization
+
+- Because your file system is hierarchical, your file organization should take advantage of that structure.
+
+- **Bad example**: Placing all of your files directly on the Desktop or at the same folder level.
+  - You’d be surprised how often I see this on student computers.
+
+- There are many good ways to organize your files. Here’s one recommended structure:
+
+  - In your home directory, create a folder called `Courses`.
+
+  - Inside `Courses`, create a folder for each course (e.g., `data_412`, `data_413`).
+
+  - Within each course folder, include `homeworks` and `notes` folders.
+
+  - Inside the `homeworks` folder, create one folder per assignment (e.g., `hw_01`, `hw_02`, etc.).
+
+  - Inside the `notes` folder, create one folder per topic (e.g., `01_bash`, `02_git`, etc.).
+
+  - Place your work in the appropriate subfolders.
+
+  - Add other subfolders as needed (e.g., `final_project`).
+
+- Visualization:
+
+  <img src="./02_figs/file_hier.png" alt="Recommended directory hierarchy" width="70%"/>
+
+- Using numbers for the folder names in this way makes sure they are ordered the same way as the order of discussion.
+
+- **Exercise**:
+  1. Create a "Courses" directory in your home directory.
+  2. Create a "data_413" or "data_613" directory in your "Courses" directory.
+  3. Create "homeworks" and "notes" directories in your "data_413" or "data_613" directory.
+  4. Transfer your current notes for this class from wherever they are to your new directories. Make sure they are named well (no spaces, numbered ordering, etc).

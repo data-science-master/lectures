@@ -283,6 +283,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#file-organization" id="toc-file-organization" class="nav-link" data-scroll-target="#file-organization">File Organization</a></li>
   </ul>
 </nav>
     </div>
@@ -318,22 +319,73 @@ ul.task-list li input[type="checkbox"] {
 <section id="learning-objectives" class="level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>Understand Windows and Mac File Systems</li>
+<li>Understand file systems on Windows and Mac.</li>
 </ul>
 </section>
 <section id="overview" class="level1">
 <h1>Overview</h1>
 <ul>
-<li><p>Your files on your computer are arranged in a <strong>hierarchical directory structure</strong>.</p></li>
-<li><p>There is a tree-like pattern of <strong>directories</strong>. On Mac and Windows these are called <strong>folders</strong>.</p></li>
+<li><p>Your computer organizes files using a <strong>hierarchical directory structure</strong>.</p></li>
+<li><p>This structure follows a tree-like pattern of <strong>directories</strong>—called <strong>folders</strong> on Windows and Mac.</p></li>
 <li><p><strong>Folders</strong> contain <strong>files</strong> and other folders, called <strong>subfolders</strong> or <strong>subdirectories</strong>.</p></li>
-<li><p>The first directory is called the <strong>root</strong>.</p></li>
-<li><p>The <strong>root</strong> contains all files and other directories on your computer.</p></li>
-<li><p>The <strong>home</strong> directory is the default location for your files. On a local Mac, this is typically “Users/user_name”, but it can be something else.</p>
+<li><p>The top-level directory is called the <strong>root</strong>.</p></li>
+<li><p>The <strong>root</strong> contains all files and directories on your computer.</p></li>
+<li><p>Your <strong>home</strong> directory is the default location for your files. On a Mac, this is typically <code>Users/your_username</code>, but it may differ.</p>
 <ul>
-<li>It’s the working directory of your shell when you first open it up.</li>
+<li>It’s also the working directory of your shell when you first open it.</li>
 </ul></li>
-<li><p>You use a <strong>file management program</strong> to view and manage the</p></li>
+<li><p>You use a <a href="https://en.wikipedia.org/wiki/File_manager"><strong>file management program</strong></a> to navigate and manage your files:</p>
+<ul>
+<li>On Windows: <strong>File Explorer</strong></li>
+<li>On Mac: <strong>Finder</strong></li>
+</ul></li>
+<li><p>There are tons of <a href="https://en.wikipedia.org/wiki/Comparison_of_file_managers">alternatives</a> if you are curious.</p></li>
+<li><p>You should know how to perform the following tasks using your file management system. If you do not know how to do <strong>any</strong> of them, come talk to me:</p>
+<ul>
+<li>Navigate to your home directory.</li>
+<li>Navigate to your Documents folder.</li>
+<li>Navigate to your AU OneDrive.</li>
+<li>Create a new folder.</li>
+<li>Move a file from one folder to another.</li>
+<li>Copy a file and paste it in another folder.</li>
+<li>Rename a file or folder.</li>
+</ul></li>
+<li><p>I won’t cover how to do them in these notes because even different versions of the same operating system have slightly different workflows.</p></li>
+<li><p>To add the home directory to your sidebar on Mac for quick access:</p>
+<ul>
+<li>Finder → Settings → “Show these items in the sidebar” → Check your username (with the home icon).</li>
+</ul></li>
+<li><p>When naming files or folders, <strong>do not use spaces</strong>. Use underscores (<code>_</code>) instead.</p></li>
+</ul>
+</section>
+<section id="file-organization" class="level1">
+<h1>File Organization</h1>
+<ul>
+<li><p>Because your file system is hierarchical, your file organization should take advantage of that structure.</p></li>
+<li><p><strong>Bad example</strong>: Placing all of your files directly on the Desktop or at the same folder level.</p>
+<ul>
+<li>You’d be surprised how often I see this on student computers.</li>
+</ul></li>
+<li><p>There are many good ways to organize your files. Here’s one recommended structure:</p>
+<ul>
+<li><p>In your home directory, create a folder called <code>Courses</code>.</p></li>
+<li><p>Inside <code>Courses</code>, create a folder for each course (e.g., <code>data_412</code>, <code>data_413</code>).</p></li>
+<li><p>Within each course folder, include <code>homeworks</code> and <code>notes</code> folders.</p></li>
+<li><p>Inside the <code>homeworks</code> folder, create one folder per assignment (e.g., <code>hw_01</code>, <code>hw_02</code>, etc.).</p></li>
+<li><p>Inside the <code>notes</code> folder, create one folder per topic (e.g., <code>01_bash</code>, <code>02_git</code>, etc.).</p></li>
+<li><p>Place your work in the appropriate subfolders.</p></li>
+<li><p>Add other subfolders as needed (e.g., <code>final_project</code>).</p></li>
+</ul></li>
+<li><p>Visualization:</p>
+<p><img src="./02_figs/file_hier.png" alt="Recommended directory hierarchy" width="70%"></p></li>
+<li><p>Using numbers for the folder names in this way makes sure they are ordered the same way as the order of discussion.</p></li>
+<li><p><strong>Exercise</strong>:</p>
+<ol type="1">
+<li>Create a “Courses” directory in your home directory.</li>
+<li>Create a “data_413” or “data_613” directory in your “Courses” directory.</li>
+<li>Create “homeworks” and “notes” directories in your “data_413” or “data_613” directory.</li>
+<li>Transfer your current notes for this class from wherever they are to your new directories. Make sure they are named well (no spaces, numbered ordering, etc).</li>
+</ol></li>
 </ul>
 
 
