@@ -1356,5 +1356,26 @@
     "title": "Contributor Covenant Code of Conduct",
     "section": "",
     "text": "This Code of Conduct is adapted from the Contributor Covenant, version 2.1, available at https://www.contributor-covenant.org/version/2/1/code_of_conduct.html.\nCommunity Impact Guidelines were inspired by [Mozilla’s code of conduct enforcement ladder][https://github.com/mozilla/inclusion].\nFor answers to common questions about this code of conduct, see the FAQ at https://www.contributor-covenant.org/faq. Translations are available at https://www.contributor-covenant.org/translations."
+  },
+  {
+    "objectID": "02_organization/02_projects.html",
+    "href": "02_organization/02_projects.html",
+    "title": "Project Organization",
+    "section": "",
+    "text": "Learning Objectives\n\nR Studio Projects\nChapter 6 of R for Data Science\nMy project template: https://github.com/gerardlab/proj\nJim Hester’s project template: https://github.com/jimhester/analysis_framework\n\n\n\nR Studio Projects\n\n\nProject Organization"
+  },
+  {
+    "objectID": "02_organization/02_scrum.html",
+    "href": "02_organization/02_scrum.html",
+    "title": "Project Management",
+    "section": "",
+    "text": "Learning Objectives\n\nKanban: https://kanban.university/kanban-guide/\n\n\n\nKanban\n\nThere are many project management paradigms out there.\nWe will focus on one that is popular in software engineering and adapt it to data science: kanban.\nOther systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain.\n\nE.g., sometimes the questions you have are impossible to answer given the data available.\n\nKanban is also natively supported in GitHub repos.\nKanban is a board with (at least) three columns: “To do”, “In Progress”, and “Done”."
+  },
+  {
+    "objectID": "02_organization/02_kanban.html",
+    "href": "02_organization/02_kanban.html",
+    "title": "Project Management",
+    "section": "",
+    "text": "Learning Objectives\n\nKanban system for project management\n\n\n\nKanban\n\nThere are many project management paradigms out there.\nWe will focus on one that is popular in software engineering and adapt it to data science: kanban.\nOther systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain.\n\nE.g., sometimes the questions you have are impossible to answer given the data available.\n\nKanban is also natively supported in GitHub repos.\nKanban is a board with (at least) three columns: “To do” or “Backlog”, “In progress”, and “Done”."
   }
 ]

@@ -1,0 +1,15 @@
+---
+title: "Project Organization"
+author: "David Gerard"
+---
+
+# Learning Objectives
+
+- R Studio Projects
+- Chapter 6 of [R for Data Science](https://r4ds.hadley.nz/)
+- My project template: <https://github.com/gerardlab/proj>
+- Jim Hester's project template: <https://github.com/jimhester/analysis_framework>
+
+# R Studio Projects
+
+# Project Organization

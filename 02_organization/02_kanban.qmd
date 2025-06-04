@@ -1,0 +1,22 @@
+---
+title: "Project Management"
+author: "David Gerard"
+---
+
+# Learning Objectives
+
+- Kanban system for project management
+
+# Kanban
+
+- There are many project management paradigms out there.
+
+- We will focus on one that is popular in software engineering and adapt it to data science: kanban.
+
+- Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain.
+
+  - E.g., sometimes the questions you have are impossible to answer given the data available.
+
+- Kanban is also natively supported in GitHub repos.
+
+- Kanban is a board with (at least) three columns: "To do" or "Backlog", "In progress", and "Done".
