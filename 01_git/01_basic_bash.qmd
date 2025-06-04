@@ -36,6 +36,12 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
 - Other words for command line: shell, terminal, command line interface (cli), and console.
     - These terms are technically slightly
       [different](https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line).
+      - **shell**: a program that takes commands from keyboard and sends them to the operating system.
+      - **terminal**: a program that opens up a window so that you can interact with the shell.
+      - **console**: nowadays is mostly just a synonym for a terminal, but historically meant something like the keyboard and a screen.
+      - **command line interface**: Any format where you interact with a computer by commands, rather than by graphics.
+      - **command line**: Short for command line interface, or the space where the commands are entered.
+
 
 - There are many types of shells, each with their own scripting language. We will use the
   [bash scripting language ](https://en.wikipedia.org/wiki/Bash_(Unix_shell))
@@ -45,7 +51,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
     - R: `f(x, arg = 1)`
     - Bash: `f x --arg=1`
     - There are also arguments that are "flags" where its presence alters the behavior of the command. E.g., `f x -g` would incorporate the `g` flag and have a different behavior than `f x` which does not have the `g` flag.
-    - Typically, two dashes are for longer named commands, like `--arg` versus `-a`.
+    - Typically, two dashes are for longer named commands and one dash is for shorter (one-letter) commands, like `--arg` versus `-a`.
 
 - If you are using Linux or Mac, then you can keep going. If you are using Windows,
   you need to first download and install git (and thus git bash) from here:
@@ -53,19 +59,23 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
   are already running it.
 
 - Open up the terminal
-    - Windows: Open up the `Git Bash` app. It should look like this:
-
-        <img src="./01_figs/git_bash.png" alt="Git Bash for Windows" width="50%"/>
-
-    - Mac: On your Mac, do one of the following:
-        - Type "Terminal" in the search field, then click Terminal.
-        - In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.
-    - Ubuntu: Do one of the following
-        - Open the dash and search for "terminal". Open up the terminal.
-        - Use keyboard shortcut: Ctrl+Alt+T
-        - It should look like this:
-
-            <img src="./01_figs/terminal_ubuntu.png" alt="Git Bash for Windows" width="50%"/>
+  - Windows: Open up the `Git Bash` app. It should look like this:
+  
+    <img src="./01_figs/git_bash.png" alt="Git Bash for Windows" width="50%"/>
+    
+  - Mac: On your Mac, do one of the following:
+    - Type "Terminal" in the search field, then click Terminal.
+    - In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.
+    - It should look like this:
+    
+      <img src="./01_figs/terminal_mac.png" alt="Zsh for Mac" width="70%"/>
+    
+  - Ubuntu: Do one of the following
+      - Open the dash and search for "terminal". Open up the terminal.
+      - Use keyboard shortcut: Ctrl+Alt+T
+      - It should look like this:
+      
+        <img src="./01_figs/terminal_ubuntu.png" alt="Bash for Ubuntu" width="50%"/>
 
 - All commands get placed after the dollar sign.
 
@@ -235,3 +245,18 @@ rm List_of_theological_demons
 2. Type a search term
 3. `ctrl`+`r` to cycle through matches
 4. Hit `enter` if you want to reuse the match. Hit `ctrl`+`c` to exit out of the search.
+
+# Exercises
+
+Execute these commands in this order:
+
+1. Create a file called "foo.txt"
+2. Rename "foo.txt" to "bar.txt"
+3. Copy "bar.txt" to "foobar.txt"
+4. Create a new directory called "newdir"
+5. Move "foobar.txt" to "newdir"
+6. Delete "bar.txt"
+7. Change the working directory to "newdir"
+8. Delete "foobar.txt"
+9. Change the working directory up one level.
+10. Delete the "newdir" directory.

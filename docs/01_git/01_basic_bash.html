@@ -324,6 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#string-search-with-grep" id="toc-string-search-with-grep" class="nav-link" data-scroll-target="#string-search-with-grep">String search with <code>grep</code></a></li>
   <li><a href="#download-data-with-wget" id="toc-download-data-with-wget" class="nav-link" data-scroll-target="#download-data-with-wget">Download data with <code>wget</code></a></li>
   <li><a href="#search-your-command-history-with-reverse-i-search" id="toc-search-your-command-history-with-reverse-i-search" class="nav-link" data-scroll-target="#search-your-command-history-with-reverse-i-search">Search your command history with <code>reverse-i-search</code></a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -384,7 +385,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><p>Other words for command line: shell, terminal, command line interface (cli), and console.</p>
 <ul>
-<li>These terms are technically slightly <a href="https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line">different</a>.</li>
+<li>These terms are technically slightly <a href="https://askubuntu.com/questions/506510/what-is-the-difference-between-terminal-console-shell-and-command-line">different</a>.
+<ul>
+<li><strong>shell</strong>: a program that takes commands from keyboard and sends them to the operating system.</li>
+<li><strong>terminal</strong>: a program that opens up a window so that you can interact with the shell.</li>
+<li><strong>console</strong>: nowadays is mostly just a synonym for a terminal, but historically meant something like the keyboard and a screen.</li>
+<li><strong>command line interface</strong>: Any format where you interact with a computer by commands, rather than by graphics.</li>
+<li><strong>command line</strong>: Short for command line interface, or the space where the commands are entered.</li>
+</ul></li>
 </ul></li>
 <li><p>There are many types of shells, each with their own scripting language. We will use the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">bash scripting language</a> for this class.</p></li>
 <li><p>A huge difference between R and bash is how commands/functions are called.</p>
@@ -392,7 +400,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>R: <code>f(x, arg = 1)</code></li>
 <li>Bash: <code>f x --arg=1</code></li>
 <li>There are also arguments that are “flags” where its presence alters the behavior of the command. E.g., <code>f x -g</code> would incorporate the <code>g</code> flag and have a different behavior than <code>f x</code> which does not have the <code>g</code> flag.</li>
-<li>Typically, two dashes are for longer named commands, like <code>--arg</code> versus <code>-a</code>.</li>
+<li>Typically, two dashes are for longer named commands and one dash is for shorter (one-letter) commands, like <code>--arg</code> versus <code>-a</code>.</li>
 </ul></li>
 <li><p>If you are using Linux or Mac, then you can keep going. If you are using Windows, you need to first download and install git (and thus git bash) from here: <a href="http://git-scm.com/download/win" class="uri">http://git-scm.com/download/win</a>. You might need to restart R Studio if you are already running it.</p></li>
 <li><p>Open up the terminal</p>
@@ -401,15 +409,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="./01_figs/git_bash.png" alt="Git Bash for Windows" width="50%"></p></li>
 <li><p>Mac: On your Mac, do one of the following:</p>
 <ul>
-<li>Type “Terminal” in the search field, then click Terminal.</li>
-<li>In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.</li>
+<li><p>Type “Terminal” in the search field, then click Terminal.</p></li>
+<li><p>In the Finder <img src="./01_figs/finder.png" alt="Mac Finder Icon" width="20" height="20">, open the /Applications/Utilities folder, then double-click Terminal.</p></li>
+<li><p>It should look like this:</p>
+<p><img src="./01_figs/terminal_mac.png" alt="Zsh for Mac" width="70%"></p></li>
 </ul></li>
 <li><p>Ubuntu: Do one of the following</p>
 <ul>
 <li><p>Open the dash and search for “terminal”. Open up the terminal.</p></li>
 <li><p>Use keyboard shortcut: Ctrl+Alt+T</p></li>
 <li><p>It should look like this:</p>
-<p><img src="./01_figs/terminal_ubuntu.png" alt="Git Bash for Windows" width="50%"></p></li>
+<p><img src="./01_figs/terminal_ubuntu.png" alt="Bash for Ubuntu" width="50%"></p></li>
 </ul></li>
 </ul></li>
 <li><p>All commands get placed after the dollar sign.</p></li>
@@ -588,14 +598,14 @@ citation.bib</code></pre>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rnw</span> <span class="at">-e</span> <span class="st">"move"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>./.Rhistory:2:grep -rnwe "move"
-./01_basic_bash.qmd:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.qmd:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.qmd:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.qmd:193:grep -rnw -e "move"
-./01_basic_bash.rmarkdown:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.rmarkdown:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.rmarkdown:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.rmarkdown:193:grep -rnw -e "move"
+./01_basic_bash.qmd:104:  paths in R, using two periods mean "move back a folder".
+./01_basic_bash.qmd:109:    -   If you use `cd` without specifying a folder to move to, it will move the
+./01_basic_bash.qmd:115:    -   OK, I'm going to move us back to the 01_git directory.
+./01_basic_bash.qmd:203:grep -rnw -e "move"
+./01_basic_bash.rmarkdown:104:  paths in R, using two periods mean "move back a folder".
+./01_basic_bash.rmarkdown:109:    -   If you use `cd` without specifying a folder to move to, it will move the
+./01_basic_bash.rmarkdown:115:    -   OK, I'm going to move us back to the 01_git directory.
+./01_basic_bash.rmarkdown:203:grep -rnw -e "move"
 ./01_git_github.qmd:64:- You can go back to previous versions of your code/text, then move forward to
 ./01_git_github.qmd:221:-   Then move into your new repo</code></pre>
 </div>
@@ -603,10 +613,10 @@ citation.bib</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-rnw</span> <span class="at">-e</span> <span class="st">"mov"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>./01_basic_bash.qmd:197:grep -rnw -e "mov"
-./01_basic_bash.qmd:201:grep -rn -e "mov"
-./01_basic_bash.rmarkdown:197:grep -rnw -e "mov"
-./01_basic_bash.rmarkdown:201:grep -rn -e "mov"</code></pre>
+<pre><code>./01_basic_bash.qmd:207:grep -rnw -e "mov"
+./01_basic_bash.qmd:211:grep -rn -e "mov"
+./01_basic_bash.rmarkdown:207:grep -rnw -e "mov"
+./01_basic_bash.rmarkdown:211:grep -rn -e "mov"</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -615,24 +625,24 @@ citation.bib</code></pre>
 <pre><code>./.Rhistory:2:grep -rnwe "move"
 ./.Rhistory:9:conda_remove(envname = "r-reticulate")
 ./.Rhistory:11:conda_remove("bs4")
-./01_basic_bash.qmd:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.qmd:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.qmd:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.qmd:161:-   `rm`: Remove a file.
-./01_basic_bash.qmd:175:-   `rmdir`: Remove a directory/folder.
-./01_basic_bash.qmd:193:grep -rnw -e "move"
-./01_basic_bash.qmd:197:grep -rnw -e "mov"
-./01_basic_bash.qmd:201:grep -rn -e "mov"
-./01_basic_bash.qmd:226:I'll remove that file now
-./01_basic_bash.rmarkdown:94:  paths in R, using two periods mean "move back a folder".
-./01_basic_bash.rmarkdown:99:    -   If you use `cd` without specifying a folder to move to, it will move the
-./01_basic_bash.rmarkdown:105:    -   OK, I'm going to move us back to the 01_git directory.
-./01_basic_bash.rmarkdown:161:-   `rm`: Remove a file.
-./01_basic_bash.rmarkdown:175:-   `rmdir`: Remove a directory/folder.
-./01_basic_bash.rmarkdown:193:grep -rnw -e "move"
-./01_basic_bash.rmarkdown:197:grep -rnw -e "mov"
-./01_basic_bash.rmarkdown:201:grep -rn -e "mov"
-./01_basic_bash.rmarkdown:226:I'll remove that file now
+./01_basic_bash.qmd:104:  paths in R, using two periods mean "move back a folder".
+./01_basic_bash.qmd:109:    -   If you use `cd` without specifying a folder to move to, it will move the
+./01_basic_bash.qmd:115:    -   OK, I'm going to move us back to the 01_git directory.
+./01_basic_bash.qmd:171:-   `rm`: Remove a file.
+./01_basic_bash.qmd:185:-   `rmdir`: Remove a directory/folder.
+./01_basic_bash.qmd:203:grep -rnw -e "move"
+./01_basic_bash.qmd:207:grep -rnw -e "mov"
+./01_basic_bash.qmd:211:grep -rn -e "mov"
+./01_basic_bash.qmd:236:I'll remove that file now
+./01_basic_bash.rmarkdown:104:  paths in R, using two periods mean "move back a folder".
+./01_basic_bash.rmarkdown:109:    -   If you use `cd` without specifying a folder to move to, it will move the
+./01_basic_bash.rmarkdown:115:    -   OK, I'm going to move us back to the 01_git directory.
+./01_basic_bash.rmarkdown:171:-   `rm`: Remove a file.
+./01_basic_bash.rmarkdown:185:-   `rmdir`: Remove a directory/folder.
+./01_basic_bash.rmarkdown:203:grep -rnw -e "move"
+./01_basic_bash.rmarkdown:207:grep -rnw -e "mov"
+./01_basic_bash.rmarkdown:211:grep -rn -e "mov"
+./01_basic_bash.rmarkdown:236:I'll remove that file now
 ./01_git_github.qmd:64:- You can go back to previous versions of your code/text, then move forward to
 ./01_git_github.qmd:221:-   Then move into your new repo
 ./01_git_github.qmd:394:- Lines after a "`+`" are being added. Lines after a "`-`" are being removed.</code></pre>
@@ -654,18 +664,18 @@ citation.bib</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-nc</span> <span class="at">-nd</span> https://en.wikipedia.org/wiki/List_of_theological_demons</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>--2025-06-04 09:04:32--  https://en.wikipedia.org/wiki/List_of_theological_demons
+<pre><code>--2025-06-04 14:06:24--  https://en.wikipedia.org/wiki/List_of_theological_demons
 Resolving en.wikipedia.org (en.wikipedia.org)... 208.80.154.224
 Connecting to en.wikipedia.org (en.wikipedia.org)|208.80.154.224|:443... connected.
 HTTP request sent, awaiting response... 200 OK
 Length: 105005 (103K) [text/html]
 Saving to: ‘List_of_theological_demons’
 
-     0K .......... .......... .......... .......... .......... 48% 1.58M 0s
-    50K .......... .......... .......... .......... .......... 97% 8.33M 0s
-   100K ..                                                    100% 50.9K=0.04s
+     0K .......... .......... .......... .......... .......... 48% 1.21M 0s
+    50K .......... .......... .......... .......... .......... 97% 4.03M 0s
+   100K ..                                                    100% 50.9K=0.05s
 
-2025-06-04 09:04:32 (2.72 MB/s) - ‘List_of_theological_demons’ saved [105005/105005]</code></pre>
+2025-06-04 14:06:24 (1.91 MB/s) - ‘List_of_theological_demons’ saved [105005/105005]</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -694,6 +704,22 @@ List_of_theological_demons</code></pre>
 <li>Type a search term</li>
 <li><code>ctrl</code>+<code>r</code> to cycle through matches</li>
 <li>Hit <code>enter</code> if you want to reuse the match. Hit <code>ctrl</code>+<code>c</code> to exit out of the search.</li>
+</ol>
+</section>
+<section id="exercises" class="level1">
+<h1>Exercises</h1>
+<p>Execute these commands in this order:</p>
+<ol type="1">
+<li>Create a file called “foo.txt”</li>
+<li>Rename “foo.txt” to “bar.txt”</li>
+<li>Copy “bar.txt” to “foobar.txt”</li>
+<li>Create a new directory called “newdir”</li>
+<li>Move “foobar.txt” to “newdir”</li>
+<li>Delete “bar.txt”</li>
+<li>Change the working directory to “newdir”</li>
+<li>Delete “foobar.txt”</li>
+<li>Change the working directory up one level.</li>
+<li>Delete the “newdir” directory.</li>
 </ol>
 
 
