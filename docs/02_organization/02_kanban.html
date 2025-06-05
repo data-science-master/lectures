@@ -21,7 +21,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -282,7 +302,14 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
   <li><a href="#kanban" id="toc-kanban" class="nav-link" data-scroll-target="#kanban">Kanban</a></li>
+  <li><a href="#visualize-workflow" id="toc-visualize-workflow" class="nav-link" data-scroll-target="#visualize-workflow">Visualize Workflow</a></li>
+  <li><a href="#limit-work-in-progress-wip" id="toc-limit-work-in-progress-wip" class="nav-link" data-scroll-target="#limit-work-in-progress-wip">Limit Work-in-progress (WIP)</a></li>
+  <li><a href="#measure-and-manage-flow" id="toc-measure-and-manage-flow" class="nav-link" data-scroll-target="#measure-and-manage-flow">Measure and Manage Flow</a></li>
+  <li><a href="#make-process-policies-explicit" id="toc-make-process-policies-explicit" class="nav-link" data-scroll-target="#make-process-policies-explicit">Make Process Policies Explicit</a></li>
+  <li><a href="#improve-collaboration" id="toc-improve-collaboration" class="nav-link" data-scroll-target="#improve-collaboration">Improve Collaboration</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -321,23 +348,147 @@ ul.task-list li input[type="checkbox"] {
 <li>Kanban system for project management</li>
 </ul>
 </section>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<ul>
+<li><p>Almost every group project I have been on as a student was one of these three types:</p>
+<ol type="1">
+<li>I did all of the work.</li>
+<li>I did none of the work.</li>
+<li>I did a fair share of the work, but it was completely separate from my collaborators and we just stapled the different parts together.</li>
+</ol></li>
+<li><p>I think this experience is really common with students, which is why so many hate group projects.</p></li>
+<li><p>This is a problem with <strong>project management</strong>, not student abilities.</p></li>
+<li><p>There are whole fields devoted to improving project management and team collaboration.</p></li>
+<li><p>We won’t get into the full details of these. Some folks get entire degrees in the subject.</p></li>
+<li><p>Here, we will just try to apply a couple of the principles of project management to team collaboration.</p></li>
+</ul>
+</section>
 <section id="kanban" class="level1">
 <h1>Kanban</h1>
 <ul>
-<li><p>There are many project management paradigms out there.</p></li>
-<li><p>We will focus on one that is popular in software engineering and adapt it to data science: kanban.</p></li>
-<li><p>Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain.</p>
+<li><p>There are many project management paradigms out there, but we’ll focus on Kanban.</p></li>
+<li><p>Kanban originated in the Japanese auto industry and has expanded to other fields.</p></li>
+<li><p>Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain. This makes other systems not as useful for data science collaborations <span class="citation" data-cites="saltz2017comparing">(<a href="#ref-saltz2017comparing" role="doc-biblioref">Saltz, Crowston, et al. 2017</a>)</span></p>
 <ul>
-<li>E.g., sometimes the questions you have are impossible to answer given the data available.</li>
+<li><p>E.g., sometimes the questions you have are impossible to answer given the data available.</p></li>
+<li><p><span class="citation" data-cites="saltz2019ski">Saltz and Suthrland (<a href="#ref-saltz2019ski" role="doc-biblioref">2019</a>)</span> has a very nice summary of the different project management systems used in Data Science.</p></li>
 </ul></li>
 <li><p>Kanban is also natively supported in GitHub repos.</p></li>
-<li><p>Kanban is a board with (at least) three columns: “To do” or “Backlog”, “In progress”, and “Done”.</p></li>
+<li><p>Kanban has five underlying principles:</p>
+<ol type="1">
+<li>Visualize the workflow</li>
+<li>Limit work-in-progress,</li>
+<li>Manage flow,</li>
+<li>Make process policies explicit,</li>
+<li>Improve collaboration and implement feedback loops</li>
+</ol></li>
 </ul>
+</section>
+<section id="visualize-workflow" class="level1">
+<h1>Visualize Workflow</h1>
+<ul>
+<li><p>Kanban is a board with three or more columns of increasing levels of completion.</p></li>
+<li><p>E.g.: “To do”, “In progress”, and “Done”.</p></li>
+<li><p>GitHub’s default board has: Backlog, Ready, In progress, In review, and Done</p></li>
+<li><p>You place work items on (virtual) cards on the board. Example work items might be:</p>
+<ul>
+<li>Download and clean the EPA water data</li>
+<li>Exploratory data analysis on the College scorecard data.</li>
+<li>Random forest implementation of the Netflix movie data.</li>
+<li>Draft introduction and literature review for final project</li>
+<li>BAD: “Do the final project” (too vague/broad)</li>
+</ul></li>
+<li><p>You place the name of the person responsible for the card on that card.</p>
+<ul>
+<li>Limit it to one person, otherwise the split responsibility could make it so that nothing is completed.</li>
+<li>If it requires two people, split the task up into smaller tasks.</li>
+</ul></li>
+<li><p>All work items begin at the left-most column. As the work-items progress you move them rightward one column until you reach “done”.</p></li>
+<li><p>This allows all members of a team to see what items are being worked on and the overall progress of the project.</p></li>
+</ul>
+</section>
+<section id="limit-work-in-progress-wip" class="level1">
+<h1>Limit Work-in-progress (WIP)</h1>
+<ul>
+<li><p>Keep each card &lt; 2–3 days of effort</p></li>
+<li><p>Set a numeric WIP limit above the column: e.g., “In progress (max 3).”</p></li>
+<li><p>When the column is full, finish something before starting new work.</p></li>
+<li><p>This has many advantages:</p>
+<ul>
+<li>allows you to prioritize what tasks to do first.</li>
+<li>minimizes bottlenecks, since most tasks depend on previously finished tasks.</li>
+<li>allows you to reprioritize different aspects of the project by reprioritizing what items are moved to “In progress”.</li>
+</ul></li>
+</ul>
+</section>
+<section id="measure-and-manage-flow" class="level1">
+<h1>Measure and Manage Flow</h1>
+<ul>
+<li>Organize your “To Do” column vertically by priority.
+<ul>
+<li>Highest priority at the top, lowest priority at the bottom.</li>
+</ul></li>
+<li>Manage bottlenecks.
+<ul>
+<li>It’s easy to see what is stalled on the visual board.</li>
+</ul></li>
+<li>Keep your board up-to-date.
+<ul>
+<li>Kanban does not work if anyone doesn’t buy-in to the system and fails to update cards.</li>
+<li>You can assign a team member to be in charge of making sure the board is up-to-date.</li>
+</ul></li>
+</ul>
+</section>
+<section id="make-process-policies-explicit" class="level1">
+<h1>Make Process Policies Explicit</h1>
+<ul>
+<li><p>Be explicit about when you can move a work item to the next column.</p></li>
+<li><p>Write your rules on the board</p></li>
+<li><p>E.g.:</p>
+<ul>
+<li>Functions must have unit tests and pass them to move on.</li>
+</ul></li>
+</ul>
+</section>
+<section id="improve-collaboration" class="level1">
+<h1>Improve Collaboration</h1>
+<ul>
+<li><p>Use stand-ups (tech-speak for short meetings) and retros (tech-speak for meetings focused on reviewing progress) to tweak the board and process together.</p></li>
+<li><p>Stand-up</p>
+<ul>
+<li>Relatively frequent meetings</li>
+<li>10–15 min stand-up</li>
+<li>Discuss items on the board from right to left (most done to least done)</li>
+<li>Unblock stuck cards — discuss where bottlenecks are.</li>
+<li>Keep it to the board</li>
+<li>No deep dives</li>
+</ul></li>
+<li><p>Retro</p>
+<ul>
+<li>Less frequent meetings.</li>
+<li>What flowed?</li>
+<li>What stalled?</li>
+<li>Update WIP limits / policies</li>
+<li>Action items become new cards.</li>
+</ul></li>
+</ul>
+</section>
+<section id="references" class="level1">
+
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-saltz2017comparing" class="csl-entry" role="listitem">
+Saltz, Jeffrey, Kevin Crowston, et al. 2017. <span>“Comparing Data Science Project Management Methodologies via a Controlled Experiment.”</span>
+</div>
+<div id="ref-saltz2019ski" class="csl-entry" role="listitem">
+Saltz, Jeffrey, and Alex Suthrland. 2019. <span>“SKI: An Agile Framework for Data Science.”</span> In <em>2019 IEEE International Conference on Big Data (Big Data)</em>, 3468–76. IEEE. <a href="https://doi.org/10.1109/BigData47090.2019.9005591">https://doi.org/10.1109/BigData47090.2019.9005591</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

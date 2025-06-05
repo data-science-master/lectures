@@ -1,22 +1,128 @@
 ---
 title: "Project Management"
 author: "David Gerard"
+bibliography: "../bib.bib"
 ---
 
 # Learning Objectives
 
 - Kanban system for project management
 
+# Motivation
+
+- Almost every group project I have been on as a student was one of these three types:
+
+  1. I did all of the work.
+  2. I did none of the work.
+  3. I did a fair share of the work, but it was completely separate from my collaborators and we just stapled the different parts together.
+  
+- I think this experience is really common with students, which is why so many hate group projects.
+
+- This is a problem with **project management**, not student abilities.
+
+- There are whole fields devoted to improving project management and team collaboration.
+
+- We won't get into the full details of these. Some folks get entire degrees in the subject.
+
+- Here, we will just try to apply a couple of the principles of project management to team collaboration.
+
 # Kanban
 
-- There are many project management paradigms out there.
+- There are many project management paradigms out there, but we'll focus on Kanban.
 
-- We will focus on one that is popular in software engineering and adapt it to data science: kanban.
+- Kanban originated in the Japanese auto industry and has expanded to other fields.
 
-- Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain.
+- Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain. This makes other systems not as useful for data science collaborations [@saltz2017comparing]
 
   - E.g., sometimes the questions you have are impossible to answer given the data available.
+  
+  - @saltz2019ski has a very nice summary of the different project management systems used in Data Science.
 
 - Kanban is also natively supported in GitHub repos.
 
-- Kanban is a board with (at least) three columns: "To do" or "Backlog", "In progress", and "Done".
+- Kanban has five underlying principles:
+  1. Visualize the workflow
+  2. Limit work-in-progress,
+  3. Manage flow, 
+  4. Make process policies explicit,
+  5. Improve collaboration and implement feedback loops
+
+# Visualize Workflow
+
+- Kanban is a board with three or more columns of increasing levels of completion.
+
+- E.g.: "To do", "In progress", and "Done".
+
+- GitHub's default board has: Backlog, Ready, In progress, In review, and Done
+
+- You place work items on (virtual) cards on the board. Example work items might be:
+  - Download and clean the EPA water data
+  - Exploratory data analysis on the College scorecard data.
+  - Random forest implementation of the Netflix movie data.
+  - Draft introduction and literature review for final project
+  - BAD: "Do the final project" (too vague/broad)
+  
+- You place the name of the person responsible for the card on that card.
+  - Limit it to one person, otherwise the split responsibility could make it so that nothing is completed.
+  - If it requires two people, split the task up into smaller tasks.
+
+- All work items begin at the left-most column. As the work-items progress you move them rightward one column until you reach "done".
+
+- This allows all members of a team to see what items are being worked on and the overall progress of the project.
+
+# Limit Work-in-progress (WIP)
+
+- Keep each card < 2--3 days of effort
+  
+- Set a numeric WIP limit above the column: e.g., "In progress (max 3)."
+
+- When the column is full, finish something before starting new work.
+
+- This has many advantages:
+  - allows you to prioritize what tasks to do first. 
+  - minimizes bottlenecks, since most tasks depend on previously finished tasks.
+  - allows you to reprioritize different aspects of the project by reprioritizing what items are moved to "In progress".
+
+# Measure and Manage Flow
+
+- Organize your "To Do" column vertically by priority. 
+  - Highest priority at the top, lowest priority at the bottom.
+
+- Manage bottlenecks.
+  - It's easy to see what is stalled on the visual board. 
+  
+- Keep your board up-to-date.
+  - Kanban does not work if anyone doesn't buy-in to the system and fails to update cards.
+  - You can assign a team member to be in charge of making sure the board is up-to-date.
+
+
+
+# Make Process Policies Explicit
+
+- Be explicit about when you can move a work item to the next column.
+
+- Write your rules on the board
+
+- E.g.:
+  - Functions must have unit tests and pass them to move on.
+
+# Improve Collaboration
+
+- Use stand-ups (tech-speak for short meetings) and retros (tech-speak for meetings focused on reviewing progress) to tweak the board and process together.
+
+- Stand-up
+  - Relatively frequent meetings
+  - 10–15 min stand-up
+  - Discuss items on the board from right to left (most done to least done)
+  - Unblock stuck cards --- discuss where bottlenecks are.
+  - Keep it to the board
+  - No deep dives
+  
+- Retro
+  - Less frequent meetings.
+  - What flowed?
+  - What stalled?
+  - Update WIP limits / policies
+  - Action items become new cards.
+
+# References
