@@ -7,6 +7,8 @@ bibliography: "../bib.bib"
 # Learning Objectives
 
 - Kanban system for project management
+- [The Kanban Guide](https://kanbanguides.org/english/)
+- [The Kanban Pocket Guide](https://www.prokanban.org/kpg)
 
 # Motivation
 
@@ -25,6 +27,8 @@ bibliography: "../bib.bib"
 - We won't get into the full details of these. Some folks get entire degrees in the subject.
 
 - Here, we will just try to apply a couple of the principles of project management to team collaboration.
+
+- **Exercise**: How do you typically organize your student projects?
 
 # Kanban
 
