@@ -53,7 +53,7 @@ author: "David Gerard"
 - You can format this manually, but R Studio Projects do this for you automatically.
   - Forces the working directory to be the root of the project.
   - You can set default behavior for the project.
-  - R studio has tools that interface with projects (like using git inside a project).
+  - R studio has tools that interface with projects (like using git or [R environments](https://rstudio.github.io/renv/) inside a project).
 
 - You create a project with "File" > "New Project..."
   

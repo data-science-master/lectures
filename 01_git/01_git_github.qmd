@@ -24,6 +24,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 - Version Control with git.
 - Collaboration and software-hosting with GitHub.
 - [Git Cheat Sheet](https://education.github.com/git-cheat-sheet-education.pdf)
+- [Another Git Cheat Sheet](https://rstudio.github.io/cheatsheets/git-github.pdf)
 - [Git Handbook](https://guides.github.com/introduction/git-handbook/)
 - [Git Novice](https://swcarpentry.github.io/git-novice/)
 
