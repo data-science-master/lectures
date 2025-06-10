@@ -283,6 +283,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#file-naming" id="toc-file-naming" class="nav-link" data-scroll-target="#file-naming">File Naming</a></li>
   <li><a href="#file-organization" id="toc-file-organization" class="nav-link" data-scroll-target="#file-organization">File Organization</a></li>
   <li><a href="#some-file-things-you-might-not-know" id="toc-some-file-things-you-might-not-know" class="nav-link" data-scroll-target="#some-file-things-you-might-not-know">Some file things you might not know</a>
   <ul class="collapse">
@@ -364,18 +365,43 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Finder -&gt; Settings -&gt; “Show these items in the sidebar” -&gt; Check your username (with the home icon).</li>
 </ul></li>
-<li><p>When naming files or folders, <strong>do not use spaces</strong>. Use underscores (<code>_</code>) instead.</p>
+</ul>
+</section>
+<section id="file-naming" class="level1">
+<h1>File Naming</h1>
+<ul>
+<li><strong>Do not use spaces</strong>. Use underscores (<code>_</code>) instead.
 <ul>
 <li>Spaces make command-line scripts more annoying to code up.</li>
 </ul></li>
-<li><p>When naming files or folders, <strong>do not use periods</strong>.</p>
+<li><strong>Do not use periods</strong>.
 <ul>
 <li>These should be reserved for file extensions.</li>
 </ul></li>
-<li><p>When naming files or folders, <strong>do not depend on case</strong> to differentiate files.</p>
+<li><strong>Do not use other special characters</strong> like back slashes, dollar signs, percents, etc
+<ul>
+<li>These can make it harder for the machine to read the files.</li>
+</ul></li>
+<li><strong>Do not depend on case</strong> to differentiate files.
 <ul>
 <li>Some file systems are case sensitive, but others are not. So if you depend on case (e.g., “File.txt” vs “file.txt”), then you are setting yourself up for a headache.</li>
 <li>I typically just use lower_snake_case for all files/folders except top level folders (like “Documents” or “Downloads” or “Desktop” etc)</li>
+</ul></li>
+<li><strong>DO</strong> use numbers to help with default ordering for files.
+<ul>
+<li>E.g. Suppose “intro.R” was done before “basics.R”. To respect that order, name it “01_intro.R” and “02_basics.R”.</li>
+</ul></li>
+<li><strong>Exercise</strong> (From R for data science): Rename these files (I’ve added context to help you)
+<ul>
+<li>“alternative model.R”: Second modeling approach</li>
+<li>“code for exploratory analysis.r”</li>
+<li>“finalreport.qmd”: Done on March 20, 2022</li>
+<li>“FinalReport.qmd”: Done on April 2, 2022</li>
+<li>“fig 1.png”</li>
+<li>“Figure_02.png”</li>
+<li>“model_first_try.R”: First modeling approach</li>
+<li>“run-first.r”: Loads the data</li>
+<li>“temp.txt”: Notes for the final report</li>
 </ul></li>
 </ul>
 </section>

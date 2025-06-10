@@ -3,6 +3,16 @@ title: "File Structure"
 author: "David Gerard"
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+knitr::knit_engines$set(text = function(options) {
+})
+```
+
 # Learning Objectives
 
 - Understand file systems on Windows and Mac.
@@ -50,15 +60,48 @@ author: "David Gerard"
 - To add the home directory to your sidebar on Mac for quick access:
   - Finder -> Settings -> "Show these items in the sidebar" -> Check your username (with the home icon).
 
-- When naming files or folders, **do not use spaces**. Use underscores (`_`) instead.
+# File Naming
+
+- **Do not use spaces**. Use underscores (`_`) instead.
   - Spaces make command-line scripts more annoying to code up.
   
-- When naming files or folders, **do not use periods**.
+- **Do not use periods**.
   - These should be reserved for file extensions.
   
-- When naming files or folders, **do not depend on case** to differentiate files.
+- **Do not use other special characters** like back slashes, dollar signs, percents, etc
+  - These can make it harder for the machine to read the files.
+  
+- **Do not depend on case** to differentiate files.
   - Some file systems are case sensitive, but others are not. So if you depend on case (e.g., "File.txt" vs "file.txt"), then you are setting yourself up for a headache.
   - I typically just use lower_snake_case for all files/folders except top level folders (like "Documents" or "Downloads" or "Desktop" etc)
+  
+- **DO** use numbers to help with default ordering for files.
+  - E.g. Suppose "intro.R" was done before "basics.R". To respect that order, name it "01_intro.R" and "02_basics.R".
+  
+- **Exercise** (From R for data science): Rename these files (I've added context to help you)
+  - "alternative model.R": Second modeling approach
+  - "code for exploratory analysis.r"
+  - "finalreport.qmd": Done on March 20, 2022
+  - "FinalReport.qmd": Done on April 2, 2022
+  - "fig 1.png"
+  - "Figure_02.png"
+  - "model_first_try.R": First modeling approach
+  - "run-first.r": Loads the data
+  - "temp.txt": Notes for the final report
+
+```{text, echo = FALSE, eval = FALSE}
+This is one way:
+- "01-load-data.R"
+- "02-exploratory-analysis.R"
+- "03-model-approach-1.R"
+- "04-model-approach-2.R"
+- "fig-01.png"
+- "fig-02.png"
+- "report-2022-03-20.qmd"
+- "report-2022-04-02.qmd"
+- "report-draft-notes.txt"
+```
+
 
 # File Organization
 
