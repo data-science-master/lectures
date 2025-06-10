@@ -284,6 +284,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#file-organization" id="toc-file-organization" class="nav-link" data-scroll-target="#file-organization">File Organization</a></li>
+  <li><a href="#some-file-things-you-might-not-know" id="toc-some-file-things-you-might-not-know" class="nav-link" data-scroll-target="#some-file-things-you-might-not-know">Some file things you might not know</a>
+  <ul class="collapse">
+  <li><a href="#file-extensions" id="toc-file-extensions" class="nav-link" data-scroll-target="#file-extensions">File extensions</a></li>
+  <li><a href="#hidden-files" id="toc-hidden-files" class="nav-link" data-scroll-target="#hidden-files">Hidden files</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -320,20 +325,24 @@ ul.task-list li input[type="checkbox"] {
 <h1>Learning Objectives</h1>
 <ul>
 <li>Understand file systems on Windows and Mac.</li>
+<li>Better organize your files.</li>
 </ul>
 </section>
 <section id="overview" class="level1">
 <h1>Overview</h1>
 <ul>
 <li><p>Your computer organizes files using a <strong>hierarchical directory structure</strong>.</p></li>
-<li><p>This structure follows a tree-like pattern of <strong>directories</strong>—called <strong>folders</strong> on Windows and Mac.</p></li>
+<li><p>This structure follows a tree-like pattern of <strong>directories</strong>, called <strong>folders</strong> on Windows and Mac.</p></li>
 <li><p><strong>Folders</strong> contain <strong>files</strong> and other folders, called <strong>subfolders</strong> or <strong>subdirectories</strong>.</p></li>
 <li><p>The top-level directory is called the <strong>root</strong>.</p></li>
 <li><p>The <strong>root</strong> contains all files and directories on your computer.</p></li>
-<li><p>Your <strong>home</strong> directory is the default location for your files. On a Mac, this is typically <code>Users/your_username</code>, but it may differ.</p>
+<li><p>Your <strong>home</strong> directory is the default location for your files.</p>
 <ul>
-<li>It’s also the working directory of your shell when you first open it.</li>
+<li>On a Mac, this is typically <code>Users/your_username</code>, but it may differ.</li>
+<li>On Windows, this is typically <code>C:\Users\your_username</code>, but it may differ.</li>
 </ul></li>
+<li><p>Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time (e.g., Git Bash for Windows uses forward slashes), but it’s something to be aware of.</p></li>
+<li><p>The home directory is also the working directory of your shell when you first open it.</p></li>
 <li><p>You use a <a href="https://en.wikipedia.org/wiki/File_manager"><strong>file management program</strong></a> to navigate and manage your files:</p>
 <ul>
 <li>On Windows: <strong>File Explorer</strong></li>
@@ -353,9 +362,21 @@ ul.task-list li input[type="checkbox"] {
 <li><p>I won’t cover how to do them in these notes because even different versions of the same operating system have slightly different workflows.</p></li>
 <li><p>To add the home directory to your sidebar on Mac for quick access:</p>
 <ul>
-<li>Finder → Settings → “Show these items in the sidebar” → Check your username (with the home icon).</li>
+<li>Finder -&gt; Settings -&gt; “Show these items in the sidebar” -&gt; Check your username (with the home icon).</li>
 </ul></li>
-<li><p>When naming files or folders, <strong>do not use spaces</strong>. Use underscores (<code>_</code>) instead.</p></li>
+<li><p>When naming files or folders, <strong>do not use spaces</strong>. Use underscores (<code>_</code>) instead.</p>
+<ul>
+<li>Spaces make command-line scripts more annoying to code up.</li>
+</ul></li>
+<li><p>When naming files or folders, <strong>do not use periods</strong>.</p>
+<ul>
+<li>These should be reserved for file extensions.</li>
+</ul></li>
+<li><p>When naming files or folders, <strong>do not depend on case</strong> to differentiate files.</p>
+<ul>
+<li>Some file systems are case sensitive, but others are not. So if you depend on case (e.g., “File.txt” vs “file.txt”), then you are setting yourself up for a headache.</li>
+<li>I typically just use lower_snake_case for all files/folders except top level folders (like “Documents” or “Downloads” or “Desktop” etc)</li>
+</ul></li>
 </ul>
 </section>
 <section id="file-organization" class="level1">
@@ -364,7 +385,7 @@ ul.task-list li input[type="checkbox"] {
 <li><p>Because your file system is hierarchical, your file organization should take advantage of that structure.</p></li>
 <li><p><strong>Bad example</strong>: Placing all of your files directly on the Desktop or at the same folder level.</p>
 <ul>
-<li>You’d be surprised how often I see this on student computers.</li>
+<li>This is more common than you might think, but it makes files hard to manage.</li>
 </ul></li>
 <li><p>There are many good ways to organize your files. Here’s one recommended structure:</p>
 <ul>
@@ -387,8 +408,36 @@ ul.task-list li input[type="checkbox"] {
 <li>Transfer your current notes for this class from wherever they are to your new directories. Make sure they are named well (no spaces, numbered ordering, etc).</li>
 </ol></li>
 </ul>
+</section>
+<section id="some-file-things-you-might-not-know" class="level1">
+<h1>Some file things you might not know</h1>
+<section id="file-extensions" class="level2">
+<h2 class="anchored" data-anchor-id="file-extensions">File extensions</h2>
+<ul>
+<li><p>A file extension is a suffix for a file (like “.txt”, “.jpg”, “.R”, etc). It is primarily used to tell the operating system what program to use to open it.</p></li>
+<li><p>When you double click on a file, your operating system knows what program to use (almost) only because of the file extension.</p></li>
+<li><p>Windows sometimes hides the file extension. You should change the settings so you can see them:</p></li>
+<li><p>Open File Explorer, click on the “View” tab, and check the “File name extensions” box.</p></li>
+<li><p>There are ways to choose the default program to use when opening a file with a given file extension.</p></li>
+</ul>
+</section>
+<section id="hidden-files" class="level2">
+<h2 class="anchored" data-anchor-id="hidden-files">Hidden files</h2>
+<ul>
+<li><p>Some files/folders are hidden by default. These typically begin with a period “<code>.</code>”.</p></li>
+<li><p>Common examples:</p>
+<ul>
+<li><code>.git</code>: A folder that contains all of your version history.</li>
+<li><code>.gitignore</code>: A file that you can edit to say what files to never commit.</li>
+<li><code>.DS_Store</code>: A Mac-specific file used by Finder to maintain properties of your folder.</li>
+<li><code>.Renviron</code>: A file you can create that contains variables (format: <code>name=value</code>) that are available on startup.</li>
+<li><code>.Rprofile</code>: A file you can create that is sourced on R’s startup. Can be any R code.</li>
+</ul></li>
+<li><p>There are ways to see hidden files by default.</p></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

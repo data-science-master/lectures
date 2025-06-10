@@ -6,7 +6,10 @@ bibliography: "../bib.bib"
 
 # Learning Objectives
 
-- Kanban system for project management
+- Understand the principles of the Kanban system for project management.
+- Apply Kanban using [GitHub Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects).
+- Reflect on common group project challenges and how Kanban addresses them.
+- Develop, prioritize, and manage tasks using a Kanban workflow.
 - [The Kanban Guide](https://kanbanguides.org/english/)
 - [The Kanban Pocket Guide](https://www.prokanban.org/kpg)
 
@@ -28,11 +31,18 @@ bibliography: "../bib.bib"
 
 - Here, we will just try to apply a couple of the principles of project management to team collaboration.
 
-- **Exercise**: How do you typically organize your student projects?
-
+- **Exercise**: In groups of ~4, discuss your past experiences with group projects and answer:
+  - How do you plan out tasks?
+  - How do you assign roles?
+  - How do you monitor progress?
+  - Are you satisfied with how most group projects go? Why or why not?
+  
+  **Output**: Summarize 2-3 key pain points or challenges, and be prepared to share.
+  
 # Kanban
 
 - There are many project management paradigms out there, but we'll focus on Kanban.
+  - Kanban is so basic, that many more complicated paradigms build on it, or use it as a component.
 
 - Kanban originated in the Japanese auto industry and has expanded to other fields.
 
@@ -108,8 +118,10 @@ bibliography: "../bib.bib"
 
   <img src="./02_figs/github7.png" alt="GitHub Projects" width="100%"/>
 
-- "Draft" is short for "Draft issue", which is an issue that only exists in the Project. GitHub Projects are set up to correlate most cards to real issues in real repos. But we are using just the very basic features, so no need to get into that now.
-  
+- "Draft" is short for "Draft issue", which is an issue that only exists in the Project. GitHub Projects are set up to correlate most cards to real issues in real repos.
+
+- We'll stick with basic features for now. Integrating with issues is more advanced and optional.
+
 - Click on the card to open up the card settings.
 
   <img src="./02_figs/github8.png" alt="GitHub Projects" width="100%"/>
@@ -132,7 +144,7 @@ bibliography: "../bib.bib"
 
 - This has many advantages:
   - allows you to prioritize what tasks to do first. 
-  - minimizes bottlenecks, since most tasks depend on previously finished tasks.
+  - minimizes bottlenecks. If "In progress" (or some other intermediate step) is overloaded, your group might need to prioritize finishing the tasks in progress over starting new tasks.
   - allows you to reprioritize different aspects of the project by reprioritizing what items are moved to "In progress".
 
 # Measure and Manage Flow
@@ -177,5 +189,22 @@ bibliography: "../bib.bib"
   - What stalled?
   - Update WIP limits / policies
   - Action items become new cards.
+  
+# Exercise
+
+You're working in a team to analyze the [College Scorecard Data](https://collegescorecard.ed.gov/) and identify which features are most associated with post-graduate median earnings.
+
+1. Create a GitHub Kanban board in your team repo.
+2. Create 6–10 task cards, covering any or all of the following:
+   1. Data import
+   2. Cleaning/missingness
+   3. Exploratory analysis
+   4. Model selection
+   5. Model fitting
+   6. Interpretation of results
+   7. Report writing
+3. Assign a student to each card. Ensure no one has more than two cards.
+4. Set WIP limits and write 1–2 process policies.
+5. Organize the "To do" column by priority.
 
 # References

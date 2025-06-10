@@ -310,6 +310,7 @@ div.csl-indent {
   <li><a href="#measure-and-manage-flow" id="toc-measure-and-manage-flow" class="nav-link" data-scroll-target="#measure-and-manage-flow">Measure and Manage Flow</a></li>
   <li><a href="#make-process-policies-explicit" id="toc-make-process-policies-explicit" class="nav-link" data-scroll-target="#make-process-policies-explicit">Make Process Policies Explicit</a></li>
   <li><a href="#improve-collaboration" id="toc-improve-collaboration" class="nav-link" data-scroll-target="#improve-collaboration">Improve Collaboration</a></li>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -346,7 +347,10 @@ div.csl-indent {
 <section id="learning-objectives" class="level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>Kanban system for project management</li>
+<li>Understand the principles of the Kanban system for project management.</li>
+<li>Apply Kanban using <a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects">GitHub Projects</a>.</li>
+<li>Reflect on common group project challenges and how Kanban addresses them.</li>
+<li>Develop, prioritize, and manage tasks using a Kanban workflow.</li>
 <li><a href="https://kanbanguides.org/english/">The Kanban Guide</a></li>
 <li><a href="https://www.prokanban.org/kpg">The Kanban Pocket Guide</a></li>
 </ul>
@@ -365,13 +369,23 @@ div.csl-indent {
 <li><p>There are whole fields devoted to improving project management and team collaboration.</p></li>
 <li><p>We won’t get into the full details of these. Some folks get entire degrees in the subject.</p></li>
 <li><p>Here, we will just try to apply a couple of the principles of project management to team collaboration.</p></li>
-<li><p><strong>Exercise</strong>: How do you typically organize your student projects?</p></li>
+<li><p><strong>Exercise</strong>: In groups of ~4, discuss your past experiences with group projects and answer:</p>
+<ul>
+<li>How do you plan out tasks?</li>
+<li>How do you assign roles?</li>
+<li>How do you monitor progress?</li>
+<li>Are you satisfied with how most group projects go? Why or why not?</li>
+</ul>
+<p><strong>Output</strong>: Summarize 2-3 key pain points or challenges, and be prepared to share.</p></li>
 </ul>
 </section>
 <section id="kanban" class="level1">
 <h1>Kanban</h1>
 <ul>
-<li><p>There are many project management paradigms out there, but we’ll focus on Kanban.</p></li>
+<li><p>There are many project management paradigms out there, but we’ll focus on Kanban.</p>
+<ul>
+<li>Kanban is so basic, that many more complicated paradigms build on it, or use it as a component.</li>
+</ul></li>
 <li><p>Kanban originated in the Japanese auto industry and has expanded to other fields.</p></li>
 <li><p>Other systems (like scrum) are too focused on deliverables, whereas in data science outcomes are typically uncertain. This makes other systems not as useful for data science collaborations <span class="citation" data-cites="saltz2017comparing">(<a href="#ref-saltz2017comparing" role="doc-biblioref">Saltz, Crowston, et al. 2017</a>)</span></p>
 <ul>
@@ -431,7 +445,8 @@ div.csl-indent {
 <p><img src="./02_figs/github6.png" alt="GitHub Projects" width="100%"></p></li>
 <li><p>Click on “Create a draft” after you have the card name.</p>
 <p><img src="./02_figs/github7.png" alt="GitHub Projects" width="100%"></p></li>
-<li><p>“Draft” is short for “Draft issue”, which is an issue that only exists in the Project. GitHub Projects are set up to correlate most cards to real issues in real repos. But we are using just the very basic features, so no need to get into that now.</p></li>
+<li><p>“Draft” is short for “Draft issue”, which is an issue that only exists in the Project. GitHub Projects are set up to correlate most cards to real issues in real repos.</p></li>
+<li><p>We’ll stick with basic features for now. Integrating with issues is more advanced and optional.</p></li>
 <li><p>Click on the card to open up the card settings.</p>
 <p><img src="./02_figs/github8.png" alt="GitHub Projects" width="100%"></p></li>
 <li><p>You can add a description of what work needs to be done by clicking “Edit”. You can assign who is responsible for that work by clicking “Add assignees”</p>
@@ -449,7 +464,7 @@ div.csl-indent {
 <li><p>This has many advantages:</p>
 <ul>
 <li>allows you to prioritize what tasks to do first.</li>
-<li>minimizes bottlenecks, since most tasks depend on previously finished tasks.</li>
+<li>minimizes bottlenecks. If “In progress” (or some other intermediate step) is overloaded, your group might need to prioritize finishing the tasks in progress over starting new tasks.</li>
 <li>allows you to reprioritize different aspects of the project by reprioritizing what items are moved to “In progress”.</li>
 </ul></li>
 </ul>
@@ -506,6 +521,26 @@ div.csl-indent {
 <li>Action items become new cards.</li>
 </ul></li>
 </ul>
+</section>
+<section id="exercise" class="level1">
+<h1>Exercise</h1>
+<p>You’re working in a team to analyze the <a href="https://collegescorecard.ed.gov/">College Scorecard Data</a> and identify which features are most associated with post-graduate median earnings.</p>
+<ol type="1">
+<li>Create a GitHub Kanban board in your team repo.</li>
+<li>Create 6–10 task cards, covering any or all of the following:
+<ol type="1">
+<li>Data import</li>
+<li>Cleaning/missingness</li>
+<li>Exploratory analysis</li>
+<li>Model selection</li>
+<li>Model fitting</li>
+<li>Interpretation of results</li>
+<li>Report writing</li>
+</ol></li>
+<li>Assign a student to each card. Ensure no one has more than two cards.</li>
+<li>Set WIP limits and write 1–2 process policies.</li>
+<li>Organize the “To do” column by priority.</li>
+</ol>
 </section>
 <section id="references" class="level1">
 

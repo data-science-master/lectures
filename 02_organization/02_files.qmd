@@ -6,12 +6,13 @@ author: "David Gerard"
 # Learning Objectives
 
 - Understand file systems on Windows and Mac.
+- Better organize your files.
 
 # Overview
 
 - Your computer organizes files using a **hierarchical directory structure**.
 
-- This structure follows a tree-like pattern of **directories**—called **folders** on Windows and Mac.
+- This structure follows a tree-like pattern of **directories**, called **folders** on Windows and Mac.
 
 - **Folders** contain **files** and other folders, called **subfolders** or **subdirectories**.
 
@@ -19,9 +20,13 @@ author: "David Gerard"
 
 - The **root** contains all files and directories on your computer.
 
-- Your **home** directory is the default location for your files. On a Mac, this is typically `Users/your_username`, but it may differ.
+- Your **home** directory is the default location for your files. 
+  - On a Mac, this is typically `Users/your_username`, but it may differ.
+  - On Windows, this is typically `C:\Users\your_username`, but it may differ.
+  
+- Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time (e.g., Git Bash for Windows uses forward slashes), but it's something to be aware of.
 
-  - It’s also the working directory of your shell when you first open it.
+- The home directory is also the working directory of your shell when you first open it.
 
 - You use a [**file management program**](https://en.wikipedia.org/wiki/File_manager) to navigate and manage your files:
 
@@ -43,18 +48,26 @@ author: "David Gerard"
 - I won't cover how to do them in these notes because even different versions of the same operating system have slightly different workflows.
 
 - To add the home directory to your sidebar on Mac for quick access:
-  - Finder → Settings → “Show these items in the sidebar” → Check your username (with the home icon).
+  - Finder -> Settings -> "Show these items in the sidebar" -> Check your username (with the home icon).
 
 - When naming files or folders, **do not use spaces**. Use underscores (`_`) instead.
+  - Spaces make command-line scripts more annoying to code up.
+  
+- When naming files or folders, **do not use periods**.
+  - These should be reserved for file extensions.
+  
+- When naming files or folders, **do not depend on case** to differentiate files.
+  - Some file systems are case sensitive, but others are not. So if you depend on case (e.g., "File.txt" vs "file.txt"), then you are setting yourself up for a headache.
+  - I typically just use lower_snake_case for all files/folders except top level folders (like "Documents" or "Downloads" or "Desktop" etc)
 
 # File Organization
 
 - Because your file system is hierarchical, your file organization should take advantage of that structure.
 
 - **Bad example**: Placing all of your files directly on the Desktop or at the same folder level.
-  - You’d be surprised how often I see this on student computers.
+  - This is more common than you might think, but it makes files hard to manage.
 
-- There are many good ways to organize your files. Here’s one recommended structure:
+- There are many good ways to organize your files. Here's one recommended structure:
 
   - In your home directory, create a folder called `Courses`.
 
@@ -81,3 +94,30 @@ author: "David Gerard"
   2. Create a "data_413" or "data_613" directory in your "Courses" directory.
   3. Create "homeworks" and "notes" directories in your "data_413" or "data_613" directory.
   4. Transfer your current notes for this class from wherever they are to your new directories. Make sure they are named well (no spaces, numbered ordering, etc).
+  
+# Some file things you might not know
+
+## File extensions
+
+- A file extension is a suffix for a file (like ".txt", ".jpg", ".R", etc). It is primarily used to tell the operating system what program to use to open it.
+
+- When you double click on a file, your operating system knows what program to use (almost) only because of the file extension.
+
+- Windows sometimes hides the file extension. You should change the settings so you can see them:
+
+- Open File Explorer, click on the "View" tab, and check the "File name extensions" box.
+
+- There are ways to choose the default program to use when opening a file with a given file extension.
+
+## Hidden files
+
+- Some files/folders are hidden by default. These typically begin with a period "`.`".
+
+- Common examples:
+  - `.git`: A folder that contains all of your version history.
+  - `.gitignore`: A file that you can edit to say what files to never commit.
+  - `.DS_Store`: A Mac-specific file used by Finder to maintain properties of your folder.
+  - `.Renviron`: A file you can create that contains variables (format: `name=value`) that are available on startup.
+  - `.Rprofile`: A file you can create that is sourced on R's startup. Can be any R code.
+  
+- There are ways to see hidden files by default.
