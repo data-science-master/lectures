@@ -62,13 +62,13 @@ knitr::knit_engines$set(text = function(options) {
 
 # File Naming
 
-- **Do not use spaces**. Use underscores (`_`) instead.
+- **Do not use spaces**. Use underscores (`_`) instead (hyphons are also very common)
   - Spaces make command-line scripts more annoying to code up.
   
 - **Do not use periods**.
   - These should be reserved for file extensions.
   
-- **Do not use other special characters** like back slashes, dollar signs, percents, etc
+- **Do not use other special characters** like back slashes or dollar signs or quotes
   - These can make it harder for the machine to read the files.
   
 - **Do not depend on case** to differentiate files.
@@ -91,15 +91,15 @@ knitr::knit_engines$set(text = function(options) {
 
 ```{text, echo = FALSE, eval = FALSE}
 This is one way:
-- "01-load-data.R"
-- "02-exploratory-analysis.R"
-- "03-model-approach-1.R"
-- "04-model-approach-2.R"
-- "fig-01.png"
-- "fig-02.png"
-- "report-2022-03-20.qmd"
-- "report-2022-04-02.qmd"
-- "report-draft-notes.txt"
+- "01_load_data.R"
+- "02_exploratory_analysis.R"
+- "03_model_approach_1.R"
+- "04_model_approach_2.R"
+- "fig_01.png"
+- "fig_02.png"
+- "report_2022_03_20.qmd"
+- "report_2022_04_02.qmd"
+- "report_draft_notes.txt"
 ```
 
 
