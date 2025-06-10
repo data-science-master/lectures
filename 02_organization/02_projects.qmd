@@ -7,9 +7,92 @@ author: "David Gerard"
 
 - R Studio Projects
 - Chapter 6 of [R for Data Science](https://r4ds.hadley.nz/)
+  - Most of my notes here are from Hadley. Thank you!
 - My project template: <https://github.com/gerardlab/proj>
 - Jim Hester's project template: <https://github.com/jimhester/analysis_framework>
 
-# R Studio Projects
+# What is Truth
+
+- What is Truth?
+
+- Right now, your truth is whatever is in your global environment (the variables and functions that you, or R, has created in your current R session).
+
+- This is not reproducible. It's hard to share it. It's hard to exactly re-create it. You should never depend on your R environment for Truth.
+
+- Truth should be what is writtne in your R scripts and Qmds.
+
+- Run this to get a blank global environment each time you start up R studio:
+
+  ```r
+  usethis::use_blank_slate()
+  ```
+  
+- That forces you to have the correct Truth.
+
+# Where does your project live?
+
+- Your **working directory** is where R looks for files/folders.
+
+- It's the same concept as from the [bash lecture](../01_git/01_basic_bash.qmd).
+
+- R's working directory can be different from bash's.
+
+- In R, you can see the current working directoy by
+
+  ```{r}
+  #| eval: false
+  getwd()
+  ```
+
+# Where should your project live?
+
+- All files/data/output for a single project should be in a single directory.
+
+- You working directory should be at the root of the project directory.
+
+- You can format this manually, but R Studio Projects do this for you automatically.
+  - Forces the working directory to be the root of the project.
+  - You can set default behavior for the project.
+  - R studio has tools that interface with projects (like using git inside a project).
+
+- You create a project with "File" > "New Project..."
+  
+  <img src="./02_figs/projects1.png" alt="New project screen" width="100%"/>
+  
+- Click on "New Directory"
+
+  <img src="./02_figs/projects2.png" alt="New project type" width="100%"/>
+  
+- Click on "New Project"
+
+  <img src="./02_figs/projects3.png" alt="New project screen" width="100%"/>
+
+- Fill out the project name (making sure they follow the same standards as file names). Choose a directory to place the project.
+
+- The new project will open. The working directory will be the project location.
+
+  ```{r}
+  getwd()
+  ```
+  
+  ```r
+  /Users/dgerard/Documents/teaching/r4ds
+  ```
+
+- If you quit R Studio and double click on the ".Rproj" file, then this will repoen the project.
+
+- You can switch between projects by clicking on the project name at the top right of R Studio and toggling between projects.
+
+- Once inside a project, you should only use relative paths.
+  - In an R script, assume the working directory is the root of the project.
+  - In a Quarto document, assume the working directory is the location of the quarto document.
 
 # Project Organization
+
+- My default project structure is here: <https://github.com/gerardlab/proj>
+
+- analysis
+- code
+- output
+- data
+

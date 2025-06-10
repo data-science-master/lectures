@@ -21,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -282,7 +317,9 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
-  <li><a href="#r-studio-projects" id="toc-r-studio-projects" class="nav-link" data-scroll-target="#r-studio-projects">R Studio Projects</a></li>
+  <li><a href="#what-is-truth" id="toc-what-is-truth" class="nav-link" data-scroll-target="#what-is-truth">What is Truth</a></li>
+  <li><a href="#where-does-your-project-live" id="toc-where-does-your-project-live" class="nav-link" data-scroll-target="#where-does-your-project-live">Where does your project live?</a></li>
+  <li><a href="#where-should-your-project-live" id="toc-where-should-your-project-live" class="nav-link" data-scroll-target="#where-should-your-project-live">Where should your project live?</a></li>
   <li><a href="#project-organization" id="toc-project-organization" class="nav-link" data-scroll-target="#project-organization">Project Organization</a></li>
   </ul>
 </nav>
@@ -320,16 +357,82 @@ ul.task-list li input[type="checkbox"] {
 <h1>Learning Objectives</h1>
 <ul>
 <li>R Studio Projects</li>
-<li>Chapter 6 of <a href="https://r4ds.hadley.nz/">R for Data Science</a></li>
+<li>Chapter 6 of <a href="https://r4ds.hadley.nz/">R for Data Science</a>
+<ul>
+<li>Most of my notes here are from Hadley. Thank you!</li>
+</ul></li>
 <li>My project template: <a href="https://github.com/gerardlab/proj" class="uri">https://github.com/gerardlab/proj</a></li>
 <li>Jim Hester’s project template: <a href="https://github.com/jimhester/analysis_framework" class="uri">https://github.com/jimhester/analysis_framework</a></li>
 </ul>
 </section>
-<section id="r-studio-projects" class="level1">
-<h1>R Studio Projects</h1>
+<section id="what-is-truth" class="level1">
+<h1>What is Truth</h1>
+<ul>
+<li><p>What is Truth?</p></li>
+<li><p>Right now, your truth is whatever is in your global environment (the variables and functions that you, or R, has created in your current R session).</p></li>
+<li><p>This is not reproducible. It’s hard to share it. It’s hard to exactly re-create it. You should never depend on your R environment for Truth.</p></li>
+<li><p>Truth should be what is writtne in your R scripts and Qmds.</p></li>
+<li><p>Run this to get a blank global environment each time you start up R studio:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_blank_slate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>That forces you to have the correct Truth.</p></li>
+</ul>
+</section>
+<section id="where-does-your-project-live" class="level1">
+<h1>Where does your project live?</h1>
+<ul>
+<li><p>Your <strong>working directory</strong> is where R looks for files/folders.</p></li>
+<li><p>It’s the same concept as from the <a href="../01_git/01_basic_bash.html">bash lecture</a>.</p></li>
+<li><p>R’s working directory can be different from bash’s.</p></li>
+<li><p>In R, you can see the current working directoy by</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="where-should-your-project-live" class="level1">
+<h1>Where should your project live?</h1>
+<ul>
+<li><p>All files/data/output for a single project should be in a single directory.</p></li>
+<li><p>You working directory should be at the root of the project directory.</p></li>
+<li><p>You can format this manually, but R Studio Projects do this for you automatically.</p>
+<ul>
+<li>Forces the working directory to be the root of the project.</li>
+<li>You can set default behavior for the project.</li>
+<li>R studio has tools that interface with projects (like using git inside a project).</li>
+</ul></li>
+<li><p>You create a project with “File” &gt; “New Project…”</p>
+<p><img src="./02_figs/projects1.png" alt="New project screen" width="100%"></p></li>
+<li><p>Click on “New Directory”</p>
+<p><img src="./02_figs/projects2.png" alt="New project type" width="100%"></p></li>
+<li><p>Click on “New Project”</p>
+<p><img src="./02_figs/projects3.png" alt="New project screen" width="100%"></p></li>
+<li><p>Fill out the project name (making sure they follow the same standards as file names). Choose a directory to place the project.</p></li>
+<li><p>The new project will open. The working directory will be the project location.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/Users/dgerard/Library/CloudStorage/Dropbox/teaching/stat_413_613/lectures/02_organization"</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span>Users<span class="sc">/</span>dgerard<span class="sc">/</span>Documents<span class="sc">/</span>teaching<span class="sc">/</span>r4ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>If you quit R Studio and double click on the “.Rproj” file, then this will repoen the project.</p></li>
+<li><p>You can switch between projects by clicking on the project name at the top right of R Studio and toggling between projects.</p></li>
+<li><p>Once inside a project, you should only use relative paths.</p>
+<ul>
+<li>In an R script, assume the working directory is the root of the project.</li>
+<li>In a Quarto document, assume the working directory is the location of the quarto document.</li>
+</ul></li>
+</ul>
 </section>
 <section id="project-organization" class="level1">
 <h1>Project Organization</h1>
+<ul>
+<li><p>My default project structure is here: <a href="https://github.com/gerardlab/proj" class="uri">https://github.com/gerardlab/proj</a></p></li>
+<li><p>analysis</p></li>
+<li><p>code</p></li>
+<li><p>output</p></li>
+<li><p>data</p></li>
+</ul>
 
 
 </section>
