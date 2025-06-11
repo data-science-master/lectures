@@ -174,13 +174,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     - The `--no-save --no-restore` options make sure that you are working with a clean environment and that you don't save this environment after the command is executed. This is a good thing for reproducibility.
     
--   Render a Quarto Document
+-   Render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> Document
 
     ```{bash, eval = FALSE}
     quarto render quarto_file.qmd
     ```
 
--   Use Quarto to Render an Jupyter Notebook (`.ipynb` Document):
+-   Use Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> to Render an Jupyter Notebook (`.ipynb` Document):
 
     ```{bash, eval = FALSE}
     quarto render notebook.ipynb --execute

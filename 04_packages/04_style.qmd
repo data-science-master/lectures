@@ -71,6 +71,8 @@ tcl = -.25)
 
 - R markdown files should end in `.Rmd`.
 
+- Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> documents should end in `.qmd`.
+
 # Syntax
 
 

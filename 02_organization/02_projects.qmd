@@ -15,11 +15,13 @@ author: "David Gerard"
 
 - What is Truth?
 
-- Right now, your truth is whatever is in your global environment (the variables and functions that you, or R, has created in your current R session).
+  - Hadley uses this metaphore, where Truth = source of reproducibility.
+
+- Right now, your Truth is whatever is in your global environment (the variables and functions that you, or R, have created in your current R session).
 
 - This is not reproducible. It's hard to share it. It's hard to exactly re-create it. You should never depend on your R environment for Truth.
 
-- Truth should be what is writtne in your R scripts and Qmds.
+- Truth should be what is written in your R scripts and Quartos.
 
 - Run this to get a blank global environment each time you start up R studio:
 
@@ -33,7 +35,7 @@ author: "David Gerard"
 
 - Your **working directory** is where R looks for files/folders.
 
-- It's the same concept as from the [bash lecture](../01_git/01_basic_bash.qmd).
+- It's the same concept as from the [bash lecture](../01_git/01_basic_bash.qmd), but applied to R instead of bash.
 
 - R's working directory can be different from bash's.
 
@@ -51,7 +53,7 @@ author: "David Gerard"
 - You working directory should be at the root of the project directory.
 
 - You can format this manually, but R Studio Projects do this for you automatically.
-  - Forces the working directory to be the root of the project.
+  - Sets the working directory to be the root of the project.
   - You can set default behavior for the project.
   - R studio has tools that interface with projects (like using git or [R environments](https://rstudio.github.io/renv/) inside a project).
 
@@ -79,20 +81,52 @@ author: "David Gerard"
   /Users/dgerard/Documents/teaching/r4ds
   ```
 
-- If you quit R Studio and double click on the ".Rproj" file, then this will repoen the project.
+- If you quit R Studio and double click on the ".Rproj" file, then this will reopen the project. Try this now.
 
 - You can switch between projects by clicking on the project name at the top right of R Studio and toggling between projects.
 
 - Once inside a project, you should only use relative paths.
   - In an R script, assume the working directory is the root of the project.
-  - In a Quarto document, assume the working directory is the location of the quarto document.
+  - In a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> document, assume the working directory is the location of the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> document.
 
 # Project Organization
 
 - My default project structure is here: <https://github.com/gerardlab/proj>
 
-- analysis
-- code
-- output
-- data
+- It contains four basic folders:
 
+- `analysis/`:
+  - Contains Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> documents for exploratory analysis and reports.
+- `code/`:
+  - Contains R scripts. Use this for reusable functions or large code that doesn’t require literate programming.
+- `output/`:
+  - Contains figures and cleaned data that were created in `code/` and `analysis/`.
+- `data/`:
+  - Contains **raw** data. Once placed here, data should **never** be modified.
+  - Always keep a copy of the original dataset untouched. If you overwrite it, you may never be able to reproduce your results.
+  
+- There are lots of other perfectly fine project structures, like [Jim Hester's](https://github.com/jimhester/analysis_framework).
+
+# README files
+
+- In a repo/project, you should have a small summary of your project so others can see what it's about.
+
+- Create a README file in your open project by writing:
+
+  ```r
+  usethis::use_readme_rmd()
+  ```
+
+- This opens up an R markdown file that you can edit to include a summary of your project.
+
+- When you knit the R markdown file, it renders it to a markdown file that is viewable on GitHub.
+
+# Exercise
+
+1. In your `r4ds` project, create four folders: `analysis`, `code`, `output`, and `data`.
+
+2. Download the Big Mac data from [here](https://data-science-master.github.io/lectures/data/big_mac.csv), as described [here](https://data-science-master.github.io/lectures/data.html). Place it in the data folder.
+
+3. Create a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> file in the `analysis` folder. Load the `tidyverse` and the Big Mac data. Make sure the document renders.
+
+4. Create an R script in the `code` folder. Load the `tidyverse` and the Big Mac data. Confirm that the working directory is still the root of the project.

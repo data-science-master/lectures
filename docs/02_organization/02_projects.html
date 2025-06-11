@@ -321,6 +321,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#where-does-your-project-live" id="toc-where-does-your-project-live" class="nav-link" data-scroll-target="#where-does-your-project-live">Where does your project live?</a></li>
   <li><a href="#where-should-your-project-live" id="toc-where-should-your-project-live" class="nav-link" data-scroll-target="#where-should-your-project-live">Where should your project live?</a></li>
   <li><a href="#project-organization" id="toc-project-organization" class="nav-link" data-scroll-target="#project-organization">Project Organization</a></li>
+  <li><a href="#readme-files" id="toc-readme-files" class="nav-link" data-scroll-target="#readme-files">README files</a></li>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
   </ul>
 </nav>
     </div>
@@ -368,10 +370,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="what-is-truth" class="level1">
 <h1>What is Truth</h1>
 <ul>
-<li><p>What is Truth?</p></li>
-<li><p>Right now, your truth is whatever is in your global environment (the variables and functions that you, or R, has created in your current R session).</p></li>
+<li><p>What is Truth?</p>
+<ul>
+<li>Hadley uses this metaphore, where Truth = source of reproducibility.</li>
+</ul></li>
+<li><p>Right now, your Truth is whatever is in your global environment (the variables and functions that you, or R, have created in your current R session).</p></li>
 <li><p>This is not reproducible. It’s hard to share it. It’s hard to exactly re-create it. You should never depend on your R environment for Truth.</p></li>
-<li><p>Truth should be what is writtne in your R scripts and Qmds.</p></li>
+<li><p>Truth should be what is written in your R scripts and Quartos.</p></li>
 <li><p>Run this to get a blank global environment each time you start up R studio:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_blank_slate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>That forces you to have the correct Truth.</p></li>
@@ -381,7 +386,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Where does your project live?</h1>
 <ul>
 <li><p>Your <strong>working directory</strong> is where R looks for files/folders.</p></li>
-<li><p>It’s the same concept as from the <a href="../01_git/01_basic_bash.html">bash lecture</a>.</p></li>
+<li><p>It’s the same concept as from the <a href="../01_git/01_basic_bash.html">bash lecture</a>, but applied to R instead of bash.</p></li>
 <li><p>R’s working directory can be different from bash’s.</p></li>
 <li><p>In R, you can see the current working directoy by</p>
 <div class="cell">
@@ -396,7 +401,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>You working directory should be at the root of the project directory.</p></li>
 <li><p>You can format this manually, but R Studio Projects do this for you automatically.</p>
 <ul>
-<li>Forces the working directory to be the root of the project.</li>
+<li>Sets the working directory to be the root of the project.</li>
 <li>You can set default behavior for the project.</li>
 <li>R studio has tools that interface with projects (like using git or <a href="https://rstudio.github.io/renv/">R environments</a> inside a project).</li>
 </ul></li>
@@ -415,12 +420,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span>Users<span class="sc">/</span>dgerard<span class="sc">/</span>Documents<span class="sc">/</span>teaching<span class="sc">/</span>r4ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>If you quit R Studio and double click on the “.Rproj” file, then this will repoen the project.</p></li>
+<li><p>If you quit R Studio and double click on the “.Rproj” file, then this will reopen the project. Try this now.</p></li>
 <li><p>You can switch between projects by clicking on the project name at the top right of R Studio and toggling between projects.</p></li>
 <li><p>Once inside a project, you should only use relative paths.</p>
 <ul>
 <li>In an R script, assume the working directory is the root of the project.</li>
-<li>In a Quarto document, assume the working directory is the location of the quarto document.</li>
+<li>In a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> document, assume the working directory is the location of the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> document.</li>
 </ul></li>
 </ul>
 </section>
@@ -428,11 +433,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Project Organization</h1>
 <ul>
 <li><p>My default project structure is here: <a href="https://github.com/gerardlab/proj" class="uri">https://github.com/gerardlab/proj</a></p></li>
-<li><p>analysis</p></li>
-<li><p>code</p></li>
-<li><p>output</p></li>
-<li><p>data</p></li>
+<li><p>It contains four basic folders:</p></li>
+<li><p><code>analysis/</code>:</p>
+<ul>
+<li>Contains Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> documents for exploratory analysis and reports.</li>
+</ul></li>
+<li><p><code>code/</code>:</p>
+<ul>
+<li>Contains R scripts. Use this for reusable functions or large code that doesn’t require literate programming.</li>
+</ul></li>
+<li><p><code>output/</code>:</p>
+<ul>
+<li>Contains figures and cleaned data that were created in <code>code/</code> and <code>analysis/</code>.</li>
+</ul></li>
+<li><p><code>data/</code>:</p>
+<ul>
+<li>Contains <strong>raw</strong> data. Once placed here, data should <strong>never</strong> be modified.</li>
+<li>Always keep a copy of the original dataset untouched. If you overwrite it, you may never be able to reproduce your results.</li>
+</ul></li>
+<li><p>There are lots of other perfectly fine project structures, like <a href="https://github.com/jimhester/analysis_framework">Jim Hester’s</a>.</p></li>
 </ul>
+</section>
+<section id="readme-files" class="level1">
+<h1>README files</h1>
+<ul>
+<li><p>In a repo/project, you should have a small summary of your project so others can see what it’s about.</p></li>
+<li><p>Create a README file in your open project by writing:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_readme_rmd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>This opens up an R markdown file that you can edit to include a summary of your project.</p></li>
+<li><p>When you knit the R markdown file, it renders it to a markdown file that is viewable on GitHub.</p></li>
+</ul>
+</section>
+<section id="exercise" class="level1">
+<h1>Exercise</h1>
+<ol type="1">
+<li><p>In your <code>r4ds</code> project, create four folders: <code>analysis</code>, <code>code</code>, <code>output</code>, and <code>data</code>.</p></li>
+<li><p>Download the Big Mac data from <a href="https://data-science-master.github.io/lectures/data/big_mac.csv">here</a>, as described <a href="https://data-science-master.github.io/lectures/data.html">here</a>. Place it in the data folder.</p></li>
+<li><p>Create a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> file in the <code>analysis</code> folder. Load the <code>tidyverse</code> and the Big Mac data. Make sure the document renders.</p></li>
+<li><p>Create an R script in the <code>code</code> folder. Load the <code>tidyverse</code> and the Big Mac data. Confirm that the working directory is still the root of the project.</p></li>
+</ol>
 
 
 </section>
