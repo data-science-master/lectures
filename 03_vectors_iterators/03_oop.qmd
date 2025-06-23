@@ -1,0 +1,298 @@
+---
+title: "Introduction to Object Oriented Programming"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+# Learning Objectives
+
+- Overview of OOP.
+- Vocabulary of OOP.
+- R Base Types.
+- Introduction to OOP and Chapter 12 of [Advanced R](https://adv-r.hadley.nz/)
+
+# Motivation
+
+-   There are various [strategies to programming](https://en.wikipedia.org/wiki/Comparison_of_programming_paradigms) that folks use.
+
+-   You are mostly used to [**procedural programming**](https://en.wikipedia.org/wiki/Procedural_programming) where you list out a sequence of steps that are carried out in succession.
+    ```{r}
+    mean_vec <- rep(NA_real_, length.out = length(mtcars))
+    names(mean_vec) <- names(mtcars)
+    for (i in seq_along(mtcars)) {
+      mean_vec[[i]] <- mean(mtcars[[i]])
+    }
+    mean_vec
+    ```
+
+-   You have also been exposed to [**functional programming**](https://en.wikipedia.org/wiki/Functional_programming) where you compose functions with other functions.
+
+    ```{r}
+    sapply(mtcars, mean)
+    purrr::map_dbl(mtcars, mean) ## tidyverse version
+    ```
+
+- [**Object oriented programming**](https://en.wikipedia.org/wiki/Object-oriented_programming) (OOP) is a different style of programming than you are used to, centered around **objects** with data and functions attached to them and their class.
+
+-   R has three native object oriented programming systems (S3, S4, and RC for "reference classes"), and many other third-party packages have made their own object oriented systems (`{R6}` being the most popular).
+
+    - These systems are listed in increasing order of complexity, with S3 being "baby" OOP, S4 being "YA" OOP, and RC and R6 being "big boy" OOP.
+    
+    - If you are in extending `{ggplot2}` then you will learn about another OOP system specific to `{ggplot2}`: ggproto.
+    
+-   E.g.: To calculate the column means in S3 OOP, we would probably create a generic function for column means.
+
+    ```{r}
+    col_means <- function(x, ...) {
+      UseMethod("col_means")
+    }
+    ```
+    and then create a specific method for the `data.frame` class
+    ```{r}
+    col_means.data.frame <- function(x) {
+      sapply(x, mean)
+    }
+    ```
+    Finally, we would call the generic function on a object of class `data.frame`.
+    ```{r}
+    col_means(mtcars)
+    ```
+
+-   E.g.: To calculate the column means in S4 OOP is very similar, just more formal:
+
+    ```{r, message = FALSE}
+    setOldClass(Classes = "data.frame")
+    setGeneric(name = "col_means_s4", def = function(x) standardGeneric("col_means_s4"))
+    setMethod(f = "col_means_s4", 
+              signature = "data.frame", 
+              definition = function(x) {
+                sapply(x, mean)
+              }
+    )
+    col_means_s4(mtcars)
+    ```
+
+-   E.g.: To calculate the column means in R6 OOP, we would probably create a new class that has the `$col_means()` method that we could call.
+
+    ```{r}
+    datFrame <- R6::R6Class(classname = "datFrame", public = list(
+      df = NULL,
+      initialize = function(df) {
+        stopifnot(is.data.frame(df))
+        self$df <- df
+      },
+      col_means = function() {
+        sapply(self$df, mean)
+      }
+    )
+    )
+    
+    mtcars_df <- datFrame$new(df = mtcars)
+    mtcars_df$col_means()
+    ```
+
+- Because R programmers are not OOP programmers, you should be coding mostly in S3 and S4 when using OOP. We'll spend most of our time on these.
+
+- S3 and S4 use **generic function OOP** where the same function name is evaluated differently based on the class of the object. 
+
+-   E.g. that allows the output of `summary()` to differ between doubles and factors.
+
+    ```{r}
+    x <- sample(1:10, size = 100, replace = TRUE)
+    summary(x)
+    y <- factor(x)
+    summary(y)
+    ```
+
+- R6 and RC use **encapsulated OOP** where objects are the center of everything, holding fields (data) and methods (functions) that operate on those values. These are closest to what you would be used to if you are coming from an OOP language. Try not to use them.
+
+-   E.g. in R we apply a function, like `mean()` to a vector, like `x`. But in an encapsulated object oriented programming system would have the function `mean()` attached to a vector `x`. That's one difference between R and Python.
+
+    <mark style="background-color: lightblue">R</mark>
+    ```{r}
+    x <- c(19, 22, 31)
+    mean(x) ## apply mean to x
+    ```
+    
+    <mark style="background-color: GoldenRod">Python</mark>
+    ```{python}
+    import numpy as np
+    x = np.array([19, 22, 31])
+    x.mean() ## mean belongs to x
+    ```
+
+- S3 allows you to use functions like `print()` and `summary()` and `plot()` on outputs of your functions. You can also define your own "generics."
+
+- S4 is similar to S3 but is more formal and strict. S4 is important to understand if you want to use or contribute to [Bioconductor](https://www.bioconductor.org/).
+
+# OOP Vocabulary
+
+- **Polymorphism**: Use the same function name for different types of input, but have the function evaluate differently based on the types of input.
+
+-   An **object** is a specific **instance** of a **class**. E.g. below, `x` is an object of class `factor`.
+
+    ```{r}
+    x <- factor(c(119, 22, 31))
+    class(x)
+    ```
+
+- A function for a specific class is a **method**. 
+  - In R6, methods belong to objects, like the `col_means()` method for our R6 class above.
+  - In S3 and S4, methods are specific versions of **generics**. Like in S3, `print.factor()` is the print method for factor objects.
+
+- A **field** is data that belongs to an object. In our R6 example, we had the `df` and `mean_vec` fields.
+  - In S3, fields are called *attributes*.
+  - In S4, fields are called *slots*.
+
+- Classes are defined in a hierarchy. So if a method does not exist in one class it is searched for in the parent class. It is said that the child class **inherits** the behavior the parent class.
+
+-   E.g. `tibbles` inherit the behavior of data frames.
+    ```{r}
+    class(tibble::tibble(a = 1))
+    ```
+
+- The order in which classes are searched for methods is called **method dispatch**.
+
+# `{sloop}`
+
+- The `{sloop}` package is an interface for exploring OOP systems.
+
+-   `sloop::otype()` allows you to see if the system is S3, S4, R6, etc...
+
+    ```{r}
+    sloop::otype(mtcars) ## Most R stuff is in S3.
+    
+    data("USCounties", package = "Matrix") ## Efficient matrix computations package
+    sloop::otype(USCounties) 
+    
+    pb <- progress::progress_bar$new() ## progress bars for for-loops
+    sloop::otype(pb)
+    ```
+
+# Base Types
+
+- S (the precursor to R) was developed first without an OOP system. So their only objects were "base types". But these don't have basic OOP functionality like polymorphism, inheritance, etc..
+
+-   R users often call base types "objects" even though they aren't OOP objects.
+
+    ```{r}
+    x <- 1:10
+    sloop::otype(x)
+    ```
+
+-   In R, an OO object has a `class` attribute and a base type does not.
+
+    ```{r}
+    x <- 1:10
+    attr(x, "class")
+    y <- factor(x)
+    attr(y, "class")
+    ```
+
+-   `class()` will return the result of `typeof()` if an object has no `class` attribute, this is called its **implicit class**.
+
+    ```{r}
+    class(x)
+    typeof(x)
+    ```
+
+-   Every object, including OO objects, have a base type that can be seen by `typeof()`.
+
+    ```{r}
+    typeof(y)
+    typeof(mtcars)
+    typeof(USCounties)
+    typeof(pb)
+    ```
+
+- There are 25 base types. From Hadley's list, the important ones are:
+  - Vector: `NULL`, `logical`, `integer`, `double`, `character`, `list`
+    ```{r}
+    typeof(NULL)
+    typeof(TRUE)
+    typeof(1L)
+    typeof(1)
+    typeof("1")
+    typeof(list(1))
+    ```
+  - Functions: `closure` (regular R functions), `special` (internal R functions), `builtin` ("primitive" functions in the base namespace that were built using C)
+    ```{r}
+    typeof(mean)
+    typeof(`if`)
+    typeof(sum)
+    ```
+  - Environments: `environment`
+    ```{r}
+    typeof(rlang::global_env())
+    ```
+  - S4 types: `S4`
+    ```{r}
+    typeof(USCounties)
+    ```
+  - Language types (used in metaprogramming): `symbol`, `language`, `pairlist`, and `expression`.
+    ```{r}
+    typeof(quote(a))
+    typeof(quote(a + 1))
+    typeof(formals(mean))
+    typeof(expression(a))
+    ```
+
+-   **Exercise**: What's the (i) type, (ii) OOP system, and (iii) class of the following objects.
+
+    ```{r}
+    x <- lubridate::make_date(year = c(1990, 2022), month = c(1, 2), day = c(30, 22))
+    y <- matrix(NA_real_, nrow = 10, ncol = 2)
+    z <- tibble::tibble(a = 1:3)
+    aa <- lm(mpg ~ wt, data = mtcars)
+    bb <- t.test(mpg ~ am, data = mtcars)
+    cc <- rTensor::as.tensor(array(1:30, dim = c(2, 3, 5)))
+    ```
+    
+    ```{block, eval = FALSE, echo = FALSE}
+    - `x`: double, S3, `Date`.
+    - `y`: double, base type, no class (`class()` returns matrix, which is not the class), type `attr(y, "class")`.
+    - `z`: list, S3, `c("tbl_df", "tbl", "data.frame")`. Class is a vector of length 3.
+    - `aa`: list, S3, `"lm"`
+    - `bb`: list, S3, `"htest"`
+    - `cc`: S4, S4, `"Tensor"`
+    ```
+
+-   **Exercise**: Why do we get different results from `summary()` with the following code?
+
+    ```{r}
+    a <- lm(mpg ~ wt, data = mtcars)
+    b <- t.test(mpg ~ am, data = mtcars)
+    summary(a)
+    summary(b)
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    They are different S3 objects, to have different `summary()` methods.
+    ```
+
+-   **Exercise**: From the previous exercise, if we remove the `class` from `a` and `b`, what happens to the `summary()` call? What does this tell you about the `summary()` methods of the `htest` and `lm` classes?
+
+    ```{r, eval = FALSE, echo = FALSE}
+    class(a) <- NULL
+    class(b) <- NULL
+    summary(a)
+    summary(b)
+    ```
+    
+    ```{block, eval = FALSE, echo = FALSE}
+    `a` prints a different summary, while `b` prints the same summary. So there is no specific `summary()` method for the `htest` class and it method dispatches to the summary method of `list`s.
+    ```

@@ -1,0 +1,498 @@
+---
+title: "Web Scraping with rvest"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+urlcolor: "blue"
+---
+
+
+```{r setup, include=FALSE}
+set.seed(1)
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.height = 3, 
+                      fig.width  = 6,
+                      fig.align  = "center")
+ggplot2::theme_set(ggplot2::theme_bw())
+knitr::knit_engines$set(text = function(options) {
+  # the source code is in options$code; just do
+  # whatever you want with it
+})
+```
+
+# Learning Objectives
+
+- Basics of Web Scraping
+- Chapter 24 of [RDS](https://r4ds.hadley.nz/)
+- [Overview of rvest](https://rvest.tidyverse.org/).
+- [SelectorGadget](https://rvest.tidyverse.org/articles/selectorgadget.html).
+- [Web Scraping](https://r4ds.hadley.nz/webscraping.html)
+
+# Data on the Web
+
+- There are at least 4 ways people download data on the web:
+  1. Click to download a csv/xls/txt file.
+  2. Use a package that interacts with an API.
+  3. Use an API directly.
+  4. Scrape from directly from the HTML file.
+    
+- This lesson, we talk about how to do 4.
+
+- Note: You shouldn't download thousands of HTML files from a website
+  to parse --- the admins might block you if you send too many requests.
+  
+- Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information. **I don't give legal advice**, so see Chapter 24 of [RDS](https://r4ds.hadley.nz/) for some general recommendations, and talk to a lawyer if you are not sure.
+
+-   Let's load the tidyverse:
+    
+    ```{r, message = FALSE}
+    library(tidyverse)
+    ```
+
+# CSS
+
+- We have to know a little bit about HTML and CSS in order to understand how to extract certain elements from a website.
+  
+- CSS stands from "Cascading Style Sheets". It's a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.
+  
+-   Here is some example CSS:
+
+    ``` css
+    h3 {
+      color: red;
+      font-style: italic;
+    }
+    
+    footer div.alert {
+      display: none;
+    }
+    ```
+    
+-   The part before the curly braces is called a *selector*. It corresponds
+  to HTML tags. Specifically, for those two they would correspond to:
+  
+    ``` html
+    <h3>Some text</h3>
+    
+    <footer>
+    <div class="alert">More text</div>
+    </footer>
+    ```
+    
+- The code inside the curly braces are *properties*. For example, the h3
+  properties tells us to make the h3 headers red and in italics. The second
+  CSS chunk says that all `<div>` tags of class `"alert"` in the `<footer>`
+  should be hidden.
+  
+- CSS applies the same *properties* to the same *selectors*. So every time
+  we use h3 will result in the h3 styling of red and italicized text.
+  
+- CSS selectors define patterns for selecting HTML elements. This is useful for scraping because we can extract all text in an HTML that corresponds to some CSS selector.
+
+- You can get a long way just selecting all `p` elements (standing for "paragraph") since that is where a lot of text lives. Also `.title` and `#title`.
+
+# SelectorGadget
+
+- SelectorGadget is a tool for you to see what selector influences 
+  a particular element on a website.
+
+- To install SelectorGadget, drag this link to your bookmark bar on Chrome: [SelectorGadget](javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();)
+
+-   Suppose we wanted to get the top 100 movies of all time from IMDB. The
+  web page is very unstructured:
+  
+    <https://www.imdb.com/list/ls055592025/>
+    
+    ![](./cartoons/IMDB_100_1.png)\ 
+    
+    ```{text}
+    #| eval: false
+    #| echo: false
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/imdb_100.html>
+    ```
+    
+- If we click on the ranking of the Godfather, the "1" turns green (indicating
+  what we have selected).
+  
+  ![](./cartoons/IMDB_100_2.png)\ 
+  
+- The ".text-primary" is the selector associated with the "1" we clicked on.
+
+- Everything highlighted in yellow also has the ".text-primary" selector
+  associated with it.
+  
+- We will also want the name of the movie. So if we click on that
+  we get the selector associated with both the rank and the movie name:
+  "a , .text-primary".
+  
+  ![](./cartoons/IMDB_100_3.png)\ 
+  
+- But we also got a lot of stuff we don't want (in yellow). If we click
+  one of the yellow items that we don't want, it turns red. This indicates
+  that we don't want to select it.
+  
+  ![](./cartoons/IMDB_100_4.png)\ 
+
+- Only the ranking and the name remain, which are under the selector 
+  ".lister-item-header a , .text-primary".
+  
+- It's important to visually inspect the selected elements throughout the whole
+  HTML file. SelectorGadget doesn't always get all of what you want, or
+  it sometimes gets too much.
+  
+-   **Exercise**: What selector can we use to get just the genres of each film,
+  the metacritic score, and the IMDB rating?
+  
+    ```{text}
+    #| eval: false
+    #| echo: false
+    ".ipl-rating-star.small .ipl-rating-star__rating , .ratings-metascore, .genre"
+    ```
+  
+# Chrome developer tools:
+
+- If you have trouble with SelectorGadget, you can also use the Chrome
+  developer tools.
+  
+- Open up the list of selectors with: &#8942; > More tools > Developer tools.
+  
+- Clicking on the element selector on the top left of the developer tools
+  will show you what selectors are possible with each element.
+  
+  ![](./cartoons/IMDB_100_6.png)\ 
+  
+# rvest
+
+-   We'll use rvest to extract elements from HTML files.
+
+    ```{r, message = FALSE}
+    library(rvest)
+    ```
+
+-   Use `read_html()` to save an HTML file to a variable. The variable will
+  be an "`xml_document`" object
+
+    ```{r}
+    #| eval: false
+    html_obj <- read_html("https://www.imdb.com/list/ls055592025/")
+    html_obj
+    class(html_obj)
+    ```
+    
+    ```{r, eval = TRUE, echo = FALSE}
+    html_obj <- read_html("./imdb_100.html")
+    ```
+    
+- [XML](https://en.wikipedia.org/wiki/XML) stands for 
+  "Extensible Markup Language". It's a markup language 
+  (like HTML and Markdown), useful for representing data.
+  rvest will store the HTML file as an XML.
+
+-   We can use `html_elements()` and the selectors we found in the previous section 
+  to get the elements we want. Insert the found selectors as the `css`
+  argument.
+  
+    ```{r}
+    ranking_elements <- html_elements(html_obj, css = ".lister-item-header a , .text-primary")
+    head(ranking_elements)
+    ```
+    
+- Note: `html_element()` is similar, but will return exactly one response per element, so is useful if some elements have missing components.
+
+-   To extract the text inside the obtained nodes, use `html_text()` or `html_text2()`:
+    - `html_text2()` just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc). So you should typically use this.
+
+    ```{r}
+    ranking_text <- html_text2(ranking_elements)
+    head(ranking_text)
+    ```
+    
+-   After you do this, you need to tidy the data using your data munging 
+  tools.
+  
+    ```{r}
+    tibble(text = ranking_text) |>
+      mutate(rownum = row_number(),
+             iseven = rownum %% 2 == 0,
+             movie = rep(1:100, each = 2)) |>
+      select(-rownum) |>
+      spread(key = "iseven", value = "text") |>
+      select(-movie, "Rank" = "FALSE", movie = "TRUE") |>
+      mutate(Rank = parse_number(Rank)) ->
+      movierank
+    movierank
+    ```
+  
+-   **Exercise**: Extract the directors and the names of each film. You can
+  extract them separately and combine them.
+  
+    ```{r, echo = FALSE, eval = FALSE}
+    dirdat <- html_elements(html_obj, ".text-small a:nth-child(1)")
+    dirdat <- html_text2(dirdat)
+    dirdat <- dirdat[-1] ## got an extra one
+    filmdat <- html_elements(html_obj, ".lister-item-header a")
+    filmdat <- html_text2(filmdat)
+    
+    data.frame(film = filmdat, director = dirdat)
+    ```
+  
+# Bigger example using rvest
+  
+- Let's try and get the name, rank, year, genre, and metascore for each 
+  movie:
+  
+  ![](./cartoons/IMDB_100_5.png)\ 
+  
+-   We copy the CSS selectors and make a text vector
+
+    ```{r}
+    dataobj <- html_elements(html_obj, css = ".favorable , .genre, .unbold, .lister-item-header a")
+    datatext <- html_text(dataobj)
+    ```
+  
+-   We now have a *lot* of cleaning to do. Note that the first 132 elements
+  we didn't even want:
+    ```{r}
+    head(datatext)
+    datatext[130:136]
+    ```
+  
+  
+-   The rankings are always of the form `"\\d+\\."`. We'll use this and a
+  cumulative sum to indicate which movies the variables belong to.
+  This is necessary because some data have elements that are missing (e.g. 
+  "The Great Dictator" doesn't have a metacritic score).
+
+    ```{r}
+    datadf <- tibble(text = datatext)
+    
+    datadf |>
+      mutate(ismovierank = str_detect(text, "^\\d+\\.$")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$ismovierank)
+    
+    ## get movie numbers and remove non-movie elements:
+    datadf |>
+      mutate(movienum = cumsum(ismovierank)) |>
+      filter(movienum > 0) ->
+      datadf
+    
+    datadf
+    ```
+
+-   We'll use the `movierank$movie` variable we created before see
+  which rows are movie names
+  
+    ```{r}
+    datadf |>
+      mutate(isname = text %in% movierank$movie) ->
+      datadf
+    
+    ## make sure we have 100 movies:
+    sum(datadf$isname)
+    
+    datadf
+    ```
+    
+-   Years are surrounded by parentheses:
+
+    ```{r}
+    datadf |>
+      mutate(isyear = str_detect(text, "\\(\\d+\\)")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$isyear)
+    
+    datadf
+    ```
+
+-   Genre's begin with a new line:
+    
+    ```{r}
+    datadf |>
+      mutate(isgenre = str_detect(text, "^\\n")) ->
+      datadf
+    
+    ## make sure it is 100
+    sum(datadf$isgenre)
+    ```
+
+-   Everything else should be the metacritic score:
+
+    ```{r}
+    datadf |>
+      group_by(ismovierank, isname, isyear, isgenre) |>
+      count()
+    
+    datadf |>
+      mutate(ismeta = !ismovierank & !isname & !isyear & !isgenre) ->
+      datadf
+    
+    datadf
+    ```
+
+-   Let's create a key for these data then spread them:
+
+    ```{r}
+    datadf |>
+      mutate(key = case_when(ismovierank ~ "rank",
+                             isname ~ "name",
+                             isyear ~ "year",
+                             isgenre ~ "genre",
+                             ismeta ~ "metacritic")) |>
+      select(key, text, movienum) |>
+      spread(key = "key", value = "text") ->
+      datawide
+    
+    datawide
+    ```
+    
+-   Let's clean up the remaining variables:
+
+    ```{r}
+    datawide |>
+      mutate(genre = str_replace_all(genre, "\\n", ""),
+             genre = str_squish(genre),
+             metacritic = parse_number(metacritic),
+             rank = parse_number(rank),
+             year = parse_number(year)) ->
+      datawide
+    
+    datawide
+    ```
+
+# `html_table()`
+
+- When data is in the form of a table, you can format it more easily with
+  `html_table()`.
+
+-   The Wikipedia article on hurricanes: <https://en.wikipedia.org/wiki/Atlantic_hurricane_season>
+
+    ```{text}
+    #| eval: false
+    #| echo: false
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/wiki.html>
+    ```
+    
+    This contains many tables which might be a pain to copy and paste
+    into Excel (and we would be prone to error if we did so).
+    Let's try to automate this procedure.
+  
+-   Save the HTML
+
+    ```{r}
+    #| eval: false
+    wikixml <- read_html("https://en.wikipedia.org/wiki/Atlantic_hurricane_season")
+    ```
+    
+    ```{r, eval = TRUE, echo = FALSE}
+    wikixml <- read_html("./wiki.html")
+    ```
+    
+-   We'll extract all of the "table" elements.
+
+    ```{r}
+    wikidat <- html_elements(wikixml, "table")
+    ```
+
+-   Use `html_table()` to get a list of tables from table elements:
+
+    ```{r}
+    tablist <- html_table(wikidat)
+    class(tablist)
+    length(tablist)
+    tablist[[19]] |>
+      select(1:4)
+    ```
+    
+- You can clean up, bind, or merge these tables after you have read them in.
+
+-   **Exercise**: The Wikipedia page on the oldest mosques in the world
+  has many tables. 
+  
+    <https://en.wikipedia.org/wiki/List_of_the_oldest_mosques>
+    
+    ```{text}
+    #| eval: false
+    #| echo: false
+    If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/mosque.html>
+    ```
+  
+    1. Use rvest to read these tables into R.
+    2. Use rvest and SelectorGadget to extract out the category for the 
+       table (mentioned in Quran, in northeast Africa, etc).
+    3. Merge the data frames together. You only need to keep the building
+       name, the country, and the time it was first build. 
+       
+    *Hint*: It's easier if you use a css selector of `"table.wikitable"`
+    to get the table rather than just `"table"`. I found this out by getting
+    to the developer tools in Chrome with CTRL + Shift + I then playing around
+    with the tables.
+    
+    The first 15 rows should look like this:
+       
+    ```{r, echo = FALSE}
+    mosque <- read_html("https://data-science-master.github.io/lectures/05_web_scraping/mosque.html")
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    mosque <- read_html("mosque.html")
+    ```
+    
+    ```{r, echo = FALSE}
+    headers <- html_text2(html_elements(mosque, css = "caption , #Mentioned_in_the_Quran"))
+    tabnode  <- html_elements(mosque, css = "table.wikitable")
+    tablist <- html_table(tabnode)
+    
+    ## length(tablist)
+    ## length(headers)
+    
+    ## See what variables are in each table
+    ## map(tablist, names)
+    
+    ## Table 18 doesn't have a country
+    ## headers[[18]]
+    tablist[[18]] |>
+      mutate(Country = "Russia") ->
+      tablist[[18]]
+    
+    ## Remove table 17 since it doesn't have the same format
+    tablist[[17]] <- NULL
+    
+    ## table 13 has an NA row
+    names(tablist[[13]])[ncol(tablist[[13]])] <- "blah"
+    
+    ## select variables of interest
+    map(tablist, ~select(., Building, Country, fb = `First built`)) ->
+      tablist
+    
+    ## replace, e.g., 15th century with 1500 century
+    map(tablist, \(df) mutate(df, fb = str_replace(fb, "th", "00"))) |>
+      map(\(df) mutate(df, fb = str_extract(fb, "^\\d+"))) ->
+      tablist
+    
+    ## clean up headers
+    str_replace_all(headers, "\\n", "") |>
+      str_replace_all("\\(.+\\)", "") |>
+      str_squish() ->
+      headers
+    
+    ## add category information    
+    for (index in seq_along(tablist)) {
+      mutate(tablist[[index]], category = headers[[index]]) ->
+        tablist[[index]]
+    }
+    
+    ## bind rows
+    bind_rows(tablist) ->
+      tabdf
+    
+    ## print
+    head(tabdf, n = 15)
+    ```

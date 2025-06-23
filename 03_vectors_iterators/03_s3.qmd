@@ -1,0 +1,966 @@
+---
+title: "S3 Objects"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+# Learning Objectives
+
+- Chapter 13 of [Advanced R](https://adv-r.hadley.nz/)
+  - Most notes taken from Hadley's book. Thank you so much.
+
+# Motivation
+
+- S3 is the most commonly used object-oriented programming (OOP) system in R.
+
+-   Most of the common data types you are used to are S3.
+
+    ```{r}
+    # Data frames are S3
+    sloop::otype(mtcars)
+    
+    # tibbles are S3
+    mt_tb <- tibble::as_tibble(mtcars)
+    sloop::otype(mt_tb)
+    
+    # lm objects are S3
+    lmout <- lm(mpg ~ wt, data = mtcars)
+    sloop::otype(lmout) 
+    
+    # ggplot2 plots are S3
+    pl <- ggplot2::ggplot(mtcars, ggplot2::aes(x = wt, y = mpg)) + 
+      ggplot2::geom_point()
+    sloop::otype(pl)
+    
+    # tidymodels use S3
+    tdout <- 
+      parsnip::linear_reg() |>
+      parsnip::set_engine("lm") |>
+      parsnip::fit(mpg ~ wt, data = mtcars)
+    sloop::otype(tdout)
+    
+    # Factors are S3
+    x <- factor(c(1, 2, 3))
+    sloop::otype(x)
+    
+    # Dates are S3
+    x <- lubridate::make_date(year = 1970, month = 1, day = 1)
+    sloop::otype(x)
+    ```
+
+- If you are creating a package and you want OOP features, you should use S3 unless
+  1. You work in a large team, or you need to contribute to [Bioconductor](https://www.bioconductor.org/) (use S4).
+  2. Modify-by-reference is important (use R6).
+    
+- This is since most R programmers are used to S3 (intuitively) and are not used to S4 or R6.
+
+# S3 Basics
+
+- An S3 object is any variable with a `class` attribute. This is the full definition.
+
+- S3 objects may or may not have more attributes.
+
+-   E.g. the `factor` class always has the `levels` attribute.
+
+    ```{r}
+    x <- factor(c("A", "B", "B", "A", "C", "A"))
+    attributes(x)
+    ```
+
+-   You can get the underlying base type by `unclass()`.
+
+    ```{r}
+    unclass(x)
+    ```
+
+-   Functions can be S3 objects as well as long as they have the `class` attribute.
+
+    ```{r}
+    sout <- stepfun(1:3, 0:3)
+    sloop::otype(sout)
+    class(sout)
+    ```
+
+- S3 objects behave differently when passed to a **generic** function, a special type of function meant to provide different implementations based on the S3 class of the object.
+
+- Use `sloop::ftype()` to see if a function is generic. If it has the word "generic" is anywhere, it can be used as an S3 generic.
+
+-   These are all S3 generics
+    ```{r}
+    sloop::ftype(print)
+    sloop::ftype(summary)
+    sloop::ftype(plot)
+    ```
+
+-   But these are not:
+    ```{r}
+    sloop::ftype(lm)
+    sloop::ftype(stop)
+    ```
+
+-   Generic functions behave differently depending on the class of the object.
+
+    ```{r}
+    print(mt_tb)
+    print(lmout)
+    print(pl)
+    ```
+    
+- This is *not* implemented by `if`-`else` statements. That would be inefficient because only the authors of `print()` (i.e. the R Core team) could add new functionality to new S3 objects. The idea of using generic functions allows us (new developers) to define new functionality to the same generics.
+
+- The implementation of a generic for a specific class is called a **method**.
+
+-   The act of choosing a method from a generic is called **method dispatch**. Use `sloop::s3_dispatch()` to see this process.
+
+    ```{r}
+    sloop::s3_dispatch(print(mt_tb))
+    ```
+    - The `*` means the method exists but is not used.
+    - The `=>` means the method exists and is used.
+    - So above, it did not find a method for `tbl_df`, so it moved on to `tbl` which does have a method and used it. So it did not go on to look for other methods (`data.frame` or the `default` method), even those classes both have methods.
+
+-   Below there is no `aperm()` method for matrices, integers, or numerics, so it used the default one, which is for arrays.
+    ```{r}    
+    mat <- matrix(1:12, nrow = 4, ncol = 3)
+    sloop::s3_dispatch(aperm(mat, c(2, 1)))
+    ```
+
+-   You can access specific methods by `generic.class()`. E.g.
+
+    ```{r}
+    stats:::print.lm(lmout)
+    aperm.default(mat, c(2, 1))
+    ```
+
+- But these are often not exported and should generally **not** be accessed directly by the user, or other developers.
+
+- Lots of methods have `.` in the middle. But not all functions with `.` are methods. E.g. `read.csv()` and `t.test()` are not methods of generic functions. `read.csv()` is just a function with a dot in the name, and `t.test()` is just a generic function with a dot in the name. These functions were created before S3, which is why they are named poorly.
+
+-   You can confirm that a function with a `.` in it is a method also with `sloop::is_s3_method()`.
+
+    ```{r}
+    sloop::is_s3_method("read.csv")
+    sloop::is_s3_method("t.test")
+    sloop::is_s3_method("print.default")
+    ```
+
+- Because of the important role of `.`, you should never name variables or non method functions with a dot in them.
+
+-   To find all of the methods of a generic, use `sloop::s3_methods_generic()`.
+
+    ```{r}
+    sloop::s3_methods_generic("print")
+    ```
+    
+-   To find all methods for a class, use `sloop::s3_methods_class()`.
+    ```{r}
+    sloop::s3_methods_class("data.frame")
+    ```
+
+-   **Exercise**: Explain the difference between each of the dots in `as.data.frame.data.frame()`. How would you typically use this method? Include in your discussion calls from the functions in the `{sloop}` package.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sloop::ftype(as.data.frame.data.frame)
+    sloop::ftype(as.data.frame.data.frame)
+    ```
+    ```{block, eval = FALSE, echo = FALSE}
+    The `.` between each `data` and each `frame` is just indicating the `data.frame` class.
+    
+    So `as.data.frame()` is an S3 generic that converts an object to a `data.frame` and then the `as.data.frame.data.frame()` is the method for inputs of class `data.frame()`.
+    
+    You would typically use this method by calling `as.data.frame()` with a `data.frame()` input, e.g. `as.data.frame(mtcars)`.
+    ```
+
+    ```{r, echo = FALSE, eval = FALSE}
+    sloop::s3_dispatch(as.data.frame(mtcars))
+    ```
+
+-   **Exercise**: `mean()` is an S3 generic. What classes have a method for `mean()`. What is the difference between them?
+
+    ```{r, echo = FALSE, eval = FALSE}
+    sloop::s3_methods_generic("mean")
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    `mean.default()` will work with numeric and logical vector. The different date versions of `mean()` will return a date.
+    ```
+
+-   **Exercise** (Advanced R): What class of object does the following code return? What base type is it built on? What attributes does it use?
+
+    ```{r}
+    set.seed(21)
+    x <- ecdf(rpois(100, 10))
+    x
+    ```
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sloop::otype(x)
+    class(x)
+    typeof(x)
+    attributes(x)
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    It's an `ecdf` class S3 object with the function (aka "closure") base type. It has a class and a call attribute.
+    ```
+
+-   **Exercise**: (Advanced R): What class of object does the following code return? What base type is it built on? What attributes does it use?
+
+    ```{r}
+    x <- table(rpois(100, 5))
+    x
+    ```
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sloop::otype(x)
+    class(x)
+    attributes(x)
+    ```
+
+# Classes
+
+-   Again, an S3 object is *any* object with a class attribute, that you can create with:
+
+    ```{r}
+    # Create and assign class in one step
+    x <- structure(list(), class = "my_class")
+    
+    # Create, then set class
+    x <- list()
+    class(x) <- "my_class"
+    ```
+
+-   You can get the class attribute by `class()` (as long as it is S3).
+
+    ```{r}
+    class(x)
+    ```
+    
+-   Thus, it is a little safer to use `sloop::s3_class()`.
+
+    ```{r}
+    sloop::s3_class(x)
+    ```
+
+-   You can test that an object is a certain class by `inherits()`.
+
+    ```{r}
+    class(mtcars)
+    inherits(mtcars, "data.frame")
+    inherits(mtcars, "tibble")
+    
+    mt_tb <- tibble::as_tibble(mtcars)
+    inherits(mt_tb, "tbl_df")
+    inherits(mt_tb, "data.frame")
+    ```
+
+-   R has no checks that the structure of the class is as you intended. E.g., we can change the "data.frame" class to `"Date"` and bad things will happen (i.e. R will try to use the wrong generics on the data).
+    ```{r, error = TRUE}
+    class(mt_tb) <- "Date"
+    mt_tb
+    ```
+
+
+- You have to be careful about enforcing the correct structure on your class. Best practice: For any S3 class you create, you should create 3 functions to help others build and validate your class:
+  - A **constructor** to make a new object with your class, for internal use only.
+  - A **validator** that checks the structure of objects with your class.
+  - A **helper** that allows users to create objects of your class.
+    
+## Constructor
+
+- Your constructor should
+  - Be called `new_myclass()`, replacing "myclass" with the name of your class.
+  - Have one argument for the base object (e.g. list, numeric vector, etc).
+  - Check the type of the base object and types of each attribute.
+
+-   E.g. if we were to create our own class to recapitulate factors, called `factor2`, we would do
+
+    ```{r}
+    new_factor2 <- function(x = integer(), levels = character()) {
+      stopifnot(is.integer(x))
+      stopifnot(is.character(levels))
+      
+      return(
+        structure(x,
+                  levels = levels,
+                  class = "factor2")
+      )
+    }
+    ```
+
+-   We can construct a factor as follows
+
+    ```{r}
+    x <- new_factor2(c(1L, 1L, 2L, 1L, 1L), levels = c("A", "B"))
+    x
+    ```
+
+## Validator
+
+- Making sure the structure of an object is what you would expect is expensive.
+
+- E.g., we need to make sure that the number of unique values in a factor is at most the number of levels in that factor.
+
+- Validator functions should:
+  1. Be named `validator_myclass()`.
+  2. Take as input just an object from your class.
+  3. Include a bunch of assertions testing the structure of the inputted object.
+  4. Return the original object.
+  
+-   Let's make a validator for `factor2`.
+    
+    ```{r}
+    validate_factor2 <- function(x) {
+      stopifnot(inherits(x, "factor2"))
+      values <- unclass(x)
+      levels <- attr(x, "levels")
+      
+      if (length(levels) < max(values)) {
+        stop("There must be at least as many `levels` as possible values in `x`")
+      }
+      return(x)
+    }
+    ```
+        
+    
+    ```{r}
+    validate_factor2(x)
+    ```
+
+## Helpers
+
+- A helper function is a user-facing function that will
+  1. Be called `myclass()`.
+  2. Call first the constructor function, then the validator function.
+  3. Be user friendly. 
+     - Good defaults.
+     - Accepts multiple types for the base object and coerces intelligently.
+    
+-   Let's do this for `factor2`.
+    ```{r}
+    factor2 <- function(x = character(), levels = unique(x)) {
+      ind <- match(x, levels)
+      return(validate_factor2(new_factor2(ind, levels)))
+    }
+    
+    factor2(c("A", "B", "B", "A"))
+    ```
+    
+-   Side note: `match()` is a useful function. It will provide the positions of the second argument that match the values in the second argument. E.g.
+
+    ```{r}
+    match(c("A", "A", "B", "A", "B"), c("A", "B"))
+    ```
+
+-   **Exercise** (Advanced R): Write a constructor for data.frame objects. What base type is a data frame built on? What attributes does it use? What are the restrictions placed on the individual elements? What about the names?
+
+    ```{block, eval = FALSE, echo = FALSE}
+    1. Built on a list.
+    2. Uses `names` and `row.names`
+    ```
+
+
+    ```{r, eval = FALSE, echo = FALSE}
+    new_data.frame <- function(x, 
+                              names = NULL,
+                              row.names = NULL) {
+      x <- unclass(x)
+      stopifnot(is.list(x))
+      
+      n <- length(x[[1]])
+      
+      stopifnot(all(lengths(x) == n))
+      
+      if (!is.null(row.names)) {
+        stopifnot(length(row.names) == n)
+        attr(x, "row.names") <- row.names
+      } else {
+        attr(x, "row.names") <- as.character(1:n)
+      }
+      
+      if (!is.null(names)) {
+        stopifnot(length(names) == length(x))
+        attr(x, "names") <- names
+      }
+      
+      return(structure(x, class = "data.frame"))
+    }
+    
+    new_data.frame(x = list(a = 1:3, b = 4:6))
+    new_data.frame(x = list(a = 1:3, b = 4:6), names = c("c", "d"))
+    new_data.frame(x = list(a = 1:3, b = 4:6), row.names = c("e", "f", "g"))
+    new_data.frame(x = mtcars)
+    ```
+
+# Generics
+
+-   A generic function is just one that performs method dispatch. Method dispatch is implemented through `UseMethod()`, so it is really easy to create a new generic.
+
+    ```{r}
+    mygeneric <- function(x, ...) {
+      UseMethod("mygeneric")
+    }
+    ```
+    
+- No arguments are passed to `UseMethod()` except the name of the generic.
+
+- The `x` is a required argument that all methods must have. You can choose to have this be a different name, to have more required arguments, or to have no required arguments.
+
+- The `...` allows methods of your generic to include other variables than just `x`.
+
+-   This is literally what most generic function definitions look like.
+    ```{r}
+    mean
+    print
+    plot
+    summary
+    ```
+
+- The key of a generic is its goals. Methods should generally align with the goals of the generic so that R users don't get unexpected results. E.g. when you type `plot()` you shouldn't output a mean (even though S3 makes this valid behavior).
+
+- How `UseMethod()` works: If an object has a class vector of `c("cl1", "cl2")` then `UseMethod()` will first search for a method for `cl1`, if it does not exist it will use the method for `cl2`, and if that does not exist it will use the default method (there is usually one).
+
+-   E.g. all tibbles have class
+    ```{r}
+    mt_tb <- tibble::as_tibble(mtcars)
+    class(mt_tb)
+    ```
+
+-   So any generic called with a tibble will first search for a `tbl_df` method, then a `tbl` method, then a `data.frame` method, then a default method (which would be for a list if applicable since tibbles are built on lists).
+
+    ```{r}
+    sloop::s3_dispatch(print(mt_tb))
+    sloop::s3_dispatch(str(mt_tb))
+    sloop::s3_dispatch(summary(mt_tb))
+    sloop::s3_dispatch(mean(mt_tb))
+    ```
+
+- The "default" class is not a real class, but is there so that there is always a fall back.
+
+# Methods
+
+- To create a method
+  1. Create a function definition for `generic.method()`.
+  2. Make sure you use the same arguments as the generic (but you can usually include more aguements if there is `...` in the generic).
+
+-   E.g., let's create plot and print methods for our `factor2` class.
+
+    ```{r}
+    print.factor2 <- function(x) {
+      print(attr(x, "levels")[x])
+      return(invisible(x))
+    }
+    
+    plot.factor2 <- function(x, y = NULL) {
+      tabx <- table(attr(x, "levels")[x])
+      barplot(table(attr(x, "levels")[x]))
+      return(invisible(x))
+    }
+    ```
+
+-   Now, we get better printing for `factor2`'s    
+    ```{r}
+    x <- factor2(c("A", "A", "B", "B", "A", "B"))
+    print(x)
+    ```
+
+-   Note: If you don't know, whenever you just run something and have it print to the console, that is R implicitly running `print()`. So this looks better too:
+    ```{r}
+    x
+    ```
+    
+- Note: In a print method, you either call the `print()` method of another S3 object, or you call `cat()`, which does less under the hood than `print()`.
+
+-   We can verify that method dispatch is working appropriately
+    ```{r}
+    sloop::s3_dispatch(print(x))
+    ```
+
+-   Plotting looks better too
+    ```{r}
+    plot(x)
+    ```
+
+- You should only build methods for classes you own, or generics you own. It is considered bad manners to define a method for a class you do not own unless you own the generics.
+
+- E.g. if you define a new print method for `tbl_df`, then include that in your package, that would be impolite to the tidyverse folks.
+
+-   A method should have the same arguments as the generic. You can have more arguments if the generic has `...` in it. E.g. if you create `plot()`, then you must include `x` and `y`, but may include anything else.
+
+    ```{r}
+    formals(plot)
+    ```
+
+-   **Exercise** (Advanced R): What generics does the `table` class have methods for?
+
+    ```{r, eval = FALSE, echo = FALSE}
+    sloop::s3_methods_class("table")
+    ```
+
+-   **Exercise**: Create a new generic called `pop` that will remove the last element and return the shorted object. Make a default method for any vector. Then make methods for the `matrix` class that will remove the last column or row, depending on the user choice of an argument called `by`.
+
+    ```{r, echo=FALSE, eval=FALSE}
+    pop <- function(x, ...) {
+      UseMethod("pop")
+    }
+    
+    pop.default <- function(x) {
+      return(x[-length(x)])
+    }
+    
+    pop.matrix <- function(x, by = c("row", "col")) {
+      by <- match.arg(by)
+      if (by == "row") {
+        return(x[-nrow(x), , drop = FALSE])        
+      } else {
+        return(x[, -ncol(x), drop = FALSE])        
+      }
+    }
+    
+    x <- c(1, 2, 3)
+    pop(x)
+    x <- matrix(1:6, ncol = 2, nrow = 3)
+    x
+    pop(x, by = "row")
+    pop(x, by = "col")
+    ```
+
+# The Design of an S3 Object
+
+- There are three most common structures for an S3 object.
+
+- In decreasing order of most common usage by you:
+
+1.  A list-like object, where the list represents one thing (e.g. model output, function, dataset, etc...).
+
+    - For example, the output of `lm()` is a list like object that represents one model fit.
+    
+    ```{r}
+    lmout <- lm(mpg ~ wt, data = mtcars)
+    sloop::otype(lmout)
+    typeof(lmout)
+    ```
+
+    - I use this format all of the time for the outputs of my model fits.
+
+2.  A vector with new functionality. E.g. `factor`s and `Date`s. You combine, print, mathematically operate with these vectors in different ways.
+
+    ```{r}
+    x <- factor(c("A", "A", "B", "A", "B"))
+    sloop::otype(x)
+    typeof(x)
+    ```
+
+3.  Lists of equal length length vectors. E.g. `data.frame`s and `POSIXlt` objects.
+
+    - `POSIXlt` objects are lists of years, days, minutes, seconds, etc... with the `i`th element of each vector contributing to indicating the same moment in time.
+    ```{r}
+    x <- as.POSIXlt(ISOdatetime(2020, 1, 1, 0, 0, 1:3))
+    x
+    typeof(x)
+    ```
+    - `data.frame` objects are lists of vectors where each vector is a variable and the `i`th element of each vector represents the same observational unit.
+    ```{r}
+    typeof(mtcars)
+    ```
+    
+# Inheritance
+
+- **Inheritance** is shared behavior. You can make your new class inherit from another class so that if you did not create a method, then it will fall back on the parent method.
+
+- We call the child class the **subclass** and the parent class the **superclass**.
+
+- E.g. the `tbl_df` (sub)class inherits from the `data.frame` (super)class.
+
+-   You can simply create a subclass by including a vector of in the `class` attribute.
+
+    ```{r}
+    mt_tb <- tibble::as_tibble(mtcars)
+    class(mt_tb)
+    ```
+
+- You should make sure your subclass is of the same base type as the superclass you are inheriting from. E.g. make sure anything you build off of `data.frame`s also has a list base type.
+
+- You should make sure that you have at least all of the same attributes as the superclass you are inheriting from. E.g. `data.frame`s can have `names` and `row.names`, and so any subclass should also have those attributes.
+
+## Next Method
+
+- `NextMethod()` allows you define methods for your class that use the functionality of classes that you inherit from.
+
+-   E.g. recall that most attributes are lost with `[`.
+
+    ```{r}
+    x <- factor2(c("A", "A", "B", "A", "B"))
+    x[1]
+    ```
+
+-   This is because R is using the integer version for `[` and so we lose the class.
+
+    ```{r}
+    sloop::s3_dispatch(x[1])
+    ```
+
+-   We cannot use `[` inside a definition for a method because we haven't defined it yet.
+    ```{r}
+    #| eval: false
+    ## won't work
+    `[.factor2` <- function(x, i) {
+      return(x[i]) # but we haven't defined `[` yet
+    }
+    x[1] ## infinite recursion
+    ```
+    
+- You can define your method to use the next method by `NextMethod()`. `NextMethod()` will take the arguments inside your function definition and run them through the next method in the inheritance list. So it returns an unclassed object, that you can then pass to your constructor function.
+
+-   Make sure you also include the attributes in your constructor.
+
+    ```{r}
+    `[.factor2` <- function(x, i) {
+      new_factor2(NextMethod(), levels = attr(x, "levels"))
+    }
+    ```
+    
+    ```{r}
+    sloop::s3_dispatch(x[1:3])
+    x[1:3]
+    ```
+
+-   If we did not pass `NextMethod()` to our constructor, it would just run the integer subsetting:
+    ```{r}
+    `[.factor2` <- function(x, i) {
+      NextMethod()
+    }
+    x[1:3]
+    ```
+
+
+# Example: Simulation
+
+- Let's work again on an a simulation function for linear regression. We started this in the [Assertions and Unit Tests](./03_testing.html) lecture.
+
+-   The basic function we had was as follows:
+
+    ```{r}
+    simreg <- function(x, beta0, beta1, sigma) {
+      n <- length(x)
+      eps <- stats::rnorm(n = n, mean = 0, sd = sigma)
+      y <- beta0 + beta1 * x + eps
+      return(y)
+    }
+    ```
+
+-   Let's create a basic list-like class so that we can define custom print, plot, and summary methods.
+    ```{r}
+    new_sim <- function(x, y, beta0, beta1, sigma) {
+      stopifnot(is.double(x),
+                is.double(y),
+                is.double(beta0),
+                is.double(beta1),
+                is.double(sigma),
+                sigma >= 0)
+                
+      return(
+        structure(list(x = x,
+                       y = y,
+                       beta0 = beta0,
+                       beta1 = beta1,
+                       sigma = sigma),
+                  class = "sim")
+      )
+    }
+    ```
+    
+-   We can create a validator function to check that the specific structure is preserved
+    ```{r}
+    validate_sim <- function(dat) {
+      stopifnot(is.list(dat))
+      stopifnot(is.double(dat$x),
+                is.double(dat$y),
+                is.double(dat$beta0),
+                is.double(dat$beta1),
+                is.double(dat$sigma))
+      stopifnot(length(dat$x) == length(dat$y), dat$sigma >= 0)
+      return(dat)
+    }
+    ```
+
+-   Let's re-write our function to return this S3 class.
+
+    ```{r}
+    simreg <- function(x, beta0, beta1, sigma) {
+      n <- length(x)
+      eps <- stats::rnorm(n = n, mean = 0, sd = sigma)
+      y <- beta0 + beta1 * x + eps
+      return(new_sim(x = x, y = y, beta0 = beta0, beta1 = beta1, sigma = sigma))
+    }
+    ```
+    
+-   This will allow us to make new a plot method
+    ```{r}
+    plot.sim <- function(x, y = NULL, ...) {
+      ggplot2::qplot(x = x$x, y = x$y) +
+        ggplot2::geom_abline(slope = x$beta1, 
+                             intercept = x$beta0, 
+                             lty = 2, 
+                             col = 2) +
+        ggplot2::theme_bw() +
+        ggplot2::geom_smooth(method = "lm", se = FALSE) +
+        ggplot2::xlab("x") +
+        ggplot2::ylab("y")
+    }
+    ```
+    
+-   We can also make a new summary method
+
+    ```{r}
+    summary.sim <- function(object, ...) {
+      lmout <- lm(object$y ~ object$x)
+      beta0_ols <- coef(lmout)[[1]]
+      beta1_ols <- coef(lmout)[[2]]
+      sigma_ols <- sigma(lmout)
+      return(
+        data.frame(parameter = c("beta0", "beta1", "sigma"),
+                   truth = c(object$beta0, object$beta1, object$sigma),
+                   ols = c(beta0_ols, beta1_ols, sigma_ols))
+      )
+    }
+    ```
+
+-   Let's try all of this out
+
+    ```{r}
+    dat <- simreg(x = runif(100), beta0 = 1, beta1 = 2, sigma = 0.25)
+    plot(dat)
+    summary(dat)
+    ```
+
+# Documenting S3
+
+- Generics, methods, constructors, validators, and helpers are all just regular functions, so you can document them as you would regular functions.
+
+-   It is sometimes nice to have the same help file for the default method and the generic. You can do that via the `@describeIn` `{roxygen}` tag.
+
+    ```{r, eval = FALSE}
+    #' Generic Function for generic.
+    #' 
+    #' @param x An R object. 
+    generic <- function(x, ...) {
+      
+    }
+    
+    #' @describeIn generic Default Method
+    #' 
+    #' @param y is some default option
+    #' 
+    generic.default <- function(x, y = NULL, ...) {
+      
+    }
+    ```
+
+- See an example usage of this for the `mean()` and `summary()` documentation.
+
+-   **Exercise**: Document your `pop()` generic and the methods you made for `pop()`.
+
+    ```{r, eval = FALSE, echo = FALSE}
+    #' Generic to remove last observation
+    #' 
+    #' @param x An R object.
+    #' 
+    #' @return The same R object, but with one less observation in the rears.
+    #' 
+    #' @author David Gerard
+    pop <- function(x, ...) {
+      UseMethod("pop")
+    }
+    
+    #' @describeIn generic Default Method
+    pop.default <- function(x) {
+      return(x[-length(x)])
+    }
+    
+    #' Pop method for matrices
+    #' 
+    #' You can either remove the last row or the last column.
+    #' 
+    #' @param by Should we remove the last row or column?
+    #' 
+    #' @author David Gerard
+    pop.matrix <- function(x, by = c("row", "col")) {
+      by <- match.arg(by)
+      if (by == "row") {
+        return(x[-nrow(x), , drop = FALSE])        
+      } else {
+        return(x[, -ncol(x), drop = FALSE])        
+      }
+    }
+    ```
+
+# Type Predicates
+
+-   Whenever you make a new S3 class, you should always provide a type predict to test if an object is a certain type.
+
+    ```{r}
+    is_sim <- function(x) {
+      return(inherits(x, "sim"))
+    }
+    dat <- simreg(x = runif(100), beta0 = 1, beta1 = 2, sigma = 0.25)
+    is_sim(dat)
+    is_sim(mtcars)  
+    ```
+
+# Method Dispatch Technicalities
+
+- Every variable in R has some **implicit class** even if it does not have a `class` attribute.
+
+- This **implicit class** is used to define methods for these objects, and to control method dispatch when you use a base type on a generic.
+
+-   `sloop::s3_class()` will return the implicit or explicit class of all objects.
+    ```{r}
+    x <- c(1, 2, 3)
+    sloop::otype(x) ## not an S3 object
+    sloop::s3_class(x) ## implicit S3 class
+    
+    x <- matrix(1:6, nrow = 3, ncol = 2)
+    sloop::otype(x) ## not an S3 object
+    sloop::s3_class(x)
+    ```
+
+-   So to create new matrix methods, you can do
+
+    ```{r, eval = FALSE}
+    generic.matrix <- function(...) {
+      
+    }
+    ```
+
+    even though `matrix` is not an S3 class.
+    
+    
+- The following functions are called "group generics" `+`, `-`, `*`, `/`, `^`, `%%`, `%/%`, `&`, `|`, `!`, `==`, `!=`, `<`, `<=`, `>=`, and `>`.
+
+- You can define methods for these group generics, but undergo what's called double dispatch, choosing a method based on both arguments. This is what allows you to add integers and dates together. We will talk about how to do this correctly in the next lecture.
+
+# `{vctrs}` package
+
+- By far, the most common use for S3 objects are list-like objects to add `plot()`/`summary()`/`print()` methods for folks who use your package.
+
+- But what if you want to create vector-like objects (e.g. `Dates` and `factors`)? Hadley provides a lot of nice examples:
+  - Percent: a double vector that prints as a percentage. 
+  - Decimal: a double vector that always prints with a fixed number of decimal places.
+  - Cached sum: a double vector that caches the total sum in an attribute.
+  - Rational: a pair of integer vectors that defines a rational number like 2 / 3.
+  - Polynomial: a list of integer vectors that define polynomials like 1 + x - x^3.
+  - Meter: a numeric vector with meter units.
+  - Period and frequency: a pair of classes represent a period, or it’s inverse, frequency.
+    
+- It's a lot of bookkeeping to do this properly. The `{vctrs}` package makes it a lot easier.
+
+- Read the `{vctrs}` vignette for more: <https://vctrs.r-lib.org/articles/s3-vector.html>
+
+- The simplest class, for percents, just changes the print method for doubles, but it is still a lot of work to get it to work:
+
+-   `percent` constructor
+    
+    ```{r}
+    new_percent <- function(x = double()) {
+      stopifnot(is.double(x))
+      return(vctrs::new_vctr(x, class = "percent"))
+    }
+    ```
+    
+-   `percent` helper
+    ```{r}
+    percent <- function(x = double()) {
+      x <- vctrs::vec_cast(x, double()) # tries to convert to double
+      return(new_percent(x))
+    }
+    ```
+
+-   `format()` method for `percent` (in `{vctrs}` this also controls the `print()` method)
+    ```{r}
+    format.percent <- function(x, ...) {
+      ret <- formatC(vctrs::vec_data(x) * 100, digits = 1, format = "f")
+      ret[is.na(x)] <- NA
+      ret[!is.na(x)] <- paste0(ret[!is.na(x)], "%")
+      return(ret)
+    }
+    ```
+    
+-   Allow `percent` objects to be combined with doubles (using `vec_c()`)
+    ```{r}
+    # type for combination should be percent
+    vec_ptype2.percent.double <- function(x, y, ...) {
+      percent()
+    }
+    
+    vec_ptype2.double.percent <- function(x, y, ...) {
+      percent()
+    }
+    
+    # How to cast (change type) based on operation
+    vec_cast.percent.double <- function(x, to, ...) percent(x) 
+    vec_cast.double.percent <- function(x, to, ...) vctrs::vec_data(x) 
+    ```
+    
+    ```{r}
+    x <- percent(c(0.1, 0.2))
+    vctrs::vec_c(x, 0.1)
+    ```
+    
+-   Allow percents to be added/subtracted
+    ```{r}
+    vec_arith.percent <- function(op, x, y, ...) {
+      UseMethod("vec_arith.percent", y)
+    }
+    vec_arith.percent.default <- function(op, x, y, ...) {
+      stop_incompatible_op(op, x, y)
+    }
+    vec_arith.percent.percent <- function(op, x, y, ...) { # method when have two percents
+      switch(
+        op,
+        "+" = , # go to next
+        "-" = new_percent(vctrs::vec_arith_base(op, x, y)), # do double ops, then convert
+        "/" = vctrs::vec_arith_base(op, x, y), # units cancel
+        stop_incompatible_op(op, x, y) # * makes less sense
+      )
+    }
+    ```
+    
+    ```{r}
+    x <- percent(c(0.1, 0.1))
+    y <- percent(c(0.5, 0.7))
+    x + y
+    x - y
+    x / y
+    ```
+    
+- Most folks don't need to create new vectors, so we won't cover this package in more detail. But it is really cool what you can do with it.
+
+
+# New functions
+
+- `class()`: Assign or get the class attribute.
+- `unclass()`: Remove class attribute and obtain underlying base type.
+- `inherits()`: Test if an object is an instance of a given class.
+- `sloop::ftype()`: See if a function is a "regular/primitive/internal function, a internal/S3/S4 generic, or a S3/S4/RC method".
+- `sloop::s3_dispatch()`: View method dispatch.
+- `sloop::s3_methods_generic()`: View all methods of a generic function.
+- `sloop::s3_methods_class()`: View all methods implemented for a specific class.
+- `sloop::s3_class()`: Returns implicit and explicit class.
+- `sloop::is_s3_method()`: Predicate function for determining if a function is an S3 method.
+- `UseMethod()`: Used in a generic to define it as a generic.
+- `NextMethod()`: Apply the next method, in the method dispatch chain, of the called generic.

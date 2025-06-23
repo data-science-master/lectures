@@ -37,14 +37,14 @@ knitr::knit_engines$set(text = function(options) {
   1. Click to download a csv/xls/txt file.
   2. Use a package that interacts with an API.
   3. Use an API directly.
-  4. Scrape from directly from the HTML file.
+  4. Scrape directly from the HTML file.
     
 - This lesson, we talk about how to do 4.
 
 - Note: You shouldn't download thousands of HTML files from a website
   to parse --- the admins might block you if you send too many requests.
   
-- Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information. **I don't give legal advice**, so see Chapter 24 of [RDS](https://r4ds.hadley.nz/) for some general recommendations, and talk to a lawyer if you are not sure.
+- Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information (especially in Europe). **I don't give legal advice**, so see Chapter 24 of [RDS](https://r4ds.hadley.nz/) for some general recommendations, and talk to a lawyer if you are not sure.
 
 -   Let's load the tidyverse:
     
@@ -52,9 +52,54 @@ knitr::knit_engines$set(text = function(options) {
     library(tidyverse)
     ```
 
-# CSS
+# HTML / CSS
 
 - We have to know a little bit about HTML and CSS in order to understand how to extract certain elements from a website.
+
+- HTML stands for "HyperText Markup Language"
+
+  ```
+  <html>
+  <head>
+    <title>My First Web Page</title>
+  </head>
+  <body>
+    <h1>Welcome!</h1>
+    <p>This is a <b>simple</b> paragraph.</p>
+    <a href="https://en.wikipedia.org/">Wikipedia</a>
+  </body>
+  </html>
+  ```
+
+- HTML consists of **elements** which start with a **tag** inside `<>` (like `<head>` and `<body>`), optional attributes that format the element (like `href=url`), contents (the text), and an **end tag** (like `</head>` and `</body>`). The above HTML text would be formatted like this:
+
+<hr></hr>
+<head>
+  <title>My First Web Page</title>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <p>This is a <b>simple</b> paragraph.</p>
+  <a href="https://youtu.be/dQw4w9WgXcQ?si=I9XnGsG7yFuKhilh">Wikipedia</a>
+</body>
+<hr></hr>
+
+- Important tags for web scraping:
+  - `<h1>`--`<h6>`: Heading tags, with `<h1>` as the highest (most important).
+  - `<p>`: Paragraph of text.
+  - `<a>`: Creates hyperlinks to other pages or resources.
+  - `<img>`: Embeds an image.
+  - `<div>`: Generic container for layout and styling.
+  - `<span>`: Inline container for styling parts of text.
+  - `<ul>`: Unordered list (bulleted).
+  - `<ol>`: Ordered list (numbered).
+  - `<li>`: List item, used inside `<ul>` or `<ol>`.
+  - `<table>`: Defines a table structure.
+  - `<tr>`: Table row.
+  - `<td>`: Table data cell.
+  - `<th>`: Table header cell.
+  - `<strong>`: Strong importance (usually bold).
+  - `<em>`: Emphasized text (usually italic).
   
 - CSS stands from "Cascading Style Sheets". It's a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.
   
@@ -71,7 +116,7 @@ knitr::knit_engines$set(text = function(options) {
     }
     ```
     
--   The part before the curly braces is called a *selector*. It corresponds
+-   The part before the curly braces is called a **selector**. It corresponds
   to HTML tags. Specifically, for those two they would correspond to:
   
     ``` html
@@ -82,7 +127,7 @@ knitr::knit_engines$set(text = function(options) {
     </footer>
     ```
     
-- The code inside the curly braces are *properties*. For example, the h3
+- The code inside the curly braces are **properties**. For example, the h3
   properties tells us to make the h3 headers red and in italics. The second
   CSS chunk says that all `<div>` tags of class `"alert"` in the `<footer>`
   should be hidden.
@@ -92,7 +137,168 @@ knitr::knit_engines$set(text = function(options) {
   
 - CSS selectors define patterns for selecting HTML elements. This is useful for scraping because we can extract all text in an HTML that corresponds to some CSS selector.
 
-- You can get a long way just selecting all `p` elements (standing for "paragraph") since that is where a lot of text lives. Also `.title` and `#title`.
+- You can get a long way just selecting all `p` elements (standing for "paragraph") since that is where a lot of text lives.
+
+- The most common attributes used are `id` and `class`. 
+  - The selectors corresponding to `class` begin with a dot `.`.
+  - The selectors corresponding to `id` begin with a hashtak `#`.
+
+- The `.a` selector selects for "Text 1" in the following
+  ```
+  <p class="a">Text 1</p>
+  ```
+
+- The `.a` selector selects for "Text 2" in the following
+  ```
+  <div class="a">Text 2</div>
+  ```
+
+- The `#b` selector selects for "Text 3" in the following
+  ```
+  <p id="b">Text 3</p>
+  ```
+
+- The `#b` selector selects for "Text 4" in the following
+  ```
+  <div id="b">Text 4</div>
+  ```
+  
+- More complicated selectors (from Richard Ressler):
+  - The `name` selector just uses the `name` value of the element such as `h3`. All elements with the same name value will be selected.
+  - The `id` selector uses a `#`, e.g., `#my_id`, to select a single element with `id=my_id` (all ids are unique within a page).
+  - The `class` selector uses a `.`, e.g., `.my_class`, where `class=my_class`. All elements with the same class value will be selected.
+  - We can combine selectors with `.`, ` `, and/or `\` to select a single element or groups of similar elements.
+    - A selector of `my_name.my_class` combines name and class to select all (only) elements with the `name=my_name` and `class=my_class`.
+  - The most important combinator is the white space, ` `, the descendant combination.
+        As an example, `p a` selects all `<a>` elements that are a child of (nested beneath) a `<p>` element in the tree.
+  - You can also find elements based on the values of attributes, e.g., find an element based on an attribute containing specific text.
+    - For a partial text search you would use `'[attribute_name*="my_text"]'`. Note the combination of single quotes and double quotes so you have double quotes around the value.
+
+
+# `rvest`
+
+-   We'll use `rvest` to extract elements from HTML files.
+
+    ```{r, message = FALSE}
+    library(rvest)
+    ```
+    
+- The typical pipeline for `rvest` is:
+  - Load the html file into R using `read_html()`
+  - Choose the selectors based on  SelectorGadget (see below) or by inspecting the selectors manually using developer tools (see below).
+  - Select those selectors using `html_elements()`.
+  - Extract the text using `html_text2()`.
+    - Or, extract tables using `html_table()`.
+  - Extreme cleaning using 412/612 tools.
+  
+-   We'll do a real example after we cover SelectorGadget and the web developer tools. But for now, let's create a small html file:
+
+    ```{r}
+    html <- minimal_html('
+    <p class="a">Text 1</p>
+    <div class="a">Text 2</div>
+    <p id="b">Text 3</p>
+    <div id="b">Text 4</div>
+    ')
+    ```
+
+-   We can get all `p` tag text via
+    ```{r}
+    html_elements(html, "p") |>
+      html_text2()
+    ```
+
+-   We can get all `div` tag text via
+    ```{r}
+    html_elements(html, "div") |>
+      html_text2()
+    ```
+
+-   We can get all `class=a` text via
+    ```{r}
+    html_elements(html, ".a") |>
+      html_text2()
+    ```
+
+-   We can get all `id=b` text via
+    ```{r}
+    html_elements(html, "#b") |>
+      html_text2()
+    ```
+
+-   Once you use `html_elements()`, it's common to then use `html_element()` to extract even more information.
+
+    ```{r}
+    html_k <- minimal_html("
+    <p><emph>A</emph>: <b>Ape</b> picks an <b>Apple</b> for <b>Aardvark</b> below.</p>
+    <p><emph>L</emph>: <b>Lion</b> <b>Lifts</b> <b>Ladybug's</b> <b>Luggage</b></p>
+    <p><emph>P</emph>: <b>Penguin</b> <b>Plays</b> with <b>Platypus</b> in the <b>Pool</b></p>
+    ")
+    ```
+
+    ```{r}
+    html_k |>
+      html_elements("p") |>
+      html_element("emph") |>
+      html_text2()
+    ```
+
+-   **Exercise**: Try extracting `b` with both `html_element()` and `html_elements()`. What's the difference?
+
+    ```{r}
+    #| eval: false
+    #| echo: false
+    html_k |>
+      html_elements("p") |>
+      html_element("b") |>
+      html_text2()
+    html_k |>
+      html_elements("p") |>
+      html_elements("b") |>
+      html_text2()
+    # html_element() only extracts first element.
+    ```
+
+
+-   **Exercise** (from R4DS): Get all of the text from the `li` element below:
+
+    ```{r}
+    html <- minimal_html("
+      <ul>
+        <li><b>C-3PO</b> is a <i>droid</i> that weighs <span class='weight'>167 kg</span></li>
+        <li><b>R4-P17</b> is a <i>droid</i></li>
+        <li><b>R2-D2</b> is a <i>droid</i> that weighs <span class='weight'>96 kg</span></li>
+        <li><b>Yoda</b> weighs <span class='weight'>66 kg</span></li>
+      </ul>
+      ")
+    ```
+
+    ```{r}
+    #| echo: false
+    #| eval: false
+    html_elements(html, "li") |>
+      html_text2()
+    ```
+
+-   **Exercise** (from R4DS): Extract the name of each droid. Start with the output of the second exercise.
+
+    ```{r}
+    #| echo: false
+    #| eval: false
+    html_elements(html, "li") |>
+      html_element("b") |>
+      html_text2()
+    ```
+
+-   **Exercise** (from R4DS): Use the class attribute of `weight` to extract the weight of each droid. Do **not** use `span`. Start with the output of the second exercise.
+
+    ```{r}
+    #| echo: false
+    #| eval: false
+    html_elements(html, "li") |>
+      html_element(".weight") |>
+      html_text2()
+    ```
 
 # SelectorGadget
 
@@ -137,7 +343,7 @@ knitr::knit_engines$set(text = function(options) {
   ![](./cartoons/IMDB_100_4.png)\ 
 
 - Only the ranking and the name remain, which are under the selector 
-  ".lister-item-header a , .text-primary".
+  ".ipc-title-link-wrapper .ipc-title__text--reduced".
   
 - It's important to visually inspect the selected elements throughout the whole
   HTML file. SelectorGadget doesn't always get all of what you want, or
@@ -157,6 +363,8 @@ knitr::knit_engines$set(text = function(options) {
 - If you have trouble with SelectorGadget, you can also use the Chrome
   developer tools.
   
+- Chrome works best for web scraping (better than Safari/Edge/Firefox/etc). So install it if you don't have it.
+  
 - Open up the list of selectors with: &#8942; > More tools > Developer tools.
   
 - Clicking on the element selector on the top left of the developer tools
@@ -164,13 +372,9 @@ knitr::knit_engines$set(text = function(options) {
   
   ![](./cartoons/IMDB_100_6.png)\ 
   
-# rvest
+# More `rvest`
 
--   We'll use rvest to extract elements from HTML files.
-
-    ```{r, message = FALSE}
-    library(rvest)
-    ```
+- Let's do a more complicated example of `rvest`.
 
 -   Use `read_html()` to save an HTML file to a variable. The variable will
   be an "`xml_document`" object
@@ -189,14 +393,14 @@ knitr::knit_engines$set(text = function(options) {
 - [XML](https://en.wikipedia.org/wiki/XML) stands for 
   "Extensible Markup Language". It's a markup language 
   (like HTML and Markdown), useful for representing data.
-  rvest will store the HTML file as an XML.
+  `rvest` will store the HTML file as an XML.
 
 -   We can use `html_elements()` and the selectors we found in the previous section 
   to get the elements we want. Insert the found selectors as the `css`
   argument.
   
     ```{r}
-    ranking_elements <- html_elements(html_obj, css = ".lister-item-header a , .text-primary")
+    ranking_elements <- html_elements(html_obj, css = ".ipc-title-link-wrapper .ipc-title__text--reduced")
     head(ranking_elements)
     ```
     
@@ -215,157 +419,90 @@ knitr::knit_engines$set(text = function(options) {
   
     ```{r}
     tibble(text = ranking_text) |>
-      mutate(rownum = row_number(),
-             iseven = rownum %% 2 == 0,
-             movie = rep(1:100, each = 2)) |>
-      select(-rownum) |>
-      spread(key = "iseven", value = "text") |>
-      select(-movie, "Rank" = "FALSE", movie = "TRUE") |>
-      mutate(Rank = parse_number(Rank)) ->
-      movierank
+      separate(col = "text", into = c("ranking", "movie"), sep = "\\.", extra = "merge") ->
     movierank
     ```
   
--   **Exercise**: Extract the directors and the names of each film. You can
-  extract them separately and combine them.
-  
-    ```{r, echo = FALSE, eval = FALSE}
-    dirdat <- html_elements(html_obj, ".text-small a:nth-child(1)")
-    dirdat <- html_text2(dirdat)
-    dirdat <- dirdat[-1] ## got an extra one
-    filmdat <- html_elements(html_obj, ".lister-item-header a")
-    filmdat <- html_text2(filmdat)
-    
-    data.frame(film = filmdat, director = dirdat)
-    ```
-  
-# Bigger example using rvest
-  
-- Let's try and get the name, rank, year, genre, and metascore for each 
-  movie:
-  
-  ![](./cartoons/IMDB_100_5.png)\ 
-  
--   We copy the CSS selectors and make a text vector
-
-    ```{r}
-    dataobj <- html_elements(html_obj, css = ".favorable , .genre, .unbold, .lister-item-header a")
-    datatext <- html_text(dataobj)
-    ```
-  
--   We now have a *lot* of cleaning to do. Note that the first 132 elements
-  we didn't even want:
-    ```{r}
-    head(datatext)
-    datatext[130:136]
-    ```
-  
-  
--   The rankings are always of the form `"\\d+\\."`. We'll use this and a
-  cumulative sum to indicate which movies the variables belong to.
-  This is necessary because some data have elements that are missing (e.g. 
-  "The Great Dictator" doesn't have a metacritic score).
-
-    ```{r}
-    datadf <- tibble(text = datatext)
-    
-    datadf |>
-      mutate(ismovierank = str_detect(text, "^\\d+\\.$")) ->
-      datadf
-    
-    ## make sure it is 100
-    sum(datadf$ismovierank)
-    
-    ## get movie numbers and remove non-movie elements:
-    datadf |>
-      mutate(movienum = cumsum(ismovierank)) |>
-      filter(movienum > 0) ->
-      datadf
-    
-    datadf
-    ```
-
--   We'll use the `movierank$movie` variable we created before see
-  which rows are movie names
+-   **Exercise**: Extract the directors and the names of each film. Try to use SelectorGadget to find your own selectors. But I eventually ended up using this selector: `".kKeVOw , .ipc-title-link-wrapper .ipc-title__text--reduced"`
   
     ```{r}
-    datadf |>
-      mutate(isname = text %in% movierank$movie) ->
-      datadf
-    
-    ## make sure we have 100 movies:
-    sum(datadf$isname)
-    
-    datadf
+    #| echo: false
+    #| eval: false
+    html_elements(html_obj, ".kKeVOw , .ipc-title-link-wrapper .ipc-title__text--reduced") |>
+      html_text2() |>
+      tibble(text = _) |>
+      mutate(title = str_detect(text, "^\\d+\\."),
+             rank = cumsum(title)) |>
+      pivot_wider(values_from = text, names_from = title) |>
+      rename(movie = `TRUE`, text = `FALSE`) |>
+      mutate(
+        movie = str_remove(movie, "^\\d+\\."),
+        directors = str_extract(text, "Director.+Stars"),
+        directors = str_remove(directors, "^Directors*"),
+        directors = str_remove(directors, "Stars$")) |>
+      select(-text)
     ```
     
--   Years are surrounded by parentheses:
+# A very simple example
 
+-   Here is a very simple html file that is generated using `rvest`:
     ```{r}
-    datadf |>
-      mutate(isyear = str_detect(text, "\\(\\d+\\)")) ->
-      datadf
-    
-    ## make sure it is 100
-    sum(datadf$isyear)
-    
-    datadf
+    html <- minimal_html("
+      <h1>This is a heading</h1>
+      <p id='first'>This is a paragraph</p>
+      <p class='important'>This is an important paragraph</p>
+    ")
     ```
 
--   Genre's begin with a new line:
-    
+-   The `h1` selector selects for `h1` tags.
     ```{r}
-    datadf |>
-      mutate(isgenre = str_detect(text, "^\\n")) ->
-      datadf
-    
-    ## make sure it is 100
-    sum(datadf$isgenre)
+    html_elements(html, "h1") |>
+      html_text()
     ```
 
--   Everything else should be the metacritic score:
-
+-   The `.important` selector selects for `class` attribute that is `important`
     ```{r}
-    datadf |>
-      group_by(ismovierank, isname, isyear, isgenre) |>
-      count()
-    
-    datadf |>
-      mutate(ismeta = !ismovierank & !isname & !isyear & !isgenre) ->
-      datadf
-    
-    datadf
+    html_elements(html, ".important") |>
+      html_text()
     ```
 
--   Let's create a key for these data then spread them:
-
+-   The `#first` selector selects for `id` attribute that is `first`
     ```{r}
-    datadf |>
-      mutate(key = case_when(ismovierank ~ "rank",
-                             isname ~ "name",
-                             isyear ~ "year",
-                             isgenre ~ "genre",
-                             ismeta ~ "metacritic")) |>
-      select(key, text, movienum) |>
-      spread(key = "key", value = "text") ->
-      datawide
-    
-    datawide
+    html_elements(html, "#first") |>
+      html_text()
     ```
-    
--   Let's clean up the remaining variables:
 
-    ```{r}
-    datawide |>
-      mutate(genre = str_replace_all(genre, "\\n", ""),
-             genre = str_squish(genre),
-             metacritic = parse_number(metacritic),
-             rank = parse_number(rank),
-             year = parse_number(year)) ->
-      datawide
-    
-    datawide
-    ```
+  
+# Bigger example using `rvest`
+  
+- Let's try and get the name, rank, year, metascore for each movie.
+
+```{r}
+html_elements(html_obj, ".dli-title-metadata-item:nth-child(1) , .hPmOUc, .ipc-title-link-wrapper .ipc-title__text--reduced") |>
+  html_text2() |>
+  tibble(text = _) |>
+  mutate(
+    title = str_detect(text, "\\d+\\."),
+    metascore = str_detect(text, "Metascore"),
+    year = !(title | metascore),
+    rank = cumsum(title),
+    type = case_when(
+      title ~ "Title",
+      year ~ "Year",
+      metascore ~ "Metascore")) |>
+  select(rank, text, type) |>
+  pivot_wider(
+    names_from = type,
+    values_from = text) |>
+  mutate(
+    Title = str_remove(Title, "\\d+\\."),
+    Metascore = str_remove(Metascore, "Metascore"),
+    Title = str_squish(Title),
+    Year = parse_integer(Year),
+    Metascore = parse_integer(Metascore))
+```
+
+
 
 # `html_table()`
 
@@ -424,8 +561,8 @@ knitr::knit_engines$set(text = function(options) {
     If the above link fails, try: <https://data-science-master.github.io/lectures/08_web_scraping/mosque.html>
     ```
   
-    1. Use rvest to read these tables into R.
-    2. Use rvest and SelectorGadget to extract out the category for the 
+    1. Use `rvest` to read these tables into R.
+    2. Use `rvest` and SelectorGadget to extract out the category for the 
        table (mentioned in Quran, in northeast Africa, etc).
     3. Merge the data frames together. You only need to keep the building
        name, the country, and the time it was first build. 

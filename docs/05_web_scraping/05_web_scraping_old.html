@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="David Gerard">
+<meta name="dcterms.date" content="2025-06-20">
+
+<title>Web Scraping with rvest – DATA 413/613 Data Science</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">DATA 413/613 Data Science</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../data.html"> 
+<span class="menu-text">Data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#data-on-the-web" id="toc-data-on-the-web" class="nav-link" data-scroll-target="#data-on-the-web">Data on the Web</a></li>
+  <li><a href="#css" id="toc-css" class="nav-link" data-scroll-target="#css">CSS</a></li>
+  <li><a href="#selectorgadget" id="toc-selectorgadget" class="nav-link" data-scroll-target="#selectorgadget">SelectorGadget</a></li>
+  <li><a href="#chrome-developer-tools" id="toc-chrome-developer-tools" class="nav-link" data-scroll-target="#chrome-developer-tools">Chrome developer tools:</a></li>
+  <li><a href="#rvest" id="toc-rvest" class="nav-link" data-scroll-target="#rvest">rvest</a></li>
+  <li><a href="#bigger-example-using-rvest" id="toc-bigger-example-using-rvest" class="nav-link" data-scroll-target="#bigger-example-using-rvest">Bigger example using rvest</a></li>
+  <li><a href="#html_table" id="toc-html_table" class="nav-link" data-scroll-target="#html_table"><code>html_table()</code></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Web Scraping with rvest</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 20, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
+<ul>
+<li>Basics of Web Scraping</li>
+<li>Chapter 24 of <a href="https://r4ds.hadley.nz/">RDS</a></li>
+<li><a href="https://rvest.tidyverse.org/">Overview of rvest</a>.</li>
+<li><a href="https://rvest.tidyverse.org/articles/selectorgadget.html">SelectorGadget</a>.</li>
+<li><a href="https://r4ds.hadley.nz/webscraping.html">Web Scraping</a></li>
+</ul>
+</section>
+<section id="data-on-the-web" class="level1">
+<h1>Data on the Web</h1>
+<ul>
+<li><p>There are at least 4 ways people download data on the web:</p>
+<ol type="1">
+<li>Click to download a csv/xls/txt file.</li>
+<li>Use a package that interacts with an API.</li>
+<li>Use an API directly.</li>
+<li>Scrape from directly from the HTML file.</li>
+</ol></li>
+<li><p>This lesson, we talk about how to do 4.</p></li>
+<li><p>Note: You shouldn’t download thousands of HTML files from a website to parse — the admins might block you if you send too many requests.</p></li>
+<li><p>Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information. <strong>I don’t give legal advice</strong>, so see Chapter 24 of <a href="https://r4ds.hadley.nz/">RDS</a> for some general recommendations, and talk to a lawyer if you are not sure.</p></li>
+<li><p>Let’s load the tidyverse:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="css" class="level1">
+<h1>CSS</h1>
+<ul>
+<li><p>We have to know a little bit about HTML and CSS in order to understand how to extract certain elements from a website.</p></li>
+<li><p>CSS stands from “Cascading Style Sheets”. It’s a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.</p></li>
+<li><p>Here is some example CSS:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>h3 {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="cn">red</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span><span class="ch">:</span> <span class="dv">italic</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>footer div<span class="fu">.alert</span> {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">display</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>The part before the curly braces is called a <em>selector</em>. It corresponds to HTML tags. Specifically, for those two they would correspond to:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h3</span><span class="dt">&gt;</span>Some text<span class="dt">&lt;/</span><span class="kw">h3</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">footer</span><span class="dt">&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"alert"</span><span class="dt">&gt;</span>More text<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">footer</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>The code inside the curly braces are <em>properties</em>. For example, the h3 properties tells us to make the h3 headers red and in italics. The second CSS chunk says that all <code>&lt;div&gt;</code> tags of class <code>"alert"</code> in the <code>&lt;footer&gt;</code> should be hidden.</p></li>
+<li><p>CSS applies the same <em>properties</em> to the same <em>selectors</em>. So every time we use h3 will result in the h3 styling of red and italicized text.</p></li>
+<li><p>CSS selectors define patterns for selecting HTML elements. This is useful for scraping because we can extract all text in an HTML that corresponds to some CSS selector.</p></li>
+<li><p>You can get a long way just selecting all <code>p</code> elements (standing for “paragraph”) since that is where a lot of text lives. Also <code>.title</code> and <code>#title</code>.</p></li>
+</ul>
+</section>
+<section id="selectorgadget" class="level1">
+<h1>SelectorGadget</h1>
+<ul>
+<li><p>SelectorGadget is a tool for you to see what selector influences a particular element on a website.</p></li>
+<li><p>To install SelectorGadget, drag this link to your bookmark bar on Chrome: <a href="javascript:(function()%7Bvar%20s=document.createElement('div');s.innerHTML='Loading...';s.style.color='black';s.style.padding='20px';s.style.position='fixed';s.style.zIndex='9999';s.style.fontSize='3.0em';s.style.border='2px%20solid%20black';s.style.right='40px';s.style.top='40px';s.setAttribute('class','selector_gadget_loading');s.style.background='white';document.body.appendChild(s);s=document.createElement('script');s.setAttribute('type','text/javascript');s.setAttribute('src','https://dv0akt2986vzh.cloudfront.net/unstable/lib/selectorgadget.js');document.body.appendChild(s);%7D)();">SelectorGadget</a></p></li>
+<li><p>Suppose we wanted to get the top 100 movies of all time from IMDB. The web page is very unstructured:</p>
+<p><a href="https://www.imdb.com/list/ls055592025/" class="uri">https://www.imdb.com/list/ls055592025/</a></p>
+<p><img src="./cartoons/IMDB_100_1.png" class="img-fluid">&nbsp;</p></li>
+<li><p>If we click on the ranking of the Godfather, the “1” turns green (indicating what we have selected).</p>
+<p><img src="./cartoons/IMDB_100_2.png" class="img-fluid">&nbsp;</p></li>
+<li><p>The “.text-primary” is the selector associated with the “1” we clicked on.</p></li>
+<li><p>Everything highlighted in yellow also has the “.text-primary” selector associated with it.</p></li>
+<li><p>We will also want the name of the movie. So if we click on that we get the selector associated with both the rank and the movie name: “a , .text-primary”.</p>
+<p><img src="./cartoons/IMDB_100_3.png" class="img-fluid">&nbsp;</p></li>
+<li><p>But we also got a lot of stuff we don’t want (in yellow). If we click one of the yellow items that we don’t want, it turns red. This indicates that we don’t want to select it.</p>
+<p><img src="./cartoons/IMDB_100_4.png" class="img-fluid">&nbsp;</p></li>
+<li><p>Only the ranking and the name remain, which are under the selector “.lister-item-header a , .text-primary”.</p></li>
+<li><p>It’s important to visually inspect the selected elements throughout the whole HTML file. SelectorGadget doesn’t always get all of what you want, or it sometimes gets too much.</p></li>
+<li><p><strong>Exercise</strong>: What selector can we use to get just the genres of each film, the metacritic score, and the IMDB rating?</p></li>
+</ul>
+</section>
+<section id="chrome-developer-tools" class="level1">
+<h1>Chrome developer tools:</h1>
+<ul>
+<li><p>If you have trouble with SelectorGadget, you can also use the Chrome developer tools.</p></li>
+<li><p>Open up the list of selectors with: ⋮ &gt; More tools &gt; Developer tools.</p></li>
+<li><p>Clicking on the element selector on the top left of the developer tools will show you what selectors are possible with each element.</p>
+<p><img src="./cartoons/IMDB_100_6.png" class="img-fluid">&nbsp;</p></li>
+</ul>
+</section>
+<section id="rvest" class="level1">
+<h1>rvest</h1>
+<ul>
+<li><p>We’ll use rvest to extract elements from HTML files.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Use <code>read_html()</code> to save an HTML file to a variable. The variable will be an “<code>xml_document</code>” object</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>html_obj <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.imdb.com/list/ls055592025/"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>html_obj</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(html_obj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p><a href="https://en.wikipedia.org/wiki/XML">XML</a> stands for “Extensible Markup Language”. It’s a markup language (like HTML and Markdown), useful for representing data. rvest will store the HTML file as an XML.</p></li>
+<li><p>We can use <code>html_elements()</code> and the selectors we found in the previous section to get the elements we want. Insert the found selectors as the <code>css</code> argument.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ranking_elements <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(html_obj, <span class="at">css =</span> <span class="st">".lister-item-header a , .text-primary"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_elements)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (6)}
+[1] &lt;span class="lister-item-index unbold text-primary"&gt;1.&lt;/span&gt;
+[2] &lt;a href="/title/tt0068646/?ref_=ttls_li_tt"&gt;The Godfather&lt;/a&gt;
+[3] &lt;span class="lister-item-index unbold text-primary"&gt;2.&lt;/span&gt;
+[4] &lt;a href="/title/tt0111161/?ref_=ttls_li_tt"&gt;The Shawshank Redemption&lt;/a&gt;
+[5] &lt;span class="lister-item-index unbold text-primary"&gt;3.&lt;/span&gt;
+[6] &lt;a href="/title/tt0108052/?ref_=ttls_li_tt"&gt;Schindler's List&lt;/a&gt;</code></pre>
+</div>
+</div></li>
+<li><p>Note: <code>html_element()</code> is similar, but will return exactly one response per element, so is useful if some elements have missing components.</p></li>
+<li><p>To extract the text inside the obtained nodes, use <code>html_text()</code> or <code>html_text2()</code>:</p>
+<ul>
+<li><code>html_text2()</code> just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc). So you should typically use this.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ranking_text <span class="ot">&lt;-</span> <span class="fu">html_text2</span>(ranking_elements)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1."                       "The Godfather"           
+[3] "2."                       "The Shawshank Redemption"
+[5] "3."                       "Schindler's List"        </code></pre>
+</div>
+</div></li>
+<li><p>After you do this, you need to tidy the data using your data munging tools.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">text =</span> ranking_text) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownum =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">iseven =</span> rownum <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">movie =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">each =</span> <span class="dv">2</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>rownum) <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">"iseven"</span>, <span class="at">value =</span> <span class="st">"text"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>movie, <span class="st">"Rank"</span> <span class="ot">=</span> <span class="st">"FALSE"</span>, <span class="at">movie =</span> <span class="st">"TRUE"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Rank =</span> <span class="fu">parse_number</span>(Rank)) <span class="ot">-&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  movierank</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>movierank</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 2
+    Rank movie                          
+   &lt;dbl&gt; &lt;chr&gt;                          
+ 1     1 The Godfather                  
+ 2     2 The Shawshank Redemption       
+ 3     3 Schindler's List               
+ 4     4 Raging Bull                    
+ 5     5 Casablanca                     
+ 6     6 Citizen Kane                   
+ 7     7 Gone with the Wind             
+ 8     8 The Wizard of Oz               
+ 9     9 One Flew Over the Cuckoo's Nest
+10    10 Lawrence of Arabia             
+# ℹ 90 more rows</code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong>: Extract the directors and the names of each film. You can extract them separately and combine them.</p></li>
+</ul>
+</section>
+<section id="bigger-example-using-rvest" class="level1">
+<h1>Bigger example using rvest</h1>
+<ul>
+<li><p>Let’s try and get the name, rank, year, genre, and metascore for each movie:</p>
+<p><img src="./cartoons/IMDB_100_5.png" class="img-fluid">&nbsp;</p></li>
+<li><p>We copy the CSS selectors and make a text vector</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dataobj <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(html_obj, <span class="at">css =</span> <span class="st">".favorable , .genre, .unbold, .lister-item-header a"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>datatext <span class="ot">&lt;-</span> <span class="fu">html_text</span>(dataobj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>We now have a <em>lot</em> of cleaning to do. Note that the first 132 elements we didn’t even want:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(datatext)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "\n        Prime Video\n            (15)\n    "              
+[2] "\n        IMDb TV\n            (2)\n    "                   
+[3] "\n        Prime Video (Rent or Buy)\n            (95)\n    "
+[4] "\n        Drama\n            (80)\n    "                    
+[5] "\n        Romance\n            (25)\n    "                  
+[6] "\n        Adventure\n            (18)\n    "                </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>datatext[<span class="dv">130</span><span class="sc">:</span><span class="dv">136</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "\n        Anti Hero\n            (16)\n    "       
+[2] "\n        Cigar Smoking\n            (16)\n    "   
+[3] "\n        Good Versus Evil\n            (16)\n    "
+[4] "1."                                                
+[5] "The Godfather"                                     
+[6] "(1972)"                                            
+[7] "\nCrime, Drama            "                        </code></pre>
+</div>
+</div></li>
+<li><p>The rankings are always of the form <code>"\\d+\\."</code>. We’ll use this and a cumulative sum to indicate which movies the variables belong to. This is necessary because some data have elements that are missing (e.g.&nbsp; “The Great Dictator” doesn’t have a metacritic score).</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">text =</span> datatext)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ismovierank =</span> <span class="fu">str_detect</span>(text, <span class="st">"^</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">.$"</span>)) <span class="ot">-&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="do">## make sure it is 100</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(datadf<span class="sc">$</span>ismovierank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## get movie numbers and remove non-movie elements:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">movienum =</span> <span class="fu">cumsum</span>(ismovierank)) <span class="sc">|&gt;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(movienum <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="ot">-&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>datadf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 496 × 3
+   text                         ismovierank movienum
+   &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt;
+ 1 "1."                         TRUE               1
+ 2 "The Godfather"              FALSE              1
+ 3 "(1972)"                     FALSE              1
+ 4 "\nCrime, Drama            " FALSE              1
+ 5 "100        "                FALSE              1
+ 6 "2."                         TRUE               2
+ 7 "The Shawshank Redemption"   FALSE              2
+ 8 "(1994)"                     FALSE              2
+ 9 "\nDrama            "        FALSE              2
+10 "80        "                 FALSE              2
+# ℹ 486 more rows</code></pre>
+</div>
+</div></li>
+<li><p>We’ll use the <code>movierank$movie</code> variable we created before see which rows are movie names</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">isname =</span> text <span class="sc">%in%</span> movierank<span class="sc">$</span>movie) <span class="ot">-&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="do">## make sure we have 100 movies:</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(datadf<span class="sc">$</span>isname)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>datadf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 496 × 4
+   text                         ismovierank movienum isname
+   &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt; 
+ 1 "1."                         TRUE               1 FALSE 
+ 2 "The Godfather"              FALSE              1 TRUE  
+ 3 "(1972)"                     FALSE              1 FALSE 
+ 4 "\nCrime, Drama            " FALSE              1 FALSE 
+ 5 "100        "                FALSE              1 FALSE 
+ 6 "2."                         TRUE               2 FALSE 
+ 7 "The Shawshank Redemption"   FALSE              2 TRUE  
+ 8 "(1994)"                     FALSE              2 FALSE 
+ 9 "\nDrama            "        FALSE              2 FALSE 
+10 "80        "                 FALSE              2 FALSE 
+# ℹ 486 more rows</code></pre>
+</div>
+</div></li>
+<li><p>Years are surrounded by parentheses:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">isyear =</span> <span class="fu">str_detect</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">(</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">)"</span>)) <span class="ot">-&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="do">## make sure it is 100</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(datadf<span class="sc">$</span>isyear)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>datadf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 496 × 5
+   text                         ismovierank movienum isname isyear
+   &lt;chr&gt;                        &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt;  &lt;lgl&gt; 
+ 1 "1."                         TRUE               1 FALSE  FALSE 
+ 2 "The Godfather"              FALSE              1 TRUE   FALSE 
+ 3 "(1972)"                     FALSE              1 FALSE  TRUE  
+ 4 "\nCrime, Drama            " FALSE              1 FALSE  FALSE 
+ 5 "100        "                FALSE              1 FALSE  FALSE 
+ 6 "2."                         TRUE               2 FALSE  FALSE 
+ 7 "The Shawshank Redemption"   FALSE              2 TRUE   FALSE 
+ 8 "(1994)"                     FALSE              2 FALSE  TRUE  
+ 9 "\nDrama            "        FALSE              2 FALSE  FALSE 
+10 "80        "                 FALSE              2 FALSE  FALSE 
+# ℹ 486 more rows</code></pre>
+</div>
+</div></li>
+<li><p>Genre’s begin with a new line:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">isgenre =</span> <span class="fu">str_detect</span>(text, <span class="st">"^</span><span class="sc">\\</span><span class="st">n"</span>)) <span class="ot">-&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="do">## make sure it is 100</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(datadf<span class="sc">$</span>isgenre)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+</div></li>
+<li><p>Everything else should be the metacritic score:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ismovierank, isname, isyear, isgenre) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+# Groups:   ismovierank, isname, isyear, isgenre [5]
+  ismovierank isname isyear isgenre     n
+  &lt;lgl&gt;       &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;   &lt;int&gt;
+1 FALSE       FALSE  FALSE  FALSE      96
+2 FALSE       FALSE  FALSE  TRUE      100
+3 FALSE       FALSE  TRUE   FALSE     100
+4 FALSE       TRUE   FALSE  FALSE     100
+5 TRUE        FALSE  FALSE  FALSE     100</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ismeta =</span> <span class="sc">!</span>ismovierank <span class="sc">&amp;</span> <span class="sc">!</span>isname <span class="sc">&amp;</span> <span class="sc">!</span>isyear <span class="sc">&amp;</span> <span class="sc">!</span>isgenre) <span class="ot">-&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  datadf</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>datadf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 496 × 7
+   text                        ismovierank movienum isname isyear isgenre ismeta
+   &lt;chr&gt;                       &lt;lgl&gt;          &lt;int&gt; &lt;lgl&gt;  &lt;lgl&gt;  &lt;lgl&gt;   &lt;lgl&gt; 
+ 1 "1."                        TRUE               1 FALSE  FALSE  FALSE   FALSE 
+ 2 "The Godfather"             FALSE              1 TRUE   FALSE  FALSE   FALSE 
+ 3 "(1972)"                    FALSE              1 FALSE  TRUE   FALSE   FALSE 
+ 4 "\nCrime, Drama           … FALSE              1 FALSE  FALSE  TRUE    FALSE 
+ 5 "100        "               FALSE              1 FALSE  FALSE  FALSE   TRUE  
+ 6 "2."                        TRUE               2 FALSE  FALSE  FALSE   FALSE 
+ 7 "The Shawshank Redemption"  FALSE              2 TRUE   FALSE  FALSE   FALSE 
+ 8 "(1994)"                    FALSE              2 FALSE  TRUE   FALSE   FALSE 
+ 9 "\nDrama            "       FALSE              2 FALSE  FALSE  TRUE    FALSE 
+10 "80        "                FALSE              2 FALSE  FALSE  FALSE   TRUE  
+# ℹ 486 more rows</code></pre>
+</div>
+</div></li>
+<li><p>Let’s create a key for these data then spread them:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>datadf <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">key =</span> <span class="fu">case_when</span>(ismovierank <span class="sc">~</span> <span class="st">"rank"</span>,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                         isname <span class="sc">~</span> <span class="st">"name"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                         isyear <span class="sc">~</span> <span class="st">"year"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                         isgenre <span class="sc">~</span> <span class="st">"genre"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>                         ismeta <span class="sc">~</span> <span class="st">"metacritic"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(key, text, movienum) <span class="sc">|&gt;</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> <span class="st">"key"</span>, <span class="at">value =</span> <span class="st">"text"</span>) <span class="ot">-&gt;</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  datawide</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>datawide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+   movienum genre                                   metacritic name  rank  year 
+      &lt;int&gt; &lt;chr&gt;                                   &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+ 1        1 "\nCrime, Drama            "            "100     … The … 1.    (197…
+ 2        2 "\nDrama            "                   "80      … The … 2.    (199…
+ 3        3 "\nBiography, Drama, History          … "94      … Schi… 3.    (199…
+ 4        4 "\nBiography, Drama, Sport            " "89      … Ragi… 4.    (198…
+ 5        5 "\nDrama, Romance, War            "     "100     … Casa… 5.    (194…
+ 6        6 "\nDrama, Mystery            "          "100     … Citi… 6.    (194…
+ 7        7 "\nDrama, History, Romance            " "97      … Gone… 7.    (193…
+ 8        8 "\nAdventure, Family, Fantasy         … "100     … The … 8.    (193…
+ 9        9 "\nDrama            "                   "83      … One … 9.    (197…
+10       10 "\nAdventure, Biography, Drama        … "100     … Lawr… 10.   (196…
+# ℹ 90 more rows</code></pre>
+</div>
+</div></li>
+<li><p>Let’s clean up the remaining variables:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>datawide <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genre =</span> <span class="fu">str_replace_all</span>(genre, <span class="st">"</span><span class="sc">\\</span><span class="st">n"</span>, <span class="st">""</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">genre =</span> <span class="fu">str_squish</span>(genre),</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">metacritic =</span> <span class="fu">parse_number</span>(metacritic),</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">rank =</span> <span class="fu">parse_number</span>(rank),</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">year =</span> <span class="fu">parse_number</span>(year)) <span class="ot">-&gt;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  datawide</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>datawide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+   movienum genre                       metacritic name               rank  year
+      &lt;int&gt; &lt;chr&gt;                            &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
+ 1        1 Crime, Drama                       100 The Godfather         1  1972
+ 2        2 Drama                               80 The Shawshank Re…     2  1994
+ 3        3 Biography, Drama, History           94 Schindler's List      3  1993
+ 4        4 Biography, Drama, Sport             89 Raging Bull           4  1980
+ 5        5 Drama, Romance, War                100 Casablanca            5  1942
+ 6        6 Drama, Mystery                     100 Citizen Kane          6  1941
+ 7        7 Drama, History, Romance             97 Gone with the Wi…     7  1939
+ 8        8 Adventure, Family, Fantasy         100 The Wizard of Oz      8  1939
+ 9        9 Drama                               83 One Flew Over th…     9  1975
+10       10 Adventure, Biography, Drama        100 Lawrence of Arab…    10  1962
+# ℹ 90 more rows</code></pre>
+</div>
+</div></li>
+</ul>
+</section>
+<section id="html_table" class="level1">
+<h1><code>html_table()</code></h1>
+<ul>
+<li><p>When data is in the form of a table, you can format it more easily with <code>html_table()</code>.</p></li>
+<li><p>The Wikipedia article on hurricanes: <a href="https://en.wikipedia.org/wiki/Atlantic_hurricane_season" class="uri">https://en.wikipedia.org/wiki/Atlantic_hurricane_season</a></p>
+<p>This contains many tables which might be a pain to copy and paste into Excel (and we would be prone to error if we did so). Let’s try to automate this procedure.</p></li>
+<li><p>Save the HTML</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>wikixml <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://en.wikipedia.org/wiki/Atlantic_hurricane_season"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>We’ll extract all of the “table” elements.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>wikidat <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(wikixml, <span class="st">"table"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Use <code>html_table()</code> to get a list of tables from table elements:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tablist <span class="ot">&lt;-</span> <span class="fu">html_table</span>(wikidat)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tablist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(tablist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>tablist[[<span class="dv">19</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 4
+   Year  Map     `Number oftropical cyclones` `Number oftropical storms`
+   &lt;chr&gt; &lt;chr&gt;                          &lt;int&gt;                      &lt;int&gt;
+ 1 2010  ""                                21                         19
+ 2 2011  ""                                20                         19
+ 3 2012  ""                                19                         19
+ 4 2013  ""                                15                         14
+ 5 2014  ""                                 9                          8
+ 6 2015  ""                                12                         11
+ 7 2016  ""                                16                         15
+ 8 2017  ""                                18                         17
+ 9 2018  ""                                16                         15
+10 2019  ""                                18                         16
+11 Total "Total"                          164                        153</code></pre>
+</div>
+</div></li>
+<li><p>You can clean up, bind, or merge these tables after you have read them in.</p></li>
+<li><p><strong>Exercise</strong>: The Wikipedia page on the oldest mosques in the world has many tables.</p>
+<p><a href="https://en.wikipedia.org/wiki/List_of_the_oldest_mosques" class="uri">https://en.wikipedia.org/wiki/List_of_the_oldest_mosques</a></p>
+<ol type="1">
+<li>Use rvest to read these tables into R.</li>
+<li>Use rvest and SelectorGadget to extract out the category for the table (mentioned in Quran, in northeast Africa, etc).</li>
+<li>Merge the data frames together. You only need to keep the building name, the country, and the time it was first build.</li>
+</ol>
+<p><em>Hint</em>: It’s easier if you use a css selector of <code>"table.wikitable"</code> to get the table rather than just <code>"table"</code>. I found this out by getting to the developer tools in Chrome with CTRL + Shift + I then playing around with the tables.</p>
+<p>The first 15 rows should look like this:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 4
+   Building                 Country      fb    category              
+   &lt;chr&gt;                    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;                 
+ 1 Al-Haram Mosque          Saudi Arabia &lt;NA&gt;  Mentioned in the Quran
+ 2 Al-Aqsa Mosque           Palestine    &lt;NA&gt;  Mentioned in the Quran
+ 3 The Sacred Monument      Saudi Arabia &lt;NA&gt;  Mentioned in the Quran
+ 4 Quba Mosque              Saudi Arabia 622   Mentioned in the Quran
+ 5 Mosque of the Companions Eritrea      610   Northeast Africa      
+ 6 Negash Āmedīn Mesgīd     Ethiopia     620   Northeast Africa      
+ 7 Masjid al-Qiblatayn      Somalia      620   Northeast Africa      
+ 8 Korijib Masjid           Djibouti     630   Northeast Africa      
+ 9 Mosque of Amr ibn al-As  Egypt        641   Northeast Africa      
+10 Mosque of Ibn Tulun      Egypt        879   Northeast Africa      
+11 Al-Hakim Mosque          Egypt        928   Northeast Africa      
+12 Al-Azhar Mosque          Egypt        972   Northeast Africa      
+13 Arba'a Rukun Mosque      Somalia      1268  Northeast Africa      
+14 Fakr ad-Din Mosque       Somalia      1269  Northeast Africa      
+15 Great Mosque of Kairouan Tunisia      670   Northwest Africa      </code></pre>
+</div>
+</div></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

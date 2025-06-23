@@ -34,7 +34,9 @@ knitr::knit_engines$set(text = function(options) {
   - On a Mac, this is typically `Users/your_username`, but it may differ.
   - On Windows, this is typically `C:\Users\your_username`, but it may differ.
   
-- Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time (e.g., Git Bash for Windows uses forward slashes), but it's something to be aware of.
+- Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time.
+  - Git Bash for Windows uses forward slashes.
+  - You can (should) always use forward slashes in R, even on Windows machines.
 
 - The home directory is also the working directory of your shell when you first open it.
 
@@ -60,7 +62,7 @@ knitr::knit_engines$set(text = function(options) {
 - To add the home directory to your sidebar on Mac for quick access:
   - Finder -> Settings -> "Show these items in the sidebar" -> Check your username (with the home icon).
 
-# File Naming
+# File/Folder Naming
 
 - **Do not use spaces**. Use underscores (`_`) instead (hyphons are also very common)
   - Spaces make command-line scripts more annoying to code up.
@@ -147,8 +149,7 @@ This is one way:
 - When you double click on a file, your operating system knows what program to use (almost) only because of the file extension.
 
 - Windows sometimes hides the file extension. You should change the settings so you can see them:
-
-- Open File Explorer, click on the "View" tab, and check the "File name extensions" box.
+  - Open File Explorer, click on the "View" tab, and check the "File name extensions" box.
 
 - There are ways to choose the default program to use when opening a file with a given file extension.
 

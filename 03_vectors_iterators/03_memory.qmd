@@ -1,0 +1,451 @@
+---
+title: "Memory"
+author: "David Gerard"
+date: "`r Sys.Date()`"
+output:  
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: false
+    highlight: pygments
+urlcolor: "blue"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo       = TRUE, 
+                      fig.align  = "center",
+                      fig.height = 3, fig.width = 4)
+ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white")))
+```
+
+# Learning Objectives
+
+- Names/Values
+- Copy-on-modify
+- Modify-by-reference
+- Chapter 2 from [Advanced R](https://adv-r.hadley.nz/)
+    - These lecture notes are mostly taken straight out of Hadley's book. Many thanks for making my life easier.
+    - His images, which I use here, are licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" height="15" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"/></a>
+
+# Names and Values
+
+- [Computer Memory](https://en.wikipedia.org/wiki/Computer_memory) is information (like numbers or strings) that is for immediate use. When you put information there, it is located at some "address" on your computer, and you can retrieve it from that address.
+
+-   The following puts the vector `c(1,2,3)` in memory, and binds the name `x` to it
+
+    ```{r}
+    x <- c(1, 2, 3)
+    ```
+
+    <img src="./04_figs/binding-1.png" alt="x binds to object" width="20%"/>
+
+-   The function `lobstr::obj_addr()` let's us see the address of this object.
+    ```{r}
+    lobstr::obj_addr(x)
+    ```
+
+-   When you assign `x` to a new variable name `y`, it makes a new name that points to the same object as `x`.
+
+    ```{r}
+    y <- x
+    ```
+
+    <img src="./04_figs/binding-2.png" alt="y binds to same object as x" width="20%"/>
+    
+    ```{r}
+    lobstr::obj_addr(y)
+    ```
+    
+-   If you modify `y`, then it will make a copy of object `r lobstr::obj_addr(x)` and point `y` to that new object. This is called **copy-on-modify**
+
+    ```{r}
+    y[[3]] <- 4
+    ```
+
+    <img src="./04_figs/binding-3.png" alt="y binds to new object" width="20%"/>
+    
+    ```{r}
+    lobstr::obj_addr(y)
+    ```
+
+-   Copy-on-modify exists so that `x` does not change when you change `y`.
+    ```{r}
+    x
+    ```
+
+-   You can use `tracemem()` to track whenever an object is copied.
+
+    ```{r}
+    x <- c(1, 2, 3)
+    tracemem(x)
+    y <- x
+    y[[3]] <- 4 ## copy made
+    y[[5]] <- 1 ## no copy made, y modified
+    ```
+    
+-   **Note**: `tracemem()` is connected to the object (here `r lobstr::obj_addr(x)`), **not** the name `x`. So the following will not show a copy-on-modify because we changed the binding of the name `x`.
+
+    ```{r}
+    x <- c(1, 2, 3)
+    tracemem(x)
+    x <- c(4, 5)
+    y <- x
+    y[[2]] <- 6
+    ```
+
+-   **Note**: `tracemem()` will give you weird results if you use it inside of RStudio. That's because the Environment pane makes references to objects.
+
+-   Name `a` inside function points to same object
+
+    ```{r}
+    x <- c(1, 2, 3)
+    tracemem(x)
+    f <- function(a) {
+      return(a)
+    }
+    z <- f(x) ## no copy made
+    ```
+
+    <img src="./04_figs/binding-f1.png" alt="a in function binds to same object" width="30%"/>
+    
+    and `x` and `z` now point to same object
+    
+    <img src="./04_figs/binding-f2.png" alt="x and z point to same object" width="20%"/>
+    
+-   **Exercise** (From Advanced R): Explain the relationship between a, b, c and d in the following code:
+
+    ```{r}
+    a <- 1:10
+    b <- a
+    c <- b
+    d <- 1:10
+    ```
+
+    Verify your conclusions using `lobstr::obj_addr()`. 
+
+    ```{block, eval = FALSE, echo = FALSE}
+    `a`, `b`, and `c` all point to the same object. `d` points to a seperate object.
+    ```
+
+    ```{r, eval = FALSE, echo = FALSE}
+    lobstr::obj_addrs(list(a, b, c, d))
+    lobstr::ref(a, b, c, d)
+    ```
+
+-   **Exercise**: When does the address of `x` change? Use `cat()` and `lobstr::obj_addr()` to verify your answer. Does `tracemem()` help you here? Why are why not?
+    ```{r, eval = FALSE}
+    x <- c()
+    for (i in 1:10) {
+      x[[i]] <- i
+    }
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    ## 10 times
+    x <- c()
+    lobstr::obj_addr(x)
+    for (i in 1:10) {
+      x[[i]] <- i
+      cat(lobstr::obj_addr(x), "\n")
+    }
+    ```
+    
+    ```{block, eval = FALSE, echo = FALSE}
+    It appears that `tracemem()` only detects one copy-on-modify. I think `tracemem()` is connected to the object address, not the name, and that's why it does not show up in the for-loop.
+    ```
+    
+    
+-   **Exercise**: When does the address of `x` change? Use `cat()` and `lobstr::obj_addr()` to verify your answer.
+    ```{r, eval = FALSE}
+    x <- rep(x = NA_real_, length.out = 10)
+    for (i in 1:10) {
+      x[[i]] <- i
+    }
+    ```
+
+    ```{r, eval = FALSE, echo = FALSE}
+    ## 0 times. 
+    ## If you see a copy, that's because you are using R Studio
+    x <- rep(x = NA_real_, length.out = 10)
+    lobstr::obj_addr(x)
+    for (i in 1:10) {
+      x[[i]] <- i
+      cat(lobstr::obj_addr(x), "\n")
+    }
+    ```
+ 
+-   **Exercise**: When does the address of `x` change? Use `cat()` and `lobstr::obj_addr()` to verify your answer.
+    ```{r, eval = FALSE}
+    x <- vector(mode = "numeric", length = 10)
+    for (i in 1:10) {
+      x[[i]] <- i
+    }
+    ```
+    
+    ```{r, eval = FALSE, echo = FALSE}
+    ## 0 times. 
+    ## If you see a copy, that's because you are using R Studio
+    x <- vector(mode = "numeric", length = 10)
+    lobstr::obj_addr(x)
+    for (i in 1:10) {
+      x[[i]] <- i
+      cat(lobstr::obj_addr(x), "\n")
+    }
+    ```
+ 
+- Understanding when an object is copied is important for performance. Making copies can be expensive if you are doing it a lot (like in a for-loop), making your code run much slower.
+ 
+# Lists and Data Frames
+
+- Recall that a list is a vector that can have elements of any type.
+
+-   To do this, the list's name points to a vector of references, and these point to the objects.
+
+    ```{r}
+    l1 <- list(1, 2, 3)
+    ```
+
+    <img src="./04_figs/list.png" alt="l1 points to references which point to objects" width="20%"/>
+    
+-   Copy on modify for a list only copies the references, so is much more memory efficient. This is called a **shallow copy**.
+
+    ```{r}
+    l2 <- l1
+    ```
+
+    <img src="./04_figs/l-modify-1.png" alt="l1 and l2 point to references" width="20%"/>    
+    
+    ```{r}
+    l2[[3]] <- 4
+    ```
+    
+    <img src="./04_figs/l-modify-2.png" alt="l2 points to new vector of references" width="20%"/>   
+    
+-   `lobstr::ref()` allows you to see the location of each component of a list.
+    ```{r}
+    lobstr::ref(l1, l2)
+    ```
+
+    - Notice that the lists are at different addresses, the first two objects of each list are at the same address, but the third object of each list are at different addresses.
+    
+-   **NOTE**: Older versions of R (before 3.1.0) always created deep copies, and so were less memory efficient.
+
+-   Data frames are lists of vectors (the columns)
+
+    ```{r}
+    d1 <- data.frame(x = c(1, 5, 6), y = c(2, 4, 3))
+    ```
+    
+    <img src="./04_figs/dataframe.png" alt="data frame d1" width="20%"/>
+    
+-   Modify a column, then only that column is copied and modified
+
+    ```{r}
+    d2 <- d1
+    d2[, 2] <- d2[, 2] * 2
+    ```
+
+    <img src="./04_figs/d-modify-c.png" alt="column 2 of d2 points to a different object" width="25%"/>
+    
+    ```{r}
+    lobstr::ref(d1, d2)
+    ```
+    
+-   Modify a row, then the entire data frame is copied (much less efficient).
+
+    ```{r}
+    d3 <- d1
+    d3[1, ] <- d3[1, ] * 3
+    ```
+
+    <img src="./04_figs/d-modify-r.png" alt="d3 copied because modified row" width="40%"/>
+    
+    ```{r}
+    lobstr::ref(d1, d3)
+    ```
+
+## Character Vectors
+
+-   A character vector is a vector of references to a global string pool.
+
+    ```{r}
+    x <- c("a", "a", "abc", "d")
+    ```
+
+    <img src="./04_figs/character-2.png" alt="character vector representation" width="30%"/>
+    
+-   But Hadley usually writes this as
+
+    <img src="./04_figs/character.png" alt="way we write character vectors" width="30%"/>
+    
+-   Use `lobstr::ref()` to show these references.
+    ```{r}
+    lobstr::ref(x, character = TRUE)
+    ```
+
+-   **Exercise** (from Advanced R): Why do you think `x` is copied here? (it is only copied twice if you use R studio). Modify the code so that `x` is not copied.
+    ```{r}
+    x <- c(1L, 2L, 3L)
+    tracemem(x)
+    x[[3]] <- 4
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    4 is a double, not an integer, so the object is copied and coerced to a double before being modified.
+    ```
+    
+    ```{r}
+    x <- c(1L, 2L, 3L)
+    tracemem(x)
+    x[[3]] <- 4L
+    ```
+    
+-   **Exercise** (From Advanced R): Sketch out the relationship between the following objects:
+    ```{r}
+    a <- 1:10
+    b <- list(a, a)
+    c <- list(b, a, 1:10)
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    `a` points to `1:10`, `b` points to references where each one points to `1:10`. `c` points to references where the first points to the same references as `b`, the second points to the same `1:10` as `a`, and the last points to a new `1:10`.
+    ```
+    
+    ```{r, echo=FALSE, eval=FALSE}
+    lobstr::ref(a, b, c)
+    ```
+
+# Object Size
+
+-   You can tell how much memory an object takes up with `lobstr::obj_size()`.
+
+    ```{r}
+    x <- 1:10
+    lobstr::obj_size(x)
+    ```
+ 
+-   Functions also take up memory
+    ```{r}
+    lobstr::obj_size(mean)
+    lobstr::obj_size(lm)
+    ```
+
+-   Because of the way objects efficiently bind, they might be smaller in memory than you expect.
+
+-   **Exercise**: Why does the following list not take up 3 times as much memory as `x`?
+    ```{r}
+    x <- 1:10
+    y <- list(x, x, x)
+    lobstr::obj_size(x)
+    lobstr::obj_size(y)
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    Because `y` points to a vector of references, and each of these point to the same object as `x`. So only the references are taking up more memory.
+    ```
+
+-   Character strings may also be a lot smaller than you expect.
+
+    ```{r}
+    a <- "hello world, how are you"
+    b <- rep(a, 100)
+    lobstr::obj_size(a)
+    lobstr::obj_size(b) ## not 100 times larger
+    ```
+
+-   New versions of R have optimizations to efficiently store sequences of numbers called "ALTREP" for "alternative representation". So the following are all the same size.
+
+    ```{r}
+    lobstr::obj_size(1:10)
+    lobstr::obj_size(1:100)
+    lobstr::obj_size(1:1000000)
+    ```
+
+# Modify-in-place
+
+-   The opposite of copy-on-modify is modify-in-place, where a new object is not created you you modify it.
+
+-   Modify in place occurs when there is only a single binding.
+
+    ```{r}
+    v <- c(1, 2, 3)
+    ```
+    
+    <img src="./04_figs/v-inplace-1.png" alt="v defined" width="20%"/>
+    
+    ```{r}
+    v[[3]] <- 4
+    ```
+    
+    <img src="./04_figs/v-inplace-2.png" alt="v modified-in-place" width="20%"/>
+
+-   **Exercise**: Why is a copy made here?
+
+    ```{r}
+    x <- 1:3
+    tracemem(x)
+    x[[3]] <- 4
+    ```
+
+    ```{block, eval = FALSE, echo = FALSE}
+    ALTREP.
+    ```
+
+
+-   Modify-in-place also occurs in environments.
+
+-   **Environments** are data structures that you can think of as like an unordered list. It's a "bag of objects".
+
+-   Here, I create an environment, and bind the names `e1` and `e2` to it.
+
+    ```{r}
+    e1 <- rlang::env(a = 1, b = 2, c = 3)
+    e2 <- e1
+    ```
+
+    <img src="./04_figs/e-modify-1.png" alt="e1 and e2 defined" width="20%"/>
+    
+-   If I change the `e1` environment, then `e2` is also changed.
+
+    ```{r}
+    e1$c <- 4
+    e2$c
+    ```
+    
+    <img src="./04_figs/e-modify-2.png" alt="e1 and e2 are both modified" width="20%"/>
+    
+-   We will learn more about environments in Chapter 7, where this will be very important.
+
+# Garbage Collection
+
+-   R often creates objects which no longer have names bound to them.
+
+    ```{r}
+    x <- 1:3
+    ```
+
+    <img src="./04_figs/unbinding-1.png" alt="x bound to vector" width="20%"/>
+
+    ```{r}
+    x <- 2:4
+    ```
+    
+    <img src="./04_figs/unbinding-2.png" alt="x bound to new vector" width="20%"/>
+    
+    ```{r}
+    rm(x)
+    ```
+    
+    <img src="./04_figs/unbinding-3.png" alt="vectors not bound to anything" width="20%"/>
+    
+-   R has a **garbage collector** that periodically deletes these objects to free up memory. It is hard to reason when garbage collection is done.
+
+-   This is only ever important to think about if you use [C code in R](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Garbage-Collection) without Rcpp.
+
+# New Functions
+
+- `tracemem()`: Tracks an object so that a message is printed whenever it is copied.
+- `untracemem()`: Untracks an object.
+- `lobstr::ref()`: Display a tree of object addresses.
+- `lobstr::obj_addr()`: Gives the address (in memory) of an object that a name points to.
+- `lobstr::obj_size()`: Gives the size (in memory) of an object.

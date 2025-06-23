@@ -169,7 +169,7 @@ bibliography: "../bib.bib"
 
 - E.g.: 
   - Code must run from a new environment without errors to move on.
-  - Qmd's must render without error.
+  - Quarto's <img src="../kuato_small.png" alt="Kuato" width="3%"/> must render without error.
 
 # Improve Collaboration
 

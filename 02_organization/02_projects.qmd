@@ -50,7 +50,7 @@ author: "David Gerard"
 
 - All files/data/output for a single project should be in a single directory.
 
-- You working directory should be at the root of the project directory.
+- Your working directory should be at the root of the project directory.
 
 - You can format this manually, but R Studio Projects do this for you automatically.
   - Sets the working directory to be the root of the project.
@@ -73,13 +73,12 @@ author: "David Gerard"
 
 - The new project will open. The working directory will be the project location.
 
-  ```{r}
+  ```r
   getwd()
   ```
   
-  ```r
-  /Users/dgerard/Documents/teaching/r4ds
-  ```
+  `[1] "/Users/dgerard/Documents/teaching/r4ds"`
+  
 
 - If you quit R Studio and double click on the ".Rproj" file, then this will reopen the project. Try this now.
 
@@ -130,3 +129,5 @@ author: "David Gerard"
 3. Create a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> file in the `analysis` folder. Load the `tidyverse` and the Big Mac data. Make sure the document renders.
 
 4. Create an R script in the `code` folder. Load the `tidyverse` and the Big Mac data. Confirm that the working directory is still the root of the project.
+
+5. Create a README file that summarizes that this repo's goal is to analyze the Big Mac data.

@@ -283,7 +283,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#file-naming" id="toc-file-naming" class="nav-link" data-scroll-target="#file-naming">File Naming</a></li>
+  <li><a href="#filefolder-naming" id="toc-filefolder-naming" class="nav-link" data-scroll-target="#filefolder-naming">File/Folder Naming</a></li>
   <li><a href="#file-organization" id="toc-file-organization" class="nav-link" data-scroll-target="#file-organization">File Organization</a></li>
   <li><a href="#some-file-things-you-might-not-know" id="toc-some-file-things-you-might-not-know" class="nav-link" data-scroll-target="#some-file-things-you-might-not-know">Some file things you might not know</a>
   <ul class="collapse">
@@ -342,7 +342,11 @@ ul.task-list li input[type="checkbox"] {
 <li>On a Mac, this is typically <code>Users/your_username</code>, but it may differ.</li>
 <li>On Windows, this is typically <code>C:\Users\your_username</code>, but it may differ.</li>
 </ul></li>
-<li><p>Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time (e.g., Git Bash for Windows uses forward slashes), but it’s something to be aware of.</p></li>
+<li><p>Note that Mac (and other Linux varieties) uses forward slashes, while Windows uses back slashes. This is not something you have to worry about most of the time.</p>
+<ul>
+<li>Git Bash for Windows uses forward slashes.</li>
+<li>You can (should) always use forward slashes in R, even on Windows machines.</li>
+</ul></li>
 <li><p>The home directory is also the working directory of your shell when you first open it.</p></li>
 <li><p>You use a <a href="https://en.wikipedia.org/wiki/File_manager"><strong>file management program</strong></a> to navigate and manage your files:</p>
 <ul>
@@ -367,8 +371,8 @@ ul.task-list li input[type="checkbox"] {
 </ul></li>
 </ul>
 </section>
-<section id="file-naming" class="level1">
-<h1>File Naming</h1>
+<section id="filefolder-naming" class="level1">
+<h1>File/Folder Naming</h1>
 <ul>
 <li><strong>Do not use spaces</strong>. Use underscores (<code>_</code>) instead (hyphons are also very common)
 <ul>
@@ -442,8 +446,10 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><p>A file extension is a suffix for a file (like “.txt”, “.jpg”, “.R”, etc). It is primarily used to tell the operating system what program to use to open it.</p></li>
 <li><p>When you double click on a file, your operating system knows what program to use (almost) only because of the file extension.</p></li>
-<li><p>Windows sometimes hides the file extension. You should change the settings so you can see them:</p></li>
-<li><p>Open File Explorer, click on the “View” tab, and check the “File name extensions” box.</p></li>
+<li><p>Windows sometimes hides the file extension. You should change the settings so you can see them:</p>
+<ul>
+<li>Open File Explorer, click on the “View” tab, and check the “File name extensions” box.</li>
+</ul></li>
 <li><p>There are ways to choose the default program to use when opening a file with a given file extension.</p></li>
 </ul>
 </section>

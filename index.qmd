@@ -18,10 +18,13 @@ title: "DATA 413/613 Data Science"
     - [02 Project Structure](./02_organization/02_projects.qmd)
     - [02 Project Management](./02_organization/02_kanban.qmd)
 - 03 Programming
+    - [03 Memory](./03_vectors_iterators/03_memory.qmd).
     - [03 Vectors](./03_vectors_iterators/03_vectors.qmd).
     - [03 Subsetting](./03_vectors_iterators/03_subsetting.qmd).
     - [03 Functions](./03_vectors_iterators/03_functions.qmd).
     - [03 Iteration](./03_vectors_iterators/03_iterators.qmd).
+    - [03 OOP](./03_vectors_iterators/03_oop.qmd).
+    - [03 S3](./03_vectors_iterators/03_s3.qmd).
     - [03 Lab](https://github.com/data-science-master/lab_03).
 - 04 R Packages
     - [04 R Packages](./04_packages/04_packages.qmd).

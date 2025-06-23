@@ -398,7 +398,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Where should your project live?</h1>
 <ul>
 <li><p>All files/data/output for a single project should be in a single directory.</p></li>
-<li><p>You working directory should be at the root of the project directory.</p></li>
+<li><p>Your working directory should be at the root of the project directory.</p></li>
 <li><p>You can format this manually, but R Studio Projects do this for you automatically.</p>
 <ul>
 <li>Sets the working directory to be the root of the project.</li>
@@ -413,13 +413,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="./02_figs/projects3.png" alt="New project screen" width="100%"></p></li>
 <li><p>Fill out the project name (making sure they follow the same standards as file names). Choose a directory to place the project.</p></li>
 <li><p>The new project will open. The working directory will be the project location.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/dgerard/Library/CloudStorage/Dropbox/teaching/stat_413_613/lectures/02_organization"</code></pre>
-</div>
-</div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="sc">/</span>Users<span class="sc">/</span>dgerard<span class="sc">/</span>Documents<span class="sc">/</span>teaching<span class="sc">/</span>r4ds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>[1] "/Users/dgerard/Documents/teaching/r4ds"</code></p></li>
 <li><p>If you quit R Studio and double click on the “.Rproj” file, then this will reopen the project. Try this now.</p></li>
 <li><p>You can switch between projects by clicking on the project name at the top right of R Studio and toggling between projects.</p></li>
 <li><p>Once inside a project, you should only use relative paths.</p>
@@ -459,7 +454,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>In a repo/project, you should have a small summary of your project so others can see what it’s about.</p></li>
 <li><p>Create a README file in your open project by writing:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_readme_rmd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_readme_rmd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>This opens up an R markdown file that you can edit to include a summary of your project.</p></li>
 <li><p>When you knit the R markdown file, it renders it to a markdown file that is viewable on GitHub.</p></li>
 </ul>
@@ -471,6 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Download the Big Mac data from <a href="https://data-science-master.github.io/lectures/data/big_mac.csv">here</a>, as described <a href="https://data-science-master.github.io/lectures/data.html">here</a>. Place it in the data folder.</p></li>
 <li><p>Create a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> file in the <code>analysis</code> folder. Load the <code>tidyverse</code> and the Big Mac data. Make sure the document renders.</p></li>
 <li><p>Create an R script in the <code>code</code> folder. Load the <code>tidyverse</code> and the Big Mac data. Confirm that the working directory is still the root of the project.</p></li>
+<li><p>Create a README file that summarizes that this repo’s goal is to analyze the Big Mac data.</p></li>
 </ol>
 
 
