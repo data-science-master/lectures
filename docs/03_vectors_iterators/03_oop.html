@@ -409,7 +409,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>R has three native object oriented programming systems (S3, S4, and RC for “reference classes”), and many other third-party packages have made their own object oriented systems (<code>{R6}</code> being the most popular).</p>
 <ul>
 <li><p>These systems are listed in increasing order of complexity, with S3 being “baby” OOP, S4 being “YA” OOP, and RC and R6 being “big boy” OOP.</p></li>
-<li><p>If you are in extending <code>{ggplot2}</code> then you will learn about another OOP system specific to <code>{ggplot2}</code>: ggproto.</p></li>
+<li><p>If you are extending <code>{ggplot2}</code> then you will learn about another OOP system specific to <code>{ggplot2}</code>: ggproto.</p></li>
 </ul></li>
 <li><p>E.g.: To calculate the column means in S3 OOP, we would probably create a generic function for column means.</p>
 <div class="cell" data-layout-align="center">
@@ -477,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   0.4062   3.6875   2.8125 </code></pre>
 </div>
 </div></li>
-<li><p>Because R programmers are not OOP programmers, you should be coding mostly in S3 and S4 when using OOP. We’ll spend most of our time on these.</p></li>
+<li><p>Because R programmers are not OOP programmers, you should be coding mostly in S3 and S4 when using OOP. We’ll only spend time on S3 for this class (the most popular one).</p></li>
 <li><p>S3 and S4 use <strong>generic function OOP</strong> where the same function name is evaluated differently based on the class of the object.</p></li>
 <li><p>E.g. that allows the output of <code>summary()</code> to differ between doubles and factors.</p>
 <div class="cell" data-layout-align="center">
@@ -485,13 +485,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-   1.00    3.00    6.00    5.72    9.00   10.00 </code></pre>
+   1.00    2.00    4.00    4.66    7.00   10.00 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">factor</span>(x)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> 1  2  3  4  5  6  7  8  9 10 
- 6 13 11 11  7  7 11  7 17 10 </code></pre>
+13 20 10 10 10  7 10  7  5  8 </code></pre>
 </div>
 </div></li>
 <li><p>R6 and RC use <strong>encapsulated OOP</strong> where objects are the center of everything, holding fields (data) and methods (functions) that operate on those values. These are closest to what you would be used to if you are coming from an OOP language. Try not to use them.</p></li>

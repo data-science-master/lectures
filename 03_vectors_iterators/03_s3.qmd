@@ -70,7 +70,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 # S3 Basics
 
-- An S3 object is any variable with a `class` attribute. This is the full definition.
+- An S3 object is any variable with a `class` attribute. **This is the full definition**.
 
 - S3 objects may or may not have more attributes.
 
@@ -131,7 +131,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     ```
     - The `*` means the method exists but is not used.
     - The `=>` means the method exists and is used.
-    - So above, it did not find a method for `tbl_df`, so it moved on to `tbl` which does have a method and used it. So it did not go on to look for other methods (`data.frame` or the `default` method), even those classes both have methods.
+    - So above, it found a method for `tbl_df` and used it. So it did not go on to look for other methods (`tbl`, `data.frame`, or the `default` method), even though those classes have methods.
 
 -   Below there is no `aperm()` method for matrices, integers, or numerics, so it used the default one, which is for arrays.
     ```{r}    
@@ -274,138 +274,6 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     mt_tb
     ```
 
-
-- You have to be careful about enforcing the correct structure on your class. Best practice: For any S3 class you create, you should create 3 functions to help others build and validate your class:
-  - A **constructor** to make a new object with your class, for internal use only.
-  - A **validator** that checks the structure of objects with your class.
-  - A **helper** that allows users to create objects of your class.
-    
-## Constructor
-
-- Your constructor should
-  - Be called `new_myclass()`, replacing "myclass" with the name of your class.
-  - Have one argument for the base object (e.g. list, numeric vector, etc).
-  - Check the type of the base object and types of each attribute.
-
--   E.g. if we were to create our own class to recapitulate factors, called `factor2`, we would do
-
-    ```{r}
-    new_factor2 <- function(x = integer(), levels = character()) {
-      stopifnot(is.integer(x))
-      stopifnot(is.character(levels))
-      
-      return(
-        structure(x,
-                  levels = levels,
-                  class = "factor2")
-      )
-    }
-    ```
-
--   We can construct a factor as follows
-
-    ```{r}
-    x <- new_factor2(c(1L, 1L, 2L, 1L, 1L), levels = c("A", "B"))
-    x
-    ```
-
-## Validator
-
-- Making sure the structure of an object is what you would expect is expensive.
-
-- E.g., we need to make sure that the number of unique values in a factor is at most the number of levels in that factor.
-
-- Validator functions should:
-  1. Be named `validator_myclass()`.
-  2. Take as input just an object from your class.
-  3. Include a bunch of assertions testing the structure of the inputted object.
-  4. Return the original object.
-  
--   Let's make a validator for `factor2`.
-    
-    ```{r}
-    validate_factor2 <- function(x) {
-      stopifnot(inherits(x, "factor2"))
-      values <- unclass(x)
-      levels <- attr(x, "levels")
-      
-      if (length(levels) < max(values)) {
-        stop("There must be at least as many `levels` as possible values in `x`")
-      }
-      return(x)
-    }
-    ```
-        
-    
-    ```{r}
-    validate_factor2(x)
-    ```
-
-## Helpers
-
-- A helper function is a user-facing function that will
-  1. Be called `myclass()`.
-  2. Call first the constructor function, then the validator function.
-  3. Be user friendly. 
-     - Good defaults.
-     - Accepts multiple types for the base object and coerces intelligently.
-    
--   Let's do this for `factor2`.
-    ```{r}
-    factor2 <- function(x = character(), levels = unique(x)) {
-      ind <- match(x, levels)
-      return(validate_factor2(new_factor2(ind, levels)))
-    }
-    
-    factor2(c("A", "B", "B", "A"))
-    ```
-    
--   Side note: `match()` is a useful function. It will provide the positions of the second argument that match the values in the second argument. E.g.
-
-    ```{r}
-    match(c("A", "A", "B", "A", "B"), c("A", "B"))
-    ```
-
--   **Exercise** (Advanced R): Write a constructor for data.frame objects. What base type is a data frame built on? What attributes does it use? What are the restrictions placed on the individual elements? What about the names?
-
-    ```{block, eval = FALSE, echo = FALSE}
-    1. Built on a list.
-    2. Uses `names` and `row.names`
-    ```
-
-
-    ```{r, eval = FALSE, echo = FALSE}
-    new_data.frame <- function(x, 
-                              names = NULL,
-                              row.names = NULL) {
-      x <- unclass(x)
-      stopifnot(is.list(x))
-      
-      n <- length(x[[1]])
-      
-      stopifnot(all(lengths(x) == n))
-      
-      if (!is.null(row.names)) {
-        stopifnot(length(row.names) == n)
-        attr(x, "row.names") <- row.names
-      } else {
-        attr(x, "row.names") <- as.character(1:n)
-      }
-      
-      if (!is.null(names)) {
-        stopifnot(length(names) == length(x))
-        attr(x, "names") <- names
-      }
-      
-      return(structure(x, class = "data.frame"))
-    }
-    
-    new_data.frame(x = list(a = 1:3, b = 4:6))
-    new_data.frame(x = list(a = 1:3, b = 4:6), names = c("c", "d"))
-    new_data.frame(x = list(a = 1:3, b = 4:6), row.names = c("e", "f", "g"))
-    new_data.frame(x = mtcars)
-    ```
-
 # Generics
 
 -   A generic function is just one that performs method dispatch. Method dispatch is implemented through `UseMethod()`, so it is really easy to create a new generic.
@@ -457,7 +325,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
   1. Create a function definition for `generic.method()`.
   2. Make sure you use the same arguments as the generic (but you can usually include more aguements if there is `...` in the generic).
 
--   E.g., let's create plot and print methods for our `factor2` class.
+-   E.g., let's create plot and print methods for the `factor2` class.
 
     ```{r}
     print.factor2 <- function(x) {
@@ -472,9 +340,10 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     }
     ```
 
--   Now, we get better printing for `factor2`'s    
+-   Now, we get better printing for `factor`'s    
     ```{r}
-    x <- factor2(c("A", "A", "B", "B", "A", "B"))
+    x <- factor(c("A", "A", "B", "B", "A", "B"))
+    class(x) <- "factor2"
     print(x)
     ```
 
@@ -511,7 +380,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     sloop::s3_methods_class("table")
     ```
 
--   **Exercise**: Create a new generic called `pop` that will remove the last element and return the shorted object. Make a default method for any vector. Then make methods for the `matrix` class that will remove the last column or row, depending on the user choice of an argument called `by`.
+-   **Exercise**: Create a new generic called `pop` that will remove the last element and return the shortened object. Make a default method for any vector. Then make methods for the `matrix` class that will remove the last column or row, depending on the user choice of an argument called `by`.
 
     ```{r, echo=FALSE, eval=FALSE}
     pop <- function(x, ...) {
@@ -597,160 +466,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 - You should make sure that you have at least all of the same attributes as the superclass you are inheriting from. E.g. `data.frame`s can have `names` and `row.names`, and so any subclass should also have those attributes.
 
-## Next Method
-
-- `NextMethod()` allows you define methods for your class that use the functionality of classes that you inherit from.
-
--   E.g. recall that most attributes are lost with `[`.
-
-    ```{r}
-    x <- factor2(c("A", "A", "B", "A", "B"))
-    x[1]
-    ```
-
--   This is because R is using the integer version for `[` and so we lose the class.
-
-    ```{r}
-    sloop::s3_dispatch(x[1])
-    ```
-
--   We cannot use `[` inside a definition for a method because we haven't defined it yet.
-    ```{r}
-    #| eval: false
-    ## won't work
-    `[.factor2` <- function(x, i) {
-      return(x[i]) # but we haven't defined `[` yet
-    }
-    x[1] ## infinite recursion
-    ```
-    
-- You can define your method to use the next method by `NextMethod()`. `NextMethod()` will take the arguments inside your function definition and run them through the next method in the inheritance list. So it returns an unclassed object, that you can then pass to your constructor function.
-
--   Make sure you also include the attributes in your constructor.
-
-    ```{r}
-    `[.factor2` <- function(x, i) {
-      new_factor2(NextMethod(), levels = attr(x, "levels"))
-    }
-    ```
-    
-    ```{r}
-    sloop::s3_dispatch(x[1:3])
-    x[1:3]
-    ```
-
--   If we did not pass `NextMethod()` to our constructor, it would just run the integer subsetting:
-    ```{r}
-    `[.factor2` <- function(x, i) {
-      NextMethod()
-    }
-    x[1:3]
-    ```
-
-
-# Example: Simulation
-
-- Let's work again on an a simulation function for linear regression. We started this in the [Assertions and Unit Tests](./03_testing.html) lecture.
-
--   The basic function we had was as follows:
-
-    ```{r}
-    simreg <- function(x, beta0, beta1, sigma) {
-      n <- length(x)
-      eps <- stats::rnorm(n = n, mean = 0, sd = sigma)
-      y <- beta0 + beta1 * x + eps
-      return(y)
-    }
-    ```
-
--   Let's create a basic list-like class so that we can define custom print, plot, and summary methods.
-    ```{r}
-    new_sim <- function(x, y, beta0, beta1, sigma) {
-      stopifnot(is.double(x),
-                is.double(y),
-                is.double(beta0),
-                is.double(beta1),
-                is.double(sigma),
-                sigma >= 0)
-                
-      return(
-        structure(list(x = x,
-                       y = y,
-                       beta0 = beta0,
-                       beta1 = beta1,
-                       sigma = sigma),
-                  class = "sim")
-      )
-    }
-    ```
-    
--   We can create a validator function to check that the specific structure is preserved
-    ```{r}
-    validate_sim <- function(dat) {
-      stopifnot(is.list(dat))
-      stopifnot(is.double(dat$x),
-                is.double(dat$y),
-                is.double(dat$beta0),
-                is.double(dat$beta1),
-                is.double(dat$sigma))
-      stopifnot(length(dat$x) == length(dat$y), dat$sigma >= 0)
-      return(dat)
-    }
-    ```
-
--   Let's re-write our function to return this S3 class.
-
-    ```{r}
-    simreg <- function(x, beta0, beta1, sigma) {
-      n <- length(x)
-      eps <- stats::rnorm(n = n, mean = 0, sd = sigma)
-      y <- beta0 + beta1 * x + eps
-      return(new_sim(x = x, y = y, beta0 = beta0, beta1 = beta1, sigma = sigma))
-    }
-    ```
-    
--   This will allow us to make new a plot method
-    ```{r}
-    plot.sim <- function(x, y = NULL, ...) {
-      ggplot2::qplot(x = x$x, y = x$y) +
-        ggplot2::geom_abline(slope = x$beta1, 
-                             intercept = x$beta0, 
-                             lty = 2, 
-                             col = 2) +
-        ggplot2::theme_bw() +
-        ggplot2::geom_smooth(method = "lm", se = FALSE) +
-        ggplot2::xlab("x") +
-        ggplot2::ylab("y")
-    }
-    ```
-    
--   We can also make a new summary method
-
-    ```{r}
-    summary.sim <- function(object, ...) {
-      lmout <- lm(object$y ~ object$x)
-      beta0_ols <- coef(lmout)[[1]]
-      beta1_ols <- coef(lmout)[[2]]
-      sigma_ols <- sigma(lmout)
-      return(
-        data.frame(parameter = c("beta0", "beta1", "sigma"),
-                   truth = c(object$beta0, object$beta1, object$sigma),
-                   ols = c(beta0_ols, beta1_ols, sigma_ols))
-      )
-    }
-    ```
-
--   Let's try all of this out
-
-    ```{r}
-    dat <- simreg(x = runif(100), beta0 = 1, beta1 = 2, sigma = 0.25)
-    plot(dat)
-    summary(dat)
-    ```
-
 # Documenting S3
-
-- Generics, methods, constructors, validators, and helpers are all just regular functions, so you can document them as you would regular functions.
 
 -   It is sometimes nice to have the same help file for the default method and the generic. You can do that via the `@describeIn` `{roxygen}` tag.
 
@@ -809,19 +525,6 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     }
     ```
 
-# Type Predicates
-
--   Whenever you make a new S3 class, you should always provide a type predict to test if an object is a certain type.
-
-    ```{r}
-    is_sim <- function(x) {
-      return(inherits(x, "sim"))
-    }
-    dat <- simreg(x = runif(100), beta0 = 1, beta1 = 2, sigma = 0.25)
-    is_sim(dat)
-    is_sim(mtcars)  
-    ```
-
 # Method Dispatch Technicalities
 
 - Every variable in R has some **implicit class** even if it does not have a `class` attribute.
@@ -853,103 +556,6 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 - The following functions are called "group generics" `+`, `-`, `*`, `/`, `^`, `%%`, `%/%`, `&`, `|`, `!`, `==`, `!=`, `<`, `<=`, `>=`, and `>`.
 
 - You can define methods for these group generics, but undergo what's called double dispatch, choosing a method based on both arguments. This is what allows you to add integers and dates together. We will talk about how to do this correctly in the next lecture.
-
-# `{vctrs}` package
-
-- By far, the most common use for S3 objects are list-like objects to add `plot()`/`summary()`/`print()` methods for folks who use your package.
-
-- But what if you want to create vector-like objects (e.g. `Dates` and `factors`)? Hadley provides a lot of nice examples:
-  - Percent: a double vector that prints as a percentage. 
-  - Decimal: a double vector that always prints with a fixed number of decimal places.
-  - Cached sum: a double vector that caches the total sum in an attribute.
-  - Rational: a pair of integer vectors that defines a rational number like 2 / 3.
-  - Polynomial: a list of integer vectors that define polynomials like 1 + x - x^3.
-  - Meter: a numeric vector with meter units.
-  - Period and frequency: a pair of classes represent a period, or it’s inverse, frequency.
-    
-- It's a lot of bookkeeping to do this properly. The `{vctrs}` package makes it a lot easier.
-
-- Read the `{vctrs}` vignette for more: <https://vctrs.r-lib.org/articles/s3-vector.html>
-
-- The simplest class, for percents, just changes the print method for doubles, but it is still a lot of work to get it to work:
-
--   `percent` constructor
-    
-    ```{r}
-    new_percent <- function(x = double()) {
-      stopifnot(is.double(x))
-      return(vctrs::new_vctr(x, class = "percent"))
-    }
-    ```
-    
--   `percent` helper
-    ```{r}
-    percent <- function(x = double()) {
-      x <- vctrs::vec_cast(x, double()) # tries to convert to double
-      return(new_percent(x))
-    }
-    ```
-
--   `format()` method for `percent` (in `{vctrs}` this also controls the `print()` method)
-    ```{r}
-    format.percent <- function(x, ...) {
-      ret <- formatC(vctrs::vec_data(x) * 100, digits = 1, format = "f")
-      ret[is.na(x)] <- NA
-      ret[!is.na(x)] <- paste0(ret[!is.na(x)], "%")
-      return(ret)
-    }
-    ```
-    
--   Allow `percent` objects to be combined with doubles (using `vec_c()`)
-    ```{r}
-    # type for combination should be percent
-    vec_ptype2.percent.double <- function(x, y, ...) {
-      percent()
-    }
-    
-    vec_ptype2.double.percent <- function(x, y, ...) {
-      percent()
-    }
-    
-    # How to cast (change type) based on operation
-    vec_cast.percent.double <- function(x, to, ...) percent(x) 
-    vec_cast.double.percent <- function(x, to, ...) vctrs::vec_data(x) 
-    ```
-    
-    ```{r}
-    x <- percent(c(0.1, 0.2))
-    vctrs::vec_c(x, 0.1)
-    ```
-    
--   Allow percents to be added/subtracted
-    ```{r}
-    vec_arith.percent <- function(op, x, y, ...) {
-      UseMethod("vec_arith.percent", y)
-    }
-    vec_arith.percent.default <- function(op, x, y, ...) {
-      stop_incompatible_op(op, x, y)
-    }
-    vec_arith.percent.percent <- function(op, x, y, ...) { # method when have two percents
-      switch(
-        op,
-        "+" = , # go to next
-        "-" = new_percent(vctrs::vec_arith_base(op, x, y)), # do double ops, then convert
-        "/" = vctrs::vec_arith_base(op, x, y), # units cancel
-        stop_incompatible_op(op, x, y) # * makes less sense
-      )
-    }
-    ```
-    
-    ```{r}
-    x <- percent(c(0.1, 0.1))
-    y <- percent(c(0.5, 0.7))
-    x + y
-    x - y
-    x / y
-    ```
-    
-- Most folks don't need to create new vectors, so we won't cover this package in more detail. But it is really cool what you can do with it.
-
 
 # New functions
 

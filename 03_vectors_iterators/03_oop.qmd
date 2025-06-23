@@ -52,7 +52,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
     - These systems are listed in increasing order of complexity, with S3 being "baby" OOP, S4 being "YA" OOP, and RC and R6 being "big boy" OOP.
     
-    - If you are in extending `{ggplot2}` then you will learn about another OOP system specific to `{ggplot2}`: ggproto.
+    - If you are extending `{ggplot2}` then you will learn about another OOP system specific to `{ggplot2}`: ggproto.
     
 -   E.g.: To calculate the column means in S3 OOP, we would probably create a generic function for column means.
 
@@ -105,7 +105,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     mtcars_df$col_means()
     ```
 
-- Because R programmers are not OOP programmers, you should be coding mostly in S3 and S4 when using OOP. We'll spend most of our time on these.
+- Because R programmers are not OOP programmers, you should be coding mostly in S3 and S4 when using OOP. We'll only spend time on S3 for this class (the most popular one).
 
 - S3 and S4 use **generic function OOP** where the same function name is evaluated differently based on the class of the object. 
 
