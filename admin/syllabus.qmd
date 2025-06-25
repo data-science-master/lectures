@@ -69,18 +69,18 @@ Almost all course material will be posted and accessed through GitHub. `git` is 
 
 - I will provide practice questions to study from.
 
-- I plan on each quiz taking about 30 minutes.
+- I plan on each quiz taking about 30 minutes to 1 hour.
 
 ## Group Project
 
-All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R package.
+All students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R shiny app.
 
 # Assignments and Grading
 
 - Weekly homeworks: 25%
 - Final Project: 25%
 - Tidyverse Quiz: 15%
-- Git/Vectors/Iteration/Dates Quiz: 15%
+- Git/Bash/Vectors/Functions/Iteration Quiz: 15%
 - SQL Quiz: 10%
 - Python Quiz: 10%
 
@@ -96,7 +96,7 @@ Individual assignments will not be curved. However, at the discretion of the ins
 
 # Late Work Policy
 
-All assignments must be submitted, in class, on the day they are due. You will be penalized 15% every day an assignment is late. I will not accept assignments submitted over three days after the deadline. If you become ill or the victim of an emergency, please let me know within 48 hours.
+All assignments must be submitted on the day they are due. If you become ill or the victim of an emergency, please let me know within 48 hours.
 
 Students requiring a temporary leave of absence for medical or mental health reasons must provide documentation to the Office of the Dean of Students (<dos@american.edu>), which will verify with the academic unit that the documentation is appropriate and supports the leave. Students with an ASAC-approved accommodation for disability reasons should, to the greatest extent possible, make arrangements in advance of the due date or deadline.
 
@@ -111,7 +111,7 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
   - If something in your work seems off, I may ask you to meet with me. If you're unable to explain how or why you did something, you will receive a zero on that assignment.
 
-  - This is not a penalty for "cheating". Since generative AI is permitted, using it is not academic misconduct. But I will grade based on your demonstrated understanding, not just your submitted answers.
+  - This is not a penalty for "cheating". Since generative AI is permitted, using it is not academic misconduct. But I will grade based on your **demonstrated understanding**, not your submitted answers.
 
 ## Some Thoughts
 
@@ -137,7 +137,7 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 - Standards of academic conduct are set forth in the university’s [Academic Integrity Code](http://www.american.edu/academics/integrity/index.cfm). By registering for this course, students have acknowledged their awareness of the Academic Integrity Code and they are obliged to become familiar with their rights and responsibilities as defined by the Code. Violations of the Academic Integrity Code will not be treated lightly and disciplinary action will be taken should violations occur. This includes cheating, fabrication, and plagiarism.
 
-- No outside resources are allowed for the in-class quizzes. Any use of phones/notes/books/etc will result in a failing grade for the entire course.
+- No outside resources are allowed for the in-class quizzes. **Any use of phones/notes/books/etc will result in a failing grade for the entire course.**
 
 - It is a violation of the Academic Code of Integrity if you obtain past homework solutions from students who took the course previously (whether they wrote those solutions, or I wrote those solutions).
 
@@ -149,14 +149,30 @@ Students requiring a temporary leave of absence for medical or mental health rea
 
 - 09/01/2025: Memorial Day (no classes)
 - 09/08/2025\*: Tidyverse Quiz
-- 09/25/2025\*: Git/Bash/Iteration/Dates Quiz
-- 10/23/2025\*: Python Quiz
-- 11/06/2025\*: SQL Quiz
+- 10/06/2025\*: Git/Bash/Vectors/Functions/Iteration Quiz
+- 10/31/2025: Last day to Withdraw
+- 11/10/2025\*: Python Quiz
+- 11/20/2025\*: SQL Quiz
+- 11/24/2025: Classes Online via Zoom (or a video recording). No in person class.
 - 11/27/2025: Thanksgiving break (no classes).
 - TBD (between 12/08/2025 and 12/12/2025): Final exam period (final project presentations). 
   - If there is enough interest, I can move this to Zoom so folks can start their holiday travel early.
     
 \* Tentative, subject to change.
+
+# Tentative Schedule
+
+- Week 1: Git/GitHub: 
+- Week 2: File/Project Structure and Memory
+- Week 3--4: Vectors/Subsetting
+- Week 4--5: Functions/Iteration
+- Week 6: OOP/S3
+- Week 7: Webscraping/APIs
+- Weeks 8--9: Shiny
+- Week 10: Python
+- Week 11: SQL
+- Week 12: Make
+- Weeks 13--14: R Packages
 
 # Incomplete Policy
 
@@ -174,4 +190,4 @@ Students are not permitted to make visual or audio recordings (including livestr
 
 # Syllabus Change Policy
 
-This syllabus is a guide for the course and is subject to change with advanced notice. These changes may come via email. Make sure to check your university-supplied email regularly. You are accountable for all such communications.
+This syllabus is a guide for the course and is subject to change with advanced notice. These changes may come via email or Canvas. Make sure to check Canvas and your university-supplied email regularly. You are accountable for all such communications.

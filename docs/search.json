@@ -53,21 +53,21 @@
     "href": "admin/syllabus.html#quizzes",
     "title": "DATA-413/613 Data Science",
     "section": "Quizzes",
-    "text": "Quizzes\n\nWe will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 50% of the grade.\nMy intention is to make these straightforward (no trick questions). But you will still have to know the material to do well on them.\nI will provide practice questions to study from.\nI plan on each quiz taking about 30 minutes."
+    "text": "Quizzes\n\nWe will have four closed book, closed computer, closed notes, closed calculator quizzes for a total of 50% of the grade.\nMy intention is to make these straightforward (no trick questions). But you will still have to know the material to do well on them.\nI will provide practice questions to study from.\nI plan on each quiz taking about 30 minutes to 1 hour."
   },
   {
     "objectID": "admin/syllabus.html#group-project",
     "href": "admin/syllabus.html#group-project",
     "title": "DATA-413/613 Data Science",
     "section": "Group Project",
-    "text": "Group Project\nAll students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R package."
+    "text": "Group Project\nAll students will prepare a final project using the tools learned in the class. This project will be completed in groups of 2-3 students. Work with me to get your project topic approved. Tentatively, your project will involve creating an R shiny app."
   },
   {
     "objectID": "admin/syllabus.html#official-policy",
     "href": "admin/syllabus.html#official-policy",
     "title": "DATA-413/613 Data Science",
     "section": "Official Policy",
-    "text": "Official Policy\n\nYou are allowed to use generative AI (e.g., ChatGPT) for homework assignments and the final project.\nHowever, you must be able to explain your work and the reasoning behind your solutions. If you cannot do so, your grade may be adjusted accordingly.\n\nIf something in your work seems off, I may ask you to meet with me. If you’re unable to explain how or why you did something, you will receive a zero on that assignment.\nThis is not a penalty for “cheating”. Since generative AI is permitted, using it is not academic misconduct. But I will grade based on your demonstrated understanding, not just your submitted answers."
+    "text": "Official Policy\n\nYou are allowed to use generative AI (e.g., ChatGPT) for homework assignments and the final project.\nHowever, you must be able to explain your work and the reasoning behind your solutions. If you cannot do so, your grade may be adjusted accordingly.\n\nIf something in your work seems off, I may ask you to meet with me. If you’re unable to explain how or why you did something, you will receive a zero on that assignment.\nThis is not a penalty for “cheating”. Since generative AI is permitted, using it is not academic misconduct. But I will grade based on your demonstrated understanding, not your submitted answers."
   },
   {
     "objectID": "admin/syllabus.html#my-rant",
