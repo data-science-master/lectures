@@ -80,7 +80,8 @@ All students will prepare a final project using the tools learned in the class. 
 - Weekly homeworks: 25%
 - Final Project: 25%
 - Tidyverse Quiz: 15%
-- Git/Bash/Vectors/Functions/Iteration Quiz: 15%
+- Programming Quiz: 15%
+  - Git/Bash/Vectors/Functions/Iteration
 - SQL Quiz: 10%
 - Python Quiz: 10%
 
