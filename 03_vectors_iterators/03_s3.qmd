@@ -233,16 +233,24 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 # Classes
 
--   Again, an S3 object is *any* object with a class attribute, that you can create with:
+-   Again, an S3 object is *any* object with a class attribute, 
 
-    ```{r}
-    # Create and assign class in one step
-    x <- structure(list(), class = "my_class")
-    
-    # Create, then set class
-    x <- list()
-    class(x) <- "my_class"
-    ```
+
+::: {.callout-important}
+## Creating S3 Objects
+This can be done in two ways:
+
+Create and assign class in one step
+```{r}
+x <- structure(list(), class = "my_class")
+```
+
+Create, then set class
+```{r}
+x <- list()
+class(x) <- "my_class"
+```
+:::
 
 -   You can get the class attribute by `class()` (as long as it is S3).
 
@@ -278,11 +286,16 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 -   A generic function is just one that performs method dispatch. Method dispatch is implemented through `UseMethod()`, so it is really easy to create a new generic.
 
-    ```{r}
-    mygeneric <- function(x, ...) {
-      UseMethod("mygeneric")
-    }
-    ```
+
+::: {.callout-important}
+## Creating Generic Functions
+To create a new generic function called `mygeneric` with a required argument `x`:
+```{r}
+mygeneric <- function(x, ...) {
+  UseMethod("mygeneric")
+}
+```
+:::
     
 - No arguments are passed to `UseMethod()` except the name of the generic.
 
@@ -321,9 +334,13 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 # Methods
 
-- To create a method
-  1. Create a function definition for `generic.method()`.
-  2. Make sure you use the same arguments as the generic (but you can usually include more aguements if there is `...` in the generic).
+::: {.callout-important}
+## Creating a Method
+To create a method
+
+1. Create a function definition for `generic.method()`.
+2. Make sure you use the same arguments as the generic (but you can usually include more arguments if there is `...` in the generic).
+:::
 
 -   E.g., let's create plot and print methods for the `factor2` class.
 
