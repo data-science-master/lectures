@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-06-04">
+<meta name="dcterms.date" content="2025-07-28">
 
 <title>Setting up Git and GitHub – DATA 413/613 Data Science</title>
 <style>
@@ -73,9 +73,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 4, 2025</p>
+      <p class="date">July 28, 2025</p>
     </div>
   </div>
   
@@ -408,27 +408,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"nano -w"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
-<li><p>Notepad (Windows only):</p>
+<li><p>Emacs (for the brave)</p>
+<ul>
+<li>On Mac: <a href="https://emacs-modified.gitlab.io/macos/" class="uri">https://emacs-modified.gitlab.io/macos/</a></li>
+<li>On Windows: <a href="https://emacs-modified.gitlab.io/windows/" class="uri">https://emacs-modified.gitlab.io/windows/</a></li>
+</ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"c:/Windows/System32/notepad.exe"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></li>
-<li><p>Emacs (for the brave) if it is already installed:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"emacs"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.editor <span class="st">"emacs"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul></li>
 </ul>
 </section>
 <section id="html-authentication" class="level1">
 <h1>HTML Authentication</h1>
+<ul>
+<li><p>To integrate GitHub (the website) with git (the command-line program), you have to set up the proper authorization.</p></li>
+<li><p>If you can already integrate with GitHub through the command line then you can skip the rest of these notes. If you are not sure, then please continue.</p></li>
+<li><p>There are two ways to authenticate. This section covers <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">personal access tokens</a> (PAT), the next covers <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">SSH keys</a>.</p></li>
+<li><p>GitHub recommends access tokens, so please try that first. Only try SSH if the access tokens don’t work for you.</p></li>
+<li><p>These notes follow the directions here: <a href="https://usethis.r-lib.org/articles/git-credentials.html" class="uri">https://usethis.r-lib.org/articles/git-credentials.html</a></p></li>
+</ul>
+<ol type="1">
+<li><p>Create a personal access token by running this in R:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_github_token</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Change the “Note” to describe the machine it is used on. E.g., “Personal Macbook”</p></li>
+<li><p>You can change the expiration date.</p>
+<ul>
+<li>You have to generate a new token every time yours expires and go back through this setup.</li>
+<li>GitHub does not recommend using a non-expiring token. For this class, I would recommend choosing “custom” then a date after this class has ended</li>
+</ul></li>
+<li><p>The default scopes should be fine for this course.</p></li>
+<li><p>Click “Generate Token”</p></li>
+<li><p><strong>Do not close the next window until we are done</strong>. It has your PAT which you won’t be able to see again.</p></li>
+<li><p>Copy the PAT</p></li>
+<li><p>Run this in R:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gitcreds<span class="sc">::</span><span class="fu">gitcreds_set</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Paste your PAT in the console</p></li>
+<li><p>Verify that your token is setup by running this in R:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">gh_token_help</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ol>
+<ul>
+<li>In the future, make sure all cloning URLs are like this: <code>https://github.com/&lt;OWNER&gt;/&lt;REPO&gt;.git</code> Not like this: <code>git@github.com:&lt;OWNER&gt;/&lt;REPO&gt;.git</code></li>
+</ul>
 </section>
 <section id="ssh-authentication" class="level1">
 <h1>SSH Authentication</h1>
 <ul>
-<li><p>To integrate GitHub (the website) with git (the command-line program), you have to set up the proper authorization.</p></li>
-<li><p>If you can already integrate with GitHub through the command line then you can skip the rest of these notes. If you are not sure, then please continue.</p></li>
-<li><p>GitHub now requires you to use either <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">Personal Access Tokens</a> or <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh">SSH Keys</a> for interfacing. For this class, we’ll use SSH Keys since its implementation is slightly easier.</p></li>
-<li><p>An alternative setup using personal access tokens can be found <a href="https://usethis.r-lib.org/articles/git-credentials.html">here</a>.</p></li>
+<li><p>Only continue on if the HTML authentication did not work for you.</p></li>
+<li><p>An alternative way to authenticate is via <a href="https://en.wikipedia.org/wiki/Secure_Shell">SSH</a>.</p></li>
 <li><p>SSH uses what’s called a <a href="https://en.wikipedia.org/wiki/Public-key_cryptography">key pair</a> where GitHub has a “public key” (a very long publicly known password) and you have on your computer a “private key” (a very long privately known password).</p></li>
 <li><p>Think about the public key as a padlock, and the private key as the key. You have to use to private key to unlock the public key.</p></li>
 <li><p>You need to generate a new private key, and go through the below steps, for each computer for which you intend to use git.</p></li>
@@ -441,7 +468,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>Check to see if you already have an SSH key pair by running the following in R</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"~/.ssh/id_rsa.pub"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.exists</span>(<span class="st">"~/.ssh/id_rsa.pub"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It will return <code>FALSE</code> if you do not have a key pair.</p></li>
 <li><p>Open up Tools &gt; Global Options… &gt; Git/SVN.</p></li>
@@ -463,7 +490,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>In the terminal run</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-al</span> ~/.ssh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-al</span> ~/.ssh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>This will say something like “ls: cannot access ‘/c/Users/Vlad Dracula/.ssh’: No such file or directory” if you don’t have any public/private key pairs.</p></li>
 <li><p>This will list out files names like “id_rsa.pub”, “id_ecdsa.pub”, or “id_ed25519.pub” if you do have a public/private key pair.</p></li>
@@ -476,7 +503,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>If you <strong>don’t</strong> have an SSH key, follow the below steps.</p></li>
 <li><p>In the terminal, run</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519 <span class="at">-C</span> <span class="st">"your_email@example.com"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>Press enter if prompted where to save the key to accept the default location.</p></li>
 <li><p>At the prompt, type a password that you can remember.</p></li>
@@ -487,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>In the terminal, run the following to start the ssh-agent in the background.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">"</span><span class="va">$(</span><span class="fu">ssh-agent</span> <span class="at">-s</span><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="st">"</span><span class="va">$(</span><span class="fu">ssh-agent</span> <span class="at">-s</span><span class="va">)</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>In the terminal, run the following to add your SSH private key to the ssh-agent:</p></li>
 </ol>
@@ -503,7 +530,7 @@ ssh-add ~/.ssh/id_ed25519
 <ol type="1">
 <li><p>Run the following in the terminal to show the contents of “id_ed25519.pub”.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>Highlight the output using your mouse and copy the contents.</p></li>
 </ol>
@@ -528,7 +555,7 @@ ssh-add ~/.ssh/id_ed25519
 <ol type="1">
 <li><p>Enter the following in the terminal:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-T</span> git@github.com</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 <li><p>Type “yes” if prompted to continue connecting.</p></li>
 <li><p>You are successful if you see something like</p>

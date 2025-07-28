@@ -55,31 +55,67 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     git config --global core.editor "nano -w"
     ```
         
-  - Notepad (Windows only): 
-  
-    ```{bash, eval = FALSE}
-    git config --global core.editor "c:/Windows/System32/notepad.exe"
-    ```
-        
-  - Emacs (for the brave) if it is already installed:
-  
+  - Emacs (for the brave) 
+    - On Mac: <https://emacs-modified.gitlab.io/macos/>
+    - On Windows: <https://emacs-modified.gitlab.io/windows/>
     ```{bash, eval = FALSE}
     git config --global core.editor "emacs"
     ```
 
 # HTML Authentication
 
-
-
-# SSH Authentication
-
 - To integrate GitHub (the website) with git (the command-line program), you have to set up the proper authorization.
 
 - If you can already integrate with GitHub through the command line then you can skip the rest of these notes. If you are not sure, then please continue.
 
-- GitHub now requires you to use either [Personal Access Tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) or [SSH Keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for interfacing. For this class, we'll use SSH Keys since its implementation is slightly easier.
+- There are two ways to authenticate. This section covers [personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) (PAT), the next covers [SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh).
 
-- An alternative setup using personal access tokens can be found [here](https://usethis.r-lib.org/articles/git-credentials.html).
+- GitHub recommends access tokens, so please try that first. Only try SSH if the access tokens don't work for you.
+
+- These notes follow the directions here: <https://usethis.r-lib.org/articles/git-credentials.html>
+
+1.  Create a personal access token by running this in R:
+
+    ```r
+    usethis::create_github_token()
+    ```
+    
+2. Change the "Note" to describe the machine it is used on. E.g., "Personal Macbook"
+
+3.  You can change the expiration date. 
+    - You have to generate a new token every time yours expires and go back through this setup.
+    - GitHub does not recommend using a non-expiring token. For this class, I would recommend choosing "custom" then a date after this class has ended
+    
+4. The default scopes should be fine for this course.
+
+5. Click "Generate Token"
+
+6. **Do not close the next window until we are done**. It has your PAT which you won't be able to see again.
+
+7. Copy the PAT
+
+8.  Run this in R:
+
+    ```r
+    gitcreds::gitcreds_set()
+    ```
+    
+9. Paste your PAT in the console
+
+10. Verify that your token is setup by running this in R:
+
+    ```r
+    usethis::gh_token_help()
+    ```
+
+- In the future, make sure all cloning URLs are like this: `https://github.com/<OWNER>/<REPO>.git` 
+  Not like this: `git@github.com:<OWNER>/<REPO>.git`
+
+# SSH Authentication
+
+- Only continue on if the HTML authentication did not work for you.
+
+- An alternative way to authenticate is via [SSH](https://en.wikipedia.org/wiki/Secure_Shell).
 
 - SSH uses what's called a [key pair](https://en.wikipedia.org/wiki/Public-key_cryptography) where GitHub has a "public key" (a very long publicly known password) and you have on your computer a "private key" (a very long privately known password). 
 
