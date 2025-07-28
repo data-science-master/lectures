@@ -43,6 +43,8 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
   
     ```{bash, eval = FALSE}
     git config --global user.name "YOUR FULL NAME"
+    ```
+    ```{bash, eval = FALSE}
     git config --global user.email "YOUR EMAIL ADDRESS"
     ```
 
@@ -91,6 +93,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 5. Click "Generate Token"
 
 6. **Do not close the next window until we are done**. It has your PAT which you won't be able to see again.
+   - **Do not share your PAT with anyone**. Treat it like a password.
 
 7. Copy the PAT
 
@@ -109,7 +112,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     ```
 
 - In the future, make sure all cloning URLs are like this: `https://github.com/<OWNER>/<REPO>.git` 
-  Not like this: `git@github.com:<OWNER>/<REPO>.git`
+  - Not like this: `git@github.com:<OWNER>/<REPO>.git`
 
 # SSH Authentication
 
