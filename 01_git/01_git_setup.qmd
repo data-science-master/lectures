@@ -22,6 +22,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 - Installing git
 - Setting up GitHub
+- [Connecting to GitHub with PATs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 - [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
 
 # Installing Git
@@ -82,6 +83,8 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     usethis::create_github_token()
     ```
     
+    This opens up a browser to GitHub.
+    
 2. Change the "Note" to describe the machine it is used on. E.g., "Personal Macbook"
 
 3.  You can change the expiration date. 
@@ -92,7 +95,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 5. Click "Generate Token"
 
-6. **Do not close the next window until we are done**. It has your PAT which you won't be able to see again.
+6. **Do not close this window until we are done**. It has your PAT which you won't be able to see again.
    - **Do not share your PAT with anyone**. Treat it like a password.
 
 7. Copy the PAT

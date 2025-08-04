@@ -193,7 +193,7 @@
     "href": "01_git/01_git_setup.html",
     "title": "Setting up Git and GitHub",
     "section": "",
-    "text": "Installing git\nSetting up GitHub\nConnecting to GitHub with SSH"
+    "text": "Installing git\nSetting up GitHub\nConnecting to GitHub with PATs\nConnecting to GitHub with SSH"
   },
   {
     "objectID": "01_git/01_git_setup.html#generate-key-pair-on-r-studio",
