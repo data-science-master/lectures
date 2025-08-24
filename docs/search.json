@@ -123,7 +123,7 @@
     "href": "01_git/01_git_github.html#cloning",
     "title": "Git and GitHub",
     "section": "Cloning",
-    "text": "Cloning\n\n“Cloning” is a fancy way to say download from GitHub.\nBut it also means that your local copy is connected to the remote copy automatically.\nEnter the repo you want to clone, then click on the  Button\nMake sure that “SSH” is highlighted.\nThen click on the  button to copy the link.\n\nIn the terminal, navigate to where you want to download the repo, then clone it with git clone\n\ngit clone git@github.com:dcgerard/test.git\n\n\nMake sure to change the link to what you copied (don’t use my link above).\n\nThen move into your new repo\n\nls\ncd test"
+    "text": "Cloning\n\n“Cloning” is a fancy way to say download from GitHub.\nBut it also means that your local copy is connected to the remote copy automatically.\nEnter the repo you want to clone, then click on the  Button\nIf you used PAT’s, make sure “HTTPS” is highlighted.\nIf you used SSH, make sure that “SSH” is highlighted.\nThen click on the  button to copy the link.\n\nIn the terminal, navigate to where you want to download the repo, then clone it with git clone\n\ngit clone git@github.com:dcgerard/test.git\n\n\nMake sure to change the link to what you copied (don’t use my link above).\n\nThen move into your new repo\n\nls\ncd test"
   },
   {
     "objectID": "01_git/01_git_github.html#status",
