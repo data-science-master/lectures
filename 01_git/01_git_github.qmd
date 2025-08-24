@@ -41,20 +41,6 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     git version 2.25.1
     ```
 
-- To see if you can connect to GitHub:
-
-  1. Enter the following in the terminal:
-     ```{bash, eval = FALSE}
-     ssh -T git@github.com
-     ```
-
-  2. Type "yes" if prompted to continue connecting.
-
-  3. You are successful if you see something like
-     ```
-     Hi dcgerard! You've successfully authenticated, but GitHub does not provide shell access.
-     ```
-
 - If you have issues with either of these step, go to [Setting up Git and GitHub](./01_git_setup.html)
 
 # Version Control:
