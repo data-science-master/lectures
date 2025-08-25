@@ -1,0 +1,16 @@
+---
+title: "LLM APIs"
+author: "David Gerard"
+date: today
+urlcolor: "blue"
+format: html
+---
+
+# Learning Objectives
+
+- Interface with an LLM API via `ellmer`
+- <https://ellmer.tidyverse.org/>
+- Include API interface and output in a Shiny app.
+
+
+

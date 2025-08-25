@@ -1,0 +1,8 @@
+---
+title: "Embeddings"
+author: "David Gerard"
+---
+
+# Learning Objectives
+
+- Convert text data to embeddings for use in standard ML models.

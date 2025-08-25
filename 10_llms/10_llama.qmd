@@ -1,0 +1,13 @@
+---
+title: "Free Models"
+author: "David Gerard"
+date: today
+urlcolor: "blue"
+format: html
+---
+
+# Learning Objectives
+
+- Use weights from free models on your local machine.
+- <https://github.com/meta-llama/llama-cookbook/tree/main/getting-started/>
+- <https://www.llama.com/>
