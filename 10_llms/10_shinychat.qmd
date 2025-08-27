@@ -1,0 +1,9 @@
+---
+title: "Shiny Chats"
+author: "David Gerard"
+---
+
+# Learning Objectives
+
+- Add chat functionality to your shiny app.
+- <https://posit-dev.github.io/shinychat/r/index.html>

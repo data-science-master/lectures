@@ -6,3 +6,14 @@ author: "David Gerard"
 # Learning Objectives
 
 - Convert text data to embeddings for use in standard ML models.
+- <https://ollama.com/blog/embedding-models>
+
+# What are embeddings?
+
+# Use case for embedding models
+
+# Generating embeddings
+
+# Practical example
+
+

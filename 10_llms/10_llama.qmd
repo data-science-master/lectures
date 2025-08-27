@@ -9,5 +9,16 @@ format: html
 # Learning Objectives
 
 - Use weights from free models on your local machine.
-- <https://github.com/meta-llama/llama-cookbook/tree/main/getting-started/>
-- <https://www.llama.com/>
+- Ollama: <https://ollama.com/>
+- Ellmer and ollama: <https://ellmer.tidyverse.org/reference/chat_ollama.html>
+- rollama: <https://cran.r-project.org/package=rollama>
+
+# Motivation
+
+- Why free?
+  - Don't have to pay.
+  - Extra privacy.
+- Why not free
+  - Generally worse performance
+
+# Use free models in R
