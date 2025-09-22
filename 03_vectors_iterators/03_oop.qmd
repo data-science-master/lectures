@@ -27,7 +27,7 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
 
 # Motivation
 
--   There are various [strategies to programming](https://en.wikipedia.org/wiki/Comparison_of_programming_paradigms) that folks use.
+-   There are various [strategies to programming](https://en.wikipedia.org/wiki/Programming_paradigm) that folks use.
 
 -   You are mostly used to [**procedural programming**](https://en.wikipedia.org/wiki/Procedural_programming) where you list out a sequence of steps that are carried out in succession.
     ```{r}
