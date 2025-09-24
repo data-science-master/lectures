@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="David Gerard">
 
-<title>DATA 413/613 Data Science</title>
+<title>Eventbrite OAuth2 Example – DATA 413/613 Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,31 +21,66 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -246,9 +282,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">DATA 413/613 Data Science</span>
     </a>
   </div>
@@ -259,11 +295,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./data.html"> 
+    <a class="nav-link" href="../data.html"> 
 <span class="menu-text">Data</span></a>
   </li>  
 </ul>
@@ -283,8 +319,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lectures" id="toc-lectures" class="nav-link active" data-scroll-target="#lectures">Lectures</a></li>
-  <li><a href="#extra-lectures" id="toc-extra-lectures" class="nav-link" data-scroll-target="#extra-lectures">Extra Lectures</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
+  <li><a href="#oauth2-method" id="toc-oauth2-method" class="nav-link" data-scroll-target="#oauth2-method">OAuth2 Method</a></li>
+  <li><a href="#api-key-method" id="toc-api-key-method" class="nav-link" data-scroll-target="#api-key-method">API Key method</a></li>
   </ul>
 </nav>
     </div>
@@ -294,13 +331,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">DATA 413/613 Data Science</h1>
+<h1 class="title">Eventbrite OAuth2 Example</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
     
   
     
@@ -311,108 +354,97 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="./admin/syllabus.html">Syllabus</a></p>
-<section id="lectures" class="level1">
-<h1>Lectures</h1>
+<section id="learning-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
 <ul>
-<li>01 Git and the Terminal
-<ul>
-<li><a href="./01_git/01_basic_bash.html">01 The Terminal and Bash Basics</a>.</li>
-<li><a href="./01_git/01_git_setup.html">01 Git Setup</a>.</li>
-<li><a href="./01_git/01_git_github.html">01 Git and GitHub</a>.</li>
-<li><a href="./01_git/01_git_lfs.html">01 Git Large File Storage</a>.</li>
-<li><a href="https://doi.org/10.1371/journal.pcbi.1004668">01 A Quick Introduction to Git and GitHub</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_01">01 Lab: Review of Tidyverse Concepts</a>.</li>
-</ul></li>
-<li>02 Organization
-<ul>
-<li><a href="./02_organization/02_files.html">02 File Structure</a></li>
-<li><a href="./02_organization/02_projects.html">02 Project Structure</a></li>
-<li><a href="./02_organization/02_kanban.html">02 Project Management</a></li>
-</ul></li>
-<li>03 Programming
-<ul>
-<li><a href="./03_vectors_iterators/03_memory.html">03 Memory</a>.</li>
-<li><a href="./03_vectors_iterators/03_vectors.html">03 Vectors</a>.</li>
-<li><a href="./03_vectors_iterators/03_subsetting.html">03 Subsetting</a>.</li>
-<li><a href="./03_vectors_iterators/03_functions.html">03 Functions</a>.</li>
-<li><a href="./03_vectors_iterators/03_iterators.html">03 Iteration</a>.</li>
-<li><a href="./03_vectors_iterators/03_oop.html">03 OOP</a>.</li>
-<li><a href="./03_vectors_iterators/03_s3.html">03 S3</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_03">03 Lab</a>.</li>
-</ul></li>
-<li>04 R Packages
-<ul>
-<li><a href="./04_packages/04_packages.html">04 R Packages</a>.</li>
-<li><a href="./04_packages/04_testing.html">04 Unit Testing</a>.</li>
-<li><a href="./04_packages/04_checking.html">04 Automated Checks</a>.</li>
-<li><a href="./04_packages/04_style.html">04 Style</a>.</li>
-</ul></li>
-<li>05 Web Scraping
-<ul>
-<li><a href="./05_web_scraping/05_apis.html">05 APIs</a>.
-<ul>
-<li><a href="./05_web_scraping/05_eventbrite.html">OAuth2 Example with Eventbrite</a>.</li>
-</ul></li>
-<li><a href="./05_web_scraping/05_web_scraping.html">05 Web Scraping</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_08">05 Lab</a>.</li>
-</ul></li>
-<li>06 Introduction to Python
-<ul>
-<li><a href="./06_python/06_python_setup.html">06 Python Setup and Reticulate</a>.</li>
-<li><a href="./06_python/06_numpy.html">06 Numpy</a>.</li>
-<li><a href="./06_python/06_pandas.html">06 Pandas</a>.</li>
-<li><a href="./06_python/06_matplotlib.html">06 Seaborn</a>.</li>
-<li><a href="./06_python/06_seaborn_objects.html">06 Seaborn.objects</a>.</li>
-</ul></li>
-<li>07 Introduction to SQL
-<ul>
-<li><a href="./07_sql/07_sql.html">07 SQL</a>.</li>
-<li><a href="./07_sql/07_dbeaver.html">07 DBeaver</a>.</li>
-</ul></li>
-<li>08 GNU Make
-<ul>
-<li><a href="./08_make/08_make.html">08 GNU Make</a>.</li>
-<li><a href="https://github.com/data-science-master/penguins">08 Penguins Exercise</a>.</li>
-<li><a href="https://github.com/data-science-master/pvalue_sims">08 Very Basic Makefile Example</a>.</li>
-</ul></li>
-<li>09 Shiny Apps
-<ul>
-<li><a href="./09_shiny/09_basic_shiny.html">09 Shiny Basics</a>.</li>
-<li><a href="./09_shiny/09_layouts.html">09 Layouts</a>.</li>
-<li><a href="./09_shiny/09_reactivity.html">09 Reactivity</a>.</li>
-<li><a href="./09_shiny/09_html.html">09 HTML</a>.</li>
-<li><a href="./09_shiny/09_upload.html">09 File Uploads</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_1">09 Shiny Lab 1: World Bank Data</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_2">09 Shiny Lab 2: Cereals Data</a>.</li>
-</ul></li>
+<li>Another example of using OAuth2 for authorization.</li>
+<li>EventBrite API: <a href="https://www.eventbrite.com/platform/api/#/introduction/about-our-api" class="uri">https://www.eventbrite.com/platform/api/#/introduction/about-our-api</a></li>
+<li>Intro to API’s: <a href="https://www.eventbrite.com/platform/docs/introduction" class="uri">https://www.eventbrite.com/platform/docs/introduction</a></li>
+<li>Intro to Authorization: <a href="https://www.eventbrite.com/platform/docs/authentication" class="uri">https://www.eventbrite.com/platform/docs/authentication</a></li>
+<li><a href="https://httr2.r-lib.org/articles/oauth.html" class="uri">https://httr2.r-lib.org/articles/oauth.html</a></li>
 </ul>
 </section>
-<section id="extra-lectures" class="level1">
-<h1>Extra Lectures</h1>
+<section id="oauth2-method" class="level2">
+<h2 class="anchored" data-anchor-id="oauth2-method">OAuth2 Method</h2>
 <ul>
-<li>A1 Basic Statistics
+<li>For authenticating other users, you use OAuth2.</li>
+<li>The base URL is: <a href="https://www.eventbriteapi.com/v3" class="uri">https://www.eventbriteapi.com/v3</a></li>
+<li>Go to <a href="https://www.eventbrite.com/platform/" class="uri">https://www.eventbrite.com/platform/</a> and click “Get a Free API Key”</li>
+<li>Go to <a href="https://www.eventbrite.com/account-settings/apps" class="uri">https://www.eventbrite.com/account-settings/apps</a> and get information on the Client Secret, and Private and Public Tokens.</li>
+<li>You need to tell EventBrite the redirect uri. Go to <a href="https://www.eventbrite.com/account-settings/apps" class="uri">https://www.eventbrite.com/account-settings/apps</a>, click on “API key details” and tell it the OAuth Redirect URI is <a href="http://localhost:1410/" class="uri">http://localhost:1410/</a></li>
+<li>The docs say the API key is the client ID. The client secret is listed explicitly.</li>
+<li>The docs say the token URL is: <a href="https://www.eventbrite.com/oauth/token" class="uri">https://www.eventbrite.com/oauth/token</a></li>
+<li>They say the authorization URL is: <a href="https://www.eventbrite.com/oauth/authorize" class="uri">https://www.eventbrite.com/oauth/authorize</a></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Based on the docs, this is the flow (your id and secret will be different):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>client <span class="ot">&lt;-</span> <span class="fu">oauth_client</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">"7Q4MLH2PBGUJWNWLZO"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">secret =</span> <span class="st">"YQW7ZQS6LX525KTISRBBAI5MVAEYLDY6IT6V3IDKLHSOP3JT5O"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">token_url =</span> <span class="st">"https://www.eventbrite.com/oauth/token"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>auth_url <span class="ot">&lt;-</span> <span class="st">"https://www.eventbrite.com/oauth/authorize"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>redirect_uri <span class="ot">&lt;-</span> <span class="st">"http://localhost:1410/"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can get a token this way and then reuse it:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Get the token</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> <span class="fu">oauth_flow_auth_code</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">client =</span> client,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">auth_url =</span> auth_url,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">redirect_uri =</span> redirect_uri</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">request</span>(<span class="st">"https://www.eventbriteapi.com/v3"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_url_path_append</span>(<span class="st">"categories"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_url_query</span>(<span class="at">token =</span> token<span class="sc">$</span>access_token) <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_perform</span>() <span class="ot">-&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  rout</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Or you can cache the token after one use (recommended):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">request</span>(<span class="st">"https://www.eventbriteapi.com/v3"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_url_path_append</span>(<span class="st">"categories"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_oauth_auth_code</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">client =</span> client, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">auth_url =</span> auth_url,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">redirect_uri =</span> redirect_uri, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">cache_disk =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">req_perform</span>() <span class="ot">-&gt;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  rout</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Here is the output:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">dat =</span> <span class="fu">resp_body_json</span>(rout)[[<span class="dv">3</span>]]) <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_wider</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 6
+   resource_uri       id    name  name_localized short_name short_name_localized
+   &lt;chr&gt;              &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;      &lt;chr&gt;               
+ 1 https://www.event… 103   Music Music          Music      Music               
+ 2 https://www.event… 101   Busi… Business &amp; Pr… Business   Business            
+ 3 https://www.event… 110   Food… Food &amp; Drink   Food &amp; Dr… Food &amp; Drink        
+ 4 https://www.event… 113   Comm… Community &amp; C… Community  Community           
+ 5 https://www.event… 105   Perf… Performing &amp; … Arts       Arts                
+ 6 https://www.event… 104   Film… Film, Media &amp;… Film &amp; Me… Film &amp; Media        
+ 7 https://www.event… 108   Spor… Sports &amp; Fitn… Sports &amp; … Sports &amp; Fitness    
+ 8 https://www.event… 107   Heal… Health &amp; Well… Health     Health              
+ 9 https://www.event… 102   Scie… Science &amp; Tec… Science &amp;… Science &amp; Tech      
+10 https://www.event… 109   Trav… Travel &amp; Outd… Travel &amp; … Travel &amp; Outdoor    
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="api-key-method" class="level2">
+<h2 class="anchored" data-anchor-id="api-key-method">API Key method</h2>
 <ul>
-<li><a href="./A1_basic_stats/A1_basic_stats.html">A1 Basic Statistics</a>.</li>
-<li><a href="./A1_basic_stats/greenland_etal_2016.pdf">A1 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_04">A1 Lab</a>.</li>
-</ul></li>
-<li>A2 Linear Models
-<ul>
-<li><a href="./A2_linear_regression/A2_simple_linear_regression.html">A2 Simple Linear Regression</a>.</li>
-<li><a href="./A2_linear_regression/A2_many_models.html">A2 Many Models</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_05">A2 Lab</a>.</li>
-</ul></li>
-<li>A3 Data.table
-<ul>
-<li><a href="./A3_medium_data/A3_medium_data.html">A3 Manipulating Large(ish) Datasets with data.table</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_07">A3 Lab</a>.</li>
-</ul></li>
-<li>A4 Dates and Times
-<ul>
-<li><a href="./A4_dates/A4_dates.html">A4 Dates</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_02">A4 Lab</a>.</li>
-</ul></li>
+<li>The documents indicate that you can use an API key for private use. But I haven’t tried it.</li>
+<li>Go to <a href="https://www.eventbrite.com/platform/" class="uri">https://www.eventbrite.com/platform/</a> and click “Get a Free API Key”</li>
+<li>The base URL is: <a href="https://www.eventbriteapi.com/v3/users/me/" class="uri">https://www.eventbriteapi.com/v3/users/me/</a></li>
+<li>You use the query: <code>?token=&lt;api_key&gt;</code></li>
 </ul>
 
 

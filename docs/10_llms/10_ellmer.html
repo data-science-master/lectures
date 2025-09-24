@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="David Gerard">
+<meta name="dcterms.date" content="2025-09-24">
 
-<title>DATA 413/613 Data Science</title>
+<title>LLM APIs – DATA 413/613 Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,28 +25,28 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -246,9 +248,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">DATA 413/613 Data Science</span>
     </a>
   </div>
@@ -259,11 +261,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./data.html"> 
+    <a class="nav-link" href="../data.html"> 
 <span class="menu-text">Data</span></a>
   </li>  
 </ul>
@@ -283,8 +285,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lectures" id="toc-lectures" class="nav-link active" data-scroll-target="#lectures">Lectures</a></li>
-  <li><a href="#extra-lectures" id="toc-extra-lectures" class="nav-link" data-scroll-target="#extra-lectures">Extra Lectures</a></li>
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   </ul>
 </nav>
     </div>
@@ -294,14 +295,26 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">DATA 413/613 Data Science</h1>
+<h1 class="title">LLM APIs</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 24, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -311,108 +324,12 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="./admin/syllabus.html">Syllabus</a></p>
-<section id="lectures" class="level1">
-<h1>Lectures</h1>
+<section id="learning-objectives" class="level1">
+<h1>Learning Objectives</h1>
 <ul>
-<li>01 Git and the Terminal
-<ul>
-<li><a href="./01_git/01_basic_bash.html">01 The Terminal and Bash Basics</a>.</li>
-<li><a href="./01_git/01_git_setup.html">01 Git Setup</a>.</li>
-<li><a href="./01_git/01_git_github.html">01 Git and GitHub</a>.</li>
-<li><a href="./01_git/01_git_lfs.html">01 Git Large File Storage</a>.</li>
-<li><a href="https://doi.org/10.1371/journal.pcbi.1004668">01 A Quick Introduction to Git and GitHub</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_01">01 Lab: Review of Tidyverse Concepts</a>.</li>
-</ul></li>
-<li>02 Organization
-<ul>
-<li><a href="./02_organization/02_files.html">02 File Structure</a></li>
-<li><a href="./02_organization/02_projects.html">02 Project Structure</a></li>
-<li><a href="./02_organization/02_kanban.html">02 Project Management</a></li>
-</ul></li>
-<li>03 Programming
-<ul>
-<li><a href="./03_vectors_iterators/03_memory.html">03 Memory</a>.</li>
-<li><a href="./03_vectors_iterators/03_vectors.html">03 Vectors</a>.</li>
-<li><a href="./03_vectors_iterators/03_subsetting.html">03 Subsetting</a>.</li>
-<li><a href="./03_vectors_iterators/03_functions.html">03 Functions</a>.</li>
-<li><a href="./03_vectors_iterators/03_iterators.html">03 Iteration</a>.</li>
-<li><a href="./03_vectors_iterators/03_oop.html">03 OOP</a>.</li>
-<li><a href="./03_vectors_iterators/03_s3.html">03 S3</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_03">03 Lab</a>.</li>
-</ul></li>
-<li>04 R Packages
-<ul>
-<li><a href="./04_packages/04_packages.html">04 R Packages</a>.</li>
-<li><a href="./04_packages/04_testing.html">04 Unit Testing</a>.</li>
-<li><a href="./04_packages/04_checking.html">04 Automated Checks</a>.</li>
-<li><a href="./04_packages/04_style.html">04 Style</a>.</li>
-</ul></li>
-<li>05 Web Scraping
-<ul>
-<li><a href="./05_web_scraping/05_apis.html">05 APIs</a>.
-<ul>
-<li><a href="./05_web_scraping/05_eventbrite.html">OAuth2 Example with Eventbrite</a>.</li>
-</ul></li>
-<li><a href="./05_web_scraping/05_web_scraping.html">05 Web Scraping</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_08">05 Lab</a>.</li>
-</ul></li>
-<li>06 Introduction to Python
-<ul>
-<li><a href="./06_python/06_python_setup.html">06 Python Setup and Reticulate</a>.</li>
-<li><a href="./06_python/06_numpy.html">06 Numpy</a>.</li>
-<li><a href="./06_python/06_pandas.html">06 Pandas</a>.</li>
-<li><a href="./06_python/06_matplotlib.html">06 Seaborn</a>.</li>
-<li><a href="./06_python/06_seaborn_objects.html">06 Seaborn.objects</a>.</li>
-</ul></li>
-<li>07 Introduction to SQL
-<ul>
-<li><a href="./07_sql/07_sql.html">07 SQL</a>.</li>
-<li><a href="./07_sql/07_dbeaver.html">07 DBeaver</a>.</li>
-</ul></li>
-<li>08 GNU Make
-<ul>
-<li><a href="./08_make/08_make.html">08 GNU Make</a>.</li>
-<li><a href="https://github.com/data-science-master/penguins">08 Penguins Exercise</a>.</li>
-<li><a href="https://github.com/data-science-master/pvalue_sims">08 Very Basic Makefile Example</a>.</li>
-</ul></li>
-<li>09 Shiny Apps
-<ul>
-<li><a href="./09_shiny/09_basic_shiny.html">09 Shiny Basics</a>.</li>
-<li><a href="./09_shiny/09_layouts.html">09 Layouts</a>.</li>
-<li><a href="./09_shiny/09_reactivity.html">09 Reactivity</a>.</li>
-<li><a href="./09_shiny/09_html.html">09 HTML</a>.</li>
-<li><a href="./09_shiny/09_upload.html">09 File Uploads</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_1">09 Shiny Lab 1: World Bank Data</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_2">09 Shiny Lab 2: Cereals Data</a>.</li>
-</ul></li>
-</ul>
-</section>
-<section id="extra-lectures" class="level1">
-<h1>Extra Lectures</h1>
-<ul>
-<li>A1 Basic Statistics
-<ul>
-<li><a href="./A1_basic_stats/A1_basic_stats.html">A1 Basic Statistics</a>.</li>
-<li><a href="./A1_basic_stats/greenland_etal_2016.pdf">A1 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_04">A1 Lab</a>.</li>
-</ul></li>
-<li>A2 Linear Models
-<ul>
-<li><a href="./A2_linear_regression/A2_simple_linear_regression.html">A2 Simple Linear Regression</a>.</li>
-<li><a href="./A2_linear_regression/A2_many_models.html">A2 Many Models</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_05">A2 Lab</a>.</li>
-</ul></li>
-<li>A3 Data.table
-<ul>
-<li><a href="./A3_medium_data/A3_medium_data.html">A3 Manipulating Large(ish) Datasets with data.table</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_07">A3 Lab</a>.</li>
-</ul></li>
-<li>A4 Dates and Times
-<ul>
-<li><a href="./A4_dates/A4_dates.html">A4 Dates</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_02">A4 Lab</a>.</li>
-</ul></li>
+<li>Interface with an LLM API via <code>ellmer</code></li>
+<li><a href="https://ellmer.tidyverse.org/" class="uri">https://ellmer.tidyverse.org/</a></li>
+<li>Include API interface and output in a Shiny app.</li>
 </ul>
 
 

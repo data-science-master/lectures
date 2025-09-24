@@ -1,0 +1,87 @@
+---
+title: "Eventbrite OAuth2 Example"
+author: "David Gerard"
+format: html
+---
+
+## Learning Objectives
+
+- Another example of using OAuth2 for authorization.
+- EventBrite API: <https://www.eventbrite.com/platform/api/#/introduction/about-our-api>
+- Intro to API's: <https://www.eventbrite.com/platform/docs/introduction>
+- Intro to Authorization: <https://www.eventbrite.com/platform/docs/authentication>
+- <https://httr2.r-lib.org/articles/oauth.html>
+
+
+## OAuth2 Method
+
+- For authenticating other users, you use OAuth2.
+- The base URL is: <https://www.eventbriteapi.com/v3>
+- Go to <https://www.eventbrite.com/platform/> and click "Get a Free API Key"
+- Go to <https://www.eventbrite.com/account-settings/apps> and get information on the Client Secret, and Private and Public Tokens.
+- You need to tell EventBrite the redirect uri. Go to <https://www.eventbrite.com/account-settings/apps>, click on "API key details" and tell it the OAuth Redirect URI is <http://localhost:1410/>
+- The docs say the API key is the client ID. The client secret is listed explicitly.
+- The docs say the token URL is: <https://www.eventbrite.com/oauth/token>
+- They say the authorization URL is: <https://www.eventbrite.com/oauth/authorize>
+
+
+```{r}
+#| message: false
+library(tidyverse)
+library(httr2)
+```
+
+
+Based on the docs, this is the flow (your id and secret will be different):
+```{r}
+client <- oauth_client(
+  id = "7Q4MLH2PBGUJWNWLZO",
+  secret = "YQW7ZQS6LX525KTISRBBAI5MVAEYLDY6IT6V3IDKLHSOP3JT5O",
+  token_url = "https://www.eventbrite.com/oauth/token"
+)
+auth_url <- "https://www.eventbrite.com/oauth/authorize"
+redirect_uri <- "http://localhost:1410/"
+```
+
+You can get a token this way and then reuse it:
+```{r}
+#| eval: false
+## Get the token
+token <- oauth_flow_auth_code(
+  client = client,
+  auth_url = auth_url,
+  redirect_uri = redirect_uri
+)
+request("https://www.eventbriteapi.com/v3") |>
+  req_url_path_append("categories") |>
+  req_url_query(token = token$access_token) |>
+  req_perform() ->
+  rout
+```
+
+Or you can cache the token after one use (recommended):
+```{r}
+request("https://www.eventbriteapi.com/v3") |>
+  req_url_path_append("categories") |>
+  req_oauth_auth_code(
+    client = client, 
+    auth_url = auth_url,
+    redirect_uri = redirect_uri, 
+    cache_disk = TRUE) |>
+  req_perform() ->
+  rout
+```
+
+Here is the output:
+```{r}
+tibble(dat = resp_body_json(rout)[[3]]) |>
+  unnest_wider(dat)
+```
+
+## API Key method
+
+- The documents indicate that you can use an API key for private use. But I haven't tried it.
+- Go to <https://www.eventbrite.com/platform/> and click "Get a Free API Key"
+- The base URL is: <https://www.eventbriteapi.com/v3/users/me/>
+- You use the query: `?token=<api_key>`
+
