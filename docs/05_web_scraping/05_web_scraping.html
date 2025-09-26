@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.24">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-06-23">
+<meta name="dcterms.date" content="2025-09-26">
 
 <title>Web Scraping with rvest – DATA 413/613 Data Science</title>
 <style>
@@ -69,18 +69,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b651517ce65839d647a86e2780455cfb.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -282,6 +283,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">DATA 413/613 Data Science</span>
     </a>
@@ -353,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 23, 2025</p>
+      <p class="date">September 26, 2025</p>
     </div>
   </div>
   
@@ -390,7 +393,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Note: Web scraping can be illegal in some circumstances, particularly if you intend to make money off of it or if you are collecting personal information (especially in Europe). <strong>I don’t give legal advice</strong>, so see Chapter 24 of <a href="https://r4ds.hadley.nz/">RDS</a> for some general recommendations, and talk to a lawyer if you are not sure.</p></li>
 <li><p>Let’s load the tidyverse:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -450,20 +453,20 @@ This is a <b>simple</b> paragraph.
 </ul></li>
 <li><p>CSS stands from “Cascading Style Sheets”. It’s a formatting language that indicates how HTML files should look. Every website you have been on is formatted with CSS.</p></li>
 <li><p>Here is some example CSS:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>h3 {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>h3 {</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="cn">red</span><span class="op">;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span><span class="ch">:</span> <span class="dv">italic</span><span class="op">;</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>footer div<span class="fu">.alert</span> {</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">display</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>The part before the curly braces is called a <strong>selector</strong>. It corresponds to HTML tags. Specifically, for those two they would correspond to:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h3</span><span class="dt">&gt;</span>Some text<span class="dt">&lt;/</span><span class="kw">h3</span><span class="dt">&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">h3</span><span class="dt">&gt;</span>Some text<span class="dt">&lt;/</span><span class="kw">h3</span><span class="dt">&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">footer</span><span class="dt">&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"alert"</span><span class="dt">&gt;</span>More text<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">footer</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">footer</span><span class="dt">&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>The code inside the curly braces are <strong>properties</strong>. For example, the h3 properties tells us to make the h3 headers red and in italics. The second CSS chunk says that all <code>&lt;div&gt;</code> tags of class <code>"alert"</code> in the <code>&lt;footer&gt;</code> should be hidden.</p></li>
 <li><p>CSS applies the same <em>properties</em> to the same <em>selectors</em>. So every time we use h3 will result in the h3 styling of red and italicized text.</p></li>
 <li><p>CSS selectors define patterns for selecting HTML elements. This is useful for scraping because we can extract all text in an HTML that corresponds to some CSS selector.</p></li>
@@ -503,13 +506,17 @@ This is a <b>simple</b> paragraph.
 <ul>
 <li><p>We’ll use <code>rvest</code> to extract elements from HTML files.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>The typical pipeline for <code>rvest</code> is:</p>
 <ul>
 <li>Load the html file into R using <code>read_html()</code></li>
 <li>Choose the selectors based on SelectorGadget (see below) or by inspecting the selectors manually using developer tools (see below).</li>
-<li>Select those selectors using <code>html_elements()</code>.</li>
+<li>Select those selectors using <code>html_elements()</code>.
+<ul>
+<li>Possibly select elements within those elements via <code>html_element()</code></li>
+<li>E.g. <code>html_elements()</code> selects the observational units and <code>html_element()</code> selects values of variables within that unit.</li>
+</ul></li>
 <li>Extract the text using <code>html_text2()</code>.
 <ul>
 <li>Or, extract tables using <code>html_table()</code>.</li>
@@ -518,73 +525,83 @@ This is a <b>simple</b> paragraph.
 </ul></li>
 <li><p>We’ll do a real example after we cover SelectorGadget and the web developer tools. But for now, let’s create a small html file:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">'</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;p class="a"&gt;Text 1&lt;/p&gt;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;div class="a"&gt;Text 2&lt;/div&gt;</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;p id="b"&gt;Text 3&lt;/p&gt;</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;div id="b"&gt;Text 4&lt;/div&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>We can get all <code>p</code> tag text via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"p"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"p"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Text 1" "Text 3"</code></pre>
 </div>
 </div></li>
 <li><p>We can get all <code>div</code> tag text via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"div"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"div"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Text 2" "Text 4"</code></pre>
 </div>
 </div></li>
 <li><p>We can get all <code>class=a</code> text via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">".a"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">".a"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Text 1" "Text 2"</code></pre>
 </div>
 </div></li>
 <li><p>We can get all <code>id=b</code> text via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"#b"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"#b"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Text 3" "Text 4"</code></pre>
 </div>
 </div></li>
 <li><p>Once you use <code>html_elements()</code>, it’s common to then use <code>html_element()</code> to extract even more information.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>html_k <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>html_k <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;p&gt;&lt;emph&gt;A&lt;/emph&gt;: &lt;b&gt;Ape&lt;/b&gt; picks an &lt;b&gt;Apple&lt;/b&gt; for &lt;b&gt;Aardvark&lt;/b&gt; below.&lt;/p&gt;</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;p&gt;&lt;emph&gt;L&lt;/emph&gt;: &lt;b&gt;Lion&lt;/b&gt; &lt;b&gt;Lifts&lt;/b&gt; &lt;b&gt;Ladybug's&lt;/b&gt; &lt;b&gt;Luggage&lt;/b&gt;&lt;/p&gt;</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">&lt;p&gt;&lt;emph&gt;P&lt;/emph&gt;: &lt;b&gt;Penguin&lt;/b&gt; &lt;b&gt;Plays&lt;/b&gt; with &lt;b&gt;Platypus&lt;/b&gt; in the &lt;b&gt;Pool&lt;/b&gt;&lt;/p&gt;</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>html_k <span class="sc">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>html_k <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"p"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">"emph"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A" "L" "P"</code></pre>
+</div>
+</div></li>
+<li><p>If you want all of the <code>b</code>s that are within a <code>p</code>, you can use <code></code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>html_k <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"p b"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Ape"       "Apple"     "Aardvark"  "Lion"      "Lifts"     "Ladybug's"
+ [7] "Luggage"   "Penguin"   "Plays"     "Platypus"  "Pool"     </code></pre>
 </div>
 </div></li>
 <li><p><strong>Exercise</strong>: Try extracting <code>b</code> with both <code>html_element()</code> and <code>html_elements()</code>. What’s the difference?</p></li>
 <li><p><strong>Exercise</strong> (from R4DS): Get all of the text from the <code>li</code> element below:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;ul&gt;</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;C-3PO&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt; that weighs &lt;span class='weight'&gt;167 kg&lt;/span&gt;&lt;/li&gt;</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;R4-P17&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt;&lt;/li&gt;</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;R2-D2&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt; that weighs &lt;span class='weight'&gt;96 kg&lt;/span&gt;&lt;/li&gt;</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;Yoda&lt;/b&gt; weighs &lt;span class='weight'&gt;66 kg&lt;/span&gt;&lt;/li&gt;</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;/ul&gt;</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;ul&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;C-3PO&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt; that weighs &lt;span class='weight'&gt;167 kg&lt;/span&gt;&lt;/li&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;R4-P17&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt;&lt;/li&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;R2-D2&lt;/b&gt; is a &lt;i&gt;droid&lt;/i&gt; that weighs &lt;span class='weight'&gt;96 kg&lt;/span&gt;&lt;/li&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;li&gt;&lt;b&gt;Yoda&lt;/b&gt; weighs &lt;span class='weight'&gt;66 kg&lt;/span&gt;&lt;/li&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;/ul&gt;</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p><strong>Exercise</strong> (from R4DS): Extract the name of each droid. Start with the output of the second exercise.</p></li>
 <li><p><strong>Exercise</strong> (from R4DS): Use the class attribute of <code>weight</code> to extract the weight of each droid. Do <strong>not</strong> use <code>span</code>. Start with the output of the second exercise.</p></li>
@@ -598,6 +615,9 @@ This is a <b>simple</b> paragraph.
 <li><p>Suppose we wanted to get the top 100 movies of all time from IMDB. The web page is very unstructured:</p>
 <p><a href="https://www.imdb.com/list/ls055592025/" class="uri">https://www.imdb.com/list/ls055592025/</a></p>
 <p><img src="./cartoons/IMDB_100_1.png" class="img-fluid">&nbsp;</p></li>
+</ul>
+<p>If the above link fails, try: <a href="https://data-science-master.github.io/lectures/08_web_scraping/imdb_100.html" class="uri">https://data-science-master.github.io/lectures/08_web_scraping/imdb_100.html</a>```</p>
+<ul>
 <li><p>If we click on the ranking of the Godfather, the “1” turns green (indicating what we have selected).</p>
 <p><img src="./cartoons/IMDB_100_2.png" class="img-fluid">&nbsp;</p></li>
 <li><p>The “.text-primary” is the selector associated with the “1” we clicked on.</p></li>
@@ -608,17 +628,30 @@ This is a <b>simple</b> paragraph.
 <p><img src="./cartoons/IMDB_100_4.png" class="img-fluid">&nbsp;</p></li>
 <li><p>Only the ranking and the name remain, which are under the selector “.ipc-title-link-wrapper .ipc-title__text–reduced”.</p></li>
 <li><p>It’s important to visually inspect the selected elements throughout the whole HTML file. SelectorGadget doesn’t always get all of what you want, or it sometimes gets too much.</p></li>
-<li><p><strong>Exercise</strong>: What selector can we use to get just the genres of each film, the metacritic score, and the IMDB rating?</p></li>
 </ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Exercise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>What selector can we use to get just the names of each film, the metacritic score, and the IMDB rating?</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Here is what I got:</p>
+<pre><code>".ipc-rating-star--rating , .metacritic-score-label, .ipc-title-link-wrapper .ipc-title__text--reduced"</code></pre>
+</div>
+</div>
+</div>
 </section>
 <section id="chrome-developer-tools" class="level1">
 <h1>Chrome developer tools:</h1>
 <ul>
 <li><p>If you have trouble with SelectorGadget, you can also use the Chrome developer tools.</p></li>
 <li><p>Chrome works best for web scraping (better than Safari/Edge/Firefox/etc). So install it if you don’t have it.</p></li>
-<li><p>Open up the list of selectors with: ⋮ &gt; More tools &gt; Developer tools.</p></li>
+<li><p>Open up the list of all selectors with: ⋮ &gt; More tools &gt; Developer tools.</p></li>
 <li><p>Clicking on the element selector on the top left of the developer tools will show you what selectors are possible with each element.</p>
 <p><img src="./cartoons/IMDB_100_6.png" class="img-fluid">&nbsp;</p></li>
+<li><p>You can also right click on the part of the website you are interested in and then click “Inspect”.</p></li>
+<li><p>In the developer tools, hover over the element you are interested, right click, and then click Copy &gt; Copy selector. This gives you the selector for that element that you can then inspect.</p></li>
 </ul>
 </section>
 <section id="more-rvest" class="level1">
@@ -627,15 +660,16 @@ This is a <b>simple</b> paragraph.
 <li><p>Let’s do a more complicated example of <code>rvest</code>.</p></li>
 <li><p>Use <code>read_html()</code> to save an HTML file to a variable. The variable will be an “<code>xml_document</code>” object</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>html_obj <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.imdb.com/list/ls055592025/"</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>html_obj</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(html_obj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>html_obj <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://www.imdb.com/list/ls055592025/"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>html_obj</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(html_obj)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
-<li><p><a href="https://en.wikipedia.org/wiki/XML">XML</a> stands for “Extensible Markup Language”. It’s a markup language (like HTML and Markdown), useful for representing data. <code>rvest</code> will store the HTML file as an XML.</p></li>
+<li><p>Try <code>read_html_live()</code> if you notice <code>read_html()</code> is not working.</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/XML">XML</a> stands for “Extensible Markup Language”. It’s a markup language (like HTML and Markdown), useful for representing a document. <code>rvest</code> will store the HTML file as an XML.</p></li>
 <li><p>We can use <code>html_elements()</code> and the selectors we found in the previous section to get the elements we want. Insert the found selectors as the <code>css</code> argument.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ranking_elements <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(html_obj, <span class="at">css =</span> <span class="st">".ipc-title-link-wrapper .ipc-title__text--reduced"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_elements)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ranking_elements <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(html_obj, <span class="at">css =</span> <span class="st">".ipc-title-link-wrapper .ipc-title__text--reduced"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_elements)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{xml_nodeset (6)}
 [1] &lt;h3 class="ipc-title__text ipc-title__text--reduced"&gt;1. The Godfather&lt;/h3&gt;
@@ -652,8 +686,8 @@ This is a <b>simple</b> paragraph.
 <li><code>html_text2()</code> just does a little more pre-formatting (like converting line breaks from HTML to R code, removing white spaces, etc). So you should typically use this.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ranking_text <span class="ot">&lt;-</span> <span class="fu">html_text2</span>(ranking_elements)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ranking_text <span class="ot">&lt;-</span> <span class="fu">html_text2</span>(ranking_elements)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ranking_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "1. The Godfather"            "2. The Shawshank Redemption"
 [3] "3. Schindler's List"         "4. Raging Bull"             
@@ -662,44 +696,106 @@ This is a <b>simple</b> paragraph.
 </div></li>
 <li><p>After you do this, you need to tidy the data using your data munging tools.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">text =</span> ranking_text) <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> <span class="st">"text"</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"ranking"</span>, <span class="st">"movie"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>, <span class="at">extra =</span> <span class="st">"merge"</span>) <span class="ot">-&gt;</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>movierank</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">text =</span> ranking_text) <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> <span class="st">"text"</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"ranking"</span>, <span class="st">"movie"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>, <span class="at">extra =</span> <span class="st">"merge"</span>) <span class="ot">-&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>movierank</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>movierank</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 2
+   ranking movie                             
+   &lt;chr&gt;   &lt;chr&gt;                             
+ 1 1       " The Godfather"                  
+ 2 2       " The Shawshank Redemption"       
+ 3 3       " Schindler's List"               
+ 4 4       " Raging Bull"                    
+ 5 5       " Casablanca"                     
+ 6 6       " Citizen Kane"                   
+ 7 7       " Gone with the Wind"             
+ 8 8       " The Wizard of Oz"               
+ 9 9       " One Flew Over the Cuckoo's Nest"
+10 10      " Lawrence of Arabia"             
+# ℹ 90 more rows</code></pre>
+</div>
 </div></li>
-<li><p><strong>Exercise</strong>: Extract the directors and the names of each film. Try to use SelectorGadget to find your own selectors. But I eventually ended up using this selector: <code>".kKeVOw , .ipc-title-link-wrapper .ipc-title__text--reduced"</code></p></li>
 </ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Exercise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Hint</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Extract the directors and the names of each film. Try to use SelectorGadget to find your own selectors.</p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>There are probably multiple ways to do this. But I used <code>".dli-parent"</code> to get get the movies. Then I did two separate calls to <code>html_element()</code> with <code>".ipc-title__text--reduced"</code> to get the titles and <code>".bDNbpf span"</code> to get the directors.</p>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html_obj, <span class="st">".dli-parent"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">".ipc-title__text--reduced"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="ot">-&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  titvec</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html_obj, <span class="st">".dli-parent"</span>)  <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_element</span>(<span class="st">".bDNbpf span"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="ot">-&gt;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  dirvec</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">title =</span> titvec, <span class="at">dir =</span> dirvec) <span class="sc">|&gt;</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> <span class="st">"title"</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"rank"</span>, <span class="st">"title"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dir =</span> <span class="fu">str_extract</span>(<span class="at">string =</span> dir, <span class="at">pattern =</span> <span class="st">"Director.+Stars"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dir =</span> <span class="fu">str_remove</span>(dir, <span class="st">"^Directors*"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dir =</span> <span class="fu">str_remove</span>(dir, <span class="st">"Stars*$"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 3
+   rank  title                              dir                                 
+   &lt;chr&gt; &lt;chr&gt;                              &lt;chr&gt;                               
+ 1 1     " The Godfather"                   Francis Ford Coppola                
+ 2 2     " The Shawshank Redemption"        Frank Darabont                      
+ 3 3     " Schindler's List"                Steven Spielberg                    
+ 4 4     " Raging Bull"                     Martin Scorsese                     
+ 5 5     " Casablanca"                      Michael Curtiz                      
+ 6 6     " Citizen Kane"                    Orson Welles                        
+ 7 7     " Gone with the Wind"              Victor Fleming                      
+ 8 8     " The Wizard of Oz"                Victor FlemingGeorge CukorNorman Ta…
+ 9 9     " One Flew Over the Cuckoo's Nest" Milos Forman                        
+10 10    " Lawrence of Arabia"              David Lean                          
+# ℹ 90 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="a-very-simple-example" class="level1">
 <h1>A very simple example</h1>
 <ul>
 <li><p>Here is a very simple html file that is generated using <code>rvest</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;h1&gt;This is a heading&lt;/h1&gt;</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p id='first'&gt;This is a paragraph&lt;/p&gt;</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p class='important'&gt;This is an important paragraph&lt;/p&gt;</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>html <span class="ot">&lt;-</span> <span class="fu">minimal_html</span>(<span class="st">"</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;h1&gt;This is a heading&lt;/h1&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p id='first'&gt;This is a paragraph&lt;/p&gt;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">  &lt;p class='important'&gt;This is an important paragraph&lt;/p&gt;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>The <code>h1</code> selector selects for <code>h1</code> tags.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"h1"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"h1"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "This is a heading"</code></pre>
 </div>
 </div></li>
 <li><p>The <code>.important</code> selector selects for <code>class</code> attribute that is <code>important</code></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">".important"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">".important"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "This is an important paragraph"</code></pre>
 </div>
 </div></li>
 <li><p>The <code>#first</code> selector selects for <code>id</code> attribute that is <code>first</code></p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"#first"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html, <span class="st">"#first"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "This is a paragraph"</code></pre>
 </div>
@@ -709,46 +805,76 @@ This is a <b>simple</b> paragraph.
 <section id="bigger-example-using-rvest" class="level1">
 <h1>Bigger example using <code>rvest</code></h1>
 <ul>
-<li>Let’s try and get the name, rank, year, metascore for each movie.</li>
+<li><p>You typically use <code>html_elements()</code> and <code>html_element()</code> together. You first use <code>html_elements()</code> to select observations. You then use <code>html_element()</code> to select values of variables from each observation.</p></li>
+<li><p>Let’s try and get the name, rank, year, and metascore for each movie.</p></li>
+<li><p>I played with the developer tools until I saw that</p>
+<ul>
+<li>“.ipc-metadata-list-summary-item” extracts each movie</li>
+<li>“.ipc-title” extracts the title from a movie</li>
+<li>“.metacritic-score-box” extracts the meteascore from a movie</li>
+<li>“.dli-title-metadata-item” extracts the year, runtime, and rating for each movie</li>
+</ul></li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">html_elements</span>(html_obj, <span class="st">".dli-title-metadata-item:nth-child(1) , .hPmOUc, .ipc-title-link-wrapper .ipc-title__text--reduced"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="sc">|&gt;</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">text =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">str_detect</span>(text, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">metascore =</span> <span class="fu">str_detect</span>(text, <span class="st">"Metascore"</span>),</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="sc">!</span>(title <span class="sc">|</span> metascore),</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">rank =</span> <span class="fu">cumsum</span>(title),</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">case_when</span>(</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>      title <span class="sc">~</span> <span class="st">"Title"</span>,</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>      year <span class="sc">~</span> <span class="st">"Year"</span>,</span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>      metascore <span class="sc">~</span> <span class="st">"Metascore"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rank, text, type) <span class="sc">|&gt;</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> type,</span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> text) <span class="sc">|&gt;</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Title =</span> <span class="fu">str_remove</span>(Title, <span class="st">"</span><span class="sc">\\</span><span class="st">d+</span><span class="sc">\\</span><span class="st">."</span>),</span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Metascore =</span> <span class="fu">str_remove</span>(Metascore, <span class="st">"Metascore"</span>),</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">Title =</span> <span class="fu">str_squish</span>(Title),</span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">Year =</span> <span class="fu">parse_integer</span>(Year),</span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">Metascore =</span> <span class="fu">parse_integer</span>(Metascore))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>movie_list <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(html_obj, <span class="st">".ipc-metadata-list-summary-item"</span>) </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(movie_list) <span class="do">## should be 100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 100 × 4
-    rank Title                            Year Metascore
-   &lt;int&gt; &lt;chr&gt;                           &lt;int&gt;     &lt;int&gt;
- 1     1 The Godfather                    1972       100
- 2     2 The Shawshank Redemption         1994        82
- 3     3 Schindler's List                 1993        95
- 4     4 Raging Bull                      1980        90
- 5     5 Casablanca                       1942       100
- 6     6 Citizen Kane                     1941       100
- 7     7 Gone with the Wind               1939        97
- 8     8 The Wizard of Oz                 1939        92
- 9     9 One Flew Over the Cuckoo's Nest  1975        84
-10    10 Lawrence of Arabia               1962       100
+<pre><code>[1] 100</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> movie_list <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".ipc-title"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(),</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">meta =</span> movie_list <span class="sc">|&gt;</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".metacritic-score-box"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>(),</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">year =</span> movie_list <span class="sc">|&gt;</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_element</span>(<span class="st">".dli-title-metadata-item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>()</span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 3
+   title                              meta  year 
+   &lt;chr&gt;                              &lt;chr&gt; &lt;chr&gt;
+ 1 1. The Godfather                   100   1972 
+ 2 2. The Shawshank Redemption        82    1994 
+ 3 3. Schindler's List                95    1993 
+ 4 4. Raging Bull                     90    1980 
+ 5 5. Casablanca                      100   1942 
+ 6 6. Citizen Kane                    100   1941 
+ 7 7. Gone with the Wind              97    1939 
+ 8 8. The Wizard of Oz                92    1939 
+ 9 9. One Flew Over the Cuckoo's Nest 84    1975 
+10 10. Lawrence of Arabia             100   1962 
 # ℹ 90 more rows</code></pre>
+</div>
+</div>
+<p>We could of course clean the <code>title</code> column here into rank and title.</p>
+<p>If we wanted the runtime and rating, we could loop over the movie list that we created and extract out each of the three elements that belong to “.dli-title-metadata-item”</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>year_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">length =</span> <span class="fu">length</span>(movie_list))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>runtime_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">length =</span> <span class="fu">length</span>(movie_list))</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>rating_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="at">length =</span> <span class="fu">length</span>(movie_list))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(movie_list)) {</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  movie_list[i] <span class="sc">|&gt;</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_elements</span>(<span class="st">".dli-title-metadata-item"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html_text2</span>() <span class="ot">-&gt;</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    x</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  year_vec[[i]] <span class="ot">&lt;-</span> x[[<span class="dv">1</span>]]</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  runtime_vec[[i]] <span class="ot">&lt;-</span> x[[<span class="dv">2</span>]]</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  rating_vec[[i]] <span class="ot">&lt;-</span> x[[<span class="dv">3</span>]]</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(year_vec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1972" "1994" "1993" "1980" "1942" "1941"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(runtime_vec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2h 55m" "2h 22m" "3h 15m" "2h 9m"  "1h 42m" "1h 59m"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rating_vec)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "R"  "R"  "R"  "R"  "PG" "PG"</code></pre>
 </div>
 </div>
 </section>
@@ -756,79 +882,106 @@ This is a <b>simple</b> paragraph.
 <h1><code>html_table()</code></h1>
 <ul>
 <li><p>When data is in the form of a table, you can format it more easily with <code>html_table()</code>.</p></li>
-<li><p>The Wikipedia article on hurricanes: <a href="https://en.wikipedia.org/wiki/Atlantic_hurricane_season" class="uri">https://en.wikipedia.org/wiki/Atlantic_hurricane_season</a></p>
+<li><p>The Wikipedia article on hurricanes in 2024: <a href="https://en.wikipedia.org/wiki/2024_Atlantic_hurricane_season" class="uri">https://en.wikipedia.org/wiki/2024_Atlantic_hurricane_season</a></p></li>
+<li><p>If the above link fails, try: <a href="https://data-science-master.github.io/lectures/08_web_scraping/wiki_2.html" class="uri">https://data-science-master.github.io/lectures/08_web_scraping/wiki_2.html</a></p>
 <p>This contains many tables which might be a pain to copy and paste into Excel (and we would be prone to error if we did so). Let’s try to automate this procedure.</p></li>
 <li><p>Save the HTML</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>wikixml <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://en.wikipedia.org/wiki/Atlantic_hurricane_season"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>wikixml <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://en.wikipedia.org/wiki/2024_Atlantic_hurricane_season"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>We’ll extract all of the “table” elements.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>wikidat <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(wikixml, <span class="st">"table"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>wikidat <span class="ot">&lt;-</span> <span class="fu">html_elements</span>(wikixml, <span class="st">"table"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Use <code>html_table()</code> to get a list of tables from table elements:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tablist <span class="ot">&lt;-</span> <span class="fu">html_table</span>(wikidat)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tablist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>tablist <span class="ot">&lt;-</span> <span class="fu">html_table</span>(wikidat)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(tablist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "list"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(tablist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(tablist)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 20</code></pre>
+<pre><code>[1] 27</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tablist[[<span class="dv">19</span>]] <span class="sc">|&gt;</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>tablist[[<span class="dv">3</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 11 × 4
-   Year  Map     `Number oftropical cyclones` `Number oftropical storms`
-   &lt;chr&gt; &lt;chr&gt;                          &lt;int&gt;                      &lt;int&gt;
- 1 2010  ""                                21                         19
- 2 2011  ""                                20                         19
- 3 2012  ""                                19                         19
- 4 2013  ""                                15                         14
- 5 2014  ""                                 9                          8
- 6 2015  ""                                12                         11
- 7 2016  ""                                16                         15
- 8 2017  ""                                18                         17
- 9 2018  ""                                16                         15
-10 2019  ""                                18                         16
-11 Total "Total"                          164                        153</code></pre>
+<pre><code># A tibble: 10 × 3
+    Rank Cost               Season
+   &lt;int&gt; &lt;chr&gt;               &lt;int&gt;
+ 1     1 ≥ $294.803 billion   2017
+ 2     2 $172.297 billion     2005
+ 3     3 $130.438 billion     2024
+ 4     4 $117.708 billion     2022
+ 5     5 ≥ $80.827 billion    2021
+ 6     6 $72.341 billion      2012
+ 7     7 $61.148 billion      2004
+ 8     8 $54.336 billion      2020
+ 9     9 ≥ $50.526 billion    2018
+10    10 ≥ $48.855 billion    2008</code></pre>
 </div>
 </div></li>
 <li><p>You can clean up, bind, or merge these tables after you have read them in.</p></li>
-<li><p><strong>Exercise</strong>: The Wikipedia page on the oldest mosques in the world has many tables.</p>
-<p><a href="https://en.wikipedia.org/wiki/List_of_the_oldest_mosques" class="uri">https://en.wikipedia.org/wiki/List_of_the_oldest_mosques</a></p>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Exercise</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Hint</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>The Wikipedia page on the oldest mosques in the world has many tables: <a href="https://en.wikipedia.org/wiki/List_of_the_oldest_mosques" class="uri">https://en.wikipedia.org/wiki/List_of_the_oldest_mosques</a></p>
+<p>If the above link fails, try: <a href="https://data-science-master.github.io/lectures/08_web_scraping/mosque_2.html" class="uri">https://data-science-master.github.io/lectures/08_web_scraping/mosque_2.html</a></p>
 <ol type="1">
 <li>Use <code>rvest</code> to read these tables into R.</li>
-<li>Use <code>rvest</code> and SelectorGadget to extract out the category for the table (mentioned in Quran, in northeast Africa, etc).</li>
 <li>Merge the data frames together. You only need to keep the building name, the country, and the time it was first build.</li>
 </ol>
-<p><em>Hint</em>: It’s easier if you use a css selector of <code>"table.wikitable"</code> to get the table rather than just <code>"table"</code>. I found this out by getting to the developer tools in Chrome with CTRL + Shift + I then playing around with the tables.</p>
-<p>The first 15 rows should look like this:</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 15 × 4
-   Building                 Country      fb    category              
-   &lt;chr&gt;                    &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt;                 
- 1 Al-Haram Mosque          Saudi Arabia &lt;NA&gt;  Mentioned in the Quran
- 2 Al-Aqsa Mosque           Palestine    &lt;NA&gt;  Mentioned in the Quran
- 3 The Sacred Monument      Saudi Arabia &lt;NA&gt;  Mentioned in the Quran
- 4 Quba Mosque              Saudi Arabia 622   Mentioned in the Quran
- 5 Mosque of the Companions Eritrea      610   Northeast Africa      
- 6 Negash Āmedīn Mesgīd     Ethiopia     620   Northeast Africa      
- 7 Masjid al-Qiblatayn      Somalia      620   Northeast Africa      
- 8 Korijib Masjid           Djibouti     630   Northeast Africa      
- 9 Mosque of Amr ibn al-As  Egypt        641   Northeast Africa      
-10 Mosque of Ibn Tulun      Egypt        879   Northeast Africa      
-11 Al-Hakim Mosque          Egypt        928   Northeast Africa      
-12 Al-Azhar Mosque          Egypt        972   Northeast Africa      
-13 Arba'a Rukun Mosque      Somalia      1268  Northeast Africa      
-14 Fakr ad-Din Mosque       Somalia      1269  Northeast Africa      
-15 Great Mosque of Kairouan Tunisia      670   Northwest Africa      </code></pre>
 </div>
-</div></li>
-</ul>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>It’s easier if you use a css selector of <code>"table.wikitable"</code> with <code>html_elements()</code> first to get the table rather than just <code>"table"</code>. I found this out by getting to the developer tools in Chrome with CTRL + Shift + I then playing around with the tables.</p>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>mosque <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://data-science-master.github.io/lectures/05_web_scraping/mosque.html"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>mosque <span class="sc">|&gt;</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"h3"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text2</span>() <span class="ot">-&gt;</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>  catvec</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>catvec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Mentioned in Quran"</span>, catvec)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>mosque <span class="sc">|&gt;</span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_elements</span>(<span class="st">"table.wikitable"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() <span class="ot">-&gt;</span></span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>  tablist</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Errors if you try bind_rows() because some are integers and some are characters</span></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(tablist)) {</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">any</span>(<span class="fu">names</span>(tablist[[i]]) <span class="sc">==</span> <span class="st">"First built"</span>)) {</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(tablist[[i]])[<span class="fu">names</span>(tablist[[i]]) <span class="sc">==</span> <span class="st">"First built"</span>] <span class="ot">&lt;-</span> <span class="st">"date"</span></span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>    tablist[[i]]<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">str_remove_all</span>(tablist[[i]]<span class="sc">$</span>date, <span class="st">"</span><span class="sc">\\</span><span class="st">[.*</span><span class="sc">\\</span><span class="st">]"</span>)</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a>tb <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tablist)</span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true" tabindex="-1"></a>tb <span class="sc">|&gt;</span></span>
+<span id="cb61-20"><a href="#cb61-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Building, Location, Country, date, Notes, Tradition)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 176 × 6
+   Building                               Location Country date  Notes Tradition
+   &lt;chr&gt;                                  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    
+ 1 Al-Haram Mosque                        Mecca    Saudi … Unkn… "Al-…  &lt;NA&gt;    
+ 2 Haram al-Sharif, also known as the Al… Jerusal… Palest… Cons… "Al-…  &lt;NA&gt;    
+ 3 The Sacred Monument                    Muzdali… Saudi … Unkn… "Al-…  &lt;NA&gt;    
+ 4 Quba Mosque                            Medina   Saudi … 622   "The…  &lt;NA&gt;    
+ 5 Mosque of the Companions               Massawa  Eritrea 620s… "Bel… ""       
+ 6 Al Nejashi Mosque                      Negash   Ethiop… 7th … "By … ""       
+ 7 Mosque of Amr ibn al-As                Cairo    Egypt   641   "Nam… ""       
+ 8 Mosque of Ibn Tulun                    Cairo    Egypt   879   ""    ""       
+ 9 Al-Azhar Mosque                        Cairo    Egypt   972   ""    "Sunni"  
+10 Arba'a Rukun Mosque                    Mogadis… Somalia 1268… ""    "Sunni"  
+# ℹ 166 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 </section>
@@ -898,13 +1051,14 @@ This is a <b>simple</b> paragraph.
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
