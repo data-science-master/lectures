@@ -35,6 +35,9 @@ title: "DATA 413/613 Data Science"
   - [05 APIs](./05_web_scraping/05_apis.qmd).
     - [OAuth2 Example with Eventbrite](./05_web_scraping/05_eventbrite.qmd).
   - [05 Web Scraping](./05_web_scraping/05_web_scraping.qmd).
+    - [IMDB](./05_web_scraping/imdb_100_3.html).
+    - [Hurricanes](./05_web_scraping/wiki_2.html).
+    - [Mosques](./05_web_scraping/mosque_2.html).
   - [05 Lab](https://github.com/data-science-master/lab_08).
 - 06 Introduction to Python
     - [06 Python Setup and Reticulate](./06_python/06_python_setup.qmd).
