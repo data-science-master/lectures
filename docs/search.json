@@ -1502,7 +1502,7 @@
     "href": "10_llms/10_llama.html",
     "title": "Free Models",
     "section": "",
-    "text": "Learning Objectives\n\nUse weights from free models on your local machine.\nOllama: https://ollama.com/\nEllmer and ollama: https://ellmer.tidyverse.org/reference/chat_ollama.html\nrollama: https://cran.r-project.org/package=rollama\n\n\n\nMotivation\n\nWhy free?\n\nDon’t have to pay.\nExtra privacy.\n\nWhy not free\n\nGenerally worse performance\n\n\n\n\nUse free models in R"
+    "text": "Use weights from free models on your local machine.\nOllama: https://ollama.com/\nHuggingface: https://huggingface.co/\nrollama: https://jbgruber.github.io/rollama/\n\n\nlibrary(tidyverse)\nlibrary(rollama)"
   },
   {
     "objectID": "10_llms/10_ellmer.html",
@@ -1510,5 +1510,19 @@
     "title": "LLM APIs",
     "section": "",
     "text": "Learning Objectives\n\nInterface with an LLM API via ellmer\nhttps://ellmer.tidyverse.org/\nInclude API interface and output in a Shiny app."
+  },
+  {
+    "objectID": "16_maps/16_maps.html",
+    "href": "16_maps/16_maps.html",
+    "title": "Simple Features and Graphing Maps",
+    "section": "",
+    "text": "Learning Objectives\n\nUnderstand the concept and utility of spatial data visualization in R.\nGet acquainted with the basic functions and data types in the {sf} package.\nCreate simple maps using the {sf} package.\nSimple Features\n\nhttps://r-spatial.github.io/sf/articles/\n\nMap Plotting\n\nhttps://ggplot2.tidyverse.org/reference/ggsf.html\n\n\n\n\nMotivation\n\nFor some reason, people are really impressed with data visualizations that include maps (e.g. of D.C., the U.S., the Earth, etc).\nLet’s go over how to build simple map visualizations in R.\nFor this lecture, we will try to visualize the 2020 presidential election elections from (https://github.com/TheUpshot/presidential-precinct-map-2020).\n\n\n\nIntroduction to Simple Features in R\n\nThe sf package, implements the “simple features” standard, making it easier to manipulate geographical data in R.\n\nlibrary(sf)\n\nLinking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE"
+  },
+  {
+    "objectID": "10_llms/10_llama.html#common-tasks-for-llms",
+    "href": "10_llms/10_llama.html#common-tasks-for-llms",
+    "title": "Free Models",
+    "section": "Common Tasks for LLM’s",
+    "text": "Common Tasks for LLM’s\n\nThere are different models that are appropriate for different tasks\nThe list of models: https://ollama.com/search\nFrom Hugging Face: https://huggingface.co/models?library=gguf\nGeneral Chat:\n\nTuned for: Conversations, questions, answers\nExample Use-case: Creating a chat bot inside a shiny app.\nExample model: llama3.1\n\nInstruct models:\n\nTuned for: completing a specific task\nExample Use-case: Classifying text based on a number of categories.\nExample model:\n\nEmbedding:\n\nConverting text into some a vector of features. To be used in later machine learning tasks.\nExample Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).\nExample model:"
   }
 ]

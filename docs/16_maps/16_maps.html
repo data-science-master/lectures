@@ -9,7 +9,7 @@
 <meta name="author" content="David Gerard">
 <meta name="dcterms.date" content="2025-10-03">
 
-<title>Free Models – DATA 413/613 Data Science</title>
+<title>Simple Features and Graphing Maps – DATA 413/613 Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -322,10 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives">Learning Objectives</a></li>
   <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
-  <li><a href="#use-free-models-in-r" id="toc-use-free-models-in-r" class="nav-link" data-scroll-target="#use-free-models-in-r">Use free models in R</a>
-  <ul class="collapse">
-  <li><a href="#common-tasks-for-llms" id="toc-common-tasks-for-llms" class="nav-link" data-scroll-target="#common-tasks-for-llms">Common Tasks for LLM’s</a></li>
-  </ul></li>
+  <li><a href="#introduction-to-simple-features-in-r" id="toc-introduction-to-simple-features-in-r" class="nav-link" data-scroll-target="#introduction-to-simple-features-in-r">Introduction to Simple Features in R</a></li>
   </ul>
 </nav>
     </div>
@@ -335,7 +332,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Free Models</h1>
+<h1 class="title">Simple Features and Graphing Maps</h1>
 </div>
 
 
@@ -367,364 +364,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="learning-objectives" class="level1">
 <h1>Learning Objectives</h1>
 <ul>
-<li>Use weights from free models on your local machine.</li>
-<li>Ollama: <a href="https://ollama.com/" class="uri">https://ollama.com/</a></li>
-<li>Huggingface: <a href="https://huggingface.co/" class="uri">https://huggingface.co/</a></li>
-<li>rollama: <a href="https://jbgruber.github.io/rollama/" class="uri">https://jbgruber.github.io/rollama/</a></li>
+<li>Understand the concept and utility of spatial data visualization in R.</li>
+<li>Get acquainted with the basic functions and data types in the <code>{sf}</code> package.</li>
+<li>Create simple maps using the <code>{sf}</code> package.</li>
+<li>Simple Features
+<ul>
+<li><a href="https://r-spatial.github.io/sf/articles/" class="uri">https://r-spatial.github.io/sf/articles/</a></li>
+</ul></li>
+<li>Map Plotting
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="uri">https://ggplot2.tidyverse.org/reference/ggsf.html</a></li>
+</ul></li>
 </ul>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rollama)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="motivation" class="level1">
 <h1>Motivation</h1>
 <ul>
-<li>Why free?
-<ul>
-<li>Don’t have to pay.</li>
-<li>Extra privacy.</li>
-</ul></li>
-<li>Why not free
-<ul>
-<li>Generally worse performance</li>
-</ul></li>
+<li><p>For some reason, people are really impressed with data visualizations that include maps (e.g.&nbsp;of D.C., the U.S., the Earth, etc).</p></li>
+<li><p>Let’s go over how to build simple map visualizations in R.</p></li>
+<li><p>For this lecture, we will try to visualize the 2020 presidential election elections from (<a href="https://github.com/TheUpshot/presidential-precinct-map-2020" class="uri">https://github.com/TheUpshot/presidential-precinct-map-2020</a>).</p></li>
 </ul>
 </section>
-<section id="use-free-models-in-r" class="level1">
-<h1>Use free models in R</h1>
+<section id="introduction-to-simple-features-in-r" class="level1">
+<h1>Introduction to Simple Features in R</h1>
 <ul>
-<li><p>The Ollama server is an awesome resource to use local models on your machine.</p></li>
-<li><p>Install the server outside of R here: <a href="https://ollama.com/" class="uri">https://ollama.com/</a></p></li>
-<li><p>Then install the <code>{rollama}</code> R package</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rollama"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rollama)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div></li>
-<li><p><code>llama3.1</code> is about 4.9 GB. <strong>If you don’t have this storage on your computer, then skip this lesson.</strong></p></li>
-<li><p>These get big fast: <code>llama4</code> is about 67 GB.</p></li>
-<li><p>You need to install some models, you do this with <code>rollama::pull_model()</code></p>
-<ul>
-<li>This downloads models from the ollama website: <a href="https://ollama.com/search" class="uri">https://ollama.com/search</a></li>
-</ul></li>
-<li><p>The default (as of 10/03/2025) is llama3.1</p></li>
-<li><p>You can also download models from Hugging Face: <a href="https://huggingface.co/" class="uri">https://huggingface.co/</a></p></li>
-<li><p>Not all models can be run on Ollama. These are the list of ones than can be:</p>
-<ul>
-<li><a href="https://huggingface.co/models?library=gguf" class="uri">https://huggingface.co/models?library=gguf</a></li>
-</ul></li>
-<li><p>Note that large language models are, err, large. You have to have a lot of storage and ram to run them.</p></li>
-<li><p>You have single, unconnected prompts with <code>query()</code></p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"How many days are in a year?"</span>, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">31</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<li><p>The <code>sf</code> package, implements the “simple features” standard, making it easier to manipulate geographical data in R.</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>There are 365 days in a non-leap year and 366 days in a leap year. Leap years
-occur every 4 years.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Why"</span>, </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">31</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>It seems like you're asking a question that starts with "why," but I'm not sure
-what the specific topic or subject is. Could you please provide more context or
-clarify your question so I can better understand and provide an accurate
-response?</code></pre>
+<pre><code>Linking to GEOS 3.13.0, GDAL 3.8.5, PROJ 9.5.1; sf_use_s2() is TRUE</code></pre>
 </div>
 </div></li>
-<li><p>You can create a chat, which treats all text sent to it during the same R session as part of the same chat</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chat</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"How many days are in a year?"</span>, </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">31</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>There are 365 days in a non-leap year and 366 days in a leap year. Leap years
-occur every 4 years.</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chat</span>(</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Why?"</span>, </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>,</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">31</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The reason there are 365 days in a non-leap year is because it takes the Earth
-approximately 365.24 days to orbit the Sun once, which is called a solar year.
-This is known as a tropical year.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>To account for this extra fraction of a day, an extra day is added to the
-calendar every four years, making it a leap year with 366 days. This extra day
-is added to the month of February, making it a 29-day month instead of the
-usual 28 days in non-leap years.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The reason we don't add an extra day every year is that if we did, our calendar
-would quickly become out of sync with the Earth's orbit around the Sun. By
-adding an extra day only every four years, we ensure that our calendar stays
-aligned with the solar year to within one day over a period of about 3,300
-years.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>This system was introduced by Julius Caesar in 45 BCE as part of the Julian
-calendar, and it has been refined over time to become the Gregorian calendar
-used internationally today.</code></pre>
-</div>
-</div></li>
-<li><p>You might have noticed that I am using the <code>model_parameters</code> argument. This is a list with possible named values here: <a href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values" class="uri">https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values</a></p></li>
-<li><p>The most common arguments are <code>seed</code> and <code>temperature</code>.</p></li>
-<li><p>The seed makes sure you get the same response when the seed and query are both the same</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">292</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">292</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">13</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Groan away! Do you want another one?</code></pre>
-</div>
-</div></li>
-<li><p>The temperature increases the variability of the response. E.g., we get the same joke at many seeds at the default temperature</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">101</span>)</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">14</span>)</span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
-</div>
-</div></li>
-<li><p>We can increase the temperature to get more varied responses</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>, </span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">seed =</span> <span class="dv">101</span>, <span class="at">temperature =</span> <span class="dv">100</span>)</span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Here's one:</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Your turn to groan! Do you want another?</code></pre>
-</div>
-</div></li>
-<li><p>Higher temperature is more creative, lower is more coherent.</p></li>
-<li><p>Temperature = 0 means that the model is no longer random. Only the most likely response (according to the model) is given.</p></li>
-<li><p>E.g., setting the temperature to 0 deterministically tells us llama3.1’s opinion on the best college football team of all time.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"What is the best college football team of all time?                                   Give me the name of the college, no yapping, and it better be Ohio State."</span>, </span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">model =</span> <span class="st">"llama3.1"</span>,</span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">model_params =</span> <span class="fu">list</span>(<span class="at">temperature =</span> <span class="dv">0</span>)</span>
-<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code></code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Ohio State</code></pre>
-</div>
-</div></li>
-</ul>
-<section id="common-tasks-for-llms" class="level2">
-<h2 class="anchored" data-anchor-id="common-tasks-for-llms">Common Tasks for LLM’s</h2>
-<ul>
-<li><p>There are different models that are appropriate for different tasks</p></li>
-<li><p>The list of models: <a href="https://ollama.com/search" class="uri">https://ollama.com/search</a></p></li>
-<li><p>From Hugging Face: <a href="https://huggingface.co/models?library=gguf" class="uri">https://huggingface.co/models?library=gguf</a></p></li>
-<li><p>General Chat:</p>
-<ul>
-<li>Tuned for: Conversations, questions, answers</li>
-<li>Example Use-case: Creating a chat bot inside a shiny app.</li>
-<li>Example model: llama3.1</li>
-</ul></li>
-<li><p>Instruct models:</p>
-<ul>
-<li>Tuned for: completing a specific task</li>
-<li>Example Use-case: Classifying text based on a number of categories.</li>
-<li>Example model:</li>
-</ul></li>
-<li><p>Embedding:</p>
-<ul>
-<li>Converting text into some a vector of features. To be used in later machine learning tasks.</li>
-<li>Example Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).</li>
-<li>Example model:</li>
-</ul></li>
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

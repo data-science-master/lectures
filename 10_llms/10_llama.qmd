@@ -10,8 +10,15 @@ format: html
 
 - Use weights from free models on your local machine.
 - Ollama: <https://ollama.com/>
-- Ellmer and ollama: <https://ellmer.tidyverse.org/reference/chat_ollama.html>
-- rollama: <https://cran.r-project.org/package=rollama>
+- Huggingface: <https://huggingface.co/>
+- rollama: <https://jbgruber.github.io/rollama/>
+
+```{r}
+#| message: false
+library(tidyverse)
+library(rollama)
+```
+
 
 # Motivation
 
@@ -22,3 +29,145 @@ format: html
   - Generally worse performance
 
 # Use free models in R
+
+- The Ollama server is an awesome resource to use local models on your machine.
+
+- Install the server outside of R here: <https://ollama.com/>
+
+-   Then install the `{rollama}` R package
+    
+    ``` r
+    install.packages("rollama")
+    ```
+    
+    ```{r}
+    library(rollama)
+    ```
+    
+- `llama3.1` is about 4.9 GB. **If you don't have this storage on your computer, then skip this lesson.**
+
+- These get big fast: `llama4` is about 67 GB.
+
+- You need to install some models, you do this with `rollama::pull_model()`
+  - This downloads models from the ollama website: <https://ollama.com/search>
+
+
+- The default (as of 10/03/2025) is llama3.1
+
+- You can also download models from Hugging Face: <https://huggingface.co/>
+
+- Not all models can be run on Ollama. These are the list of ones than can be:
+  - <https://huggingface.co/models?library=gguf>
+
+- Note that large language models are, err, large. You have to have a lot of storage and ram to run them. 
+
+-   You have single, unconnected prompts with `query()`
+    ```{r}
+    query(
+      q = "How many days are in a year?", 
+      model = "llama3.1", 
+      model_params = list(seed = 31)
+      )
+    query(
+      q = "Why", 
+      model = "llama3.1",
+      model_params = list(seed = 31)
+      )
+    ```
+
+-   You can create a chat, which treats all text sent to it during the same R session as part of the same chat
+    ```{r}
+    chat(
+      q = "How many days are in a year?", 
+      model = "llama3.1",
+      model_params = list(seed = 31)
+      )
+    chat(
+      q = "Why?", 
+      model = "llama3.1",
+      model_params = list(seed = 31)
+      )
+    ```
+
+- You might have noticed that I am using the `model_parameters` argument. This is a list with possible named values here: <https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values>
+
+- The most common arguments are `seed` and `temperature`.
+
+-   The seed makes sure you get the same response when the seed and query are both the same
+
+    ```{r}
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 292)
+      )
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 292)
+      )
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 13)
+      )
+    ```
+
+-   The temperature increases the variability of the response. E.g., we get the same joke at many seeds at the default temperature
+
+    ```{r}
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 101)
+      )
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 14)
+      )
+    ```
+-   We can increase the temperature to get more varied responses
+    ```{r}
+    query(
+      q = "Tell me a dad joke.", 
+      model = "llama3.1", 
+      model_params = list(seed = 101, temperature = 100)
+      )
+    ```
+
+- Higher temperature is more creative, lower is more coherent.
+
+-   Temperature = 0 means that the model is no longer random. Only the most likely response (according to the model) is given.
+
+-   E.g., setting the temperature to 0 deterministically tells us llama3.1's opinion on the best college football team of all time.
+
+    ```{r}
+    query(
+      q = "What is the best college football team of all time?                                   Give me the name of the college, no yapping, and it better be Ohio State.", 
+      model = "llama3.1",
+      model_params = list(temperature = 0)
+    )
+    ```
+
+## Common Tasks for LLM's
+
+- There are different models that are appropriate for different tasks
+
+- The list of models: <https://ollama.com/search>
+- From Hugging Face: <https://huggingface.co/models?library=gguf>
+
+- General Chat: 
+  - Tuned for: Conversations, questions, answers
+  - Example Use-case: Creating a chat bot inside a shiny app.
+  - Example model: llama3.1
+
+- Instruct models:
+  - Tuned for: completing a specific task
+  - Example Use-case: Classifying text based on a number of categories.
+  - Example model:
+
+- Embedding:
+  - Converting text into some a vector of features. To be used in later machine learning tasks.
+  - Example Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).
+  - Example model: 
