@@ -152,22 +152,35 @@ library(rollama)
 
 ## Common Tasks for LLM's
 
-- There are different models that are appropriate for different tasks
+- Unless you go on to get your PhD, you will probably be users of LLMs, not trainers of LLMs.
+
+- As a user, you there are tons of models that are available for out-of-the-box use.
+
+- Different models are more appropriate for different tasks
 
 - The list of models: <https://ollama.com/search>
 - From Hugging Face: <https://huggingface.co/models?library=gguf>
+
+- Here are some use cases for LLMs
 
 - General Chat: 
   - Tuned for: Conversations, questions, answers
   - Example Use-case: Creating a chat bot inside a shiny app.
   - Example model: llama3.1
 
-- Instruct models:
-  - Tuned for: completing a specific task
-  - Example Use-case: Classifying text based on a number of categories.
-  - Example model:
-
 - Embedding:
   - Converting text into some a vector of features. To be used in later machine learning tasks.
   - Example Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).
   - Example model: 
+
+- Sentiment Analysis:
+  - Convert a piece of text into three scores: A "positive" score, a "neutral" score, and a "negative" score.
+  - You use [structured outputs](https://ollama.com/blog/structured-outputs) to do this.
+  
+- Text Classification
+  - Classify a piece of text into different categories, like "sports" or "politics".
+  - You use [structured outputs](https://ollama.com/blog/structured-outputs) to do this.
+
+  
+
+

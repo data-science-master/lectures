@@ -60,6 +60,8 @@ title: "DATA 413/613 Data Science"
     - [09 File Uploads](./09_shiny/09_upload.qmd).
     - [09 Shiny Lab 1: World Bank Data](https://github.com/data-science-master/lab_06_1).
     - [09 Shiny Lab 2: Cereals Data](https://github.com/data-science-master/lab_06_2).
+- 10 Text Data
+  
 
 # Extra Lectures
     

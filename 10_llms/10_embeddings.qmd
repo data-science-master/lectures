@@ -6,13 +6,80 @@ author: "David Gerard"
 # Learning Objectives
 
 - Convert text data to embeddings for use in standard ML models.
+- [3blue1brown course](https://youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi&si=1KZluaz8FmWIITDW)
+- <https://www.sbert.net/>
+- <https://huggingface.co/models?library=sentence-transformers>
 - <https://ollama.com/blog/embedding-models>
+- <https://vickiboykis.com/what_are_embeddings/>
 
 # What are embeddings?
 
 # Use case for embedding models
 
+- Semantic textual similarity, 
+
+- Semantic search
+
+- Clustering
+
+- Classification
+
+- Paraphrase Mining,
+
 # Generating embeddings
+
+-   I think the easiest way to generate embeddings is with the `SentenceTransformers` python package.
+
+-   If you are using the `{reticulate}` package, you can set this up with:
+    ```{r}
+    library(reticulate)
+    ```
+    
+    ``` r
+    conda_create(envname = "embed", packages = c("sentence-transformers", "pandas", "seaborn", "scikit-learn"))
+    ```
+
+    ```{r}
+    use_condaenv(condaenv = "embed")
+    ```
+
+-   We first load `SentenceTransformer`
+    ```{python}
+    from sentence_transformers import SentenceTransformer
+    import numpy as np
+    ```
+
+- We choose the embedding model, and download it from huggingface. 
+  - Possible choices are here: <https://huggingface.co/models?library=sentence-transformers>
+
+-   If you have done the authentication, then you can try out [Google's model](https://huggingface.co/google/embeddinggemma-300m):
+    ```{python}
+    model = SentenceTransformer("google/embeddinggemma-300m")
+    ```
+
+-   If not, then you can try out a [free one](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2):
+    ``` python
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    ```
+
+```{python}
+# Run inference with queries and documents
+query = "Which planet is known as the Red Planet?"
+documents = [
+    "Venus is often called Earth's twin because of its similar size and proximity.",
+    "Mars, known for its reddish appearance, is often referred to as the Red Planet.",
+    "Jupiter, the largest planet in our solar system, has a prominent red spot.",
+    "Saturn, famous for its rings, is sometimes mistaken for the Red Planet."
+]
+query_embeddings = model.encode_query(query)
+query_embeddings2 = model.encode(query)
+document_embeddings = model.encode_document(documents)
+
+# Compute similarities to determine a ranking
+similarities = model.similarity(query_embeddings, document_embeddings)
+similarities
+```
+
 
 # Practical example
 

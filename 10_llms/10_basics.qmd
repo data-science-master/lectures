@@ -1,0 +1,214 @@
+---
+title: "LLM Basics"
+author: "David Gerard"
+---
+
+- [3Blue1Brown LLM Explainer](https://youtu.be/LPZh9BOjkQs?si=EWHkqjz6gJT2K81P)
+- [3Blue1Brown Trasnformer](https://youtu.be/wjZofJX0v4M?si=NsJuJISbbOjUUOkg)
+- [Hugging Face Model Search](https://huggingface.co/tasks)
+
+# Authorization
+
+- We will use [Hugging Face](https://huggingface.co) to use pretrained models to generate embeddings.
+
+- Create an account: <https://huggingface.co/join>
+
+- Install the Hugging Face CLI: <https://huggingface.co/docs/huggingface_hub/installation#install-the-hugging-face-cli>
+
+-   Mac Users:
+    ``` bash
+    brew install huggingface-cli
+    ```
+
+-   Windows Users: User the [PowerShell](https://en.wikipedia.org/wiki/PowerShell) (**not** git bash for windows) and run
+    ``` bash
+    powershell -ExecutionPolicy ByPass -c "irm https://hf.co/cli/install.ps1 | iex"
+    ```
+
+- Generate a write-access token at: <https://huggingface.co/settings/tokens>
+
+-   In the terminal on Mac or the PowerShell Terminal on Windows, run
+    ``` bash
+    hf auth login
+    ```
+
+- Copy the token and paste it into the terminal when prompted.
+
+- You are good to go.
+
+# Set up
+
+-   Let's use `{reticulate}`
+
+    ```{r}
+    library(reticulate)
+    ```
+
+
+-   You can set up an appropriate environment called "embed" by doing this once per computer
+
+    ``` r
+    conda_create(envname = "embed", packages = c("sentence-transformers", "pandas", "seaborn", "scikit-learn", "transformers", "torch"))
+    ```
+
+-   When you want to use that environment, just run (once per session):
+    ```{r}
+    use_condaenv(condaenv = "embed")
+    ```
+
+# How LLM's work
+
+- The steps are roughly as follows:
+  1. Tokenization
+  2. Embeddings
+  3. Transformer Neural Network
+  4. Sample next token
+  5. Repeat 1--4
+
+##  Tokenization: 
+    
+- The input text is split into tokens using a tokenizer. 
+
+- Tokens are subwords or word pieces.
+
+- Models always list the "context length" in terms of tokens. This is the maximum number of tokens the model can handle. 
+  - If you insert too much text, the model truncates earlier text.
+  - So the model "forgets" if you have longer text than the maximum token length.
+
+- [GPT-5](https://platform.openai.com/docs/models/gpt-5) API has a maximum context length of 400,000 tokens (this includes input and output).
+  - Roughly [100 tokens is 75 words](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them)
+  - So this is roughly 300,000 words
+  - So it cannot yet take as input the entirety of War and Peace (587,287 words), but it can handle the first Twilight Novel (118,975 words) [source](https://capitalizemytitle.com/famous-book-series-and-novel-word-counts/).
+
+-   Let's play with some tokens. We will use the [google/gemma-3-1b-it](https://huggingface.co/google/gemma-3-1b-it) model.
+
+    ```{python}
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    import torch
+    import torch.nn.functional as F
+    
+    model_name = "google/gemma-3-1b-it"
+    ```
+
+-   You can access the tokenizer the model uses via the `AutoTokenizer.from_pretrained()` function
+    ```{python}
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    ```
+
+-   Now, let's tokenize some text with `tokenizer.tokenize()`
+
+    ```{python}
+    tokenizer.tokenize("Once upon a time, a very long time ago now, about last Friday")
+    ```
+    
+- The `_` indiciates that the token is the start of a new word, not a continuation of a word. 
+
+-   E.g., "imagination" is two tokens:
+    ```{python}
+    tokenizer.tokenize("Imagination")
+    ```
+
+-   If it sees a strange work, it does its best
+
+    ```{python}
+    tokenizer.tokenize("Heffalump")
+    ```
+
+-   **Exercise**: Try to guess the tokens of this sentence
+    ```{python}
+    #| eval: false
+    tokenizer.tokenize("Gaiety, song-and-dance. Here we go round the mulberry bush.")
+    ```
+    
+-   **Exercise**: Generate some tokens of some works. Are you surprised by any of them?
+    ```{python}
+    #| echo: false
+    #| eval: false
+    tokenizer.tokenize("Paleolithic")
+    tokenizer.tokenize("Sesquipedalian")
+    tokenizer.tokenize("Not all that glitters is gold.")
+    ```
+
+##  Embedding:
+
+- Each token is mapped to a vector using an embedding layer. 
+
+- This converts discrete tokens into continuous representations that the model can process.
+
+- The idea is that "cat" might be closer (via some distance metric) to "dog" than it is to "stapler". 
+  - Each of those tokens live in a super high dimensional space.
+  - Embedding dimension sizes can be [4096 or higher](https://vickiboykis.com/2025/09/01/how-big-are-our-embeddings-now-and-why/).
+
+- Embeddings are useful in their own right. They can be used as inputs to **many** machine learning tasks that use natural language:
+  - Cluster X posts into different categories.
+  - Use descriptions of user ratings as inputs into a machine learning model to predict if someone will buy a product.
+  - Inside a document, find the sentence which is most similar to a query.
+  
+- In those applications, you pool the embeddings from the tokens into a single embedding for the text. 
+  
+- Typically, though, you use models that were designed where the embeddings are the goal. 
+  - Even though LLMs use embeddings, those are sometimes not the best for applications that use embeddings.
+  - <https://huggingface.co/models?library=sentence-transformers>
+  
+-   Let's see the embeddings for some tokens. 
+    - Don't worry about the exact code. Folks don't do thism so it's a little wonky.
+    ```{python}
+    model = AutoModelForCausalLM.from_pretrained(model_name)
+    text = "Once upon a time, a very long time ago now,"
+    input_ids = tokenizer(text, return_tensors = "pt").input_ids
+    embedding_layer = model.get_input_embeddings()
+    token_embeddings = embedding_layer(input_ids)
+    token_embeddings[0,0]
+    token_embeddings[0,1]
+    ```
+
+- The object is a `tensor`, a multidimensional array from [torch](https://docs.pytorch.org/docs/stable/tensors.html).
+  - Vectors or lists of numbers
+  - Matrices are rectangles of numbers.
+  - Tensors are blocks (or hyperblocks) of numbers.
+
+## Neural Network:
+
+- These embeddings are passed through a black-box neural network.
+
+- The specific form of the neural network is very important for how they work.
+
+- It is not important for applying these methods.
+
+- You need a PhD in order for this process to matter to you, or for you to have any effect on it.
+
+- AU has a [super computer](https://www.american.edu/cas/hpc/), but it is definitely not able to train any of the state-of-the-art LLMs that folks are putting out there.
+
+## Sample
+
+- The black box provides a probability distribution of tokens.
+
+- The next token is sampled from this probability distribution.
+
+
+```{python}
+#| eval: false
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+import torch.nn.functional as F
+
+model_name = "google/gemma-3-1b-it"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+model.eval()
+
+input_text = "The cat sat on the mat."
+input_ids = tokenizer.encode(input_text, return_tensors="pt")
+
+with torch.no_grad():
+    outputs = model(input_ids)
+    logits = outputs.logits
+
+next_token_logits = logits[0, -1, :]
+probs = F.softmax(next_token_logits, dim=-1)
+
+top_k = torch.topk(probs, k=10)
+for idx, prob in zip(top_k.indices, top_k.values):
+    print(f"{tokenizer.decode(idx)}: {prob.item():.4f}")
+```
+

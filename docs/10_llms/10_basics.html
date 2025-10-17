@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="David Gerard">
 
-<title>DATA 413/613 Data Science</title>
+<title>LLM Basics – DATA 413/613 Data Science</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,31 +21,66 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -74,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -246,9 +282,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">DATA 413/613 Data Science</span>
     </a>
   </div>
@@ -259,11 +295,11 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./data.html"> 
+    <a class="nav-link" href="../data.html"> 
 <span class="menu-text">Data</span></a>
   </li>  
 </ul>
@@ -283,8 +319,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#lectures" id="toc-lectures" class="nav-link active" data-scroll-target="#lectures">Lectures</a></li>
-  <li><a href="#extra-lectures" id="toc-extra-lectures" class="nav-link" data-scroll-target="#extra-lectures">Extra Lectures</a></li>
+  <li><a href="#authorization" id="toc-authorization" class="nav-link active" data-scroll-target="#authorization">Authorization</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set up</a></li>
+  <li><a href="#how-llms-work" id="toc-how-llms-work" class="nav-link" data-scroll-target="#how-llms-work">How LLM’s work</a>
+  <ul class="collapse">
+  <li><a href="#tokenization" id="toc-tokenization" class="nav-link" data-scroll-target="#tokenization">Tokenization:</a></li>
+  <li><a href="#embedding" id="toc-embedding" class="nav-link" data-scroll-target="#embedding">Embedding:</a></li>
+  <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network:</a></li>
+  <li><a href="#sample" id="toc-sample" class="nav-link" data-scroll-target="#sample">Sample</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -294,13 +337,19 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">DATA 413/613 Data Science</h1>
+<h1 class="title">LLM Basics</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>David Gerard </p>
+          </div>
+  </div>
     
   
     
@@ -311,117 +360,203 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="./admin/syllabus.html">Syllabus</a></p>
-<section id="lectures" class="level1">
-<h1>Lectures</h1>
 <ul>
-<li>01 Git and the Terminal
+<li><a href="https://youtu.be/LPZh9BOjkQs?si=EWHkqjz6gJT2K81P">3Blue1Brown LLM Explainer</a></li>
+<li><a href="https://youtu.be/wjZofJX0v4M?si=NsJuJISbbOjUUOkg">3Blue1Brown Trasnformer</a></li>
+<li><a href="https://huggingface.co/tasks">Hugging Face Model Search</a></li>
+</ul>
+<section id="authorization" class="level1">
+<h1>Authorization</h1>
 <ul>
-<li><a href="./01_git/01_basic_bash.html">01 The Terminal and Bash Basics</a>.</li>
-<li><a href="./01_git/01_git_setup.html">01 Git Setup</a>.</li>
-<li><a href="./01_git/01_git_github.html">01 Git and GitHub</a>.</li>
-<li><a href="./01_git/01_git_lfs.html">01 Git Large File Storage</a>.</li>
-<li><a href="https://doi.org/10.1371/journal.pcbi.1004668">01 A Quick Introduction to Git and GitHub</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_01">01 Lab: Review of Tidyverse Concepts</a>.</li>
-</ul></li>
-<li>02 Organization
-<ul>
-<li><a href="./02_organization/02_files.html">02 File Structure</a></li>
-<li><a href="./02_organization/02_projects.html">02 Project Structure</a></li>
-<li><a href="./02_organization/02_kanban.html">02 Project Management</a></li>
-</ul></li>
-<li>03 Programming
-<ul>
-<li><a href="./03_vectors_iterators/03_memory.html">03 Memory</a>.</li>
-<li><a href="./03_vectors_iterators/03_vectors.html">03 Vectors</a>.</li>
-<li><a href="./03_vectors_iterators/03_subsetting.html">03 Subsetting</a>.</li>
-<li><a href="./03_vectors_iterators/03_functions.html">03 Functions</a>.</li>
-<li><a href="./03_vectors_iterators/03_iterators.html">03 Iteration</a>.</li>
-<li><a href="./03_vectors_iterators/03_oop.html">03 OOP</a>.</li>
-<li><a href="./03_vectors_iterators/03_s3.html">03 S3</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_03">03 Lab</a>.</li>
-</ul></li>
-<li>04 R Packages
-<ul>
-<li><a href="./04_packages/04_packages.html">04 R Packages</a>.</li>
-<li><a href="./04_packages/04_testing.html">04 Unit Testing</a>.</li>
-<li><a href="./04_packages/04_checking.html">04 Automated Checks</a>.</li>
-<li><a href="./04_packages/04_style.html">04 Style</a>.</li>
-</ul></li>
-<li>05 Web Scraping
-<ul>
-<li><a href="./05_web_scraping/05_apis.html">05 APIs</a>.
-<ul>
-<li><a href="./05_web_scraping/05_eventbrite.html">OAuth2 Example with Eventbrite</a>.</li>
-</ul></li>
-<li><a href="./05_web_scraping/05_web_scraping.html">05 Web Scraping</a>.
-<ul>
-<li><a href="./05_web_scraping/imdb_100_3.html">IMDB</a>.</li>
-<li><a href="./05_web_scraping/wiki_2.html">Hurricanes</a>.</li>
-<li><a href="./05_web_scraping/mosque_2.html">Mosques</a>.</li>
-</ul></li>
-<li><a href="https://github.com/data-science-master/lab_08">05 Lab</a>.</li>
-</ul></li>
-<li>06 Introduction to Python
-<ul>
-<li><a href="./06_python/06_python_setup.html">06 Python Setup and Reticulate</a>.</li>
-<li><a href="./06_python/06_numpy.html">06 Numpy</a>.</li>
-<li><a href="./06_python/06_pandas.html">06 Pandas</a>.</li>
-<li><a href="./06_python/06_matplotlib.html">06 Seaborn</a>.</li>
-<li><a href="./06_python/06_seaborn_objects.html">06 Seaborn.objects</a>.</li>
-</ul></li>
-<li>07 Introduction to SQL
-<ul>
-<li><a href="./07_sql/07_sql.html">07 SQL</a>.</li>
-<li><a href="./07_sql/07_dbeaver.html">07 DBeaver</a>.</li>
-</ul></li>
-<li>08 GNU Make
-<ul>
-<li><a href="./08_make/08_make.html">08 GNU Make</a>.</li>
-<li><a href="https://github.com/data-science-master/penguins">08 Penguins Exercise</a>.</li>
-<li><a href="https://github.com/data-science-master/pvalue_sims">08 Very Basic Makefile Example</a>.</li>
-</ul></li>
-<li>09 Shiny Apps
-<ul>
-<li><a href="./09_shiny/09_basic_shiny.html">09 Shiny Basics</a>.</li>
-<li><a href="./09_shiny/09_layouts.html">09 Layouts</a>.</li>
-<li><a href="./09_shiny/09_reactivity.html">09 Reactivity</a>.</li>
-<li><a href="./09_shiny/09_html.html">09 HTML</a>.</li>
-<li><a href="./09_shiny/09_upload.html">09 File Uploads</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_1">09 Shiny Lab 1: World Bank Data</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_06_2">09 Shiny Lab 2: Cereals Data</a>.</li>
-</ul></li>
-<li>10 Text Data</li>
+<li><p>We will use <a href="https://huggingface.co">Hugging Face</a> to use pretrained models to generate embeddings.</p></li>
+<li><p>Create an account: <a href="https://huggingface.co/join" class="uri">https://huggingface.co/join</a></p></li>
+<li><p>Install the Hugging Face CLI: <a href="https://huggingface.co/docs/huggingface_hub/installation#install-the-hugging-face-cli" class="uri">https://huggingface.co/docs/huggingface_hub/installation#install-the-hugging-face-cli</a></p></li>
+<li><p>Mac Users: <code>bash     brew install huggingface-cli</code></p></li>
+<li><p>Windows Users: User the <a href="https://en.wikipedia.org/wiki/PowerShell">PowerShell</a> (<strong>not</strong> git bash for windows) and run <code>bash     powershell -ExecutionPolicy ByPass -c "irm https://hf.co/cli/install.ps1 | iex"</code></p></li>
+<li><p>Generate a write-access token at: <a href="https://huggingface.co/settings/tokens" class="uri">https://huggingface.co/settings/tokens</a></p></li>
+<li><p>In the terminal on Mac or the PowerShell Terminal on Windows, run <code>bash     hf auth login</code></p></li>
+<li><p>Copy the token and paste it into the terminal when prompted.</p></li>
+<li><p>You are good to go.</p></li>
 </ul>
 </section>
-<section id="extra-lectures" class="level1">
-<h1>Extra Lectures</h1>
+<section id="set-up" class="level1">
+<h1>Set up</h1>
 <ul>
-<li>A1 Basic Statistics
+<li><p>Let’s use <code>{reticulate}</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>You can set up an appropriate environment called “embed” by doing this once per computer</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">conda_create</span>(<span class="at">envname =</span> <span class="st">"embed"</span>, <span class="at">packages =</span> <span class="fu">c</span>(<span class="st">"sentence-transformers"</span>, <span class="st">"pandas"</span>, <span class="st">"seaborn"</span>, <span class="st">"scikit-learn"</span>, <span class="st">"transformers"</span>, <span class="st">"torch"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>When you want to use that environment, just run (once per session):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">use_condaenv</span>(<span class="at">condaenv =</span> <span class="st">"embed"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+</ul>
+</section>
+<section id="how-llms-work" class="level1">
+<h1>How LLM’s work</h1>
 <ul>
-<li><a href="./A1_basic_stats/A1_basic_stats.html">A1 Basic Statistics</a>.</li>
-<li><a href="./A1_basic_stats/greenland_etal_2016.pdf">A1 Statistical Tests, P-values, Confidence Intervals, and Power: A Guide to Misinterpretations</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_04">A1 Lab</a>.</li>
+<li>The steps are roughly as follows:
+<ol type="1">
+<li>Tokenization</li>
+<li>Embeddings</li>
+<li>Transformer Neural Network</li>
+<li>Sample next token</li>
+<li>Repeat 1–4</li>
+</ol></li>
+</ul>
+<section id="tokenization" class="level2">
+<h2 class="anchored" data-anchor-id="tokenization">Tokenization:</h2>
+<ul>
+<li><p>The input text is split into tokens using a tokenizer.</p></li>
+<li><p>Tokens are subwords or word pieces.</p></li>
+<li><p>Models always list the “context length” in terms of tokens. This is the maximum number of tokens the model can handle.</p>
+<ul>
+<li>If you insert too much text, the model truncates earlier text.</li>
+<li>So the model “forgets” if you have longer text than the maximum token length.</li>
 </ul></li>
-<li>A2 Linear Models
+<li><p><a href="https://platform.openai.com/docs/models/gpt-5">GPT-5</a> API has a maximum context length of 400,000 tokens (this includes input and output).</p>
 <ul>
-<li><a href="./A2_linear_regression/A2_simple_linear_regression.html">A2 Simple Linear Regression</a>.</li>
-<li><a href="./A2_linear_regression/A2_many_models.html">A2 Many Models</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_05">A2 Lab</a>.</li>
+<li>Roughly <a href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">100 tokens is 75 words</a></li>
+<li>So this is roughly 300,000 words</li>
+<li>So it cannot yet take as input the entirety of War and Peace (587,287 words), but it can handle the first Twilight Novel (118,975 words) <a href="https://capitalizemytitle.com/famous-book-series-and-novel-word-counts/">source</a>.</li>
 </ul></li>
-<li>A3 Data.table
+<li><p>Let’s play with some tokens. We will use the <a href="https://huggingface.co/google/gemma-3-1b-it">google/gemma-3-1b-it</a> model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoTokenizer, AutoModelForCausalLM</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"google/gemma-3-1b-it"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>You can access the tokenizer the model uses via the <code>AutoTokenizer.from_pretrained()</code> function</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(model_name)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p>Now, let’s tokenize some text with <code>tokenizer.tokenize()</code></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tokenizer.tokenize(<span class="st">"Once upon a time, a very long time ago now, about last Friday"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Once', '▁upon', '▁a', '▁time', ',', '▁a', '▁very', '▁long', '▁time', '▁ago', '▁now', ',', '▁about', '▁last', '▁Friday']</code></pre>
+</div>
+</div></li>
+<li><p>The <code>_</code> indiciates that the token is the start of a new word, not a continuation of a word.</p></li>
+<li><p>E.g., “imagination” is two tokens:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>tokenizer.tokenize(<span class="st">"Imagination"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Imag', 'ination']</code></pre>
+</div>
+</div></li>
+<li><p>If it sees a strange work, it does its best</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tokenizer.tokenize(<span class="st">"Heffalump"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['He', 'ff', 'al', 'ump']</code></pre>
+</div>
+</div></li>
+<li><p><strong>Exercise</strong>: Try to guess the tokens of this sentence</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tokenizer.tokenize(<span class="st">"Gaiety, song-and-dance. Here we go round the mulberry bush."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
+<li><p><strong>Exercise</strong>: Generate some tokens of some works. Are you surprised by any of them?</p></li>
+</ul>
+</section>
+<section id="embedding" class="level2">
+<h2 class="anchored" data-anchor-id="embedding">Embedding:</h2>
 <ul>
-<li><a href="./A3_medium_data/A3_medium_data.html">A3 Manipulating Large(ish) Datasets with data.table</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_07">A3 Lab</a>.</li>
+<li><p>Each token is mapped to a vector using an embedding layer.</p></li>
+<li><p>This converts discrete tokens into continuous representations that the model can process.</p></li>
+<li><p>The idea is that “cat” might be closer (via some distance metric) to “dog” than it is to “stapler”.</p>
+<ul>
+<li>Each of those tokens live in a super high dimensional space.</li>
+<li>Embedding dimension sizes can be <a href="https://vickiboykis.com/2025/09/01/how-big-are-our-embeddings-now-and-why/">4096 or higher</a>.</li>
 </ul></li>
-<li>A4 Dates and Times
+<li><p>Embeddings are useful in their own right. They can be used as inputs to <strong>many</strong> machine learning tasks that use natural language:</p>
 <ul>
-<li><a href="./A4_dates/A4_dates.html">A4 Dates</a>.</li>
-<li><a href="https://github.com/data-science-master/lab_02">A4 Lab</a>.</li>
+<li>Cluster X posts into different categories.</li>
+<li>Use descriptions of user ratings as inputs into a machine learning model to predict if someone will buy a product.</li>
+<li>Inside a document, find the sentence which is most similar to a query.</li>
+</ul></li>
+<li><p>In those applications, you pool the embeddings from the tokens into a single embedding for the text.</p></li>
+<li><p>Typically, though, you use models that were designed where the embeddings are the goal.</p>
+<ul>
+<li>Even though LLMs use embeddings, those are sometimes not the best for applications that use embeddings.</li>
+<li><a href="https://huggingface.co/models?library=sentence-transformers" class="uri">https://huggingface.co/models?library=sentence-transformers</a></li>
+</ul></li>
+<li><p>Let’s see the embeddings for some tokens.</p>
+<ul>
+<li>Don’t worry about the exact code. Folks don’t do thism so it’s a little wonky.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoModelForCausalLM.from_pretrained(model_name)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"Once upon a time, a very long time ago now,"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>input_ids <span class="op">=</span> tokenizer(text, return_tensors <span class="op">=</span> <span class="st">"pt"</span>).input_ids</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>embedding_layer <span class="op">=</span> model.get_input_embeddings()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>token_embeddings <span class="op">=</span> embedding_layer(input_ids)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>token_embeddings[<span class="dv">0</span>,<span class="dv">0</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([ 0.1388, -0.2165, -0.5386,  ..., -0.2465,  0.0267,  0.1258],
+       grad_fn=&lt;SelectBackward0&gt;)</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>token_embeddings[<span class="dv">0</span>,<span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor([-0.2113,  0.6753, -0.6505,  ...,  0.7541,  0.6588,  1.7319],
+       grad_fn=&lt;SelectBackward0&gt;)</code></pre>
+</div>
+</div></li>
+<li><p>The object is a <code>tensor</code>, a multidimensional array from <a href="https://docs.pytorch.org/docs/stable/tensors.html">torch</a>.</p>
+<ul>
+<li>Vectors or lists of numbers</li>
+<li>Matrices are rectangles of numbers.</li>
+<li>Tensors are blocks (or hyperblocks) of numbers.</li>
 </ul></li>
 </ul>
+</section>
+<section id="neural-network" class="level2">
+<h2 class="anchored" data-anchor-id="neural-network">Neural Network:</h2>
+<ul>
+<li><p>These embeddings are passed through a black-box neural network.</p></li>
+<li><p>The specific form of the neural network is very important for how they work.</p></li>
+<li><p>It is not important for applying these methods.</p></li>
+<li><p>You need a PhD in order for this process to matter to you, or for you to have any effect on it.</p></li>
+<li><p>AU has a <a href="https://www.american.edu/cas/hpc/">super computer</a>, but it is definitely not able to train any of the state-of-the-art LLMs that folks are putting out there.</p></li>
+</ul>
+</section>
+<section id="sample" class="level2">
+<h2 class="anchored" data-anchor-id="sample">Sample</h2>
+<ul>
+<li><p>The black box provides a probability distribution of tokens.</p></li>
+<li><p>The next token is sampled from this probability distribution.</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> transformers <span class="im">import</span> AutoTokenizer, AutoModelForCausalLM</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn.functional <span class="im">as</span> F</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>model_name <span class="op">=</span> <span class="st">"google/gemma-3-1b-it"</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(model_name)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> AutoModelForCausalLM.from_pretrained(model_name)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>input_text <span class="op">=</span> <span class="st">"The cat sat on the mat."</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>input_ids <span class="op">=</span> tokenizer.encode(input_text, return_tensors<span class="op">=</span><span class="st">"pt"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    outputs <span class="op">=</span> model(input_ids)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    logits <span class="op">=</span> outputs.logits</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>next_token_logits <span class="op">=</span> logits[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>, :]</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>probs <span class="op">=</span> F.softmax(next_token_logits, dim<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>top_k <span class="op">=</span> torch.topk(probs, k<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, prob <span class="kw">in</span> <span class="bu">zip</span>(top_k.indices, top_k.values):</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>tokenizer<span class="sc">.</span>decode(idx)<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>prob<span class="sc">.</span>item()<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -1495,7 +1495,7 @@
     "href": "10_llms/10_embeddings.html",
     "title": "Embeddings",
     "section": "",
-    "text": "Learning Objectives\n\nConvert text data to embeddings for use in standard ML models.\nhttps://ollama.com/blog/embedding-models\n\n\n\nWhat are embeddings?\n\n\nUse case for embedding models\n\n\nGenerating embeddings\n\n\nPractical example"
+    "text": "Learning Objectives\n\nConvert text data to embeddings for use in standard ML models.\n3blue1brown course\nhttps://www.sbert.net/\nhttps://huggingface.co/models?library=sentence-transformers\nhttps://ollama.com/blog/embedding-models\nhttps://vickiboykis.com/what_are_embeddings/\n\n\n\nWhat are embeddings?\n\n\nUse case for embedding models\n\nSemantic textual similarity,\nSemantic search\nClustering\nClassification\nParaphrase Mining,\n\n\n\nGenerating embeddings\n\nI think the easiest way to generate embeddings is with the SentenceTransformers python package.\nIf you are using the {reticulate} package, you can set this up with:\n\nlibrary(reticulate)\n\nconda_create(envname = \"embed\", packages = c(\"sentence-transformers\", \"pandas\", \"seaborn\", \"scikit-learn\"))\n\nuse_condaenv(condaenv = \"embed\")\n\nWe first load SentenceTransformer\n\nfrom sentence_transformers import SentenceTransformer\nimport numpy as np\n\nWe choose the embedding model, and download it from huggingface.\n\nPossible choices are here: https://huggingface.co/models?library=sentence-transformers\n\nIf you have done the authentication, then you can try out Google’s model:\n\nmodel = SentenceTransformer(\"google/embeddinggemma-300m\")\n\nIf not, then you can try out a free one: python     model = SentenceTransformer(\"all-MiniLM-L6-v2\")\n\n\n# Run inference with queries and documents\nquery = \"Which planet is known as the Red Planet?\"\ndocuments = [\n    \"Venus is often called Earth's twin because of its similar size and proximity.\",\n    \"Mars, known for its reddish appearance, is often referred to as the Red Planet.\",\n    \"Jupiter, the largest planet in our solar system, has a prominent red spot.\",\n    \"Saturn, famous for its rings, is sometimes mistaken for the Red Planet.\"\n]\nquery_embeddings = model.encode_query(query)\nquery_embeddings2 = model.encode(query)\ndocument_embeddings = model.encode_document(documents)\n\n# Compute similarities to determine a ranking\nsimilarities = model.similarity(query_embeddings, document_embeddings)\nsimilarities\n\ntensor([[0.3008, 0.6361, 0.4927, 0.4889]])\n\n\n\n\nPractical example"
   },
   {
     "objectID": "10_llms/10_llama.html",
@@ -1524,5 +1524,40 @@
     "title": "Free Models",
     "section": "Common Tasks for LLM’s",
     "text": "Common Tasks for LLM’s\n\nThere are different models that are appropriate for different tasks\nThe list of models: https://ollama.com/search\nFrom Hugging Face: https://huggingface.co/models?library=gguf\nGeneral Chat:\n\nTuned for: Conversations, questions, answers\nExample Use-case: Creating a chat bot inside a shiny app.\nExample model: llama3.1\n\nInstruct models:\n\nTuned for: completing a specific task\nExample Use-case: Classifying text based on a number of categories.\nExample model:\n\nEmbedding:\n\nConverting text into some a vector of features. To be used in later machine learning tasks.\nExample Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).\nExample model:"
+  },
+  {
+    "objectID": "10_llms/10_basics.html",
+    "href": "10_llms/10_basics.html",
+    "title": "LLM Basics",
+    "section": "",
+    "text": "3Blue1Brown LLM Explainer\n3Blue1Brown Trasnformer\nHugging Face Model Search"
+  },
+  {
+    "objectID": "10_llms/10_basics.html#tokenization",
+    "href": "10_llms/10_basics.html#tokenization",
+    "title": "LLM Basics",
+    "section": "Tokenization:",
+    "text": "Tokenization:\n\nThe input text is split into tokens using a tokenizer.\nTokens are subwords or word pieces.\nModels always list the “context length” in terms of tokens. This is the maximum number of tokens the model can handle.\n\nIf you insert too much text, the model truncates earlier text.\nSo the model “forgets” if you have longer text than the maximum token length.\n\nGPT-5 API has a maximum context length of 400,000 tokens (this includes input and output).\n\nRoughly 100 tokens is 75 words\nSo this is roughly 300,000 words\nSo it cannot yet take as input the entirety of War and Peace (587,287 words), but it can handle the first Twilight Novel (118,975 words) source.\n\nLet’s play with some tokens. We will use the google/gemma-3-1b-it model.\n\nfrom transformers import AutoTokenizer, AutoModelForCausalLM\nimport torch\nimport torch.nn.functional as F\n\nmodel_name = \"google/gemma-3-1b-it\"\n\nYou can access the tokenizer the model uses via the AutoTokenizer.from_pretrained() function\n\ntokenizer = AutoTokenizer.from_pretrained(model_name)\n\nNow, let’s tokenize some text with tokenizer.tokenize()\n\ntokenizer.tokenize(\"Once upon a time, a very long time ago now, about last Friday\")\n\n['Once', '▁upon', '▁a', '▁time', ',', '▁a', '▁very', '▁long', '▁time', '▁ago', '▁now', ',', '▁about', '▁last', '▁Friday']\n\n\nThe _ indiciates that the token is the start of a new word, not a continuation of a word.\nE.g., “imagination” is two tokens:\n\ntokenizer.tokenize(\"Imagination\")\n\n['Imag', 'ination']\n\n\nIf it sees a strange work, it does its best\n\ntokenizer.tokenize(\"Heffalump\")\n\n['He', 'ff', 'al', 'ump']\n\n\nExercise: Try to guess the tokens of this sentence\n\ntokenizer.tokenize(\"Gaiety, song-and-dance. Here we go round the mulberry bush.\")\n\nExercise: Generate some tokens of some works. Are you surprised by any of them?"
+  },
+  {
+    "objectID": "10_llms/10_basics.html#embedding",
+    "href": "10_llms/10_basics.html#embedding",
+    "title": "LLM Basics",
+    "section": "Embedding:",
+    "text": "Embedding:\n\nEach token is mapped to a vector using an embedding layer.\nThis converts discrete tokens into continuous representations that the model can process.\nThe idea is that “cat” might be closer (via some distance metric) to “dog” than it is to “stapler”.\n\nEach of those tokens live in a super high dimensional space.\nEmbedding dimension sizes can be 4096 or higher.\n\nEmbeddings are useful in their own right. They can be used as inputs to many machine learning tasks that use natural language:\n\nCluster X posts into different categories.\nUse descriptions of user ratings as inputs into a machine learning model to predict if someone will buy a product.\nInside a document, find the sentence which is most similar to a query.\n\nIn those applications, you pool the embeddings from the tokens into a single embedding for the text.\nTypically, though, you use models that were designed where the embeddings are the goal.\n\nEven though LLMs use embeddings, those are sometimes not the best for applications that use embeddings.\nhttps://huggingface.co/models?library=sentence-transformers\n\nLet’s see the embeddings for some tokens.\n\nDon’t worry about the exact code. Folks don’t do thism so it’s a little wonky.\n\n\nmodel = AutoModelForCausalLM.from_pretrained(model_name)\ntext = \"Once upon a time, a very long time ago now,\"\ninput_ids = tokenizer(text, return_tensors = \"pt\").input_ids\nembedding_layer = model.get_input_embeddings()\ntoken_embeddings = embedding_layer(input_ids)\ntoken_embeddings[0,0]\n\ntensor([ 0.1388, -0.2165, -0.5386,  ..., -0.2465,  0.0267,  0.1258],\n       grad_fn=&lt;SelectBackward0&gt;)\n\ntoken_embeddings[0,1]\n\ntensor([-0.2113,  0.6753, -0.6505,  ...,  0.7541,  0.6588,  1.7319],\n       grad_fn=&lt;SelectBackward0&gt;)\n\n\nThe object is a tensor, a multidimensional array from torch.\n\nVectors or lists of numbers\nMatrices are rectangles of numbers.\nTensors are blocks (or hyperblocks) of numbers."
+  },
+  {
+    "objectID": "10_llms/10_basics.html#neural-network",
+    "href": "10_llms/10_basics.html#neural-network",
+    "title": "LLM Basics",
+    "section": "Neural Network:",
+    "text": "Neural Network:\n\nThese embeddings are passed through a black-box neural network.\nThe specific form of the neural network is very important for how they work.\nIt is not important for applying these methods.\nYou need a PhD in order for this process to matter to you, or for you to have any effect on it.\nAU has a super computer, but it is definitely not able to train any of the state-of-the-art LLMs that folks are putting out there."
+  },
+  {
+    "objectID": "10_llms/10_basics.html#sample",
+    "href": "10_llms/10_basics.html#sample",
+    "title": "LLM Basics",
+    "section": "Sample",
+    "text": "Sample\n\nThe black box provides a probability distribution of tokens.\nThe next token is sampled from this probability distribution.\n\n\nfrom transformers import AutoTokenizer, AutoModelForCausalLM\nimport torch\nimport torch.nn.functional as F\n\nmodel_name = \"google/gemma-3-1b-it\"\ntokenizer = AutoTokenizer.from_pretrained(model_name)\nmodel = AutoModelForCausalLM.from_pretrained(model_name)\nmodel.eval()\n\ninput_text = \"The cat sat on the mat.\"\ninput_ids = tokenizer.encode(input_text, return_tensors=\"pt\")\n\nwith torch.no_grad():\n    outputs = model(input_ids)\n    logits = outputs.logits\n\nnext_token_logits = logits[0, -1, :]\nprobs = F.softmax(next_token_logits, dim=-1)\n\ntop_k = torch.topk(probs, k=10)\nfor idx, prob in zip(top_k.indices, top_k.values):\n    print(f\"{tokenizer.decode(idx)}: {prob.item():.4f}\")"
   }
 ]

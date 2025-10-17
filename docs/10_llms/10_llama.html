@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-10-03">
+<meta name="dcterms.date" content="2025-10-17">
 
 <title>Free Models – DATA 413/613 Data Science</title>
 <style>
@@ -352,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 3, 2025</p>
+      <p class="date">October 17, 2025</p>
     </div>
   </div>
   
@@ -429,7 +429,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>There are 365 days in a non-leap year and 366 days in a leap year. Leap years
-occur every 4 years.</code></pre>
+occur every four years, when an extra day is added to the month of February
+(February 29th).</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Why"</span>, </span>
@@ -443,10 +444,10 @@ occur every 4 years.</code></pre>
 <pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>It seems like you're asking a question that starts with "why," but I'm not sure
-what the specific topic or subject is. Could you please provide more context or
-clarify your question so I can better understand and provide an accurate
-response?</code></pre>
+<pre><code>It seems like you're asking a question, but it's quite broad. Could you please
+provide more context or clarify what "why" refers to? Are you asking about a
+specific topic, event, or situation? The more information you can provide, the
+better I'll be able to help!</code></pre>
 </div>
 </div></li>
 <li><p>You can create a chat, which treats all text sent to it during the same R session as part of the same chat</p>
@@ -464,7 +465,8 @@ response?</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>There are 365 days in a non-leap year and 366 days in a leap year. Leap years
-occur every 4 years.</code></pre>
+occur every four years, when an extra day is added to the month of February
+(February 29th).</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chat</span>(</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Why?"</span>, </span>
@@ -478,36 +480,38 @@ occur every 4 years.</code></pre>
 <pre><code>── Answer from llama3.1 ────────────────────────────────────────────────────────</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The reason there are 365 days in a non-leap year is because it takes the Earth
-approximately 365.24 days to orbit the Sun once, which is called a solar year.
-This is known as a tropical year.</code></pre>
+<pre><code>The reason for having 365 days in a non-leap year and 366 days in a leap year
+is because it takes the Earth approximately 365.24 days to orbit the Sun one
+time.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>To account for this extra fraction of a day, an extra day is added to the
-calendar every four years, making it a leap year with 366 days. This extra day
-is added to the month of February, making it a 29-day month instead of the
-usual 28 days in non-leap years.</code></pre>
+<pre><code>This is called a tropical year, and it's the length of time it takes the Earth
+to complete one full orbit around the Sun relative to the Sun's position in the
+sky. If we had exactly 365 days in a year, we would lose about 6 hours per
+year, which might not seem like a lot, but over thousands of years, it would
+add up and cause our calendar to drift away from the actual seasons.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The reason we don't add an extra day every year is that if we did, our calendar
-would quickly become out of sync with the Earth's orbit around the Sun. By
-adding an extra day only every four years, we ensure that our calendar stays
-aligned with the solar year to within one day over a period of about 3,300
-years.</code></pre>
+<pre><code>To account for this extra time, Julius Caesar introduced the Julian calendar in
+45 BCE, which included a leap year every four years. However, this calendar
+still had a small error, which added up to about 11 minutes per year. This
+might not seem like much, but over centuries, it would cause our calendar to
+drift even further away from the actual seasons.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>This system was introduced by Julius Caesar in 45 BCE as part of the Julian
-calendar, and it has been refined over time to become the Gregorian calendar
-used internationally today.</code></pre>
+<pre><code>In 1582 CE, Pope Gregory XIII introduced the Gregorian calendar, which is the
+one we use today. It refined the leap year rules to eliminate this small error
+and ensured that our calendar stays in sync with the Earth's orbit around the
+Sun.</code></pre>
 </div>
 </div></li>
 <li><p>You might have noticed that I am using the <code>model_parameters</code> argument. This is a list with possible named values here: <a href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values" class="uri">https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values</a></p></li>
@@ -532,13 +536,13 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
+<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
+<pre><code>Groaning yet?</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
@@ -558,13 +562,13 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
+<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
+<pre><code>Groaning yet?</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
@@ -590,7 +594,7 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Groan away! Do you want another one?</code></pre>
+<pre><code>Your turn, do you want to hear another?</code></pre>
 </div>
 </div></li>
 <li><p>The temperature increases the variability of the response. E.g., we get the same joke at many seeds at the default temperature</p>
@@ -613,13 +617,13 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
+<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
+<pre><code>(Sorry, I know it's a bit of a groaner!) Do you want another one?</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">query</span>(</span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q =</span> <span class="st">"Tell me a dad joke."</span>, </span>
@@ -639,13 +643,13 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Why did the mushroom go to the party?</code></pre>
+<pre><code>"I told my wife she was drawing her eyebrows too high. She looked surprised."</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Because he was a fun-gi! (get it?)</code></pre>
+<pre><code>Groaning yet?</code></pre>
 </div>
 </div></li>
 <li><p>We can increase the temperature to get more varied responses</p>
@@ -674,7 +678,7 @@ used internationally today.</code></pre>
 <pre><code></code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Your turn to groan! Do you want another?</code></pre>
+<pre><code>Did I groan-fully succeed at being funny?</code></pre>
 </div>
 </div></li>
 <li><p>Higher temperature is more creative, lower is more coherent.</p></li>
@@ -700,26 +704,33 @@ used internationally today.</code></pre>
 <section id="common-tasks-for-llms" class="level2">
 <h2 class="anchored" data-anchor-id="common-tasks-for-llms">Common Tasks for LLM’s</h2>
 <ul>
-<li><p>There are different models that are appropriate for different tasks</p></li>
+<li><p>Unless you go on to get your PhD, you will probably be users of LLMs, not trainers of LLMs.</p></li>
+<li><p>As a user, you there are tons of models that are available for out-of-the-box use.</p></li>
+<li><p>Different models are more appropriate for different tasks</p></li>
 <li><p>The list of models: <a href="https://ollama.com/search" class="uri">https://ollama.com/search</a></p></li>
 <li><p>From Hugging Face: <a href="https://huggingface.co/models?library=gguf" class="uri">https://huggingface.co/models?library=gguf</a></p></li>
+<li><p>Here are some use cases for LLMs</p></li>
 <li><p>General Chat:</p>
 <ul>
 <li>Tuned for: Conversations, questions, answers</li>
 <li>Example Use-case: Creating a chat bot inside a shiny app.</li>
 <li>Example model: llama3.1</li>
 </ul></li>
-<li><p>Instruct models:</p>
-<ul>
-<li>Tuned for: completing a specific task</li>
-<li>Example Use-case: Classifying text based on a number of categories.</li>
-<li>Example model:</li>
-</ul></li>
 <li><p>Embedding:</p>
 <ul>
 <li>Converting text into some a vector of features. To be used in later machine learning tasks.</li>
 <li>Example Use-case: Convert yelp reviews into features to predict properties of a restaurant (e.g., whether it will close in a year).</li>
 <li>Example model:</li>
+</ul></li>
+<li><p>Sentiment Analysis:</p>
+<ul>
+<li>Convert a piece of text into three scores: A “positive” score, a “neutral” score, and a “negative” score.</li>
+<li>You use <a href="https://ollama.com/blog/structured-outputs">structured outputs</a> to do this.</li>
+</ul></li>
+<li><p>Text Classification</p>
+<ul>
+<li>Classify a piece of text into different categories, like “sports” or “politics”.</li>
+<li>You use <a href="https://ollama.com/blog/structured-outputs">structured outputs</a> to do this.</li>
 </ul></li>
 </ul>
 
