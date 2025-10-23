@@ -4,7 +4,9 @@ author: "David Gerard"
 ---
 
 - [3Blue1Brown LLM Explainer](https://youtu.be/LPZh9BOjkQs?si=EWHkqjz6gJT2K81P)
-- [3Blue1Brown Trasnformer](https://youtu.be/wjZofJX0v4M?si=NsJuJISbbOjUUOkg)
+- [3Blue1Brown Transformer](https://youtu.be/wjZofJX0v4M?si=NsJuJISbbOjUUOkg)
+- [3Blue1Brown Attention](https://youtu.be/eMlx5fFNoYc?si=68yQbtttrvNvGPG8)
+- [3Blue1Brown Interpretation](https://youtu.be/9-Jl0dxWQs8?si=FP7HUFbHEATx8gwV)
 - [Hugging Face Model Search](https://huggingface.co/tasks)
 
 # Authorization
@@ -210,5 +212,23 @@ probs = F.softmax(next_token_logits, dim=-1)
 top_k = torch.topk(probs, k=10)
 for idx, prob in zip(top_k.indices, top_k.values):
     print(f"{tokenizer.decode(idx)}: {prob.item():.4f}")
+```
+
+## Chat in Python
+
+- <https://huggingface.co/docs/transformers/main/en/conversations>
+
+```{python}
+chat = [
+    {"role": "system", "content": "You are a world-leading expert in statistics."},
+    {"role": "user", "content": "What is a p-value?"}
+]
+
+import torch
+from transformers import pipeline
+
+pipeline = pipeline(task="text-generation", model="google/gemma-3-1b-it")
+response = pipeline(chat, max_new_tokens=100)
+print(response[0]["generated_text"][-1]["content"])
 ```
 
