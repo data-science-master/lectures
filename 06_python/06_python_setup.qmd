@@ -48,6 +48,13 @@ ggplot2::theme_set(ggplot2::theme_bw())
     Sys.setenv(CONDA_PLUGINS_AUTO_ACCEPT_TOS = "yes")
     library(reticulate)
     ```
+    
+-   You can also put this in your R environment (opened via `usethis::edit_r_environ()`). Then you don't need to set the enviornment variable every time you load `reticulate`.
+
+    ``` r
+    CONDA_PLUGINS_AUTO_ACCEPT_TOS = "yes"
+    ```
+
 
 -   To install a version of Python that reticulate will use, run in the terminal:
 
