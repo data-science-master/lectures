@@ -328,6 +328,14 @@ ggplot2::theme_set(ggplot2::theme_bw())
     USING SAMPLE 5 ROWS;
     ```
 
+-   **Exercise**: Select all flights that either (a) departed on time or early from JFK, or (b) departed late from LGA. Only get the departure delay, tail number, and the time.
+
+    ```{sql connection = con, echo = FALSE, eval = FALSE}
+    SELECT dep_delay, tailnum, time_hour
+    FROM flights 
+    WHERE (origin = 'JFK' AND dep_delay <= 0) OR (origin = 'LGA' AND dep_delay > 0)
+    ```
+
 
 ## Arranging Rows
 
@@ -461,6 +469,26 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - In the above, I chained two SQL queries. Your `FROM` statement can be the output of another SQL query surrounded by parentheses.
 
+-   Use `OVER ()` to go over all rows. Aggregate functions (introduced later) cannot be used in row-level expressions (inside a select) without a partitioning call. E.g., to calculate the z-score of `dep_delay` we do
+
+    ```{sql connection=con}
+    SELECT dep_delay, 
+      (dep_delay - AVG(dep_delay) OVER ()) / (STDDEV(dep_delay) OVER ()) AS zscore
+    FROM flights
+    ```
+
+-   **Exercise**: Calculate the absolute value of departure delay and arrange in descedning order of this new variable.
+
+    ```{sql connection=con, echo=FALSE, eval = FALSE}
+    SELECT dep_delay, ABS(dep_delay) AS abs_dep_delay FROM flights ORDER BY dep_delay DESC;
+    ```
+
+-   **Exercise**: Calculate a new variable called `dep_scaled`, departure delay minus the minimum divided by the range. So all values are between 0 and 1. Order in descending order of the absolute value of `dep_scaled`. Make sure every other variable is still in the query.
+    ```{sql connection=con, echo=FALSE, eval=FALSE}
+    SELECT *, (dep_delay - MIN(dep_delay) OVER ()) / (MAX(dep_delay) OVER () - MIN(dep_delay) OVER ()) AS dep_scaled 
+    FROM flights 
+    ORDER BY dep_scaled DESC;
+    ```
 
 ## Group Summaries
 
@@ -519,7 +547,16 @@ ggplot2::theme_set(ggplot2::theme_bw())
     SELECT DISTINCT "origin" 
     FROM flights;
     ```
-    
+
+-   **Exercise**: Calculate the t-statistic of departure delay for each originating airport.
+
+    ```{sql connection=con, echo=FALSE, eval=FALSE}
+    SELECT origin, AVG(dep_delay) / (STDDEV(dep_delay) / SQRT(COUNT(dep_delay))) 
+    FROM flights 
+    GROUP BY origin
+    ```
+
+
 ## Creating Grouped Summaries without Grouping the Results
 
 - This section is based on Richard Ressler's notes.
@@ -583,6 +620,18 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```
 
 - Note that all fields used in the outer query must be returned by the inner query 
+
+-   **Exercise**: For each originating airport, calculate a "robust z-score" (`rzscore`) of departure delay, the value of the variable minus the median, divided by the median absolute deviation. Make sure all variables are selected. Arrange in descending order of `rzscore`.
+
+    ```{sql connection=con, echo = FALSE, eval = FALSE}
+    SELECT *, (dep_delay - med) / mad AS rzscore FROM
+    (
+      SELECT *, MEDIAN(dep_delay) OVER (PARTITION BY origin) AS med,
+      MAD(dep_delay) OVER (PARTITION BY origin) AS mad FROM flights
+    )
+    ORDER BY rzscore DESC;
+    ```
+
 
 ## Recoding
 
