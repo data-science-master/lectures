@@ -769,15 +769,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
     <mark style="background-color: lightblue">R</mark>
     ```{r}
     data("table1", package = "tidyr")
-    dbWriteTable(conn = tmpcon, name = "table1", value = table1)
+    dbWriteTable(conn = tmpcon, name = "table1", value = as.data.frame(table1))
     data("table2", package = "tidyr")
-    dbWriteTable(conn = tmpcon, name = "table2", value = table2)
+    dbWriteTable(conn = tmpcon, name = "table2", value = as.data.frame(table2))
     data("table3", package = "tidyr")
-    dbWriteTable(conn = tmpcon, name = "table3", value = table3)
+    dbWriteTable(conn = tmpcon, name = "table3", value = as.data.frame(table3))
     data("table4b", package = "tidyr")
-    dbWriteTable(conn = tmpcon, name = "table4b", value = table4b)
+    dbWriteTable(conn = tmpcon, name = "table4b", value = as.data.frame(table4b))
     data("table5", package = "tidyr")
-    dbWriteTable(conn = tmpcon, name = "table5", value = table5)
+    dbWriteTable(conn = tmpcon, name = "table5", value = as.data.frame(table5))
     ```
 
 -   Here they are:
@@ -786,6 +786,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{sql, connection=tmpcon}
     DESCRIBE;
     ```
+
 
 ## Tidyr stuff
 
