@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-06-11">
+<meta name="dcterms.date" content="2025-11-10">
 
 <title>Managing Workflows with GNU Make – DATA 413/613 Data Science</title>
 <style>
@@ -73,14 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-a891049e43ece2d9debe56e7e2086a94.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-93955aaddd11b0e4c5b5140a17379e92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-a891049e43ece2d9debe56e7e2086a94.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -368,7 +368,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 11, 2025</p>
+      <p class="date">November 10, 2025</p>
     </div>
   </div>
   
@@ -498,7 +498,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Each subsequent line is a <em>bash</em> command that will be evaluated in the terminal in the order listed. This sequence of commands is sometimes called a <em>recipe</em>.</p>
 <ul>
 <li><strong>IMPORTANT</strong>: Make sure each bash command has one <strong>tab</strong> (not spaces) at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!</li>
-<li>From the terminal, it is possible to evaluate R scripts, python scripts, and knit R Markdown files.</li>
+<li>From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto files.</li>
 <li>You can also use the usual bash commands you are used do (<code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, etc…)</li>
 <li>There are tons of other commands that you can install that allow you to do things like download files (<a href="https://en.wikipedia.org/wiki/CURL"><code>curl</code></a> and <a href="https://en.wikipedia.org/wiki/Wget"><code>wget</code></a>), unzip files (<a href="https://en.wikipedia.org/wiki/7-Zip"><code>7z</code></a> and <a href="https://www.gnu.org/software/tar/manual/tar.html#SEC25"><code>tar</code></a>), <a href="https://www.imagemagick.org/script/convert.php"><code>convert</code></a> image files, compile LaTeX documents, etc…</li>
 </ul></li>
@@ -599,7 +599,7 @@ target3 : prereq3.Rmd
 <li><p>tl;dr</p>
 <ul>
 <li>For R and the terminal: Assume the working directory is the location of the Makefile.</li>
-<li>For R Markdown: Assume the working directory is the location of the Rmd file.</li>
+<li>For Quarto and R Markdown: Assume the working directory is the location of the Rmd file.</li>
 </ul></li>
 <li><p>So if your file structure is</p>
 <pre><code>Makefile
@@ -623,7 +623,7 @@ data/data.csv : analysis/script.R
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
-<li><p>However, confusingly, when you render an R Markdown file using <code>knitr</code>, you need to assume the working directory is the location of the R Markdown file, not the location of <code>Makefile</code>. So in “report.Rmd” you would write (<strong>notice the double dots</strong>)</p>
+<li><p>However, confusingly, when you render a Quarto or R Markdown file, you need to assume the working directory is the location of the R Markdown file, not the location of <code>Makefile</code>. So in “report.Rmd” you would write (<strong>notice the double dots</strong>)</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

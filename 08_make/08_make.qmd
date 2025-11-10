@@ -1,7 +1,7 @@
 ---
 title: "Managing Workflows with GNU Make"
 author: "David Gerard"
-date: "`r Sys.Date()`"
+date: today
 output:  
   html_document:
     toc: true
@@ -159,7 +159,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 - `prereq_1`, `prereq_2`, `prereq_3`, etc are the names of the files which are used to generate `target`. These can be datasets, R scripts, etc.
 - Each subsequent line is a *bash* command that will be evaluated in the terminal in the order listed. This sequence of commands is sometimes called a *recipe*.
   - **IMPORTANT**: Make sure each bash command has one **tab** (not spaces) at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!
-  - From the terminal, it is possible to evaluate R scripts, python scripts, and knit R Markdown files.
+  - From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto files.
   - You can also use the usual bash commands you are used do (`touch`, `cp`, `mv`, `rm`, etc...)
   - There are tons of other commands that you can install that allow you to do things like download files ([`curl`](https://en.wikipedia.org/wiki/CURL) and [`wget`](https://en.wikipedia.org/wiki/Wget)), unzip files ([`7z`](https://en.wikipedia.org/wiki/7-Zip) and [`tar`](https://www.gnu.org/software/tar/manual/tar.html#SEC25)), [`convert`](https://www.imagemagick.org/script/convert.php) image files, compile LaTeX documents, etc...
 
@@ -280,7 +280,7 @@ target3 : prereq3.Rmd
 
 - tl;dr
   - For R and the terminal: Assume the working directory is the location of the Makefile.
-  - For R Markdown: Assume the working directory is the location of the Rmd file.
+  - For Quarto and R Markdown: Assume the working directory is the location of the Rmd file.
 
 -   So if your file structure is
 
@@ -322,7 +322,7 @@ target3 : prereq3.Rmd
     dat <- read_csv("./data/data.csv")
     ```
     
--   However, confusingly, when you render an R Markdown file using `knitr`, you need to assume the working directory is the location of the R Markdown file, not the location of `Makefile`. So in "report.Rmd" you would write (**notice the double dots**)
+-   However, confusingly, when you render a Quarto or R Markdown file, you need to assume the working directory is the location of the R Markdown file, not the location of `Makefile`. So in "report.Rmd" you would write (**notice the double dots**)
 
     ```{r, eval = FALSE}
     library(readr)
