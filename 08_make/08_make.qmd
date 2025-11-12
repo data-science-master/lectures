@@ -95,7 +95,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
     tidy data (`dplyr`, `tidyr`) `|>` <br>
     exploratory data analysis (`ggplot2`, `dplyr`) `|>` <br>
     statistical analysis (`stats`, `broom`, `tidymodels`) `|>` <br>
-    present results (`shiny`, `rmarkdown`, `ggplot2`).
+    present results (`shiny`, `rmarkdown`, `quarto`, `ggplot2`).
   
 - Each of these steps should be done in separate files. But a more typical pipeline would include *multiple files for each step*. 
   - Download multiple datasets using multiple scripts
@@ -157,9 +157,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - `target` is the name of the file that will be generated.
 - `prereq_1`, `prereq_2`, `prereq_3`, etc are the names of the files which are used to generate `target`. These can be datasets, R scripts, etc.
+  - In simple rules, `prereq_1` is the script that generates `target` and the other prerequisites are supporting datasets.
+  - You can also have targets without any prerequisites. E.g., if your bash commands download a dataset, there is no prerequisite file needed.
 - Each subsequent line is a *bash* command that will be evaluated in the terminal in the order listed. This sequence of commands is sometimes called a *recipe*.
   - **IMPORTANT**: Make sure each bash command has one **tab** (not spaces) at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!
-  - From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto files.
+  - From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> files.
   - You can also use the usual bash commands you are used do (`touch`, `cp`, `mv`, `rm`, etc...)
   - There are tons of other commands that you can install that allow you to do things like download files ([`curl`](https://en.wikipedia.org/wiki/CURL) and [`wget`](https://en.wikipedia.org/wiki/Wget)), unzip files ([`7z`](https://en.wikipedia.org/wiki/7-Zip) and [`tar`](https://www.gnu.org/software/tar/manual/tar.html#SEC25)), [`convert`](https://www.imagemagick.org/script/convert.php) image files, compile LaTeX documents, etc...
 
@@ -179,6 +181,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
     ```{bash, eval = FALSE}
     quarto render quarto_file.qmd
     ```
+    or, if that doesn't work, you can render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> via
+    ```{bash, eval = FALSE}
+    Rscript -e "quarto::quarto_render('quarto_file.qmd')"
+    ```
+    
 
 -   Use Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> to Render an Jupyter Notebook (`.ipynb` Document):
 
@@ -188,7 +195,7 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 -   Knit an R Markdown file
     ```{bash, eval = FALSE}
-    Rscript -e "library(rmarkdown);render('rmarkdown_file.Rmd')"
+    Rscript -e "rmarkdown::render('rmarkdown_file.Rmd')"
     ```
 
     Make sure to change "rmarkdown_file.Rmd"
@@ -254,8 +261,8 @@ target2 : prereq2.py data2.csv
   python prereq2.py
 
 # Comment 3
-target3 : prereq3.Rmd
-  Rscript -e "library(rmarkdown);render('prereq3.Rmd')"
+target3 : prereq3.qmd
+  quarto render prereq3.qmd
 ```
 
 ## Evaluate a makefile
@@ -280,14 +287,14 @@ target3 : prereq3.Rmd
 
 - tl;dr
   - For R and the terminal: Assume the working directory is the location of the Makefile.
-  - For Quarto and R Markdown: Assume the working directory is the location of the Rmd file.
+  - For Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> and R Markdown: Assume the working directory is the location of the qmd or Rmd file.
 
 -   So if your file structure is
 
     ```
     Makefile
     analysis/script.R
-    analysis/report.Rmd
+    analysis/report.qmd
     data/data.csv
     ```
     
@@ -322,7 +329,7 @@ target3 : prereq3.Rmd
     dat <- read_csv("./data/data.csv")
     ```
     
--   However, confusingly, when you render a Quarto or R Markdown file, you need to assume the working directory is the location of the R Markdown file, not the location of `Makefile`. So in "report.Rmd" you would write (**notice the double dots**)
+-   However, confusingly, when you render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> or R Markdown file, you need to assume the working directory is the location of the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> or R Markdown file, not the location of `Makefile`. So in "report.qmd" you would write (**notice the double dots**)
 
     ```{r, eval = FALSE}
     library(readr)
@@ -340,11 +347,11 @@ target3 : prereq3.Rmd
   - analysis
     - add_alt_sims.R
     - null_sims.R
-    - panal.html
-    - panal.Rmd
+    - panal.qmd
   - output
     - add_alt_sims.Rout
     - null_sims.Rout
+    - panal.html
     - pdat.csv
     - pnull.RDS
 
@@ -357,7 +364,7 @@ target3 : prereq3.Rmd
     dagify("pnull.RDS" ~ "null_sims.R",
            "pdat.csv" ~ "add_alt_sims.R",
            "pdat.csv" ~ "pnull.RDS",
-           "panal.html" ~ "panal.Rmd",
+           "panal.html" ~ "panal.qmd",
            "panal.html" ~ "pdat.csv") |>
       ggdag(layout = "sugiyama",
             text_col = "black",
@@ -369,29 +376,38 @@ target3 : prereq3.Rmd
 -   The Makefile that organizes this structure is
 
     ``` make
-    .PHONY : all
-    all : sims
+    .PHONY: all
+    all: sims
     
-    .PHONY : sims
-    sims : analysis/panal.html
+    .PHONY: sims
+    sims: output/panal.html
     
-    analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    	Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+    output/panal.html: analysis/panal.qmd output/pdat.csv
+    	quarto render ./analysis/panal.qmd
+    	mv ./analysis/panal.html ./output/panal.html
     
-    output/pnull.RDS : analysis/null_sims.R
+    output/pnull.RDS: analysis/null_sims.R
     	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
     
-    output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    output/pdat.csv: analysis/add_alt_sims.R output/pnull.RDS
     	R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+    
+    .PHONY : clean
+    clean:
+    	rm -f ./output/panal.html
+    	rm -f ./output/pnull.RDS
+    	rm -f ./output/pdat.csv
     ```
     
 - **Exercise**: Clone this repo and run `make` in the terminal.
 
-- **Exercise**: What happens when you modify "panal.Rmd" and you rerun `make`?
+- **Exercise**: What happens when you modify "panal.qmd" and you rerun `make`?
 
 - **Exercise**: What happens when you modify "add_alt_sims.R" and rerun `make`?
 
 - **Exercise**: What happens when you modify "null_sims.R" and rerun `make`?
+
+- **Exercise**: What is the working directory the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"/> file assumpes? What is the working directory the Makefile assumes? What is the working directory the R script assumes?
 
 # Your turn
 
@@ -405,10 +421,10 @@ target3 : prereq3.Rmd
   - Readme.md
   - analysis
     - classify_penguins.R
-    - penguin_report.html
-    - penguin_report.Rmd
+    - penguin_report.qmd
     - plot_penguin.R
   - output
+    - penguin_report.html
     - penguin_class.csv
     - penguin_pairs.png
 
@@ -422,7 +438,7 @@ target3 : prereq3.Rmd
            "penguin_class.csv" ~ "classify_penguins.R",
            "penguin_report.html" ~ "penguin_pairs.png",
            "penguin_report.html" ~ "penguin_class.csv",
-           "penguin_report.html" ~ "penguin_report.Rmd") |>
+           "penguin_report.html" ~ "penguin_report.qmd") |>
       ggdag(layout = "sugiyama",
             text_col = "black",
             node = FALSE) +
@@ -489,20 +505,27 @@ target3 : prereq3.Rmd
 -   **Exercise**: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:
 
     ``` make
-    .PHONY : all
-    all : sims
+    .PHONY: all
+    all: sims
     
-    .PHONY : sims
-    sims : analysis/panal.html
+    .PHONY: sims
+    sims: output/panal.html
     
-    analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    	Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+    output/panal.html: analysis/panal.qmd output/pdat.csv
+    	quarto render ./analysis/panal.qmd
+    	mv ./analysis/panal.html ./output/panal.html
     
-    output/pnull.RDS : analysis/null_sims.R
+    output/pnull.RDS: analysis/null_sims.R
     	R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
     
-    output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
+    output/pdat.csv: analysis/add_alt_sims.R output/pnull.RDS
     	R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+    
+    .PHONY : clean
+    clean:
+    	rm -f ./output/panal.html
+    	rm -f ./output/pnull.RDS
+    	rm -f ./output/pdat.csv
     ```
 
 
@@ -553,18 +576,19 @@ target3 : prereq3.Rmd
       R CMD BATCH --no-save --no-restore script.R script.Rout
     ```
 
--   **Exercise**: Re-write the following to use an automatic variable instead of the Rmd's file name in the recipe.
+-   **Exercise**: Re-write the following to use automatic variables.
 
     ``` make
-    report.html : report.Rmd
-      Rscript -e "library(rmarkdown);render('report.Rmd')"
+    output/report.html: analysis/report.qmd
+      quarto render analysis/report.qmd
+      mv analysis/report.html output/report.html
     ```
     
     ```{bash, eval = FALSE, echo = FALSE}
-    report.html : report.Rmd
-      Rscript -e "library(rmarkdown);render('$<')"
+    output/report.html: analysis/report.qmd
+      quarto render $<
+      mv $(<D)/$(@F) $@
     ```
-
 
 # Competitors
 

@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-11-10">
+<meta name="dcterms.date" content="2025-11-12">
 
 <title>Managing Workflows with GNU Make – DATA 413/613 Data Science</title>
 <style>
@@ -69,18 +69,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-a891049e43ece2d9debe56e7e2086a94.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-93955aaddd11b0e4c5b5140a17379e92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-a891049e43ece2d9debe56e7e2086a94.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-482c505b42a27fe86bbc845866694eac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -368,7 +369,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 10, 2025</p>
+      <p class="date">November 12, 2025</p>
     </div>
   </div>
   
@@ -449,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>There are a lot of steps in a data analysis</p>
 <ul>
-<li>Download data (<code>httr</code>) <code>|&gt;</code> <br> tidy data (<code>dplyr</code>, <code>tidyr</code>) <code>|&gt;</code> <br> exploratory data analysis (<code>ggplot2</code>, <code>dplyr</code>) <code>|&gt;</code> <br> statistical analysis (<code>stats</code>, <code>broom</code>, <code>tidymodels</code>) <code>|&gt;</code> <br> present results (<code>shiny</code>, <code>rmarkdown</code>, <code>ggplot2</code>).</li>
+<li>Download data (<code>httr</code>) <code>|&gt;</code> <br> tidy data (<code>dplyr</code>, <code>tidyr</code>) <code>|&gt;</code> <br> exploratory data analysis (<code>ggplot2</code>, <code>dplyr</code>) <code>|&gt;</code> <br> statistical analysis (<code>stats</code>, <code>broom</code>, <code>tidymodels</code>) <code>|&gt;</code> <br> present results (<code>shiny</code>, <code>rmarkdown</code>, <code>quarto</code>, <code>ggplot2</code>).</li>
 </ul></li>
 <li><p>Each of these steps should be done in separate files. But a more typical pipeline would include <em>multiple files for each step</em>.</p>
 <ul>
@@ -482,7 +483,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>You place all commands for <code>make</code> in a file <em>exactly</em> titled “Makefile”. You can create this file in the terminal via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> Makefile</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> Makefile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 <section id="rules" class="level2">
@@ -494,11 +495,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   second bash command and so on</code></pre></li>
 <li><p>Each <em>rule</em> contains three things: a <em>target</em>, <em>prerequisites</em>, and <em>commands</em>.</p></li>
 <li><p><code>target</code> is the name of the file that will be generated.</p></li>
-<li><p><code>prereq_1</code>, <code>prereq_2</code>, <code>prereq_3</code>, etc are the names of the files which are used to generate <code>target</code>. These can be datasets, R scripts, etc.</p></li>
+<li><p><code>prereq_1</code>, <code>prereq_2</code>, <code>prereq_3</code>, etc are the names of the files which are used to generate <code>target</code>. These can be datasets, R scripts, etc.</p>
+<ul>
+<li>In simple rules, <code>prereq_1</code> is the script that generates <code>target</code> and the other prerequisites are supporting datasets.</li>
+<li>You can also have targets without any prerequisites. E.g., if your bash commands download a dataset, there is no prerequisite file needed.</li>
+</ul></li>
 <li><p>Each subsequent line is a <em>bash</em> command that will be evaluated in the terminal in the order listed. This sequence of commands is sometimes called a <em>recipe</em>.</p>
 <ul>
 <li><strong>IMPORTANT</strong>: Make sure each bash command has one <strong>tab</strong> (not spaces) at the start of the line. If you copy and paste a Makefile from a web site then usually tabs are converted to spaces and produce an error!</li>
-<li>From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto files.</li>
+<li>From the terminal, it is possible to evaluate R scripts, python scripts, and render Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> files.</li>
 <li>You can also use the usual bash commands you are used do (<code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, etc…)</li>
 <li>There are tons of other commands that you can install that allow you to do things like download files (<a href="https://en.wikipedia.org/wiki/CURL"><code>curl</code></a> and <a href="https://en.wikipedia.org/wiki/Wget"><code>wget</code></a>), unzip files (<a href="https://en.wikipedia.org/wiki/7-Zip"><code>7z</code></a> and <a href="https://www.gnu.org/software/tar/manual/tar.html#SEC25"><code>tar</code></a>), <a href="https://www.imagemagick.org/script/convert.php"><code>convert</code></a> image files, compile LaTeX documents, etc…</li>
 </ul></li>
@@ -509,7 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>Run an R script</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD BATCH <span class="at">--no-save</span> <span class="at">--no-restore</span> input_file.R output_file.Rout</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD BATCH <span class="at">--no-save</span> <span class="at">--no-restore</span> input_file.R output_file.Rout</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Make sure to change “input_file.R” and “output_file.Rout”</p>
 <ul>
@@ -517,25 +522,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><p>Render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> Document</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render quarto_file.qmd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render quarto_file.qmd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>or, if that doesn’t work, you can render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> via</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"quarto::quarto_render('quarto_file.qmd')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Use Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> to Render an Jupyter Notebook (<code>.ipynb</code> Document):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebook.ipynb <span class="at">--execute</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebook.ipynb <span class="at">--execute</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Knit an R Markdown file</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"library(rmarkdown);render('rmarkdown_file.Rmd')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"rmarkdown::render('rmarkdown_file.Rmd')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Make sure to change “rmarkdown_file.Rmd”</p></li>
 <li><p>Run python script</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> input_file.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> input_file.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Make sure to change “input_file.py”</p></li>
 <li><p>Download data from the web</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--no-clobber</span> url_to_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">--no-clobber</span> url_to_data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -579,16 +588,16 @@ target2 : prereq2.py data2.csv
   python prereq2.py
 
 # Comment 3
-target3 : prereq3.Rmd
-  Rscript -e "library(rmarkdown);render('prereq3.Rmd')"</code></pre>
+target3 : prereq3.qmd
+  quarto render prereq3.qmd</code></pre>
 </section>
 <section id="evaluate-a-makefile" class="level2">
 <h2 class="anchored" data-anchor-id="evaluate-a-makefile">Evaluate a makefile</h2>
 <ul>
 <li><p>You can generate all target files by running the following in the terminal</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>You can run just the targets in a phony target by specifying the phony target</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> phony_target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> phony_target</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Make will check if any of the prerequisites have changes for each <code>target</code> and, if so, will re-run the bash commands of that <em>rule</em>.</p></li>
 <li><p><code>Make</code> will not re-run commands if the prerequisites have not changed. That is, if no upstream files to <code>target</code> were modified, then <code>target</code> will not be re-generated. This makes <code>make</code> very efficient.</p></li>
 </ul>
@@ -599,12 +608,12 @@ target3 : prereq3.Rmd
 <li><p>tl;dr</p>
 <ul>
 <li>For R and the terminal: Assume the working directory is the location of the Makefile.</li>
-<li>For Quarto and R Markdown: Assume the working directory is the location of the Rmd file.</li>
+<li>For Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> and R Markdown: Assume the working directory is the location of the qmd or Rmd file.</li>
 </ul></li>
 <li><p>So if your file structure is</p>
 <pre><code>Makefile
 analysis/script.R
-analysis/report.Rmd
+analysis/report.qmd
 data/data.csv</code></pre>
 <p>Then you need specify your targets according to this structure</p>
 <pre class="make"><code>data/data.csv : analysis/script.R
@@ -620,13 +629,13 @@ data/data.csv : analysis/script.R
   cd analysis; R CMD BATCH --no-save --no-restore script.R</code></pre></li>
 <li><p>Any file manipulation in “script.R” needs to be done assuming the working directory is where Makefile is (<strong>notice the single dot</strong>):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data/data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
-<li><p>However, confusingly, when you render a Quarto or R Markdown file, you need to assume the working directory is the location of the R Markdown file, not the location of <code>Makefile</code>. So in “report.Rmd” you would write (<strong>notice the double dots</strong>)</p>
+<li><p>However, confusingly, when you render a Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> or R Markdown file, you need to assume the working directory is the location of the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> or R Markdown file, not the location of <code>Makefile</code>. So in “report.qmd” you would write (<strong>notice the double dots</strong>)</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../data/data.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -644,13 +653,13 @@ data/data.csv : analysis/script.R
 <ul>
 <li>add_alt_sims.R</li>
 <li>null_sims.R</li>
-<li>panal.html</li>
-<li>panal.Rmd</li>
+<li>panal.qmd</li>
 </ul></li>
 <li>output
 <ul>
 <li>add_alt_sims.Rout</li>
 <li>null_sims.Rout</li>
+<li>panal.html</li>
 <li>pdat.csv</li>
 <li>pnull.RDS</li>
 </ul></li>
@@ -666,24 +675,32 @@ data/data.csv : analysis/script.R
 </div>
 </div></li>
 <li><p>The Makefile that organizes this structure is</p>
-<pre class="make"><code>.PHONY : all
-all : sims
+<pre class="make"><code>.PHONY: all
+all: sims
 
-.PHONY : sims
-sims : analysis/panal.html
+.PHONY: sims
+sims: output/panal.html
 
-analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+output/panal.html: analysis/panal.qmd output/pdat.csv
+    quarto render ./analysis/panal.qmd
+    mv ./analysis/panal.html ./output/panal.html
 
-output/pnull.RDS : analysis/null_sims.R
+output/pnull.RDS: analysis/null_sims.R
     R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
 
-output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
-    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
+output/pdat.csv: analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+
+.PHONY : clean
+clean:
+    rm -f ./output/panal.html
+    rm -f ./output/pnull.RDS
+    rm -f ./output/pdat.csv</code></pre></li>
 <li><p><strong>Exercise</strong>: Clone this repo and run <code>make</code> in the terminal.</p></li>
-<li><p><strong>Exercise</strong>: What happens when you modify “panal.Rmd” and you rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What happens when you modify “panal.qmd” and you rerun <code>make</code>?</p></li>
 <li><p><strong>Exercise</strong>: What happens when you modify “add_alt_sims.R” and rerun <code>make</code>?</p></li>
 <li><p><strong>Exercise</strong>: What happens when you modify “null_sims.R” and rerun <code>make</code>?</p></li>
+<li><p><strong>Exercise</strong>: What is the working directory the Quarto <img src="../kuato_small.png" alt="Kuato" width="3%"> file assumpes? What is the working directory the Makefile assumes? What is the working directory the R script assumes?</p></li>
 </ul>
 </section>
 <section id="your-turn" class="level1">
@@ -699,12 +716,12 @@ output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
 <li>analysis
 <ul>
 <li>classify_penguins.R</li>
-<li>penguin_report.html</li>
-<li>penguin_report.Rmd</li>
+<li>penguin_report.qmd</li>
 <li>plot_penguin.R</li>
 </ul></li>
 <li>output
 <ul>
+<li>penguin_report.html</li>
 <li>penguin_class.csv</li>
 <li>penguin_pairs.png</li>
 </ul></li>
@@ -723,11 +740,11 @@ output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
 <ol start="0" type="1">
 <li><p>Make sure you have the necessary R packages installed:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(randomForest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Modify the Makefile to automatically manage this pipeline.</p></li>
 <li><p>Run <code>make</code> in the terminal to generate all of the output (penguin_class.csv, penguin_pairs.png, and penguin_report.html)</p></li>
@@ -755,20 +772,27 @@ $(figs) : fig_create.R
 fig.pdf : script.R
   $(rexec) script.R</code></pre></li>
 <li><p><strong>Exercise</strong>: Modify the following Makefile (from the p-value exercise) to use variables that reduce the amount of copying/pasting:</p>
-<pre class="make"><code>.PHONY : all
-all : sims
+<pre class="make"><code>.PHONY: all
+all: sims
 
-.PHONY : sims
-sims : analysis/panal.html
+.PHONY: sims
+sims: output/panal.html
 
-analysis/panal.html : analysis/panal.Rmd output/pdat.csv
-    Rscript -e "library(rmarkdown);render('analysis/panal.Rmd')"
+output/panal.html: analysis/panal.qmd output/pdat.csv
+    quarto render ./analysis/panal.qmd
+    mv ./analysis/panal.html ./output/panal.html
 
-output/pnull.RDS : analysis/null_sims.R
+output/pnull.RDS: analysis/null_sims.R
     R CMD BATCH --no-save --no-restore analysis/null_sims.R output/null_sims.Rout
 
-output/pdat.csv : analysis/add_alt_sims.R output/pnull.RDS
-    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout</code></pre></li>
+output/pdat.csv: analysis/add_alt_sims.R output/pnull.RDS
+    R CMD BATCH --no-save --no-restore analysis/add_alt_sims.R output/add_alt_sims.Rout
+
+.PHONY : clean
+clean:
+    rm -f ./output/panal.html
+    rm -f ./output/pnull.RDS
+    rm -f ./output/pdat.csv</code></pre></li>
 </ul>
 <section id="automatic-variables" class="level2">
 <h2 class="anchored" data-anchor-id="automatic-variables">Automatic Variables</h2>
@@ -806,9 +830,10 @@ figure.pdf : script.R data1.csv data2.csv
 <p>The variables and automatic variables would interpret this as</p>
 <pre class="make"><code>figure.pdf : script.R data1.csv data2.csv
   R CMD BATCH --no-save --no-restore script.R script.Rout</code></pre></li>
-<li><p><strong>Exercise</strong>: Re-write the following to use an automatic variable instead of the Rmd’s file name in the recipe.</p>
-<pre class="make"><code>report.html : report.Rmd
-  Rscript -e "library(rmarkdown);render('report.Rmd')"</code></pre></li>
+<li><p><strong>Exercise</strong>: Re-write the following to use automatic variables.</p>
+<pre class="make"><code>output/report.html: analysis/report.qmd
+  quarto render analysis/report.qmd
+  mv analysis/report.html output/report.html</code></pre></li>
 </ul>
 </section>
 </section>
@@ -892,13 +917,14 @@ figure.pdf : script.R data1.csv data2.csv
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
