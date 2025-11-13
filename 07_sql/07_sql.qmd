@@ -1034,7 +1034,7 @@ The file [starwars.duckdb](https://data-science-master.github.io/lectures/data/s
 
 9.  Here is the summary of the keys for the database from the [`{starwarsdb}` GitHub page](https://github.com/gadenbuie/starwarsdb).
 
-    ![](./README-starwars-data-model-1.svg)\ 
+    ![](./figs/starwars-data-model.png)\ 
 
     Select all films with characters whose homeworld is Kamino.
     

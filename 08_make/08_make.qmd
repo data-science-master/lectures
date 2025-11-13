@@ -208,6 +208,12 @@ ggplot2::theme_set(ggplot2::theme_bw())
     
     Make sure to change "input_file.py"
     
+-   Run a SQL script using [duckdb](https://duckdb.org/docs/stable/clients/cli/overview)
+
+    ```{bash, eval = FALSE}
+    duckdb duckdb_data.duckdb < input_filet.sql
+    ```
+    
 -   Download data from the web
 
     ```{bash, eval = FALSE}
