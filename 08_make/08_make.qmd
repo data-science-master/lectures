@@ -35,6 +35,15 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - If you are using Mac or Linux, you probably have `make` already installed.
   - To verify, open up the terminal and run `make --version`
+
+- You might need to install the Quarto CLI:
+  - Check by running `quarto --version`
+  - Install using <https://quarto.org/docs/get-started/>
+  - Or install using homebrew:
+    ```{bash, eval = FALSE}
+    brew install --cask quarto
+    ```
+  
     
 # Installation Windows
 
