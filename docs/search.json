@@ -1530,7 +1530,7 @@
     "href": "10_llms/10_basics.html",
     "title": "LLM Basics",
     "section": "",
-    "text": "3Blue1Brown LLM Explainer\n3Blue1Brown Trasnformer\nHugging Face Model Search"
+    "text": "3Blue1Brown LLM Explainer\n3Blue1Brown Transformer\n3Blue1Brown Attention\n3Blue1Brown Interpretation\nHugging Face Model Search"
   },
   {
     "objectID": "10_llms/10_basics.html#tokenization",
@@ -1559,5 +1559,12 @@
     "title": "LLM Basics",
     "section": "Sample",
     "text": "Sample\n\nThe black box provides a probability distribution of tokens.\nThe next token is sampled from this probability distribution.\n\n\nfrom transformers import AutoTokenizer, AutoModelForCausalLM\nimport torch\nimport torch.nn.functional as F\n\nmodel_name = \"google/gemma-3-1b-it\"\ntokenizer = AutoTokenizer.from_pretrained(model_name)\nmodel = AutoModelForCausalLM.from_pretrained(model_name)\nmodel.eval()\n\ninput_text = \"The cat sat on the mat.\"\ninput_ids = tokenizer.encode(input_text, return_tensors=\"pt\")\n\nwith torch.no_grad():\n    outputs = model(input_ids)\n    logits = outputs.logits\n\nnext_token_logits = logits[0, -1, :]\nprobs = F.softmax(next_token_logits, dim=-1)\n\ntop_k = torch.topk(probs, k=10)\nfor idx, prob in zip(top_k.indices, top_k.values):\n    print(f\"{tokenizer.decode(idx)}: {prob.item():.4f}\")"
+  },
+  {
+    "objectID": "10_llms/10_basics.html#chat-in-python",
+    "href": "10_llms/10_basics.html#chat-in-python",
+    "title": "LLM Basics",
+    "section": "Chat in Python",
+    "text": "Chat in Python\n\nhttps://huggingface.co/docs/transformers/main/en/conversations\n\n\nchat = [\n    {\"role\": \"system\", \"content\": \"You are a world-leading expert in statistics.\"},\n    {\"role\": \"user\", \"content\": \"What is a p-value?\"}\n]\n\nimport torch\nfrom transformers import pipeline\n\npipeline = pipeline(task=\"text-generation\", model=\"google/gemma-3-1b-it\")\nresponse = pipeline(chat, max_new_tokens=100)\nprint(response[0][\"generated_text\"][-1][\"content\"])\n\nOkay, let’s dive into the fascinating and often misunderstood concept of the p-value. As a statistician, I’ve spent years studying its nuances and applications, and I’m happy to provide a thorough explanation.\n\n**What is a P-Value?**\n\nAt its core, the p-value is a statistical measure that represents the probability of observing data as extreme as, or more extreme than, the data actually observed, *assuming that the null hypothesis is true*. Let"
   }
 ]

@@ -18,11 +18,13 @@ author: "David Gerard"
 - Install the Hugging Face CLI: <https://huggingface.co/docs/huggingface_hub/installation#install-the-hugging-face-cli>
 
 -   Mac Users:
+
     ``` bash
     brew install huggingface-cli
     ```
 
--   Windows Users: User the [PowerShell](https://en.wikipedia.org/wiki/PowerShell) (**not** git bash for windows) and run
+-   Windows Users: Use the [PowerShell](https://en.wikipedia.org/wiki/PowerShell) (**not** git bash for windows) and run
+
     ``` bash
     powershell -ExecutionPolicy ByPass -c "irm https://hf.co/cli/install.ps1 | iex"
     ```
@@ -153,7 +155,7 @@ author: "David Gerard"
   - <https://huggingface.co/models?library=sentence-transformers>
   
 -   Let's see the embeddings for some tokens. 
-    - Don't worry about the exact code. Folks don't do thism so it's a little wonky.
+    - Don't worry about the exact code. Folks don't do this so it's a little wonky.
     ```{python}
     model = AutoModelForCausalLM.from_pretrained(model_name)
     text = "Once upon a time, a very long time ago now,"
