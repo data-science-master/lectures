@@ -1,7 +1,7 @@
 ---
 title: "Automatic Checks"
 author: "David Gerard"
-date: "`r Sys.Date()`"
+date: today
 output:  
   html_document:
     toc: true
@@ -60,7 +60,7 @@ tcl = -.25)
     
 # Common issues
 
-- If you run into an error/warning/note that you do not understand, go to the R packages page to understand it: <https://r-pkgs.org/r-cmd-check.html>
+- If you run into an error/warning/note that you do not understand, go to the R packages page to understand it: <https://r-pkgs.org/R-CMD-check.html>
 
 - I won't cover all of the checks, but I'll list the ones that I most often need to fix.
 
@@ -155,7 +155,7 @@ tcl = -.25)
 
 -   In a package, run
     ```{r, eval = FALSE}
-    usethis::use_github_action_check_standard()
+    usethis::use_github_action("check-standard")
     ```
 
 - Running this will create a new file in a hidden folder via the path ".github/workflows/R-CMD-check.yaml". This YAML file contains instructions for setting up a virtual machine, installing R and your dependencies, and running R CMD check.
