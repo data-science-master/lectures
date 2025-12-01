@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Gerard">
-<meta name="dcterms.date" content="2025-06-03">
+<meta name="dcterms.date" content="2025-12-01">
 
 <title>R Packages – DATA 413/613 Data Science</title>
 <style>
@@ -69,18 +69,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ef56b68f8fa1e9d2ba328e99e439f80.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-6bd77949012616049cccce2f6cb6e61f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4dfb2ebcca07d72698a01318cc0f8b53.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-2d7fbd4b49ed3f9f8cca4bb2fdc551ec.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-4dfb2ebcca07d72698a01318cc0f8b53.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -123,7 +124,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -311,6 +312,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">DATA 413/613 Data Science</span>
     </a>
@@ -400,7 +403,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 3, 2025</p>
+      <p class="date">December 1, 2025</p>
     </div>
   </div>
   
@@ -427,11 +430,11 @@ window.Quarto = {
 <ul>
 <li><p>Make sure you have the following packages installed.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pkgvec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"usethis"</span>, <span class="st">"devtools"</span>, <span class="st">"roxygen2"</span>, <span class="st">"testthat"</span>, <span class="st">"knitr"</span>, <span class="st">"covr"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pkgvec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"usethis"</span>, <span class="st">"devtools"</span>, <span class="st">"roxygen2"</span>, <span class="st">"testthat"</span>, <span class="st">"knitr"</span>, <span class="st">"covr"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pkg <span class="cf">in</span> pkgvec) {</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(pkg, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) </span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(pkg)  </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>The <code>{usethis}</code> and <code>{devtools}</code> packages automate many of the tedious tasks of package development, allowing you to focus on writing R code. These are the packages we will mostly use.</p></li>
 </ul>
@@ -456,7 +459,7 @@ window.Quarto = {
 <li><p><strong>Source package</strong>: A directory of files (R scripts, documentation files, test scripts, etc) with a specific structure. This lecture is about developing source packages.</p></li>
 <li><p><strong>Bundled package</strong>: A source package that has been compressed into a single file (along with a few other operations). These usually end in “.tar.gz”. We use the following to create a bundled package from a source package:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">build</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">build</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You typically only do this when you are about to submit to CRAN.</p></li>
 <li><p><strong>Binary package</strong>: A ready-to-install version for folks who do not have R development tools. You typically don’t need to worry about this. If you submit to CRAN, then they will create binaries for you.</p></li>
@@ -466,17 +469,19 @@ window.Quarto = {
 <li><p>Confusingly, you use the <code>library()</code> function to load a package.</p></li>
 <li><p>You can see/control your active libraries with</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.libPaths</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library"</code></pre>
+<pre><code>[1] "/home/dgerard/R/x86_64-pc-linux-gnu-library/4.5"
+[2] "/usr/local/lib/R/site-library"                  
+[3] "/usr/lib/R/site-library"                        
+[4] "/usr/lib/R/library"                             </code></pre>
 </div>
 </div></li>
-<li><p>For example, these are some of the packages in /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library</p>
+<li><p>For example, these are some of the packages in /home/dgerard/R/x86_64-pc-linux-gnu-library/4.5</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">.libPaths</span>()[[<span class="dv">1</span>]]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">.libPaths</span>()[[<span class="dv">1</span>]]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "abind"             "adbcdrivermanager" "airway"           
-[4] "annotate"          "AnnotationDbi"     "AnnotationHub"    </code></pre>
+<pre><code>character(0)</code></pre>
 </div>
 </div></li>
 </ul></li>
@@ -499,7 +504,7 @@ window.Quarto = {
 <ul>
 <li><p>A typical package will have this directory/file structure</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> DESCRIPTION</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> .git</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> .gitignore</span>
@@ -519,7 +524,7 @@ window.Quarto = {
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> tests</span>
 <span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> testthat</span>
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│</span>   └── test-file.R</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> testthat.R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">└──</span> testthat.R</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Most of these files/folders will be generated by <code>{devtools}</code> and <code>{usethis}</code>, but you should still know what they are.</p></li>
 <li><p><code>.git</code> is a hidden directory that git uses to store your version control history. Don’t touch this.</p></li>
@@ -553,16 +558,16 @@ window.Quarto = {
 <li><p>Choose a location that is not inside an RStudio project, another R package, another git repo, or inside an R library.</p></li>
 <li><p>Then just type</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>I don’t like RStudio projects, so I typically run</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>, <span class="at">rstudio =</span> <span class="cn">FALSE</span>, <span class="at">open =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>, <span class="at">rstudio =</span> <span class="cn">FALSE</span>, <span class="at">open =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can use RStudio Projects if you want. But I won’t help with any issues you have with RStudio projects.</p></li>
 <li><p><strong>Example</strong>: For this lecture, we will create a simple R package called <code>forloop</code> that reproduces some Base R functions using for-loops. Create a folder called “forloop”, set the working directory to this folder, and run</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>, <span class="at">rstudio =</span> <span class="cn">FALSE</span>, <span class="at">open =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">create_package</span>(<span class="at">path =</span> <span class="st">"."</span>, <span class="at">rstudio =</span> <span class="cn">FALSE</span>, <span class="at">open =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -573,10 +578,10 @@ window.Quarto = {
 <li><p>Here, we will discuss how programming is a little different compared to working in an R script or an R Markdown file in interactive mode.</p></li>
 <li><p>All R code in package should be a function definition (with <strong>very</strong> few exceptions).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arg1 =</span> val1, <span class="at">arg2 =</span> val2, ...) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">arg1 =</span> val1, <span class="at">arg2 =</span> val2, ...) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="do">## code here</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(retval)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Don’t have R code outside of a function definition in your package until you <strong>really</strong> understand the benefits of exceptions to this rule.</p></li>
 <li><p>All R code should go in R scripts (ending in “.R”) <strong>not</strong> R markdowns (ending in “.Rmd”)</p></li>
@@ -589,29 +594,29 @@ window.Quarto = {
 </ol></li>
 <li><p>In a typical R script (outside of an R package), code is run when you run it. In an R package, code is run when the package is built. So, for example, if you include the following line of code in your package.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2025-06-03 10:28:59 EDT"</code></pre>
+<pre><code>[1] "2025-12-01 13:13:57 EST"</code></pre>
 </div>
 </div>
 <p>Then <code>x</code> be the time of the package build. If you want the time that a user runs some code, include this statement in a function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ftime <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ftime <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">Sys.time</span>())</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ftime</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ftime</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2025-06-03 10:28:59 EDT"</code></pre>
+<pre><code>[1] "2025-12-01 13:13:57 EST"</code></pre>
 </div>
 </div></li>
 <li><p>When you alias a function from another package, don’t do</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">&lt;-</span> pkg<span class="sc">::</span>bar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">&lt;-</span> pkg<span class="sc">::</span>bar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>instead, do</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="cf">function</span>(...) pkg<span class="sc">::</span><span class="fu">bar</span>(...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>foo <span class="ot">&lt;-</span> <span class="cf">function</span>(...) pkg<span class="sc">::</span><span class="fu">bar</span>(...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is since <code>foo</code> is defined as <code>pkg::bar</code> during build time of your package. So if the <code>{pkg}</code> maintainers fix an issue in <code>bar()</code>, your aliased function will still be the incorrect version of <code>bar()</code> until a user rebuilds your package.</p></li>
 <li><p>Don’t modify a user’s R landscape (the global settings and the behavior of functions/objects outside of your package). With rare exceptions, here are some things to not do:</p>
@@ -635,16 +640,16 @@ window.Quarto = {
 <li><p><strong>Example</strong>: Let’s work together to build a function called <code>col_means()</code> that will take as input a data frame and return a vector of column means. We will not use the <code>colMeans()</code> function.</p></li>
 <li><p><strong>Exercise</strong>: Create an R script file in your package called “sum.R” via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_r</span>(<span class="at">name =</span> <span class="st">"sum"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_r</span>(<span class="at">name =</span> <span class="st">"sum"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In this file, create a function called <code>sum2()</code> that takes as input a numeric vector <code>x</code> and returns its sum. Use a for-loop to calculate the sum (not the <code>sum()</code> function).</p></li>
 <li><p><strong>Exercise</strong>: Include an <code>na.rm</code> argument that defaults to <code>FALSE</code>. It removes <code>NA</code>’s if <code>TRUE</code> and does not if <code>FALSE</code>.</p></li>
 <li><p><strong>Exercise</strong>: Create a function called <code>count_na()</code> that will use a for-loop to count how many <code>NA</code>’s there are in a vector.</p></li>
 <li><p><strong>Exercise</strong>: There are a couple edge cases you should worry about. If the length of <code>x</code> is 0, then you should return <code>NA_real_</code>. If all values of <code>x</code> are <code>NA</code>, then you should return <code>NA_real_</code> (use <code>count_na()</code> to check for this). Edit your function to make these changes now. Test it out on</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum2</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">1</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="do">## should be 1</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum2</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="dv">1</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="do">## should be 1</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum2</span>(<span class="fu">c</span>(), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="do">## should be NA</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum2</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="do">## should be NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum2</span>(<span class="fu">c</span>(<span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="do">## should be NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -670,16 +675,16 @@ window.Quarto = {
 <li><p>Documentation in an R package is in “.rd” files in the “man” folder. This is rather esoteric, so we’ll use <code>{roxygen2}</code> to generate them automatically.</p></li>
 <li><p><code>{roxygen2}</code> documentation is provided by comments above a function, where each line begins with <code>#'</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' Documentation goes here</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Function code here.</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>After you write some documentation, you can run</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">document</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">document</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>and <code>{roxygen2}</code> will automatically update your documentation.</p></li>
 <li><p>You can then look at your documentation by using <code>?</code> or <code>help()</code>.</p></li>
@@ -687,7 +692,7 @@ window.Quarto = {
 <li><p>Values of a tag extend from the tag to the next tag.</p></li>
 <li><p>A typical <code>{roxygen2}</code> documentation looks like this</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @title One line description of what the function does.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @title One line description of what the function does.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @description One paragraph description of what the function does</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
@@ -705,7 +710,7 @@ window.Quarto = {
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="co">#' ## Some example code goes here</span></span>
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>fn <span class="ot">&lt;-</span> <span class="cf">function</span>(arg1, arg2) {</span>
 <span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Function code here</span></span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p><code>@param</code>: Each argument should be documented. You should state</p>
 <ol type="1">
@@ -717,7 +722,7 @@ window.Quarto = {
 <li><p>Use <code>@inheritParams</code> to use the parameter documentation from a function in a different function.</p></li>
 <li><p>The following will use <code>fn1()</code>’s documentation for <code>a</code> in <code>fn2()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param a An argument</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param a An argument</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fn1 <span class="ot">&lt;-</span> <span class="cf">function</span>(a) {</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>}</span>
@@ -726,7 +731,7 @@ window.Quarto = {
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param b Another argument</span></span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>fn2 <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b) {</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>If you want to document your function, but do not want <code>{roxygen2}</code> to create a man file for it, then add the <code>@noRd</code> tag.</p></li>
 <li><p>Documenting is very good, but having a manual page means that you need to maintain it for other users, so I usually document <strong>all</strong> of my functions but only have man pages for my exported functions.</p></li>
@@ -747,24 +752,24 @@ window.Quarto = {
 <li><p><code>\doi{}</code>: Provide the DOI of a paper (with a link to that paper).</p></li>
 <li><p>You can make an itemized list with</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \itemize{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \itemize{</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item Item 1</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item Item 2</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>You can make an enumerated list with</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \enumerate{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \enumerate{</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item Item 1</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item Item 2</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>You can make a named list with</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \describe{</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' \describe{</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{Name 1}{Item 1}</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{Name 2}{Item 2}</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p><strong>Example</strong>: Let’s work together to document our <code>col_means()</code> function.</p></li>
 <li><p><strong>Exercise</strong>: Document <code>sum2()</code> and <code>count_na()</code>. Make sure to include the following tags <code>@title</code>, <code>@description</code>, <code>@details</code>, <code>@param</code>, <code>@return</code>, <code>@author</code>, and <code>@examples</code>.</p></li>
@@ -778,8 +783,8 @@ window.Quarto = {
 <li><p>A namespace tells R what functions come from what packages.</p></li>
 <li><p>Each package has a namespace. You use <code>::</code> to tell R which package to use a function from. Otherwise, it wouldn’t know to distinguish between, e.g.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">lag</span>()</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>stats<span class="sc">::</span><span class="fu">lag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">lag</span>()</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>stats<span class="sc">::</span><span class="fu">lag</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Your package namespace will determine</p>
 <ol type="1">
@@ -792,7 +797,7 @@ window.Quarto = {
 <ul>
 <li><p>Include the following tag in the documentation of any function that you want a user to have access to.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>export</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="sc">@</span>export</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>This will add the function to the “NAMESPACE” file (which you should not edit by hand).</p></li>
 <li><p>Note <code>devtools::load_all()</code> will attach all functions from your package so you can test them out. But if a user installs your package and uses <code>library()</code>, they will <em>only</em> have access to exported functions.</p></li>
@@ -807,16 +812,16 @@ window.Quarto = {
 <li><p><strong>Never</strong> use <code>library()</code> or <code>require()</code> in an R package.</p></li>
 <li><p>Package dependencies go in the DESCRIPTION folder. You can tell R that your package depends on another package by running:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>This will make it so that the package is available when your package is installed.</p></li>
 <li><p>Then, you call functions from other packages via <code>package::function()</code>, where <code>package</code> is the name of the package and <code>function()</code> is the function name from <code>package</code>.</p></li>
 <li><p>You can suggest (but not require) a package to be installed. This is usually done if the functions from the suggested package are not vital, or the suggested package is hard to install (or has a lot of dependencies itself). To do so, also use <code>usethis::use_package()</code> with <code>type = "Suggests"</code>.</p></li>
 <li><p>If you suggest a package, whenever you use a function from that package you should first check to see if it is installed with <code>requireNamespace("pkg", quietly = TRUE)</code>. E.g.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"pkg"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"pkg"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  pkg<span class="sc">::</span><span class="fu">fun</span>()</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul>
 </section>
@@ -831,18 +836,18 @@ window.Quarto = {
 <li><p>The importing part of a namespace is important to avoid ambiguity.</p></li>
 <li><p>E.g. many packages use <code>c()</code>. We can (rather foolishly) redefine it via</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Don't run this</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Don't run this</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="cn">NA</span>)</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>and no package will be affected because they all import <code>c()</code> from the <code>{base}</code> R package.</p></li>
 <li><p><strong>Search Path</strong>: The list of packages that R will automatically search for functions. See your search path by <code>search()</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] ".GlobalEnv"        "package:stats"     "package:graphics" 
-[4] "package:grDevices" "package:utils"     "package:datasets" 
+[4] "package:grDevices" "package:datasets"  "package:utils"    
 [7] "package:methods"   "Autoloads"         "package:base"     </code></pre>
 </div>
 </div></li>
@@ -853,7 +858,7 @@ window.Quarto = {
 <li><p>Generally, I do not recommend importing functions. but you can do it by using <code>@importFrom</code> anywhere in your package.</p></li>
 <li><p>E.g. adding this line anywhere in your package will attach <code>dplyr::mutate()</code> whenever your package is attached.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom dplyr mutate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom dplyr mutate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Why do I recommend rarely using <code>@importFrom</code>? Because that could make coding more complicated for your users</p>
 <ul>
@@ -884,7 +889,7 @@ window.Quarto = {
 <li><p>The file called “DESCRIPTION” (with no filename extension) contains “meta” information about your package (like the authors, the dependencies, the license, etc)</p></li>
 <li><p><code>usethis::create_package()</code> gives you a template for DESCRIPTION which you can fill in. Most of the options are self-explanatory.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Package</span><span class="kw">:</span><span class="at"> mypackage</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Package</span><span class="kw">:</span><span class="at"> mypackage</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Title</span><span class="kw">:</span><span class="at"> What The Package Does (one line, title case required)</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Version</span><span class="kw">:</span><span class="at"> </span><span class="fl">0.1</span></span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Authors@R</span><span class="kw">:</span><span class="at"> person("First", "Last", email = "first.last@example.com",</span></span>
@@ -892,7 +897,7 @@ window.Quarto = {
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">Description</span><span class="kw">:</span><span class="at"> What the package does (one paragraph)</span></span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">Depends</span><span class="kw">:</span><span class="at"> R (&gt;= 3.1.0)</span></span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="fu">License</span><span class="kw">:</span><span class="at"> What license is it under?</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">LazyData</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="fu">LazyData</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Each line consists of a <strong>field</strong> and a <strong>value</strong>, separated by colon. For example, above the “Package” field has the value “mypackage”.</p></li>
 <li><p>“Package”: Choose a package name that is</p>
@@ -915,27 +920,27 @@ window.Quarto = {
 <li><p>The <code>comment</code> argument is a named character vector with additional notes. The most common value of <code>comment</code> is your <a href="https://orcid.org/">ORCID</a> number with <code>comment = c(ORCID = "number here")</code>.</p></li>
 <li><p>If you have more than one author, put the <code>person()</code> calls in a vector.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="at">Authors@R</span><span class="fu">:</span><span class="kw">:</span><span class="at"> c(person("Jane", "Doe", email = "janedoe@american.edu", role = c("aut", "cre")),</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="at">              person("John", "Doe", email = "johndoe@american.edu", role = c("aut")))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="at">Authors@R</span><span class="fu">:</span><span class="kw">:</span><span class="at"> c(person("Jane", "Doe", email = "janedoe@american.edu", role = c("aut", "cre")),</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="at">              person("John", "Doe", email = "johndoe@american.edu", role = c("aut")))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul></li>
 <li><p>“License”: What license should you distribute this package under? Don’t edit this by hand. You should use either (in decreasing order of restrictiveness)</p>
 <ul>
 <li><p>Proprietary license: No one can use your package (CRAN won’t except this)</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_proprietary_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_proprietary_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>GPL-3 license: If other folks make derivatives of your package, they have to also place it as open-source under a GPL-3 license:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_gpl3_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_gpl3_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>MIT license: Folks can use your stuff as long they distribute the license with your code.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>CC0 license: You place your stuff in the public domain, and anyone can use it for any reason.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_cc0_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_cc0_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ul></li>
 <li><p>“Version”: At least two integers separated by dots (.) or dashes (-) like <code>1.0.2</code> or <code>1.0-11</code>. You should usually only have three integers (at most).</p>
@@ -949,15 +954,15 @@ window.Quarto = {
 </ul></li>
 <li><p>“Imports”: What packages does your package depend on? If you run <code>usethis::use_package()</code>, then <code>{usethis}</code> will edit the DESCRIPTION file for you. But typically the imports field looks something like this</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Imports</span><span class="kw">:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Imports</span><span class="kw">:</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg1,</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>“Suggests”: What packages do you suggest installing to use your package (but are not required)? Again, use <code>usethis::use_package()</code>, but this time with the <code>Type = "Suggests"</code> argument. It will look like this in the DESCRIPTION folder:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Suggests</span><span class="kw">:</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Suggests</span><span class="kw">:</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg1,</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="at">  pkg2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p><strong>Exercise</strong>: Edit the “Package”, “Title”, “Authors@R” and “Description” sections of your “DESCRIPTION” file</p></li>
 <li><p><strong>Exercise</strong>: Use a GPL-3 license.</p></li>
@@ -989,8 +994,8 @@ window.Quarto = {
 <ul>
 <li><p>External data is available to the user. For example, the <code>mpg</code> dataset from the <code>{ggplot2}</code> is available to us by running</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mpg"</span>, <span class="at">package =</span> <span class="st">"ggplot2"</span>)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mpg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mpg"</span>, <span class="at">package =</span> <span class="st">"ggplot2"</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(mpg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>tibble [234 × 11] (S3: tbl_df/tbl/data.frame)
  $ manufacturer: chr [1:234] "audi" "audi" "audi" "audi" ...
@@ -1011,7 +1016,7 @@ window.Quarto = {
 <li><p>You should document your dataset, using roxygen, in a separate R file in the “R” directory. Typically, folks document all of their data in “R/data.R”.</p></li>
 <li><p>Instead of a function declaration, you just type the name of the dataset. E.g., from my <code>{updog}</code> R package I have the following documentation for the <code>snpdat</code> tibble.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @title GBS data from Shirasawa et al (2017)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' @title GBS data from Shirasawa et al (2017)</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @description Contains counts of reference alleles and total read counts </span></span>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' from the GBS data of Shirasawa et al (2017) for</span></span>
@@ -1033,7 +1038,7 @@ window.Quarto = {
 <span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{Gerard, D., Ferrão, L. F. V., Garcia, A. A. F., &amp; Stephens, M. (2018). Genotyping Polyploids from Messy Sequencing Data. \emph{Genetics}, 210(3), 789-807. \doi{10.1534/genetics.118.301468}.}</span></span>
 <span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span>
 <span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="st">"snpdat"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="st">"snpdat"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>Never export a dataset (via the <code>@export</code> tag).</p></li>
 <li><p>The <code>@format</code> tag is useful for describing how the data are structured.</p></li>
@@ -1047,9 +1052,9 @@ window.Quarto = {
 <li><p><code>usethis::use_data()</code> will do this automatically if you use the <code>internal = TRUE</code> argument.</p></li>
 <li><p>E.g. the following will put <code>x</code> and <code>y</code> in “R/sysdata.rda”</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>)</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">hello =</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>), <span class="at">goodbye =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_data</span>(x, y, <span class="at">internal =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_data</span>(x, y, <span class="at">internal =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p>You can use internal data in a package as you normally would use an object that is loaded into memory.</p></li>
 <li><p><strong>Exercise</strong>: Create a function called <code>fib()</code> that takes as input <code>n</code> and returns the <code>n</code>th <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci number</a>. Recall that the sequence is <span class="math display">\[
@@ -1063,66 +1068,8 @@ window.Quarto = {
 <h1>Documenting a Package</h1>
 <ul>
 <li><p>It is pretty standard to have a help page for your package called “&lt;package&gt;-package”. E.g., for our <code>{forloop}</code> package we would call it <code>forloop-package</code>. Then, if a user wanted to see more about the package, they could look at that help file via <code>?`forloop-package`</code>.</p></li>
-<li><p>This help file is also where I typically put function imports.</p></li>
-<li><p>Here is my documentation for my <code>{ldsep}</code> package</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Linkage Disequilibrium Shrinkage Estimation for Polyploids</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Estimate haplotypic or composite pairwise linkage disequilibrium</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' (LD) in polyploids, using either genotypes or genotype likelihoods. Support is</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' provided to estimate the popular measures of LD: the LD coefficient D,</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' the standardized LD coefficient D', and the Pearson correlation</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' coefficient r. All estimates are returned with corresponding</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' standard errors. These estimates and standard errors can then be used</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' for shrinkage estimation.</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @section Functions:</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co">#' The main functions are:</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co">#' \describe{</span></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{ldfast}()}}{Fast, moment-based, bias-corrected LD</span></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="co">#'       LD estimates from marginal posterior distributions.}</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{ldest}()}}{Estimates pairwise LD.}</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{mldest}()}}{Iteratively apply \code{\link{ldest}()}</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="co">#'       across many pairs of SNPs.}</span></span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{sldest}()}}{Iteratively apply \code{\link{ldest}()}</span></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="co">#'       along a sliding window of fixed length.}</span></span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{plot.lddf}()}}{Plot method for the output of</span></span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="co">#'       \code{\link{mldest}()} and \code{\link{sldest}()}.}</span></span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{format_lddf}()}}{Format the output of</span></span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="co">#'       \code{\link{mldest}()} and \code{\link{sldest}()} into a matrix.}</span></span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="co">#'   \item{\code{\link{ldshrink}()}}{Shrink correlation estimates</span></span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a><span class="co">#'       using adaptive shrinkage (Stephens, 2017; Dey and Stephens, 2018).}</span></span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a><span class="co">#' }</span></span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a><span class="co">#' @section Citation:</span></span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a><span class="co">#' If you find the methods in this package useful, please run the following</span></span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a><span class="co">#' in R for citation information: \code{citation("ldsep")}</span></span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom stats var</span></span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom foreach %dopar%</span></span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a><span class="co">#' @useDynLib ldsep, .registration = TRUE</span></span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="co">#' @importFrom Rcpp sourceCpp</span></span>
-<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a><span class="co">#' @docType package</span></span>
-<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a><span class="co">#' @name ldsep-package</span></span>
-<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a><span class="co">#' @aliases ldsep</span></span>
-<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="co">#' @author David Gerard</span></span>
-<span id="cb47-45"><a href="#cb47-45" aria-hidden="true" tabindex="-1"></a><span class="cn">NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
-</div>
-</div></li>
-<li><p>I use the <code>@section</code> tag to make custom sections for (i) the important functions and (ii) how to cite the package. This is not required, but it is a good standard.</p>
-<ul>
-<li>The format for this tag is <code>@section Name:</code>. Make sure you end the name of the section with a colon.</li>
-</ul></li>
-<li><p><code>@docType package</code>: Should be included to show that this is not a function.</p></li>
-<li><p><code>@name ldsep-package</code>: Makes it so that if a user types <code>?`ldsep-package`</code>, then they will reach this help file.</p></li>
-<li><p><code>@aliases ldsep</code>: This makes it so that a user type <code>?ldsep</code>, then they will reach this help file as well.</p></li>
-<li><p>Just include <code>NULL</code> below the documentation so that <code>{roxygen2}</code> knows to make a help file for it.</p></li>
+<li><p>To do this, just run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_package_doc</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ul>
 
 
@@ -1193,13 +1140,14 @@ window.Quarto = {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

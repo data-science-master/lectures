@@ -1,7 +1,7 @@
 ---
 title: "Assertions and Unit Tests"
 author: "David Gerard"
-date: "`r Sys.Date()`"
+date: today
 output:  
   html_document:
     toc: true
@@ -295,16 +295,6 @@ tcl = -.25)
     expect_equal(10, 10 + 10^-5, tolerance = 10^-4)
     ```
     
--   Make sure to **only** check for equality between two things. If you provide three unnamed arguments, the third one is interpreted as the tolerance. This is a common error that I have done many times.
-
-    ```{r, error = TRUE}
-    ## Bad
-    expect_equal(10, 10, 10)
-    ## Because this will also run OK (tolerance = 10)
-    expect_equal(10, 2, 10)
-    ```
-
-    
 -   Use `ignore_attr = TRUE` if your objects have different attributes and you just care about the numeric values (default `expect_equal()` will throw an error):
     ```{r, error=TRUE}
     local_edition(3) ## not necessary for package
@@ -342,21 +332,28 @@ tcl = -.25)
     beta0 <- 0
     beta1 <- 2
     sigma2 <- 0.5
-    expect_error(simreg(n = 1, 
-                        x = x, 
-                        beta0 = beta0, 
-                        beta1 = beta1, 
-                        sigma2 = sigma2))
+    expect_error(
+      simreg(
+        n = 1, 
+        x = x, 
+        beta0 = beta0, 
+        beta1 = beta1, 
+        sigma2 = sigma2
+      )
+    )
     ```
     
--   It is recommended that you think harder about your unit tests, but you can just test for a non-error by using `expect_error()` and setting `regexp = NA`
+-   It is recommended that you think harder about your unit tests, but you can just test for a non-error by using `expect_no_error()`.
     ```{r}
-    expect_error(simreg(n = length(x), 
-                        x = x, 
-                        beta0 = beta0, 
-                        beta1 = beta1, 
-                        sigma2 = sigma2), 
-                 regexp = NA)
+    expect_no_error(
+      simreg(
+        n = length(x), 
+        x = x, 
+        beta0 = beta0, 
+        beta1 = beta1, 
+        sigma2 = sigma2
+        )
+      )
     ```
 
 -   `expect_type()` is tests for the type of the output (`"double"`, `"integer"`, `"character"`, `"logical"`, or `"list"`).

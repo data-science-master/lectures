@@ -1,7 +1,7 @@
 ---
 title: "R Packages"
 author: "David Gerard"
-date: "`r Sys.Date()`"
+date: today
 output:  
   html_document:
     toc: true
@@ -1037,67 +1037,10 @@ ggplot2::theme_set(ggplot2::theme_bw() + ggplot2::theme(strip.background = ggplo
     
 # Documenting a Package
 
-- It is pretty standard to have a help page for your package called "\<package\>-package". E.g., for our `{forloop}` package we would call it `forloop-package`. Then, if a user wanted to see more about the package, they could look at that help file via `` ?`forloop-package` ``.
+-   It is pretty standard to have a help page for your package called "\<package\>-package". E.g., for our `{forloop}` package we would call it `forloop-package`. Then, if a user wanted to see more about the package, they could look at that help file via `` ?`forloop-package` ``.
 
-- This help file is also where I typically put function imports.
+-   To do this, just run:
 
-
--   Here is my documentation for my `{ldsep}` package
-    ```{r}
-    #' Linkage Disequilibrium Shrinkage Estimation for Polyploids
-    #'
-    #' Estimate haplotypic or composite pairwise linkage disequilibrium
-    #' (LD) in polyploids, using either genotypes or genotype likelihoods. Support is
-    #' provided to estimate the popular measures of LD: the LD coefficient D,
-    #' the standardized LD coefficient D', and the Pearson correlation
-    #' coefficient r. All estimates are returned with corresponding
-    #' standard errors. These estimates and standard errors can then be used
-    #' for shrinkage estimation.
-    #'
-    #' @section Functions:
-    #'
-    #' The main functions are:
-    #' \describe{
-    #'   \item{\code{\link{ldfast}()}}{Fast, moment-based, bias-corrected LD
-    #'       LD estimates from marginal posterior distributions.}
-    #'   \item{\code{\link{ldest}()}}{Estimates pairwise LD.}
-    #'   \item{\code{\link{mldest}()}}{Iteratively apply \code{\link{ldest}()}
-    #'       across many pairs of SNPs.}
-    #'   \item{\code{\link{sldest}()}}{Iteratively apply \code{\link{ldest}()}
-    #'       along a sliding window of fixed length.}
-    #'   \item{\code{\link{plot.lddf}()}}{Plot method for the output of
-    #'       \code{\link{mldest}()} and \code{\link{sldest}()}.}
-    #'   \item{\code{\link{format_lddf}()}}{Format the output of
-    #'       \code{\link{mldest}()} and \code{\link{sldest}()} into a matrix.}
-    #'   \item{\code{\link{ldshrink}()}}{Shrink correlation estimates
-    #'       using adaptive shrinkage (Stephens, 2017; Dey and Stephens, 2018).}
-    #' }
-    #'
-    #' @section Citation:
-    #' If you find the methods in this package useful, please run the following
-    #' in R for citation information: \code{citation("ldsep")}
-    #'
-    #'
-    #' @importFrom stats var
-    #' @importFrom foreach %dopar%
-    #' @useDynLib ldsep, .registration = TRUE
-    #' @importFrom Rcpp sourceCpp
-    #'
-    #' @docType package
-    #' @name ldsep-package
-    #' @aliases ldsep
-    #'
-    #' @author David Gerard
-    NULL
+    ``` r
+    usethis::use_package_doc()
     ```
-
-- I use the `@section` tag to make custom sections for (i) the important functions and (ii) how to cite the package. This is not required, but it is a good standard.
-  - The format for this tag is `@section Name:`. Make sure you end the name of the section with a colon.
-
-- `@docType package`: Should be included to show that this is not a function.
-
-- `@name ldsep-package`: Makes it so that if a user types `` ?`ldsep-package` ``, then they will reach this help file.
-
-- `@aliases ldsep`: This makes it so that a user type `?ldsep`, then they will reach this help file as well.
-
-- Just include `NULL` below the documentation so that `{roxygen2}` knows to make a help file for it.
